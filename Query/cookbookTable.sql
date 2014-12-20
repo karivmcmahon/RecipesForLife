@@ -1,0 +1,1 @@
+CREATE TABLE Cookbook (id int IDENTITY NOT NULL, updateTime datetime NOT NULL, name varchar(255) NOT NULL, description varchar(255) NULL, privacyOption varchar(255) NOT NULL, creator int NOT NULL, Cookbookid int NOT NULL, PRIMARY KEY (id));

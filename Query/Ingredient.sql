@@ -1,0 +1,1 @@
+CREATE TABLE [Ingredient details] (id int IDENTITY NOT NULL, ingredientId int NOT NULL, amount int NOT NULL, note varchar(255) NULL, value varchar(255) NOT NULL, updateTime datetime NOT NULL, PRIMARY KEY (id));

@@ -1,0 +1,3 @@
+CREATE TABLE RecipeTips (TipId int NOT NULL, recipeID int NOT NULL);
+ALTER TABLE RecipeTips ADD FOREIGN KEY (TipId) REFERENCES Tips (tipId);
+ALTER TABLE RecipeTips ADD FOREIGN KEY (recipeID) REFERENCES Recipe (id);

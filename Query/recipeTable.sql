@@ -1,0 +1,1 @@
+CREATE TABLE Recipe (id int IDENTITY NOT NULL, updateTime datetime NOT NULL, name varchar(255) NOT NULL, description varchar(255) NULL, prepTime datetime NULL, cookingTime datetime NULL, totalTime datetime NULL, serves int NULL, addedBy int NULL, PRIMARY KEY (id));
