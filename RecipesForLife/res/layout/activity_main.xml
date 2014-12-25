@@ -8,16 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/nameView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/nameEditText1"
-        android:layout_alignBottom="@+id/nameEditText1"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="22dp"
-        android:text="Name:" />
-
     <Button
         android:id="@+id/signUpButton1"
         android:layout_width="wrap_content"
@@ -25,27 +15,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="SignUp" />
-
-    <EditText
-        android:id="@+id/nameEditText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="36dp"
-        android:layout_toRightOf="@+id/nameView1"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/secondNameView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/nameView1"
-        android:layout_below="@+id/nameEditText1"
-        android:layout_marginTop="42dp"
-        android:text="Second name:" />
 
     <EditText
         android:id="@+id/secondNameEditText"
@@ -127,5 +96,71 @@
         android:layout_alignBottom="@+id/interestEditText"
         android:layout_alignRight="@+id/nameView1"
         android:text="Interest:" />
+
+    <TextView
+        android:id="@+id/nameView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16dp"
+        android:layout_toLeftOf="@+id/countryEditText"
+        android:text="Name:" />
+
+    <EditText
+        android:id="@+id/nameEditText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/nameView1"
+        android:layout_alignBottom="@+id/nameView1"
+        android:layout_alignRight="@+id/secondNameEditText"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/secondNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameEditText1"
+        android:layout_marginTop="22dp"
+        android:layout_toLeftOf="@+id/signUpButton1"
+        android:text="Second name:" />
+
+    <TextView
+        android:id="@+id/emailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/countryText"
+        android:layout_below="@+id/interestEditText"
+        android:layout_marginTop="20dp"
+        android:text="email:" />
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/emailView"
+        android:layout_alignBottom="@+id/emailView"
+        android:layout_toRightOf="@+id/secondNameView"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/passwordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/interestTextView"
+        android:layout_below="@+id/emailEditText"
+        android:layout_marginTop="14dp"
+        android:text="Password:" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/passwordTextView"
+        android:layout_toRightOf="@+id/secondNameView"
+        android:ems="10" />
 
 </RelativeLayout>
