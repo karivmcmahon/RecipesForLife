@@ -22,9 +22,62 @@
         android:layout_centerVertical="true"
         android:text="Recipes For Life"
         android:color="#FFFFFFFF" />
-   
- "
-    
-    
+
+    <TextView
+        android:id="@+id/passwordView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_below="@+id/emailView"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="20dp"
+        android:text="Password: " />
+
+    <TextView
+        android:id="@+id/emailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passwordView"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="14dp"
+        android:text="Email: " />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_alignRight="@+id/imageView1"
+        android:layout_alignTop="@+id/passwordView"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/emailView"
+        android:layout_toRightOf="@+id/passwordView"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/editText2"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@+id/passwordView"
+        android:background="@drawable/button"
+        android:text="Sign Up" />
+
+    <TextView
+        android:id="@+id/signUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:text="Click here to sign up"
+        android:clickable="true" />
 
 </RelativeLayout>
