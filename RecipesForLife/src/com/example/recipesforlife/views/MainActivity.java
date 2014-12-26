@@ -85,27 +85,10 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		buildDatabase();
+		//buildDatabase();
 	}
 	
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 	
-	// building the database.
-		public void buildDatabase() 
-		{
-			databaseConnection dbConnection = new databaseConnection(this);
-			//myDbHelper.deleteDatabase();
-			try {
-				dbConnection.createDataBase();
-			} catch (IOException ioe) {
-				throw new Error("Unable to create database");
-			}
-		}
 
 }
