@@ -33,24 +33,16 @@ public class SignUpSignInActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.signupsigninactivity);
+		
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-		TextView titleView = (TextView) findViewById(R.id.textView1);
-		titleView.setTypeface(typeFace);
-		titleView.setTextSize(24);
-		titleView.setTextColor(Color.parseColor("#FFFFFFFF"));
+		setText(R.id.textView1); 	
+		setText(R.id.emailView);	
+		setText(R.id.passwordView);
+		setButtonText(R.id.button1);
 		
-		TextView emailView = (TextView) findViewById(R.id.emailView);
-		emailView.setTypeface(typeFace);
-		emailView.setTextColor(Color.parseColor("#FFFFFFFF"));
-		
-		TextView  passwordView = (TextView) findViewById(R.id.passwordView);
-		passwordView.setTypeface(typeFace);
-		passwordView.setTextColor(Color.parseColor("#FFFFFFFF"));
-		
-		Button  button = (Button) findViewById(R.id.button1);
-		button.setTypeface(typeFace);
-		button.setTextColor(Color.parseColor("#FFFFFFFF"));
-		
+		TextView view = (TextView) findViewById(R.id.textView1);
+		view.setTextSize(24);
+			
 		TextView  signupView = (TextView) findViewById(R.id.signUpView);
 		signupView.setText(Html.fromHtml("<p><u>Create an account</u></p>"));
 		signupView.setTypeface(typeFace);
@@ -68,35 +60,19 @@ public class SignUpSignInActivity extends Activity {
 				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 				Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
 				d.setAlpha(80);
-
-
-				//dialog.getWindow().setBackgroundDrawableResource(R.drawable.shape);
 				dialog.setContentView(R.layout.signupcustomdialog);
 				dialog.getWindow().setBackgroundDrawable(d);
 		
-	 
-				TextView nameV = (TextView)	 dialog.findViewById(R.id.nameView);
-				nameV.setTypeface(typeFace);
-				nameV.setTextColor(Color.parseColor("#FFFFFFFF"));
-				
-				TextView emailV = (TextView) dialog.findViewById(R.id.emailView);
-				emailV.setTypeface(typeFace);
-				emailV.setTextColor(Color.parseColor("#FFFFFFFF"));
-				
-				TextView passwordV = (TextView)	 dialog.findViewById(R.id.passwordView);
-				passwordV.setTypeface(typeFace);
-				passwordV.setTextColor(Color.parseColor("#FFFFFFFF"));
-				
-				TextView createV = (TextView)	 dialog.findViewById(R.id.createView);
-				createV.setTypeface(typeFace);
-				createV.setTextSize(20);
-				createV.setTextColor(Color.parseColor("#FFFFFFFF"));
-				
+				setDialogText(R.id.nameView,dialog);
+				setDialogText(R.id.emailView,dialog);
+				setDialogText(R.id.passwordView,dialog);
+				setDialogText(R.id.createView,dialog);
+							
 				dialog.show(); 
+				
 				Button dialogButton = (Button) dialog.findViewById(R.id.nextButton);
 				dialogButton.setTypeface(typeFace);
 				dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-				// if button is clicked, close the custom dialog
 				dialogButton.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -108,25 +84,13 @@ public class SignUpSignInActivity extends Activity {
 						nextDialog.setContentView(R.layout.signupnextcustomdialog);
 						nextDialog.getWindow().setBackgroundDrawable(d);
 						
-						TextView additionalV = (TextView)	 nextDialog.findViewById(R.id.additionalView);
-						additionalV.setTypeface(typeFace);
-						additionalV.setTextColor(Color.parseColor("#FFFFFFFF"));
+						setDialogText(R.id.additionalView,nextDialog);
+						setDialogText(R.id.cityView,nextDialog);
+						setDialogText(R.id.countryView,nextDialog);
+						setDialogText(R.id.bioView,nextDialog);
+						setDialogText(R.id.interestView,nextDialog);
 						
-						TextView cityV = (TextView)	 nextDialog.findViewById(R.id.cityView);
-						cityV.setTypeface(typeFace);
-						cityV.setTextColor(Color.parseColor("#FFFFFFFF"));
-						
-						TextView countryV = (TextView)	 nextDialog.findViewById(R.id.countryView);
-						countryV.setTypeface(typeFace);
-						countryV.setTextColor(Color.parseColor("#FFFFFFFF"));
-						
-						TextView bioV = (TextView)	 nextDialog.findViewById(R.id.bioView);
-						bioV.setTypeface(typeFace);
-						bioV.setTextColor(Color.parseColor("#FFFFFFFF"));
-						
-						TextView interestV = (TextView)	 nextDialog.findViewById(R.id.interestView);
-						interestV.setTypeface(typeFace);
-						interestV.setTextColor(Color.parseColor("#FFFFFFFF"));
+			
 						
 						Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
 						nextDialogButton.setTypeface(typeFace);
@@ -183,5 +147,27 @@ public class SignUpSignInActivity extends Activity {
 				throw new Error("Unable to create database");
 			}
 		}
+		
+		public void setText(int resource)
+		{
+			TextView view = (TextView) findViewById(resource);
+			view.setTypeface(typeFace);
+			view.setTextColor(Color.parseColor("#FFFFFFFF"));
+		}
+		
+		public void setButtonText(int resource)
+		{
+			Button  button = (Button) findViewById(resource);
+			button.setTypeface(typeFace);
+			button.setTextColor(Color.parseColor("#FFFFFFFF"));
+		}
+		
+		public void setDialogText(int resource, Dialog dialog)
+		{
+			TextView view = (TextView)	 dialog.findViewById(resource);
+			view.setTypeface(typeFace);
+			view.setTextColor(Color.parseColor("#FFFFFFFF"));
+		}
+		
 
 }
