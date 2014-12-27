@@ -48,6 +48,8 @@
         android:layout_height="30dp"
         android:layout_alignRight="@+id/imageView1"
         android:layout_alignTop="@+id/passwordView"
+        android:textSize="11dp"
+        android:hint="password"
         android:ems="10" >
 
         <requestFocus />
@@ -59,6 +61,8 @@
         android:layout_height="30dp"
         android:layout_alignTop="@+id/emailView"
         android:layout_toRightOf="@+id/passwordView"
+        android:textSize="11dp"
+        android:hint="janedoe@aol.co.uk"
         android:ems="10" />
 
     <Button
@@ -77,7 +81,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/button1"
         android:layout_centerHorizontal="true"
-        android:text="Click here to sign up"
         android:clickable="true" />
 
 </RelativeLayout>

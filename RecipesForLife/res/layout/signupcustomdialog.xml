@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+
+
+       <TextView
+           android:id="@+id/createView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:text="Create Account" />
+
+       <TextView
+           android:id="@+id/nameView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/createView"
+           android:layout_marginTop="22dp"
+           android:gravity="left"
+           android:text="Name:" />
+        
+        <TextView
+           android:id="@+id/emailView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/nameView"
+          android:layout_marginTop="22dp"
+           android:gravity="left"
+           android:text="Email" />
+        
+         <TextView
+           android:id="@+id/passwordView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/emailView"
+           android:layout_marginTop="22dp"
+          
+           android:text="Password: " />
+         
+         <EditText
+           android:id="@+id/nameEdit"
+           android:layout_width="wrap_content"
+           android:layout_height="30dp"
+           android:layout_below="@+id/emailView"
+           android:layout_marginTop="22dp"
+            android:textSize="11dp"
+           android:layout_toRightOf="@+id/passwordView"
+           android:ems="10"
+           android:hint="password"
+           android:inputType="textPersonName" >
+       </EditText>
+       
+       <Button
+           android:id="@+id/nextButton"
+           android:layout_width="60dp"
+           android:layout_height="25dp"
+           android:layout_below="@+id/passwordView"
+           android:layout_centerHorizontal="true"
+           android:layout_marginTop="26dp"
+           android:background="@drawable/button"
+           android:text="Next" />
+
+       <EditText
+           android:id="@+id/editText2"
+           android:layout_width="wrap_content"
+           android:layout_height="30dp"
+            android:textSize="11dp"
+           android:layout_alignLeft="@+id/nameEdit"
+           android:layout_alignTop="@+id/emailView"
+           android:ems="10"
+           android:inputType="textPassword" 
+           android:hint="jane@aol.co.uk"/>
+
+       <EditText
+           android:id="@+id/editText1"
+           android:layout_width="wrap_content"
+           android:layout_height="30dp"
+           android:textSize="11dp"
+           android:hint="Jane Doe"
+           android:layout_alignRight="@+id/editText2"
+           android:layout_alignTop="@+id/nameView"
+           android:ems="10" />
+ 
+</RelativeLayout>
