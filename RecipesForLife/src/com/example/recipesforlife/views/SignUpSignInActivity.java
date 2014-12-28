@@ -42,17 +42,17 @@ public class SignUpSignInActivity extends Activity {
 		account = new ArrayList<String>();
 		//Style for activity
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-		setText(R.id.textView1); 	
-		setText(R.id.emailView);	
-		setText(R.id.passwordView);
-		setButtonText(R.id.button1);
-		TextView view = (TextView) findViewById(R.id.textView1);
-		view.setTextSize(24);
+		setText(R.id.textView1, 28); 	
+		setText(R.id.emailView, 22);	
+		setText(R.id.passwordView, 22);
+		setButtonText(R.id.button1, 22);
+	
 		
 		//Style and on touch listener for create account
 		TextView  signupView = (TextView) findViewById(R.id.signUpView);
 		signupView.setText(Html.fromHtml("<p><u>Create an account</u></p>"));
 		signupView.setTypeface(typeFace);
+		signupView.setTextSize(22);
 		signupView.setTextColor(Color.parseColor("#FFFFFFFF"));
 		signupView.setOnTouchListener(new OnTouchListener() {
 			@Override
@@ -67,10 +67,10 @@ public class SignUpSignInActivity extends Activity {
 				dialog.setContentView(R.layout.signupcustomdialog);
 				dialog.getWindow().setBackgroundDrawable(d);
 				//Set dialogs style
-				setDialogText(R.id.nameView,dialog);
-				setDialogText(R.id.emailView,dialog);
-				setDialogText(R.id.passwordView,dialog);
-				setDialogText(R.id.createView,dialog);
+				setDialogText(R.id.nameView,dialog,22);
+				setDialogText(R.id.emailView,dialog,22);
+				setDialogText(R.id.passwordView,dialog,22);
+				setDialogText(R.id.createView,dialog,28);
 				
 			
 				
@@ -80,6 +80,7 @@ public class SignUpSignInActivity extends Activity {
 				//Next button on dialog
 				Button dialogButton = (Button) dialog.findViewById(R.id.nextButton);
 				dialogButton.setTypeface(typeFace);
+				dialogButton.setTextSize(22);
 				dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
 				dialogButton.setOnClickListener(new OnClickListener() {
 					@Override
@@ -100,11 +101,11 @@ public class SignUpSignInActivity extends Activity {
 						nextDialog.setContentView(R.layout.signupnextcustomdialog);
 						nextDialog.getWindow().setBackgroundDrawable(d);
 						//Set style
-						setDialogText(R.id.additionalView,nextDialog);
-						setDialogText(R.id.cityView,nextDialog);
-						setDialogText(R.id.countryView,nextDialog);
-						setDialogText(R.id.bioView,nextDialog);
-						setDialogText(R.id.interestView,nextDialog);
+						setDialogText(R.id.additionalView,nextDialog,28);
+						setDialogText(R.id.cityView,nextDialog,22);
+						setDialogText(R.id.countryView,nextDialog,22);
+						setDialogText(R.id.bioView,nextDialog,22);
+						setDialogText(R.id.interestView,nextDialog,22);
 						
 						
 						
@@ -115,6 +116,7 @@ public class SignUpSignInActivity extends Activity {
 						Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
 						nextDialogButton.setTypeface(typeFace);
 						nextDialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+						nextDialogButton.setTextSize(22);
 						nextDialogButton.setOnClickListener(new OnClickListener()
 								{
 
@@ -190,24 +192,27 @@ public class SignUpSignInActivity extends Activity {
 			}
 		}
 		
-		public void setText(int resource)
+		public void setText(int resource,int fontSize)
 		{
 			TextView view = (TextView) findViewById(resource);
 			view.setTypeface(typeFace);
+			view.setTextSize(fontSize);
 			view.setTextColor(Color.parseColor("#FFFFFFFF"));
 		}
 		
-		public void setButtonText(int resource)
+		public void setButtonText(int resource, int fontSize)
 		{
 			Button  button = (Button) findViewById(resource);
 			button.setTypeface(typeFace);
+			button.setTextSize(fontSize);
 			button.setTextColor(Color.parseColor("#FFFFFFFF"));
 		}
 		
-		public void setDialogText(int resource, Dialog dialog)
+		public void setDialogText(int resource, Dialog dialog, int fontSize)
 		{
 			TextView view = (TextView)	 dialog.findViewById(resource);
 			view.setTypeface(typeFace);
+			view.setTextSize(fontSize);
 			view.setTextColor(Color.parseColor("#FFFFFFFF"));
 		}
 		

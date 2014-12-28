@@ -32,10 +32,12 @@
            android:layout_height="30dp"
            android:layout_below="@+id/cityView"
            android:layout_marginTop="22dp"
-            android:textSize="11dp"
+           android:textSize="14dp"
            android:layout_toRightOf="@+id/countryView"
            android:ems="10"
            android:hint="Scotland"
+           android:textColor="#FFFFFF"
+           android:textColorHint="#FFFFFF"
       >
        </EditText>
        
@@ -56,7 +58,9 @@
          android:layout_alignTop="@+id/cityView"
          android:ems="10"
          android:hint="Glasgow"
-         android:textSize="11dp" />
+         android:textSize="14dp"
+         android:textColor="#FFFFFF"
+         android:textColorHint="#FFFFFF" />
 
      <EditText
          android:id="@+id/bioEditText"
@@ -66,7 +70,9 @@
          android:layout_alignTop="@+id/bioView"
          android:ems="10"
          android:hint="I love cooking italian"
-         android:textSize="11dp" />
+         android:textSize="14dp"
+         android:textColor="#FFFFFF"
+         android:textColorHint="#FFFFFF" />
      
       <TextView
            android:id="@+id/interestView"
@@ -83,10 +89,12 @@
          android:layout_height="30dp"
          android:layout_toRightOf="@+id/interestView"
          android:layout_below="@+id/bioView"
-          android:layout_marginTop="22dp"
+         android:layout_marginTop="22dp"
          android:ems="10"
          android:hint="Home cook"
-         android:textSize="11dp" />
+         android:textSize="14dp"
+         android:textColor="#FFFFFF"
+         android:textColorHint="#FFFFFF" />
       
       <Button
            android:id="@+id/signUpButton"

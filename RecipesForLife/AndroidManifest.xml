@@ -13,10 +13,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:debuggable="true">"
+        android:debuggable="true"
+       >
         <activity
             android:name="com.example.recipesforlife.views.SignUpSignInActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+             android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

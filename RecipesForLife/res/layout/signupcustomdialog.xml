@@ -44,10 +44,12 @@
            android:layout_height="30dp"
            android:layout_below="@+id/emailView"
            android:layout_marginTop="22dp"
-           android:textSize="11dp"
+           android:textSize="14dp"
            android:layout_toRightOf="@+id/passwordView"
            android:ems="10"
            android:hint="password"
+           android:textColor="#FFFFFF"
+           android:textColorHint="#FFFFFF"
            android:inputType="textPassword" 
             >
        </EditText>
@@ -66,9 +68,11 @@
            android:id="@+id/emailEdit"
            android:layout_width="wrap_content"
            android:layout_height="30dp"
-           android:textSize="11dp"
+           android:textSize="14dp"
            android:layout_alignLeft="@+id/passwordEdit"
            android:layout_alignTop="@+id/emailView"
+           android:textColor="#FFFFFF"
+           android:textColorHint="#FFFFFF"
            android:ems="10"
            android:hint="jane@aol.co.uk"/>
 
@@ -76,10 +80,12 @@
            android:id="@+id/nameEdit"
            android:layout_width="wrap_content"
            android:layout_height="30dp"
-           android:textSize="11dp"
+           android:textSize="14dp"
            android:hint="Jane Doe"
            android:layout_alignRight="@+id/emailEdit"
            android:layout_alignTop="@+id/nameView"
+           android:textColor="#FFFFFF"
+           android:textColorHint="#FFFFFF"
            android:inputType="textPersonName"
            android:ems="10" />
  
