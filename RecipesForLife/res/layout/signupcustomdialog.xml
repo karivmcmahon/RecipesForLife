@@ -35,21 +35,21 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_below="@+id/emailView"
-           android:layout_marginTop="22dp"
-          
+           android:layout_marginTop="22dp"    
            android:text="Password: " />
          
          <EditText
-           android:id="@+id/nameEdit"
+           android:id="@+id/passwordEdit"
            android:layout_width="wrap_content"
            android:layout_height="30dp"
            android:layout_below="@+id/emailView"
            android:layout_marginTop="22dp"
-            android:textSize="11dp"
+           android:textSize="11dp"
            android:layout_toRightOf="@+id/passwordView"
            android:ems="10"
            android:hint="password"
-           android:inputType="textPersonName" >
+           android:inputType="textPassword" 
+            >
        </EditText>
        
        <Button
@@ -63,24 +63,24 @@
            android:text="Next" />
 
        <EditText
-           android:id="@+id/editText2"
+           android:id="@+id/emailEdit"
            android:layout_width="wrap_content"
            android:layout_height="30dp"
-            android:textSize="11dp"
-           android:layout_alignLeft="@+id/nameEdit"
+           android:textSize="11dp"
+           android:layout_alignLeft="@+id/passwordEdit"
            android:layout_alignTop="@+id/emailView"
            android:ems="10"
-           android:inputType="textPassword" 
            android:hint="jane@aol.co.uk"/>
 
        <EditText
-           android:id="@+id/editText1"
+           android:id="@+id/nameEdit"
            android:layout_width="wrap_content"
            android:layout_height="30dp"
            android:textSize="11dp"
            android:hint="Jane Doe"
-           android:layout_alignRight="@+id/editText2"
+           android:layout_alignRight="@+id/emailEdit"
            android:layout_alignTop="@+id/nameView"
+           android:inputType="textPersonName"
            android:ems="10" />
  
 </RelativeLayout>

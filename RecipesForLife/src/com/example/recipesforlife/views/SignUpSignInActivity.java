@@ -1,8 +1,11 @@
 package com.example.recipesforlife.views;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
 
 import android.app.Activity;
@@ -24,74 +27,91 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class SignUpSignInActivity extends Activity {
-	
+	EditText emailEdit,nameEdit,passwordEdit,countryEdit, cityEdit, interestEdit, bioEdit;
+	String email,name,password,country,city,interest,bio;
+	List<String> account;
 	Typeface typeFace;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.signupsigninactivity);
-		
+		account = new ArrayList<String>();
+		//Style for activity
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		setText(R.id.textView1); 	
 		setText(R.id.emailView);	
 		setText(R.id.passwordView);
 		setButtonText(R.id.button1);
-		
 		TextView view = (TextView) findViewById(R.id.textView1);
 		view.setTextSize(24);
-			
+		
+		//Style and on touch listener for create account
 		TextView  signupView = (TextView) findViewById(R.id.signUpView);
 		signupView.setText(Html.fromHtml("<p><u>Create an account</u></p>"));
 		signupView.setTypeface(typeFace);
 		signupView.setTextColor(Color.parseColor("#FFFFFFFF"));
 		signupView.setOnTouchListener(new OnTouchListener() {
-
-		
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction()  == MotionEvent.ACTION_DOWN)
 				{
-				// TODO Auto-generated method stubS
+				//Creates a custom dialog
 				final Dialog dialog = new Dialog(SignUpSignInActivity.this);
 				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 				Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
 				d.setAlpha(80);
 				dialog.setContentView(R.layout.signupcustomdialog);
 				dialog.getWindow().setBackgroundDrawable(d);
-		
+				//Set dialogs style
 				setDialogText(R.id.nameView,dialog);
 				setDialogText(R.id.emailView,dialog);
 				setDialogText(R.id.passwordView,dialog);
 				setDialogText(R.id.createView,dialog);
-							
+				
+			
+				
+				//Show dialogs
 				dialog.show(); 
 				
+				//Next button on dialog
 				Button dialogButton = (Button) dialog.findViewById(R.id.nextButton);
 				dialogButton.setTypeface(typeFace);
 				dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
 				dialogButton.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						emailEdit = (EditText) dialog.findViewById(R.id.emailEdit);
+						nameEdit = (EditText) dialog.findViewById(R.id.nameEdit);
+						passwordEdit = (EditText) dialog.findViewById(R.id.passwordEdit);
+						name= nameEdit.getText().toString();
+						password = passwordEdit.getText().toString();
+						email = emailEdit.getText().toString(); 
+						//Dismiss dialog
 						dialog.dismiss();
+						//Show another dialog
 						final Dialog nextDialog = new Dialog(SignUpSignInActivity.this);
 						nextDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 						Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
 						d.setAlpha(80);
 						nextDialog.setContentView(R.layout.signupnextcustomdialog);
 						nextDialog.getWindow().setBackgroundDrawable(d);
-						
+						//Set style
 						setDialogText(R.id.additionalView,nextDialog);
 						setDialogText(R.id.cityView,nextDialog);
 						setDialogText(R.id.countryView,nextDialog);
 						setDialogText(R.id.bioView,nextDialog);
 						setDialogText(R.id.interestView,nextDialog);
 						
-			
 						
+						
+						
+						
+						
+						//Set button click
 						Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
 						nextDialogButton.setTypeface(typeFace);
 						nextDialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
@@ -100,6 +120,28 @@ public class SignUpSignInActivity extends Activity {
 
 									@Override
 									public void onClick(View v) {
+										cityEdit = (EditText) nextDialog.findViewById(R.id.cityEdit);
+										countryEdit = (EditText) nextDialog.findViewById(R.id.countryEdit);
+										bioEdit = (EditText) nextDialog.findViewById(R.id.bioEditText);
+										interestEdit = (EditText) nextDialog.findViewById(R.id.interestEditText);
+										city = cityEdit.getText().toString();
+										country = countryEdit.getText().toString();
+										bio = bioEdit.getText().toString();
+										interest = interestEdit.getText().toString();
+										
+										account.add(name);
+										account.add(name);
+										account.add(country);
+										account.add(bio);
+										account.add(city);
+										account.add(interest);
+										account.add(email);
+										account.add(password);
+										
+										//Insert to db
+										Context t = getApplicationContext();
+										accountModel accountmodel = new accountModel(t);
+										accountmodel.insertAccount(account);
 										nextDialog.dismiss();
 										
 									}
@@ -140,7 +182,7 @@ public class SignUpSignInActivity extends Activity {
 		public void buildDatabase() 
 		{
 			databaseConnection dbConnection = new databaseConnection(this);
-			//myDbHelper.deleteDatabase();
+			dbConnection.deleteDatabase();
 			try {
 				dbConnection.createDataBase();
 			} catch (IOException ioe) {

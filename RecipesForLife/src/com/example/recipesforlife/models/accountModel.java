@@ -34,8 +34,8 @@ public class accountModel extends baseDataSource{
 		 	
             //User values
 		    ContentValues values = new ContentValues();
-		    values.put("firstName", accountInfo.get(0)); // inserting a string
-		    values.put("secondName", accountInfo.get(1)); // inserting a string
+		    values.put("name", accountInfo.get(0)); // inserting a string
+		  //  values.put("secondName", accountInfo.get(1)); // inserting a string
 		    values.put("updateTime", lastUpdated); // inserting a string
 		    values.put("country", accountInfo.get(2)); // inserting a string
 		    values.put("bio", accountInfo.get(3)); // inserting a string
