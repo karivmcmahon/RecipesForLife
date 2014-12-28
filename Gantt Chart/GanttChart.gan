@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-09-01" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-11-04" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="en_GB">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Name" width="57" order="0"/>
+    <view zooming-state="default:3" id="gantt-chart">
+        <field id="tpd3" name="Name" width="56" order="0"/>
         <field id="tpd4" name="Begin date" width="21" order="1"/>
         <field id="tpd5" name="End date" width="21" order="2"/>
-        <timeline><![CDATA[0,0,0,0,0]]></timeline>
+        <timeline><![CDATA[0]]></timeline>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="52" order="0"/>
-        <field id="1" name="Default role" width="47" order="1"/>
+        <field id="0" name="Name" width="50" order="0"/>
+        <field id="1" name="Default role" width="49" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -36,12 +36,12 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="129" name="Project" meeting="false" start="2014-03-20" duration="396" complete="5" expand="true">
+        <task id="129" name="Project" meeting="false" start="2014-03-20" duration="396" complete="31" expand="true">
             <task id="0" name="Background Reading" color="#8cb6ce" meeting="true" start="2014-10-06" duration="0" complete="100" expand="true">
                 <task id="7" name="Research into history of cookbooks and recipes" color="#8cb6ce" meeting="false" start="2014-10-06" duration="14" complete="100" expand="true"/>
                 <task id="28" name="Idea Development" color="#8cb6ce" meeting="false" start="2014-10-06" duration="5" complete="100" expand="true"/>
             </task>
-            <task id="3" name="Design Decisions" color="#8cb6ce" meeting="true" start="2014-10-13" duration="0" complete="97" expand="true">
+            <task id="3" name="Design Decisions" color="#8cb6ce" meeting="true" start="2014-10-13" duration="0" complete="98" expand="true">
                 <task id="11" name="Device Selection" color="#8cb6ce" meeting="false" start="2014-10-13" duration="2" complete="100" expand="true"/>
                 <task id="13" name="Database Selection" color="#8cb6ce" meeting="false" start="2014-10-15" duration="2" complete="100" expand="true"/>
                 <task id="15" name="Current applications available" color="#8cb6ce" meeting="false" start="2014-10-15" duration="1" complete="100" expand="true"/>
@@ -49,12 +49,15 @@
                 <task id="19" name="Development environ selection" color="#8cb6ce" meeting="false" start="2014-10-16" duration="1" complete="100" expand="true"/>
                 <task id="22" name="Project management tool selection" color="#8cb6ce" meeting="false" start="2014-10-17" duration="1" complete="100" expand="true"/>
                 <task id="25" name="Target market research" color="#8cb6ce" meeting="false" start="2014-10-18" duration="1" complete="80" expand="true"/>
+                <task id="150" name="Database design" color="#8cb6ce" meeting="false" start="2014-11-03" duration="1" complete="100" expand="true"/>
+                <task id="151" name="Class diagram design" color="#8cb6ce" meeting="false" start="2014-12-20" duration="1" complete="100" expand="true"/>
+                <task id="152" name="Testing strategy" color="#8cb6ce" meeting="false" start="2014-12-20" duration="1" complete="100" expand="true"/>
             </task>
-            <task id="26" name="Design Sketches" color="#8cb6ce" meeting="true" start="2014-10-06" duration="0" complete="85" expand="true">
+            <task id="26" name="Design Sketches" color="#8cb6ce" meeting="true" start="2014-10-06" duration="0" complete="100" expand="true">
                 <task id="32" name="Design Drawings" color="#8cb6ce" meeting="false" start="2014-10-06" duration="5" complete="100" expand="true"/>
-                <task id="33" name="Design Axure" color="#8cb6ce" meeting="false" start="2014-10-20" duration="14" complete="80" expand="true"/>
+                <task id="33" name="Design Axure" color="#8cb6ce" meeting="false" start="2014-10-20" duration="14" complete="100" expand="true"/>
             </task>
-            <task id="37" name="Ethics" color="#8cb6ce" meeting="false" start="2014-10-20" duration="15" complete="100" expand="true">
+            <task id="37" name="Ethics" color="#8cb6ce" meeting="false" start="2014-10-20" duration="29" complete="100" expand="true">
                 <task id="39" name="Fill out plan" color="#8cb6ce" meeting="false" start="2014-10-20" duration="3" complete="100" expand="true"/>
                 <task id="40" name="Information sheet" color="#8cb6ce" meeting="false" start="2014-10-22" duration="1" complete="100" expand="true"/>
                 <task id="41" name="Consent sheet" color="#8cb6ce" meeting="false" start="2014-10-23" duration="1" complete="100" expand="true"/>
@@ -62,26 +65,27 @@
                 <task id="43" name="Task sheet" color="#8cb6ce" meeting="false" start="2014-10-25" duration="1" complete="100" expand="true"/>
                 <task id="44" name="Survey" color="#8cb6ce" meeting="false" start="2014-10-26" duration="1" complete="100" expand="true"/>
                 <task id="56" name="Supervisor review" color="#8cb6ce" meeting="false" start="2014-10-27" duration="1" complete="100" expand="true"/>
-                <task id="93" name="Confirmed" color="#8cb6ce" meeting="false" start="2014-10-28" duration="7" complete="0" expand="true">
+                <task id="93" name="Confirmed" color="#8cb6ce" meeting="false" start="2014-10-28" duration="21" complete="100" expand="true">
                     <depend id="62" type="2" difference="0" hardness="Strong"/>
                 </task>
             </task>
-            <task id="59" name="Requirements" meeting="false" start="2014-10-25" duration="30" complete="0" expand="true">
-                <task id="60" name="Initial requirements" color="#8cb6ce" meeting="false" start="2014-10-25" duration="1" complete="0" expand="true"/>
-                <task id="62" name="Requirements after survey" color="#8cb6ce" meeting="false" start="2014-11-04" duration="10" complete="0" expand="true">
+            <task id="59" name="Requirements" meeting="false" start="2014-10-25" duration="67" complete="77" expand="true">
+                <task id="60" name="Initial requirements" color="#8cb6ce" meeting="false" start="2014-10-25" duration="1" complete="100" expand="true"/>
+                <task id="62" name="Requirements after survey" color="#8cb6ce" meeting="false" start="2014-11-18" duration="33" complete="100" expand="true">
                     <depend id="64" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="64" name="Trello" color="#8cb6ce" meeting="false" start="2014-11-14" duration="10" complete="0" expand="true">
+                <task id="64" name="Trello" color="#8cb6ce" meeting="false" start="2014-12-21" duration="10" complete="0" expand="true">
                     <depend id="69" type="2" difference="0" hardness="Strong"/>
                 </task>
             </task>
-            <task id="69" name="Development" color="#8cb6ce" meeting="true" start="2014-11-24" duration="0" complete="0" expand="true"/>
-            <task id="68" name="Report" meeting="false" start="2014-11-04" duration="167" complete="0" expand="true">
-                <task id="97" name="Abstract" meeting="false" start="2014-11-04" duration="6" complete="0" expand="true"/>
-                <task id="98" name="Intro" color="#8cb6ce" meeting="false" start="2014-11-04" duration="6" complete="0" expand="true"/>
+            <task id="145" name="Survey" color="#8cb6ce" meeting="false" start="2014-11-17" duration="33" complete="100" expand="true"/>
+            <task id="69" name="Development" color="#8cb6ce" meeting="false" start="2014-12-31" duration="84" complete="0" expand="true"/>
+            <task id="68" name="Report" meeting="false" start="2014-11-04" duration="167" complete="12" expand="true">
+                <task id="97" name="Abstract" color="#8cb6ce" meeting="false" start="2014-11-04" duration="6" complete="60" expand="true"/>
+                <task id="98" name="Intro" color="#8cb6ce" meeting="false" start="2014-11-04" duration="6" complete="60" expand="true"/>
                 <task id="99" name="Specification" color="#8cb6ce" meeting="false" start="2014-11-04" duration="6" complete="0" expand="true"/>
-                <task id="100" name="Design" meeting="false" start="2014-11-04" duration="6" complete="0" expand="true"/>
-                <task id="134" name="Mid Proj Report" meeting="false" start="2015-01-15" duration="16" complete="0" expand="true"/>
+                <task id="100" name="Design" color="#8cb6ce" meeting="false" start="2014-11-04" duration="6" complete="60" expand="true"/>
+                <task id="134" name="Mid Proj Report" meeting="false" start="2015-01-20" duration="11" complete="0" expand="true"/>
                 <task id="101" name="Implementation" meeting="false" start="2015-02-15" duration="8" complete="0" expand="true"/>
                 <task id="102" name="Evaluation" meeting="false" start="2015-03-09" duration="8" complete="0" expand="true"/>
                 <task id="103" name="Conclusion" meeting="false" start="2015-03-16" duration="7" complete="0" expand="true"/>
@@ -108,9 +112,9 @@
         <displaycolumn property-id="tpd9" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd1" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd0" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="199" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="75" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="75" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="190" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="72" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="72" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
