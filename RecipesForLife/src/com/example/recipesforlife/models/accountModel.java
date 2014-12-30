@@ -7,6 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -65,6 +70,29 @@ public class accountModel extends baseDataSource{
 		    {
 		    	Log.v("db","Exception 2 " +  e.toString());
 		    } 
+		    JSONObject student1 = new JSONObject();
+			try {
+				student1.put("name", accountInfo.get(0)); // inserting a string
+				  //  values.put("secondName", accountInfo.get(1)); // inserting a string
+				    student1.put("updateTime", lastUpdated); // inserting a string
+				    student1.put("country", accountInfo.get(2)); // inserting a string
+				    student1.put("bio", accountInfo.get(3)); // inserting a string
+				    student1.put("city", accountInfo.get(4)); // inserting a string
+				    student1.put("cookingInterest", accountInfo.get(5)); // in
+				    student1.put("id", (int)id);
+				    student1.put("email", accountInfo.get(6));
+				    student1.put("updateTime", lastUpdated);
+				    student1.put("password", accountInfo.get(7));
+				    JSONArray jsonArray = new JSONArray();
+					jsonArray.put(student1);
+				    Log.v("JSON create ", "JSON create " + jsonArray);
+
+			} catch (JSONException e) {
+			    // TODO Auto-generated catch block
+			    e.printStackTrace();
+			}
+
+			
 		    close();
 	} 
 	

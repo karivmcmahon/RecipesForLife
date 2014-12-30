@@ -1,6 +1,7 @@
 package com.example.recipesforlife.views;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,13 @@ public class SignUpSignInActivity extends Activity {
 
          StrictMode.setThreadPolicy(policy);
 		sync syncs = new sync();
-		syncs.getJson();
+		//syncs.getJson();
+		try {
+			syncs.createJsonArray();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setContentView(R.layout.signupsigninactivity);
 		account = new ArrayList<String>();
 		//Style for activity
