@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
+import com.example.recipesforlife.models.sync;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -18,6 +19,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +40,11 @@ public class SignUpSignInActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+         StrictMode.setThreadPolicy(policy);
+		sync syncs = new sync();
+		syncs.getJson();
 		setContentView(R.layout.signupsigninactivity);
 		account = new ArrayList<String>();
 		//Style for activity
@@ -184,7 +191,7 @@ public class SignUpSignInActivity extends Activity {
 		public void buildDatabase() 
 		{
 			databaseConnection dbConnection = new databaseConnection(this);
-			dbConnection.deleteDatabase();
+		//	dbConnection.deleteDatabase();
 			try {
 				dbConnection.createDataBase();
 			} catch (IOException ioe) {
