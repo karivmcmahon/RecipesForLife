@@ -15,6 +15,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -38,13 +40,17 @@ public class SignUpSignInActivity extends Activity {
 	String email,name,password,country,city,interest,bio;
 	List<String> account;
 	Typeface typeFace;
+	public static final String MyPREFERENCES = "MyPrefs" ;
+	public static final String emailk = "emailKey"; 
+	public static final String pass = "passwordKey"; 
+	SharedPreferences sharedpreferences;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
          StrictMode.setThreadPolicy(policy);
-		sync syncs = new sync();
+	//	sync syncs = new sync();
 		/**syncs.getJson();
 		try {
 			syncs.createJsonArray();
@@ -60,6 +66,33 @@ public class SignUpSignInActivity extends Activity {
 		setText(R.id.emailView, 22);	
 		setText(R.id.passwordView, 22);
 		setButtonText(R.id.button1, 22);
+		
+		Button button1 = (Button) findViewById(R.id.button1);
+		button1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				TextView emailEdit = (TextView) findViewById(R.id.editText1);
+				TextView passwordEdit = (TextView) findViewById(R.id.editText2);
+				String email = emailEdit.getText().toString();
+				String password = passwordEdit.getText().toString();
+				Log.v("SIGN IN ", "Email " + email + " password " + password);
+				Context t = getApplicationContext();
+				accountModel accountmodel = new accountModel(t);
+				boolean access = accountmodel.logIn(email, password);
+				if(access == true)
+				{
+					Log.v("prefs saved","prefs saved");
+					 Editor editor = sharedpreferences.edit();
+				     
+				      editor.putString(emailk, email);
+				      editor.putString(pass, password);
+				      editor.commit();
+				}
+			}
+			
+		});
 			
 		//Style and on touch listener for create account
 		TextView  signupView = (TextView) findViewById(R.id.signUpView);
@@ -194,6 +227,33 @@ public class SignUpSignInActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	 @Override
+	   protected void onResume() {
+	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
+	      Context.MODE_PRIVATE);
+	      if (sharedpreferences.contains(emailk))
+	      {
+	      if(sharedpreferences.contains(pass)){
+	        //LOG IN
+	    	  Log.v("LOG IN", "LOG IN");
+	      }
+	      }
+	      super.onResume();
+	   }
+	 
+	 /**
+	  * LOG out code future
+	   public void logout(View view){
+      SharedPreferences sharedpreferences = getSharedPreferences
+      (MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+      Editor editor = sharedpreferences.edit();
+      editor.clear();
+      editor.commit();
+      moveTaskToBack(true); 
+      Welcome.this.finish();
+   }
+	  */
 	
 	// building the database.
 		public void buildDatabase() 

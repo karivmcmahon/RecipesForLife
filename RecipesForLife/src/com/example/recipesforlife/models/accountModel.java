@@ -14,6 +14,7 @@ import java.util.List;
 
 
 
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -24,6 +25,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -138,6 +141,26 @@ public class accountModel extends baseDataSource{
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentDate = formatter.format(date);
 		return currentDate;
+	}
+	
+	public boolean logIn(String email, String password) {
+		open();
+		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password });
+		if (cursor != null && cursor.getCount() > 0) {
+			Log.v("SIGN IN", "SIGN IN");
+			cursor.close();
+			close();
+			return true;
+		}
+		else
+		{
+			Log.v("SIGN OUT", "SIGN OUT");
+			cursor.close();
+			close();
+			return false;
+		} 
+		
+	
 	}
 	
 
