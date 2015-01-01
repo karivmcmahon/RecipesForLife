@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/christmas_tree_treats">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" 
+        android:src="@drawable/shape" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/imageView1"
+        android:text="Recipes For Life"
+        android:color="#FFFFFFFF" />
+
+    <TextView
+        android:id="@+id/passwordView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_below="@+id/emailView"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="20dp"
+        android:text="Password: " />
+
+    <TextView
+        android:id="@+id/emailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/passwordView"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="14dp"
+        android:text="Email: " />
+
+   <EditText
+        android:id="@+id/editText2"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_alignRight="@+id/imageView1"
+        android:layout_alignTop="@+id/passwordView"
+        android:textSize="14dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:hint="password"
+        android:ems="10" >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/emailView"
+        android:layout_toRightOf="@+id/passwordView"
+        android:textSize="14dp"
+        android:textColor="#FFFFFF"
+         android:textColorHint="#FFFFFF"
+        android:hint="janedoe@aol.co.uk"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_below="@+id/editText2"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+         android:layout_centerVertical="true"
+        android:background="@drawable/button"
+        android:text="Sign Up" />
+
+    <TextView
+        android:id="@+id/signUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:clickable="true" />
+
+</RelativeLayout>
