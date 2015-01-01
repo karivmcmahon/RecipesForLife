@@ -48,6 +48,10 @@ public class accountModel extends baseDataSource{
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Code to insert sign up information into sqlite database
+	 * @param accountInfo
+	 */
 	public void insertAccount(List<String> accountInfo) 
 	{
 			open();
@@ -61,6 +65,11 @@ public class accountModel extends baseDataSource{
 		    close();
 	} 
 	
+	/**
+	 * Converts date into string
+	 * @param date
+	 * @return
+	 */
 	private String dateToString(Date date) 
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -68,6 +77,12 @@ public class accountModel extends baseDataSource{
 		return currentDate;
 	}
 	
+	/**
+	 * Check if details provided are an account
+	 * @param email
+	 * @param password
+	 * @return true if an account or false if not
+	 */
 	public boolean logIn(String email, String password) {
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password });
@@ -84,6 +99,10 @@ public class accountModel extends baseDataSource{
 		} 	
 	}
 	
+	/**
+	 * Create a json with information entered in app to send to SQL on the server database
+	 * @param accountInfo
+	 */
 	public void createAndSendJSON(List<String> accountInfo)
 	{
 		 JSONObject account = new JSONObject();
@@ -135,6 +154,10 @@ public class accountModel extends baseDataSource{
 			}
 	}
 	
+	/**
+	 * Insert user info into the user sqlite table
+	 * @param accountInfo
+	 */
 	public void insertUserData(List<String> accountInfo)
 	{
 		 //User values
@@ -156,6 +179,11 @@ public class accountModel extends baseDataSource{
 	    } 
 	}
 	
+	/**
+	 * Insert account info into account sqlite table
+	 * @param accountInfo
+	 * @param id
+	 */
 	public void insertAccountData(List<String> accountInfo, long id)
 	{
 		//Account values
