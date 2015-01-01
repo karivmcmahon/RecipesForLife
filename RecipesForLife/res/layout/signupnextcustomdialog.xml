@@ -98,7 +98,7 @@
       
       <Button
            android:id="@+id/signUpButton"
-           android:layout_width="60dp"
+           android:layout_width="wrap_content"
            android:layout_height="25dp"
            android:layout_below="@+id/interestView"
            android:layout_centerHorizontal="true"
