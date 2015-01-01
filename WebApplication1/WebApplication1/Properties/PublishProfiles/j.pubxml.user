@@ -6,23 +6,23 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>X:\root</_PublishTargetUrl>
+    <_PublishTargetUrl>X:\wwwroot</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>12/29/2014 19:48:24</publishTime>
+      <publishTime>12/29/2014 21:29:01</publishTime>
     </File>
     <File Include="bin/WebApplication1.dll">
-      <publishTime>12/29/2014 19:53:43</publishTime>
+      <publishTime>12/31/2014 20:46:41</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>12/29/2014 19:50:39</publishTime>
+      <publishTime>12/29/2014 21:31:47</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/29/2014 16:27:31</publishTime>
+      <publishTime>12/31/2014 11:26:17</publishTime>
     </File>
     <File Include="WebForm1.aspx">
-      <publishTime>12/29/2014 19:43:15</publishTime>
+      <publishTime>12/30/2014 12:41:37</publishTime>
     </File>
   </ItemGroup>
 </Project>

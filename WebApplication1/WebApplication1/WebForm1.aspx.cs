@@ -7,8 +7,6 @@ using System.IO;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
 using System.Web.Script.Serialization;
 
 namespace WebApplication1
@@ -20,24 +18,63 @@ namespace WebApplication1
             string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
             if (jsonInput != null)
             {
-                int n;
+                //Serializing a json
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                Person p = new Person();
-                p.name = "John";
-                p.age = 42;
-                MemoryStream stream1 = new MemoryStream();
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Person));
-                //DataContractJsonSerializer ser2 = new DataContractJsonSerializer(typeof(Students));
-                ser.WriteObject(stream1, p);
+                Employee emp = new Employee();
+                emp.Name = "a";
+                emp.age = 12;
+                string json = js.Serialize(emp);
               
 
-               var p2 = js.Deserialize<List<Student>>(jsonInput);
+               var p2 = js.Deserialize<List<Account>>(jsonInput);
                for (int i = 0; i < p2.Count(); i++)
                {
-                   Response.Write(p2[i].name);
-                   Response.Write(p2[i].id);
+                   Response.Write("Name " + p2[i].name);
+                   Response.Write("Country " + p2[i].country);
+                   Response.Write("ID " + p2[i].id);
+                   Response.Write("City " + p2[i].city);
+                   Response.Write("Bio " + p2[i].bio);
+                   Response.Write("Cooking interest " + p2[i].cookingInterest);
+                   Response.Write("Update time " + p2[i].updateTime);
+
+                   SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+                   SqlCommand insert = new SqlCommand("SET IDENTITY_INSERT Users ON INSERT INTO Users(id,name, cookingInterest, updateTime, bio, city, country) VALUES (@id,@name, @cookingInterest, @updateTime, @bio, @city, @country) SET IDENTITY_INSERT Users OFF", con);
+                   insert.Parameters.AddWithValue("@id", p2[i].id);
+                   insert.Parameters.AddWithValue("@name", p2[i].name);
+                   insert.Parameters.AddWithValue("@cookingInterest", p2[i].cookingInterest);
+                   insert.Parameters.AddWithValue("@updateTime", p2[i].updateTime);
+                   insert.Parameters.AddWithValue("@bio", p2[i].bio);
+                   insert.Parameters.AddWithValue("@city", p2[i].city);
+                   insert.Parameters.AddWithValue("@country", p2[i].country); 
+
+                   SqlCommand insert2 = new SqlCommand(" INSERT INTO Account(id,email,password,updateTime) VALUES (@id,@email,@password,@updateTime)", con);
+                   insert2.Parameters.AddWithValue("@id", p2[i].id);
+                   insert2.Parameters.AddWithValue("@email", p2[i].email);
+                   insert2.Parameters.AddWithValue("@password", p2[i].password);
+                   insert2.Parameters.AddWithValue("@updateTime", p2[i].updateTime);
+
+                   try
+                   {
+                      
+                       con.Open();
+                       insert.ExecuteNonQuery();
+                       insert2.ExecuteNonQuery();
+                       Response.Write("Success");
+
+
+                   }
+                   catch (Exception ex)
+                   {
+
+                       Response.Write("Error ");
+                       Response.Write(ex);
+                   }
+                  
                }
-             //   Response.Write(p2[1].name);
+               
+
+                
+                
             }
             
 
@@ -55,23 +92,25 @@ namespace WebApplication1
         } **/
     }
 }
-[DataContract]
-internal class Person
-{
-    [DataMember]
-    internal string name;
 
-    [DataMember]
-    internal int age;
-}
 
-public class Student
+public class Account
 {
-    public string  id { get; set; }
+    public int  id { get; set; }
     public string name { get; set; }
+    public string updateTime { get; set; }
+    public string country { get; set; }
+    public string city { get; set; }
+    public string bio { get; set; }
+    public string email { get; set; }
+    public string password { get; set; }
+    public string cookingInterest { get; set; }
 }
 
-public class Studentss
+public class Employee
 {
-    public List<Student> Students { get; set; }
+    public string Name { get; set; }
+    public int age { get; set; }
 }
+
+
