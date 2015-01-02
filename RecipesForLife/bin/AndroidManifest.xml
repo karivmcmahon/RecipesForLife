@@ -25,6 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+         <activity
+            android:name="com.example.recipesforlife.views.MainActivity"
+            android:label="@string/app_name" 
+             android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
+           
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 

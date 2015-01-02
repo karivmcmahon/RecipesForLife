@@ -11,6 +11,7 @@ import com.example.recipesforlife.models.databaseConnection;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
@@ -51,10 +52,8 @@ public class SignUpSignInActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
          StrictMode.setThreadPolicy(policy);
-	
          //View for activity
 		setContentView(R.layout.signupsigninactivity);
-		
 		//Style for activity
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		setText(R.id.textView1, 28); 	
@@ -160,34 +159,27 @@ public class SignUpSignInActivity extends Activity {
 		return true;
 	}
 	
-	 @Override
+		/**
+		 * On resume takes user to activity if logged in
+		 */
+	   @Override
 	   protected void onResume() {
 	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
 	      Context.MODE_PRIVATE);
 	      if (sharedpreferences.contains(emailk))
 	      {
-	      if(sharedpreferences.contains(pass)){
-	        //LOG IN
-	    	  Log.v("LOG IN", "LOG IN");
-	      }
+	    	  if(sharedpreferences.contains(pass))
+	    	  {       
+		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
+			      startActivity(i);
+	    	  }
 	      }
 	      super.onResume();
 	   }
-	 
-	 /**
-	  * LOG out code future
-	   public void logout(View view){
-      SharedPreferences sharedpreferences = getSharedPreferences
-      (MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-      Editor editor = sharedpreferences.edit();
-      editor.clear();
-      editor.commit();
-      moveTaskToBack(true); 
-      Welcome.this.finish();
-   }
-	  */
 	
-	// building the database.
+	 	/**
+	 	 * Build database
+	 	 */
 		public void buildDatabase() 
 		{
 			databaseConnection dbConnection = new databaseConnection(this);
@@ -199,6 +191,11 @@ public class SignUpSignInActivity extends Activity {
 			}
 		}
 		
+		/**
+		 * Set custom text
+		 * @param resource
+		 * @param fontSize
+		 */
 		public void setText(int resource,int fontSize)
 		{
 			TextView view = (TextView) findViewById(resource);
@@ -207,6 +204,11 @@ public class SignUpSignInActivity extends Activity {
 			view.setTextColor(Color.parseColor("#FFFFFFFF"));
 		}
 		
+		/**
+		 * Set custom text for button
+		 * @param resource
+		 * @param fontSize
+		 */
 		public void setButtonText(int resource, int fontSize)
 		{
 			Button  button = (Button) findViewById(resource);
@@ -215,6 +217,12 @@ public class SignUpSignInActivity extends Activity {
 			button.setTextColor(Color.parseColor("#FFFFFFFF"));
 		}
 		
+		/**
+		 * Set custom text for the dialog
+		 * @param resource
+		 * @param dialog
+		 * @param fontSize
+		 */
 		public void setDialogText(int resource, Dialog dialog, int fontSize)
 		{
 			TextView view = (TextView)	 dialog.findViewById(resource);
@@ -223,6 +231,9 @@ public class SignUpSignInActivity extends Activity {
 			view.setTextColor(Color.parseColor("#FFFFFFFF"));
 		}
 		
+		/**
+		 * Checks the details entered is a valid account and logs them in
+		 */
 		public void checkLogin()
 		{
 			//Get text from edit textbox
@@ -237,29 +248,41 @@ public class SignUpSignInActivity extends Activity {
 			//If allowed access save pref
 			if(access == true)
 			{
-			  Log.v("prefs saved","prefs saved");
+			  //Store details in shared preferences
 			  Editor editor = sharedpreferences.edit();
 		      editor.putString(emailk, email);
 		      editor.putString(pass, password);
 		      editor.commit();
+		      //Start activity
+		      Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
+		      startActivity(i);
 			}
 		}
 		
+		/**
+		 * Get information from the first dialog box when creating account
+		 * @param dialog
+		 */
 		public void getInitialDialogInfo(Dialog dialog)
 		{
+			//Get info from edit text box
 			emailEdit = (EditText) dialog.findViewById(R.id.emailEdit);
 			nameEdit = (EditText) dialog.findViewById(R.id.nameEdit);
 			passwordEdit = (EditText) dialog.findViewById(R.id.passwordEdit);
 			name= nameEdit.getText().toString();
 			password = passwordEdit.getText().toString();
 			email = emailEdit.getText().toString(); 	
-			//Dismiss dialog
-			dialog.dismiss();
-			
+			dialog.dismiss();		
 		}
 		
+		/**
+		 * Get information from the second dialog box when creating account
+		 * Adds to a list and then sends to model to insert into database
+		 * @param nextDialog
+		 */
 		public void getSecondDialogInfo(Dialog nextDialog)
 		{
+			//Get info from textboxes
 			cityEdit = (EditText) nextDialog.findViewById(R.id.cityEdit);
 			countryEdit = (EditText) nextDialog.findViewById(R.id.countryEdit);
 			bioEdit = (EditText) nextDialog.findViewById(R.id.bioEditText);
@@ -268,7 +291,7 @@ public class SignUpSignInActivity extends Activity {
 			country = countryEdit.getText().toString();
 			bio = bioEdit.getText().toString();
 			interest = interestEdit.getText().toString();
-			
+			//Add info to list
 			account.add(name);
 			account.add(name);
 			account.add(country);
@@ -276,8 +299,7 @@ public class SignUpSignInActivity extends Activity {
 			account.add(city);
 			account.add(interest);
 			account.add(email);
-			account.add(password);
-			
+			account.add(password);	
 			//Insert to db
 			Context t = getApplicationContext();
 			accountModel accountmodel = new accountModel(t);

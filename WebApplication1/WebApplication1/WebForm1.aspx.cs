@@ -29,17 +29,17 @@ namespace WebApplication1
                var p2 = js.Deserialize<List<Account>>(jsonInput);
                for (int i = 0; i < p2.Count(); i++)
                {
-                   Response.Write("Name " + p2[i].name);
+                 /**  Response.Write("Name " + p2[i].name);
                    Response.Write("Country " + p2[i].country);
                    Response.Write("ID " + p2[i].id);
                    Response.Write("City " + p2[i].city);
                    Response.Write("Bio " + p2[i].bio);
                    Response.Write("Cooking interest " + p2[i].cookingInterest);
-                   Response.Write("Update time " + p2[i].updateTime);
+                   Response.Write("Update time " + p2[i].updateTime); **/
 
                    SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-                   SqlCommand insert = new SqlCommand("SET IDENTITY_INSERT Users ON INSERT INTO Users(id,name, cookingInterest, updateTime, bio, city, country) VALUES (@id,@name, @cookingInterest, @updateTime, @bio, @city, @country) SET IDENTITY_INSERT Users OFF", con);
-                   insert.Parameters.AddWithValue("@id", p2[i].id);
+                   SqlCommand insert = new SqlCommand(" INSERT INTO Users(name, cookingInterest, updateTime, bio, city, country) OUTPUT INSERTED.id VALUES (@name, @cookingInterest, @updateTime, @bio, @city, @country)", con);
+                  // insert.Parameters.AddWithValue("@id", p2[i].id);
                    insert.Parameters.AddWithValue("@name", p2[i].name);
                    insert.Parameters.AddWithValue("@cookingInterest", p2[i].cookingInterest);
                    insert.Parameters.AddWithValue("@updateTime", p2[i].updateTime);
@@ -47,20 +47,23 @@ namespace WebApplication1
                    insert.Parameters.AddWithValue("@city", p2[i].city);
                    insert.Parameters.AddWithValue("@country", p2[i].country); 
 
-                   SqlCommand insert2 = new SqlCommand(" INSERT INTO Account(id,email,password,updateTime) VALUES (@id,@email,@password,@updateTime)", con);
-                   insert2.Parameters.AddWithValue("@id", p2[i].id);
-                   insert2.Parameters.AddWithValue("@email", p2[i].email);
-                   insert2.Parameters.AddWithValue("@password", p2[i].password);
-                   insert2.Parameters.AddWithValue("@updateTime", p2[i].updateTime);
+                 
 
                    try
                    {
                       
                        con.Open();
-                       insert.ExecuteNonQuery();
+                       Int32 newId = (Int32) insert.ExecuteScalar();
+                       Response.Write(newId);
+                      // Response.Write("Success");
+
+                       SqlCommand insert2 = new SqlCommand(" INSERT INTO Account(id,email,password,updateTime) VALUES (@id,@email,@password,@updateTime)", con);
+                       insert2.Parameters.AddWithValue("@id", newId);
+                       insert2.Parameters.AddWithValue("@email", p2[i].email);
+                       insert2.Parameters.AddWithValue("@password", p2[i].password);
+                       insert2.Parameters.AddWithValue("@updateTime", p2[i].updateTime);
                        insert2.ExecuteNonQuery();
                        Response.Write("Success");
-
 
                    }
                    catch (Exception ex)
@@ -69,6 +72,8 @@ namespace WebApplication1
                        Response.Write("Error ");
                        Response.Write(ex);
                    }
+
+                  
                   
                }
                
