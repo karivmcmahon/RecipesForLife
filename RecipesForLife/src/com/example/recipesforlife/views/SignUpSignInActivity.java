@@ -191,6 +191,7 @@ public class SignUpSignInActivity extends Activity {
 			}
 		}
 		
+		
 		/**
 		 * Set custom text
 		 * @param resource

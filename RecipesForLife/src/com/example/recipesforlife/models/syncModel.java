@@ -120,6 +120,8 @@ public class syncModel extends baseDataSource
 			account.put("updateTime", accountList.get(i).getUpdateTime());
 			jsonArray.put(account);
 			
+			
+			
 		} 
 	sendJSONToServer(jsonArray);
 	}
@@ -153,6 +155,55 @@ public class syncModel extends baseDataSource
 	
 	}
 	
+	public void getJSONFromServer() throws JSONException
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		JSONObject date = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		 JSONObject json;
+		date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT") );
+		jsonArray.put(date);
+		String str = "";
+		HttpResponse response = null;
+        HttpClient myClient = new DefaultHttpClient();
+        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
+		try 
+		{
+			myConnection.setEntity(new ByteArrayEntity(
+					jsonArray.toString().getBytes("UTF8")));
+			try 
+			{
+				response = myClient.execute(myConnection);
+				str = EntityUtils.toString(response.getEntity(), "UTF-8");
+				Log.v("RESPONSE", "RESPONSE " + str);
+				
+			} 
+			catch (ClientProtocolException e) 
+			{							
+				e.printStackTrace();
+			} 
+			
+			JSONArray jArray = new JSONArray(str);
+            if (jArray.length() != 0) 
+            {
+                json = jArray.getJSONObject(0);
+                Log.v("Name", "Name " + json.getString("name"));
+                for (int i = 0; i < jArray.length(); i++) 
+                {
+                    json = jArray.getJSONObject(i);
+                    Log.v("Length", Integer.toString(jArray.length()));
+                    Log.v("Name", "Name " + json.getString("name"));
+                    Log.v("Email", "Email " + json.getString("email"));
+                }
+            }
+                    
+                    
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 	public void recieveUserJSON()
 	{
 		

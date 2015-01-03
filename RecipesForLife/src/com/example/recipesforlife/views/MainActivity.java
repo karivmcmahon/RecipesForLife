@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 		
 		sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = sharedpreferences.edit();
-        editor.putString("Date", "2015-01-02 16:30:29");
+        editor.putString("Date", "2015-01-02 16:50:00");
         editor.commit();
 		Button syncButton = (Button) findViewById(R.id.syncButton);
 		syncButton.setOnClickListener(new OnClickListener()
@@ -59,7 +59,8 @@ public class MainActivity extends Activity {
 				
 				syncModel sync = new syncModel(getApplicationContext());
 				try {
-					sync.getAndCreateAccountJSON();
+					//sync.getAndCreateAccountJSON();
+					sync.getJSONFromServer();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
