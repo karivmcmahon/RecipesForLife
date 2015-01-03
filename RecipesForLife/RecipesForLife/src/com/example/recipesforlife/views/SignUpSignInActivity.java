@@ -183,13 +183,14 @@ public class SignUpSignInActivity extends Activity {
 		public void buildDatabase() 
 		{
 			databaseConnection dbConnection = new databaseConnection(this);
-		//	dbConnection.deleteDatabase();
+			dbConnection.deleteDatabase();
 			try {
 				dbConnection.createDataBase();
 			} catch (IOException ioe) {
 				throw new Error("Unable to create database");
 			}
 		}
+		
 		
 		/**
 		 * Set custom text

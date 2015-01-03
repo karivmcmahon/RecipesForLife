@@ -152,6 +152,7 @@ public class accountModel extends baseDataSource{
 			{
 			    e.printStackTrace();
 			}
+			
 	}
 	
 	/**
@@ -195,7 +196,7 @@ public class accountModel extends baseDataSource{
 	    try
 	    {
 	    	database.insert("Account", null, accountValues);
-	    	createAndSendJSON(accountInfo);
+	    	//createAndSendJSON(accountInfo);
 	    } 
 	    catch (SQLException e) 
 	    {
