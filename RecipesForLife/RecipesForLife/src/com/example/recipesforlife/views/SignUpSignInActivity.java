@@ -1,12 +1,18 @@
 package com.example.recipesforlife.views;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import org.json.JSONException;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
+import com.example.recipesforlife.models.syncModel;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -18,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Html;
@@ -52,14 +59,34 @@ public class SignUpSignInActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
          StrictMode.setThreadPolicy(policy);
-         //View for activity
+         //View fo
 		setContentView(R.layout.signupsigninactivity);
-		//Style for activity
+		
+		sharedpreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		
+		if (sharedpreferences.getBoolean("firstTime",false) == false) {
+			Editor editor = sharedpreferences.edit();
+			editor.putBoolean("firstTime", false);
+			editor.commit();
+			Log.v("FIRST TIME", "FIRST TIME");	
+			
+			Editor editor2 = sharedpreferences.edit();
+			editor2.putString("Date", "2015-01-01 12:00:00");
+			editor2.commit();
+			
+		} else {
+			Editor editor = sharedpreferences.edit();
+			editor.putBoolean("firstTime", true);
+			editor.commit();
+		}
+		 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+		//Style for 
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		setText(R.id.textView1, 28); 	
 		setText(R.id.emailView, 22);	
 		setText(R.id.passwordView, 22);
 		setButtonText(R.id.button1, 22);
+		
 		
 		//Sign in button
 		Button button1 = (Button) findViewById(R.id.button1);
@@ -97,7 +124,7 @@ public class SignUpSignInActivity extends Activity {
 				setDialogText(R.id.emailView,dialog,22);
 				setDialogText(R.id.passwordView,dialog,22);
 				setDialogText(R.id.createView,dialog,28);
-				//Show dialog
+				//Show dialo
 				dialog.show(); 
 				
 				//Next button on dialog
@@ -150,6 +177,30 @@ public class SignUpSignInActivity extends Activity {
 		}
 	});
 		buildDatabase();
+		if(checkInternetConnection(getApplicationContext()))
+		{
+			syncModel sync = new syncModel(getApplicationContext());
+			try {
+				sync.getAndCreateAccountJSON();
+				sync.getJSONFromServer();
+				sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+				
+				Calendar cal = Calendar.getInstance(); // creates calendar
+	            cal.setTime(new Date()); // sets calendar time/date
+	            cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
+	            Date today = cal.getTime();
+	            String lastUpdated = dateToString(today);
+				Editor editor = sharedpreferences.edit();
+		        editor.putString("Date", lastUpdated);
+		        editor.commit();
+			} catch (JSONException e) {
+				// TODO Auto-generated  
+				e.printStackTrace();
+				
+				
+			}
+		}
+		
 }
 	
 	@Override
@@ -164,17 +215,44 @@ public class SignUpSignInActivity extends Activity {
 		 */
 	   @Override
 	   protected void onResume() {
+		   super.onResume();
 	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
 	      Context.MODE_PRIVATE);
 	      if (sharedpreferences.contains(emailk))
 	      {
 	    	  if(sharedpreferences.contains(pass))
-	    	  {       
+	    	  {   
+	    		  
+	    		 if(checkInternetConnection(getApplicationContext()))
+	    			{
+	    				syncModel sync = new syncModel(getApplicationContext());
+	    				try {
+	    					sync.getAndCreateAccountJSON();
+	    					sync.getJSONFromServer();
+	    					sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+	    					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+	    					
+	    					Calendar cal = Calendar.getInstance(); // creates calendar
+	    		            cal.setTime(new Date()); // sets calendar time/date
+	    		            cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
+	    		            Date today = cal.getTime();
+	    		            String lastUpdated = dateToString(today);
+	    					Editor editor = sharedpreferences.edit();
+	    			        editor.putString("Date", lastUpdated);
+	    			        editor.commit();
+	    				} catch (JSONException e) {
+	    					// TODO Auto-generated catch block
+	    					e.printStackTrace();
+	    					
+	    					
+	    				}
+	    			}
+	    		  Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
 			      startActivity(i);
 	    	  }
-	      }
-	      super.onResume();
+	     }
+	      
 	   }
 	
 	 	/**
@@ -306,6 +384,22 @@ public class SignUpSignInActivity extends Activity {
 			accountModel accountmodel = new accountModel(t);
 			accountmodel.insertAccount(account);
 			nextDialog.dismiss();
+		}
+		
+		private boolean checkInternetConnection(Context context) {
+			ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable()
+					&& conMgr.getActiveNetworkInfo().isConnected()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		private String dateToString(Date date) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String currentDate = formatter.format(date);
+			return currentDate;
 		}
 	}
 		

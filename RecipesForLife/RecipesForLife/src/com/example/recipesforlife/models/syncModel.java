@@ -44,7 +44,7 @@ public class syncModel extends baseDataSource
 	
 	public ArrayList<userBean> getUsers()
 	{
-		  SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		  SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		getCurrentDate();
 		Log.v("Current Date", "Curr" + currentDate);
 		Log.v("Last updated", "Last" + sharedpreferences.getString("Date", "DEFAULT"));
@@ -64,7 +64,7 @@ public class syncModel extends baseDataSource
 	
 	public ArrayList<accountBean> getAccount()
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		getCurrentDate();
 		open();
 		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
@@ -158,7 +158,7 @@ public class syncModel extends baseDataSource
 	
 	public void getJSONFromServer() throws JSONException
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		 JSONObject json;
@@ -183,7 +183,7 @@ public class syncModel extends baseDataSource
 			{							
 				e.printStackTrace();
 			} 
-			List<String> accountInfo = new ArrayList<String>();
+			
 			JSONArray jArray = new JSONArray(str);
             if (jArray.length() != 0) 
             {
@@ -191,8 +191,9 @@ public class syncModel extends baseDataSource
                 Log.v("Name", "Name " + json.getString("name"));
                 for (int i = 0; i < jArray.length(); i++) 
                 {
+                	List<String> accountInfo = new ArrayList<String>();
                     json = jArray.getJSONObject(i);
-                    
+                    Log.v("Name", "Name " + json.getString("name"));
                     Log.v("Length", Integer.toString(jArray.length()));
                     accountInfo.add(json.getString("name"));
                     accountInfo.add(json.getString("name"));
