@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.util.Log;
 
 public class MainActivity extends Activity {
@@ -95,6 +96,8 @@ public class MainActivity extends Activity {
 	    					Editor editor = sharedpreferences.edit();
 	    			        editor.putString("Date", lastUpdated);
 	    			        editor.commit();
+	    			        Toast.makeText(getApplicationContext(), 
+	    			        	    "App synced", Toast.LENGTH_LONG).show();
 	    				} catch (JSONException e) {
 	    					//uto-generated catch block
 	    					e.printStackTrace();

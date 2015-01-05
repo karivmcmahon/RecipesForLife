@@ -39,6 +39,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Class that handles the sign in/sign up page that is showed initially
@@ -231,23 +232,25 @@ public class SignUpSignInActivity extends Activity {
 			{
 				syncModel sync = new syncModel(getApplicationContext());
 				try {
+					
 					sync.getAndCreateAccountJSON();
 					sync.getJSONFromServer();
 					sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 					
 					Calendar cal = Calendar.getInstance(); // creates calendar
-		            cal.setTime(new Date()); // sets calendar time/date
+		            cal.setTime(new Date()); // sets calendar time/dat
 		            Date today = cal.getTime();
 		            String lastUpdated = utils.dateToString(today);
 					Editor editor = sharedpreferences.edit();
 			        editor.putString("Date", lastUpdated);
 			        editor.commit();
+			        Toast.makeText(getApplicationContext(), 
+			        	    "App synced", Toast.LENGTH_LONG).show();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					
-					
+								
 				}
 			}
 	   }
@@ -337,10 +340,10 @@ public class SignUpSignInActivity extends Activity {
 			{
 				final Dialog dialog = new Dialog(SignUpSignInActivity.this);
 				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
-				d.setAlpha(80);
+				//Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
+				//d.setAlpha(80);
 				dialog.setContentView(R.layout.textviewdialog);
-				dialog.getWindow().setBackgroundDrawable(d);
+				dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 				//Set dialogs style
 				setDialogText(R.id.textView,dialog,18);
 				TextView txtView =  (TextView) dialog.findViewById(R.id.textView);
@@ -378,8 +381,14 @@ public class SignUpSignInActivity extends Activity {
 			errorView.setTextColor(Color.parseColor("#F70521"));
 			name= nameEdit.getText().toString();
 			password = passwordEdit.getText().toString();
-			email = emailEdit.getText().toString(); 	
-			if(email.equals(""))
+			email = emailEdit.getText().toString(); 
+			Context t = getApplicationContext();
+			accountModel accountmodel = new accountModel(t);
+			if(accountmodel.checkEmail(email) == true)
+			{
+				errorView.setText("Email already in use \n");
+			}
+			else if(email.equals(""))
 			{
 				errorView.setText("Please enter an email address \n" );
 			}
@@ -435,10 +444,20 @@ public class SignUpSignInActivity extends Activity {
 				account.add(email);
 				account.add(password);	
 				//Insert to db
-				Context t = getApplicationContext();
-				accountModel accountmodel = new accountModel(t);
-				accountmodel.insertAccount(account);
-				nextDialog.dismiss();
+				try
+				{
+					Context t = getApplicationContext();
+					accountModel accountmodel = new accountModel(t);
+					accountmodel.insertAccount(account);
+					nextDialog.dismiss();
+					
+				}
+				catch(Exception e)
+				{
+					Log.v("Error ", "Error with account insert. Exception " + e);
+					errorView.setText("Error creating account");
+					
+				}
 			}
 		}
 		

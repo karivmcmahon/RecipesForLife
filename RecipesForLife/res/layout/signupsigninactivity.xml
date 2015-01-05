@@ -67,7 +67,8 @@
         android:textColor="#FFFFFF"
          android:textColorHint="#FFFFFF"
         android:hint="janedoe@aol.co.uk"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="textEmailAddress" />
 
     <Button
         android:id="@+id/button1"

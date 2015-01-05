@@ -85,7 +85,8 @@
            android:textColor="#FFFFFF"
            android:textColorHint="#FFFFFF"
            android:ems="10"
-           android:hint="jane@aol.co.uk"/>
+           android:hint="jane@aol.co.uk"
+           android:inputType="textEmailAddress"/>
 
        <EditText
            android:id="@+id/nameEdit"

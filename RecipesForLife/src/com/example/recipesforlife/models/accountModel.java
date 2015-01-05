@@ -15,6 +15,7 @@ import java.util.List;
 
 
 
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,6 +37,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Class handles database details relating to the users account
@@ -48,10 +51,12 @@ public class accountModel extends baseDataSource
 	ContentValues values;
 	ContentValues accountValues;
 	String lastUpdated;
+	Context context;
 	
 	public accountModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
+		this.context = context;
 	}
 
 	/**
@@ -104,6 +109,27 @@ public class accountModel extends baseDataSource
 	}
 	
 	/**
+	 * Checks if email is already in use
+	 * @param email
+	 * @return true if in use and false if not
+	 */
+	public boolean checkEmail(String email )
+	{
+		open();
+		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=?", new String[] { email });
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.close();
+			close();
+			return true;
+		}
+		else
+		{
+			cursor.close();
+			close();
+			return false;
+		} 	
+	}
+	/**
 	 * Create a json with information entered in app to send to SQL on the server database
 	 * @param accountInfo
 	 */
@@ -138,22 +164,31 @@ public class accountModel extends baseDataSource
 							
 						} 
 						catch (ClientProtocolException e) 
-						{							
+						{	
+							Toast.makeText(context, 
+					        	    "Error with sync", Toast.LENGTH_LONG).show();
+							Log.v("Error", "Error with executing connection");
 							e.printStackTrace();
 						} 
 					catch (IOException e) 
 					{
+						Toast.makeText(context, 
+				        	    "Error with sync", Toast.LENGTH_LONG).show();
 						e.printStackTrace();
 					}
 				} 
 				catch (UnsupportedEncodingException e) 
-				{						
+				{	
+					Toast.makeText(context, 
+			        	    "Error with sync", Toast.LENGTH_LONG).show();
 					e.printStackTrace();
 				}
 					
 			} 
 			catch (JSONException e) 
 			{
+				Toast.makeText(context, 
+		        	    "Error with sync", Toast.LENGTH_LONG).show();
 			    e.printStackTrace();
 			}
 			
