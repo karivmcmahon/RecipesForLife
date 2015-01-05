@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+     android:background="@drawable/shape2"
+     >
 
    <TextView
            android:id="@+id/additionalView"
@@ -75,13 +77,14 @@
          android:textColorHint="#FFFFFF" />
      
       <TextView
-           android:id="@+id/interestView"
+           android:id="@+id/errorView"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:layout_below="@+id/bioView"
+           android:layout_below="@+id/interestView"
            android:layout_marginTop="22dp"
-           android:gravity="left"
-           android:text="Cooking interest:" />
+           android:layout_centerHorizontal="true"
+           android:layout_centerVertical="true"
+            />
       
       <EditText
          android:id="@+id/interestEditText"
@@ -95,12 +98,20 @@
          android:textSize="14dp"
          android:textColor="#FFFFFF"
          android:textColorHint="#FFFFFF" />
+       <TextView
+           android:id="@+id/interestView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/bioView"
+           android:layout_marginTop="22dp"
+           android:gravity="left"
+           android:text="Cooking interest:" />
       
       <Button
            android:id="@+id/signUpButton"
            android:layout_width="wrap_content"
            android:layout_height="25dp"
-           android:layout_below="@+id/interestView"
+           android:layout_below="@+id/errorView"
            android:layout_centerHorizontal="true"
            android:layout_marginTop="26dp"
            android:background="@drawable/button"

@@ -59,13 +59,14 @@ public class SignUpSignInActivity extends Activity {
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
 	util utils;
-	
+	int counter;
 	SharedPreferences sharedpreferences;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
+		counter = 0;
 		//View for activity
 		setContentView(R.layout.signupsigninactivity);
 		utils = new util();
@@ -123,7 +124,7 @@ public class SignUpSignInActivity extends Activity {
 					Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
 					d.setAlpha(80);
 					dialog.setContentView(R.layout.signupcustomdialog);
-					dialog.getWindow().setBackgroundDrawable(d);
+					dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 					//Set dialogs style
 					setDialogText(R.id.nameView,dialog,22);
 					setDialogText(R.id.emailView,dialog,22);
@@ -140,15 +141,19 @@ public class SignUpSignInActivity extends Activity {
 					dialogButton.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
+							counter++;
 							//get the info from the dialog
-							getInitialDialogInfo(dialog);		
+							boolean show = getInitialDialogInfo(dialog);
+							if(show == true)
+							{
 							//Show another dialog
 							final Dialog nextDialog = new Dialog(SignUpSignInActivity.this);
 							nextDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-							Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
-							d.setAlpha(80);
+							//Drawable d = new ColorDrawable(Color.parseColor("#A6A6A6"));
+							//d.setAlpha(80);
 							nextDialog.setContentView(R.layout.signupnextcustomdialog);
-							nextDialog.getWindow().setBackgroundDrawable(d);
+							nextDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+							
 							//Set style
 							setDialogText(R.id.additionalView,nextDialog,28);
 							setDialogText(R.id.cityView,nextDialog,22);
@@ -170,6 +175,7 @@ public class SignUpSignInActivity extends Activity {
 
 							});					
 							nextDialog.show();						
+						}
 						}
 					});  
 
@@ -327,22 +333,71 @@ public class SignUpSignInActivity extends Activity {
 		      Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
 		      startActivity(i);
 			}
+			else
+			{
+				final Dialog dialog = new Dialog(SignUpSignInActivity.this);
+				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
+				d.setAlpha(80);
+				dialog.setContentView(R.layout.textviewdialog);
+				dialog.getWindow().setBackgroundDrawable(d);
+				//Set dialogs style
+				setDialogText(R.id.textView,dialog,18);
+				TextView txtView =  (TextView) dialog.findViewById(R.id.textView);
+				txtView.setText("Error : The details you have entered are incorrect, please try again");
+				
+				//Show dialog
+				dialog.show(); 
+				Button button = (Button) dialog.findViewById(R.id.okButton);
+				button.setTypeface(typeFace);
+				button.setTextSize(22);
+				button.setTextColor(Color.parseColor("#FFFFFFFF"));
+				button.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View arg0) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}});
+			}
 		}
 		
 		/**
 		 * Get information from the first dialog box when creating account
 		 * @param dialog
 		 */
-		public void getInitialDialogInfo(Dialog dialog)
+		public boolean getInitialDialogInfo(Dialog dialog)
 		{
 			//Get info from edit text box
 			emailEdit = (EditText) dialog.findViewById(R.id.emailEdit);
 			nameEdit = (EditText) dialog.findViewById(R.id.nameEdit);
 			passwordEdit = (EditText) dialog.findViewById(R.id.passwordEdit);
+			TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
+			
+			setDialogText(R.id.errorView,dialog,16);
+			errorView.setTextColor(Color.parseColor("#F70521"));
 			name= nameEdit.getText().toString();
 			password = passwordEdit.getText().toString();
 			email = emailEdit.getText().toString(); 	
-			dialog.dismiss();		
+			if(email.equals(""))
+			{
+				errorView.setText("Please enter an email address \n" );
+			}
+			else if(password.equals("") )
+			{
+				errorView.setText("Please enter a password \n");
+			}
+			else if(name.equals("") )
+			{
+				errorView.setText("Please enter a name \n");
+			}
+			
+			else
+			{
+				dialog.dismiss();
+				return true;
+			}
+			return false;
 		}
 		
 		/**
@@ -357,24 +412,34 @@ public class SignUpSignInActivity extends Activity {
 			countryEdit = (EditText) nextDialog.findViewById(R.id.countryEdit);
 			bioEdit = (EditText) nextDialog.findViewById(R.id.bioEditText);
 			interestEdit = (EditText) nextDialog.findViewById(R.id.interestEditText);
+			TextView errorView = (TextView) nextDialog.findViewById(R.id.errorView);
+			setDialogText(R.id.errorView,nextDialog,16);
+			errorView.setTextColor(Color.parseColor("#F70521"));
 			city = cityEdit.getText().toString();
 			country = countryEdit.getText().toString();
 			bio = bioEdit.getText().toString();
 			interest = interestEdit.getText().toString();
-			//Add info to list
-			account.add(name);
-			account.add(name);
-			account.add(country);
-			account.add(bio);
-			account.add(city);
-			account.add(interest);
-			account.add(email);
-			account.add(password);	
-			//Insert to db
-			Context t = getApplicationContext();
-			accountModel accountmodel = new accountModel(t);
-			accountmodel.insertAccount(account);
-			nextDialog.dismiss();
+			if(country.equals(""))
+			{
+				errorView.setText("Please enter a country \n");
+			}
+			else
+			{
+				//Add info to list
+				account.add(name);
+				account.add(name);
+				account.add(country);
+				account.add(bio);
+				account.add(city);
+				account.add(interest);
+				account.add(email);
+				account.add(password);	
+				//Insert to db
+				Context t = getApplicationContext();
+				accountModel accountmodel = new accountModel(t);
+				accountmodel.insertAccount(account);
+				nextDialog.dismiss();
+			}
 		}
 		
 		
