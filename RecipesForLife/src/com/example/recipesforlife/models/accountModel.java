@@ -55,7 +55,7 @@ public class accountModel extends baseDataSource
 	
 	public accountModel(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor st
 		this.context = context;
 	}
 
@@ -69,8 +69,19 @@ public class accountModel extends baseDataSource
 			Calendar cal = Calendar.getInstance(); // creates calendar
             cal.setTime(new Date()); // sets calendar time/date
             Date today = cal.getTime();
-            lastUpdated = dateToString(today);	 	
-            insertUserData(accountInfo);
+            lastUpdated = dateToString(today);	
+            database.beginTransaction();
+            try
+            {
+            	insertUserData(accountInfo);
+            	database.setTransactionSuccessful();
+            	database.endTransaction();
+            	Log.v("suc", "suc");
+            }catch(SQLException e)
+            {
+            	database.endTransaction();
+            	Log.v("Trans fail", "Trans fail");
+            }
 		    close();
 	} 
 	
@@ -207,16 +218,9 @@ public class accountModel extends baseDataSource
 	    values.put("country", accountInfo.get(2)); 
 	    values.put("bio", accountInfo.get(3)); 
 	    values.put("city", accountInfo.get(4)); 
-	    values.put("cookingInterest", accountInfo.get(5));     
-	    try
-	    {	
-	    	id = database.insert("Users", null, values);
-	    	insertAccountData(accountInfo, id);
-		} 
-	    catch (SQLException e) 
-	    {
-	        Log.v("db","Exception 1 " +  e.toString());
-	    } 
+	    values.put("cookingInterest", accountInfo.get(5));     	 
+    	id = database.insertOrThrow("Users", null, values);
+    	insertAccountData(accountInfo, id);
 	}
 	
 	/**
@@ -232,14 +236,7 @@ public class accountModel extends baseDataSource
 	    accountValues.put("email", accountInfo.get(6));
 	    accountValues.put("updateTime", lastUpdated);
 	    accountValues.put("password", accountInfo.get(7));
-	    try
-	    {
-	    	database.insert("Account", null, accountValues);
-	    } 
-	    catch (SQLException e) 
-	    {
-	    	Log.v("db","Exception 2 " +  e.toString());
-	    } 
+	    database.insertOrThrow("Account", null, accountValues);
 	}
 	
 
