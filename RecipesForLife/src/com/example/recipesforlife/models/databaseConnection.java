@@ -14,6 +14,11 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Class based on code from http://www.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
+ * @author Kari
+ *
+ */
 public class databaseConnection extends SQLiteOpenHelper {
 	
   private static String DB_PATH;
@@ -22,6 +27,10 @@ public class databaseConnection extends SQLiteOpenHelper {
   private Context myContext;
   private Resources resources;
   
+  /**
+   * Stores database connection path
+   * @param context
+   */
   public databaseConnection(Context context) 
   {
         super(context, DB_NAME, null, 1);
@@ -30,6 +39,10 @@ public class databaseConnection extends SQLiteOpenHelper {
         resources = myContext.getResources();
   }
   
+  /**
+   * Creates the database
+   * @throws IOException
+   */
   public void createDataBase() throws IOException
   {
         if (databaseFileExists()) 
@@ -62,6 +75,10 @@ public class databaseConnection extends SQLiteOpenHelper {
 	    }
   	}
 
+  	/**
+  	 * Checks if the database file already exists
+  	 * @return true if it does or false if not
+  	 */
 	private boolean databaseFileExists() {
 	    AssetManager mg = resources.getAssets();
 	    try 
@@ -101,6 +118,10 @@ public class databaseConnection extends SQLiteOpenHelper {
 	    return checkDB != null ? true : false;
 	}
 	
+	/**
+	 * Copys database
+	 * @throws IOException
+	 */
 	private void copyDataBase() throws IOException 
 	{
 	    //Open your local db as the input stream
@@ -126,6 +147,11 @@ public class databaseConnection extends SQLiteOpenHelper {
 	    myInput.close();
 	}
 	
+	/**
+	 * Open the database and return the opened database
+	 * @return
+	 * @throws SQLException
+	 */
 	public SQLiteDatabase openDataBase() throws SQLException 
 	{
 	    //Open the database
@@ -138,6 +164,10 @@ public class databaseConnection extends SQLiteOpenHelper {
 	    return myDataBase;
 	}
 	
+	/**
+	 * Deletes the database
+	 * @throws SQLException
+	 */
 	public void deleteDatabase() throws SQLException 
 	{
 	    myContext.deleteDatabase(DB_NAME);

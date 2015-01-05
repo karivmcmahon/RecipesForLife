@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-
+/**
+ * Base class that relates to all model classes handling  database work
+ * @author Kari
+ *
+ */
 public abstract class baseDataSource {
     protected SQLiteDatabase database;
     protected databaseConnection dbHelper;

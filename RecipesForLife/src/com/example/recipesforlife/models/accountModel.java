@@ -36,7 +36,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class accountModel extends baseDataSource{
+/**
+ * Class handles database details relating to the users account
+ * @author Kari
+ *
+ */
+public class accountModel extends baseDataSource
+{
 	long id;
 	String str;
 	ContentValues values;
@@ -55,10 +61,8 @@ public class accountModel extends baseDataSource{
 	public void insertAccount(List<String> accountInfo) 
 	{
 			open();
-			//Get datetime
 			Calendar cal = Calendar.getInstance(); // creates calendar
             cal.setTime(new Date()); // sets calendar time/date
-            cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
             Date today = cal.getTime();
             lastUpdated = dateToString(today);	 	
             insertUserData(accountInfo);
@@ -152,6 +156,7 @@ public class accountModel extends baseDataSource{
 			{
 			    e.printStackTrace();
 			}
+			
 	}
 	
 	/**
@@ -195,7 +200,6 @@ public class accountModel extends baseDataSource{
 	    try
 	    {
 	    	database.insert("Account", null, accountValues);
-	    	//createAndSendJSON(accountInfo);
 	    } 
 	    catch (SQLException e) 
 	    {

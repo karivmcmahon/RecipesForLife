@@ -1,5 +1,10 @@
 package com.example.recipesforlife.controllers;
 
+/**
+ * Controller for user bean
+ * @author Kari
+ *
+ */
 public class userBean {
 	String name;
 	String country;

@@ -13,6 +13,7 @@ import org.json.JSONException;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.*;
 
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
 	
 	public static final String MyPREFERENCES = "MyPrefs";
 	private SharedPreferences sharedpreferences;
+	util utils;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,44 +43,12 @@ public class MainActivity extends Activity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.activity_main);
+		utils = new util();
 		
 		
 		
-		sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		Editor editor = sharedpreferences.edit();
-        editor.putString("Date", "2015-01-02 16:50:00");
-        editor.commit();
-		Button syncButton = (Button) findViewById(R.id.syncButton);
-		syncButton.setOnClickListener(new OnClickListener()
-		{
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				List nameValuePairs = new ArrayList(1);
-				
-				syncModel sync = new syncModel(getApplicationContext());
-				try {
-					//sync.getAndCreateAccountJSON();
-					sync.getJSONFromServer();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-              /**  Calendar cal = Calendar.getInstance(); // creates calendar
-                cal.setTime(new Date()); // sets calendar time/date
-                cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-                Date today = cal.getTime();
-                String lastUpdated = dateToString(today);
-                Editor editor = sharedpreferences.edit();
-                editor.putString("Date", lastUpdated);
-                editor.commit();
-                Log.v("SHARED", "SHARED " + sharedpreferences.getString("Date", "DEFAULT")); **/
-				
-			}
-			
-		});
+		
+		
 		
 		
 		Button logOff = (Button) findViewById(R.id.logOffButton);
@@ -102,11 +72,44 @@ public class MainActivity extends Activity {
 		
 	}
 	
-
-	private String dateToString(Date date) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentDate = formatter.format(date);
-		return currentDate;
-	}
+	 @Override
+	   protected void onResume() {
+		   super.onResume();
+	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
+	      Context.MODE_PRIVATE);
+	      
+	    		  
+	    		 if(utils.checkInternetConnection(getApplicationContext()))
+	    			{
+	    				syncModel sync = new syncModel(getApplicationContext());
+	    				try {
+	    					sync.getAndCreateAccountJSON();
+	    					sync.getJSONFromServer();
+	    					sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+	    					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+	    					
+	    					Calendar cal = Calendar.getInstance(); // creates calendar
+	    		            cal.setTime(new Date()); // sets calendar time/date
+	    		            Date today = cal.getTime();
+	    		            String lastUpdated = utils.dateToString(today);
+	    					Editor editor = sharedpreferences.edit();
+	    			        editor.putString("Date", lastUpdated);
+	    			        editor.commit();
+	    				} catch (JSONException e) {
+	    					//uto-generated catch block
+	    					e.printStackTrace();
+	    					
+	    					
+	    				}
+	    			
+	    	
+	    				
+	    	  
+	     }
+	      
+	   }
+	
+	
+	
 
 }

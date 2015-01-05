@@ -1,12 +1,19 @@
 package com.example.recipesforlife.views;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import org.json.JSONException;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
+import com.example.recipesforlife.models.syncModel;
+import com.example.recipesforlife.models.util;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -18,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Html;
@@ -32,6 +40,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * Class that handles the sign in/sign up page that is showed initially
+ * @author Kari
+ *
+ */
 public class SignUpSignInActivity extends Activity {
 	//Edit text stores
 	EditText emailEdit,nameEdit,passwordEdit,countryEdit, cityEdit, interestEdit, bioEdit;
@@ -45,22 +58,41 @@ public class SignUpSignInActivity extends Activity {
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
+	util utils;
 	
 	SharedPreferences sharedpreferences;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-         StrictMode.setThreadPolicy(policy);
-         //View for activity
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		//View for activity
 		setContentView(R.layout.signupsigninactivity);
+		utils = new util();
+		//Get shared pref
+		sharedpreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		//If false its the first time been created - set initial sync time
+		if (sharedpreferences.getBoolean("firstTime",false) == false) {
+			Editor editor = sharedpreferences.edit();
+			editor.putBoolean("firstTime", false);
+			editor.commit();
+			Editor editor2 = sharedpreferences.edit();
+			editor2.putString("Date", "2015-01-01 12:00:00");
+			editor2.commit();
+
+		} else {
+			Editor editor = sharedpreferences.edit();
+			editor.putBoolean("firstTime", true);
+			editor.commit();
+		}
 		//Style for activity
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		setText(R.id.textView1, 28); 	
 		setText(R.id.emailView, 22);	
 		setText(R.id.passwordView, 22);
 		setButtonText(R.id.button1, 22);
-		
+
+
 		//Sign in button
 		Button button1 = (Button) findViewById(R.id.button1);
 		button1.setOnClickListener(new OnClickListener() {
@@ -70,9 +102,9 @@ public class SignUpSignInActivity extends Activity {
 				//Check login details
 				checkLogin();
 			}
-			
+
 		});
-			
+
 		//Style and on touch listener for create account
 		TextView  signupView = (TextView) findViewById(R.id.signUpView);
 		signupView.setText(Html.fromHtml("<p><u>Create an account</u></p>"));
@@ -85,72 +117,76 @@ public class SignUpSignInActivity extends Activity {
 				if(event.getAction()  == MotionEvent.ACTION_DOWN)
 				{
 					account = new ArrayList<String>();
-				//Creates a custom dialog
-				final Dialog dialog = new Dialog(SignUpSignInActivity.this);
-				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
-				d.setAlpha(80);
-				dialog.setContentView(R.layout.signupcustomdialog);
-				dialog.getWindow().setBackgroundDrawable(d);
-				//Set dialogs style
-				setDialogText(R.id.nameView,dialog,22);
-				setDialogText(R.id.emailView,dialog,22);
-				setDialogText(R.id.passwordView,dialog,22);
-				setDialogText(R.id.createView,dialog,28);
-				//Show dialog
-				dialog.show(); 
-				
-				//Next button on dialog
-				Button dialogButton = (Button) dialog.findViewById(R.id.nextButton);
-				dialogButton.setTypeface(typeFace);
-				dialogButton.setTextSize(22);
-				dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-				dialogButton.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						//get the info from the dialog
-						getInitialDialogInfo(dialog);		
-						//Show another dialog
-						final Dialog nextDialog = new Dialog(SignUpSignInActivity.this);
-						nextDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-						Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
-						d.setAlpha(80);
-						nextDialog.setContentView(R.layout.signupnextcustomdialog);
-						nextDialog.getWindow().setBackgroundDrawable(d);
-						//Set style
-						setDialogText(R.id.additionalView,nextDialog,28);
-						setDialogText(R.id.cityView,nextDialog,22);
-						setDialogText(R.id.countryView,nextDialog,22);
-						setDialogText(R.id.bioView,nextDialog,22);
-						setDialogText(R.id.interestView,nextDialog,22);
-						//Set button click
-						Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
-						nextDialogButton.setTypeface(typeFace);
-						nextDialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-						nextDialogButton.setTextSize(22);
-						nextDialogButton.setOnClickListener(new OnClickListener()
+					//Creates a custom dialog
+					final Dialog dialog = new Dialog(SignUpSignInActivity.this);
+					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+					Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
+					d.setAlpha(80);
+					dialog.setContentView(R.layout.signupcustomdialog);
+					dialog.getWindow().setBackgroundDrawable(d);
+					//Set dialogs style
+					setDialogText(R.id.nameView,dialog,22);
+					setDialogText(R.id.emailView,dialog,22);
+					setDialogText(R.id.passwordView,dialog,22);
+					setDialogText(R.id.createView,dialog,28);
+					//Show dialog
+					dialog.show(); 
+
+					//Next button on dialog
+					Button dialogButton = (Button) dialog.findViewById(R.id.nextButton);
+					dialogButton.setTypeface(typeFace);
+					dialogButton.setTextSize(22);
+					dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+					dialogButton.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							//get the info from the dialog
+							getInitialDialogInfo(dialog);		
+							//Show another dialog
+							final Dialog nextDialog = new Dialog(SignUpSignInActivity.this);
+							nextDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+							Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
+							d.setAlpha(80);
+							nextDialog.setContentView(R.layout.signupnextcustomdialog);
+							nextDialog.getWindow().setBackgroundDrawable(d);
+							//Set style
+							setDialogText(R.id.additionalView,nextDialog,28);
+							setDialogText(R.id.cityView,nextDialog,22);
+							setDialogText(R.id.countryView,nextDialog,22);
+							setDialogText(R.id.bioView,nextDialog,22);
+							setDialogText(R.id.interestView,nextDialog,22);
+							//Set button click
+							Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
+							nextDialogButton.setTypeface(typeFace);
+							nextDialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+							nextDialogButton.setTextSize(22);
+							nextDialogButton.setOnClickListener(new OnClickListener()
+							{
+								@Override
+								public void onClick(View v) 
 								{
-									@Override
-									public void onClick(View v) 
-									{
-										getSecondDialogInfo(nextDialog);
-									}
-							
-								});					
-						nextDialog.show();						
-					}
-				});  
-							
-			return false; 
+									getSecondDialogInfo(nextDialog);
+								}
+
+							});					
+							nextDialog.show();						
+						}
+					});  
+
+					return false; 
+				}
+				else
+				{
+					return false;
+				}
 			}
-			else
-			{
-				return false;
-			}
-		}
-	});
+		});
 		buildDatabase();
-}
+		sync();
+	}
+		
+		
+
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,17 +200,50 @@ public class SignUpSignInActivity extends Activity {
 		 */
 	   @Override
 	   protected void onResume() {
+		   super.onResume();
 	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
 	      Context.MODE_PRIVATE);
 	      if (sharedpreferences.contains(emailk))
 	      {
 	    	  if(sharedpreferences.contains(pass))
-	    	  {       
+	    	  {   
+	    		  sync();
+	    		  			
 		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
 			      startActivity(i);
 	    	  }
-	      }
-	      super.onResume();
+	     }
+	   }
+	      
+	   
+	   /**
+	    * Syncs the databases
+	    */
+	   public void sync()
+	   {
+		   if(utils.checkInternetConnection(getApplicationContext()))
+			{
+				syncModel sync = new syncModel(getApplicationContext());
+				try {
+					sync.getAndCreateAccountJSON();
+					sync.getJSONFromServer();
+					sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+					
+					Calendar cal = Calendar.getInstance(); // creates calendar
+		            cal.setTime(new Date()); // sets calendar time/date
+		            Date today = cal.getTime();
+		            String lastUpdated = utils.dateToString(today);
+					Editor editor = sharedpreferences.edit();
+			        editor.putString("Date", lastUpdated);
+			        editor.commit();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+					
+				}
+			}
 	   }
 	
 	 	/**
@@ -183,7 +252,7 @@ public class SignUpSignInActivity extends Activity {
 		public void buildDatabase() 
 		{
 			databaseConnection dbConnection = new databaseConnection(this);
-		//	dbConnection.deleteDatabase();
+			dbConnection.deleteDatabase();
 			try {
 				dbConnection.createDataBase();
 			} catch (IOException ioe) {
@@ -307,6 +376,8 @@ public class SignUpSignInActivity extends Activity {
 			accountmodel.insertAccount(account);
 			nextDialog.dismiss();
 		}
+		
+		
 	}
 		
 

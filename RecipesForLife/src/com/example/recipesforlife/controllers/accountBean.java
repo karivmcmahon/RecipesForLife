@@ -1,5 +1,10 @@
 package com.example.recipesforlife.controllers;
 
+/**
+ * Controller for Account
+ * @author Kari
+ *
+ */
 public class accountBean 
 {
 	private int id;

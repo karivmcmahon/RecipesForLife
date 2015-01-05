@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -27,26 +28,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * This class syncs the sever and phone databases
+ * @author Kari
+ *
+ */
 public class syncModel extends baseDataSource
 {
 	Context context;
+	String currentDate;
 	public syncModel(Context context) {
 		super(context);
 		this.context = context;
 		// TODO Auto-generated constructor stub
 	}
 
-	String currentDate;
-
-	
-
-	
+	/**
+	 * Gets	the users that have been added after last sync datetime
+	 * @return the list of users
+	 */
 	public ArrayList<userBean> getUsers()
 	{
-		  SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		getCurrentDate();
-		Log.v("Current Date", "Curr" + currentDate);
-		Log.v("Last updated", "Last" + sharedpreferences.getString("Date", "DEFAULT"));
 		open();
 		 ArrayList<userBean> userList = new ArrayList<userBean>();
 	        Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
@@ -56,14 +60,18 @@ public class syncModel extends baseDataSource
 	                userList.add(cursorToUser(cursor));
 	            }
 	        }
-	        cursor.close();
-	        close();
-	        return userList;
+	     cursor.close();
+	     close();
+	     return userList;
 	}
 	
+	/**
+	 * Gets the accounts that have been added after last sync datetime
+	 * @return the list of accounts
+	 */
 	public ArrayList<accountBean> getAccount()
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		getCurrentDate();
 		open();
 		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
@@ -79,7 +87,11 @@ public class syncModel extends baseDataSource
 	        return accountList;
 	}
 	
-
+	/**
+	 * Sets info from db to the controller
+	 * @param cursor
+	 * @return accountBean
+	 */
 	private accountBean cursorToAccount(Cursor cursor) {
 	        accountBean ab = new accountBean();
 	        ab.setId(cursor.getInt(getIndex("id",cursor)));       
@@ -89,6 +101,11 @@ public class syncModel extends baseDataSource
 	        return ab;
 	    }
 	 
+	/**
+	 * Sets info from db to the controller
+	 * @param cursor
+	 * @return userBean
+	 */
 	 private userBean cursorToUser(Cursor cursor) {
 	        userBean ub = new userBean();
 	        ub.setId(cursor.getInt(getIndex("id",cursor)));       
@@ -100,14 +117,17 @@ public class syncModel extends baseDataSource
 	        return ub;
 	    }
 	
+	 /**
+	  * Create a json with the recently added account info to send to server
+	  * @throws JSONException
+	  */
 	public void getAndCreateAccountJSON() throws JSONException
 	{
 		ArrayList<userBean> userList = getUsers();
-		Log.v("USe list" , "User list " + userList.size());
 		ArrayList<accountBean> accountList = getAccount();
 		JSONArray jsonArray = new JSONArray();
 		
-	for(int i = 0; i < userList.size(); i++)
+		for(int i = 0; i < userList.size(); i++)
 		{
 			JSONObject account = new JSONObject();
 			account.put("email",  accountList.get(i).getEmail());
@@ -118,14 +138,15 @@ public class syncModel extends baseDataSource
 			account.put("city", userList.get(i).getCity());
 			account.put("cookingInterest", userList.get(i).getCookingInterest());
 			account.put("updateTime", accountList.get(i).getUpdateTime());
-			jsonArray.put(account);
-			
-			
-			
+			jsonArray.put(account);			
 		} 
 	sendJSONToServer(jsonArray);
 	}
 	
+	/**
+	 * Sends the json with account info to the server
+	 * @param jsonArray
+	 */
 	public void sendJSONToServer(JSONArray jsonArray)
 	{
 		String str = "";
@@ -155,12 +176,16 @@ public class syncModel extends baseDataSource
 	
 	}
 	
+	/**
+	 * Gets the json with it's sync info from the server
+	 * @throws JSONException
+	 */
 	public void getJSONFromServer() throws JSONException
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		 JSONObject json;
+		JSONObject json;
 		date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT") );
 		jsonArray.put(date);
 		String str = "";
@@ -187,13 +212,20 @@ public class syncModel extends baseDataSource
             if (jArray.length() != 0) 
             {
                 json = jArray.getJSONObject(0);
-                Log.v("Name", "Name " + json.getString("name"));
                 for (int i = 0; i < jArray.length(); i++) 
                 {
+                	List<String> accountInfo = new ArrayList<String>();
                     json = jArray.getJSONObject(i);
-                    Log.v("Length", Integer.toString(jArray.length()));
-                    Log.v("Name", "Name " + json.getString("name"));
-                    Log.v("Email", "Email " + json.getString("email"));
+                    accountInfo.add(json.getString("name"));
+                    accountInfo.add(json.getString("name"));
+                    accountInfo.add(json.getString("country"));
+                    accountInfo.add(json.getString("bio"));
+                    accountInfo.add(json.getString("city"));
+                    accountInfo.add(json.getString("cookingInterest"));
+                    accountInfo.add(json.getString("email"));
+                    accountInfo.add(json.getString("password"));
+        			accountModel accountmodel = new accountModel(context);
+        			accountmodel.insertAccount(accountInfo);
                 }
             }
                     
@@ -204,25 +236,7 @@ public class syncModel extends baseDataSource
 			e.printStackTrace();
 		}
 	}
-	public void recieveUserJSON()
-	{
-		
-	}
 	
-	public void recieveAccountJSON()
-	{
-		
-	}
-	
-	public void insertUserJSON()
-	{
-		
-	}
-	
-	public void insertAccountJSON()
-	{
-		
-	}
 	
 	private String dateToString(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
