@@ -58,22 +58,44 @@ public class accountTestCase extends InstrumentationTestCase  {
 		accountmodel.insertAccount(accountInfo);
 		account = accountmodel.selectAccount("hilz@aol.co.uk", "whisk");
 		user = accountmodel.selectUser(account.get(0).getId());
+		Assert.assertEquals(account.get(0).getEmail(), "hilz@aol.co.uk");
+		Assert.assertEquals(user.get(0).getName(), "Hilary");
+		//Test invalid insert
+		accountInfo.add(null);
+		accountInfo.add("Hilary");
+		accountInfo.add("Scotland");
+		accountInfo.add("Home cook");
+		accountInfo.add("Edinburgh");
+		accountInfo.add("Home cook");
+		accountInfo.add("hils@aol.co.uk");
+		accountInfo.add("whisk");	
+		accountmodel.insertAccount(accountInfo);
+		account = accountmodel.selectAccount("hils@aol.co.uk", "whisk");
+		Assert.assertEquals(account.size(),0);
+		
 		
 	}
 	
 	public void testGetUser() throws Exception
 	{
+		List<userBean> user = new ArrayList<userBean>();
+		user = accountmodel.selectUser(1);
+		Assert.assertEquals(user.get(0).getName(), "jane");
+		user = accountmodel.selectUser(10000000);
+		Assert.assertEquals(user.size(), 0);
 		
 	}
 	
 	public void testGetAccount() throws Exception
 	{
-		
+		List<accountBean> account = new ArrayList<accountBean>();
+		account = accountmodel.selectAccount("doe", "doe");
+		Assert.assertEquals(account.get(0).getEmail(), "doe");
+		account = accountmodel.selectAccount("danny", "vause");
+		Assert.assertEquals(account.size(), 0);
 	}
 	
-	public void testSync()
-	{
-		
-	}
-
+	//Needs to test sync - not sure how to approach it without adding test data to server
+	//possibly add and delete from server
+	
 }

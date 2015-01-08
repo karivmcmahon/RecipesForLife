@@ -98,7 +98,7 @@ public class accountModel extends baseDataSource
 	{
 		open();
 		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
-	        Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email,  });
+	        Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password  });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
@@ -114,7 +114,7 @@ public class accountModel extends baseDataSource
 	{
 		open();
 		 ArrayList<userBean> userList = new ArrayList<userBean>();
-	        Cursor cursor = database.rawQuery("SELECT * FROM User WHERE id=?", new String[] { Integer.toString(id) });
+	        Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE id=?", new String[] { Integer.toString(id) });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
