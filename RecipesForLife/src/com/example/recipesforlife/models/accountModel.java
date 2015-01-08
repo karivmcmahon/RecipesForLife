@@ -16,6 +16,8 @@ import java.util.List;
 
 
 
+
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -29,6 +31,11 @@ import org.json.JSONObject;
 
 
 
+
+
+
+import com.example.recipesforlife.controllers.accountBean;
+import com.example.recipesforlife.controllers.userBean;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,11 +59,13 @@ public class accountModel extends baseDataSource
 	ContentValues accountValues;
 	String lastUpdated;
 	Context context;
+	syncModel sync;
 	
 	public accountModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor st
 		this.context = context;
+		sync = new syncModel(context);
 	}
 
 	/**
@@ -75,7 +84,7 @@ public class accountModel extends baseDataSource
             {
             	insertUserData(accountInfo);
             	database.setTransactionSuccessful();
-            	database.endTransaction();
+            	database.endTransaction(); 
             	Log.v("suc", "suc");
             }catch(SQLException e)
             {
@@ -84,6 +93,38 @@ public class accountModel extends baseDataSource
             }
 		    close();
 	} 
+	
+	public ArrayList<accountBean> selectAccount(String email, String password)
+	{
+		open();
+		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
+	        Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email,  });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                accountList.add(sync.cursorToAccount(cursor));
+	            }
+	        }
+	        cursor.close();
+	        close();
+	        return accountList;
+	}
+	
+	public ArrayList<userBean> selectUser(int id)
+	{
+		open();
+		 ArrayList<userBean> userList = new ArrayList<userBean>();
+	        Cursor cursor = database.rawQuery("SELECT * FROM User WHERE id=?", new String[] { Integer.toString(id) });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                userList.add(sync.cursorToUser(cursor));
+	            }
+	        }
+	        cursor.close();
+	        close();
+	        return userList;
+	}
 	
 	/**
 	 * Converts date into string

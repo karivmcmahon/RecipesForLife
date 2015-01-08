@@ -435,7 +435,7 @@ public class SignUpSignInActivity extends Activity {
 			else
 			{
 				//Add info to list
-				account.add(null);
+				account.add(name);
 				account.add(name);
 				account.add(country);
 				account.add(bio);

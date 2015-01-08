@@ -92,7 +92,7 @@ public class syncModel extends baseDataSource
 	 * @param cursor
 	 * @return accountBean
 	 */
-	private accountBean cursorToAccount(Cursor cursor) {
+	public accountBean cursorToAccount(Cursor cursor) {
 	        accountBean ab = new accountBean();
 	        ab.setId(cursor.getInt(getIndex("id",cursor)));       
 	        ab.setEmail(cursor.getString(getIndex("email", cursor)));
@@ -106,7 +106,7 @@ public class syncModel extends baseDataSource
 	 * @param cursor
 	 * @return userBean
 	 */
-	 private userBean cursorToUser(Cursor cursor) {
+	 public userBean cursorToUser(Cursor cursor) {
 	        userBean ub = new userBean();
 	        ub.setId(cursor.getInt(getIndex("id",cursor)));       
 	        ub.setName(cursor.getString(getIndex("name", cursor)));

@@ -31,7 +31,13 @@
              android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
            
         </activity>
+        <uses-library android:name="android.test.runner" /> 
     </application>
+    
+    <instrumentation 
+        android:name="android.test.InstrumentationTestRunner" 
+        android:targetPackage="com.example.recipesforlife"
+        android:label="recipesforlife" /> 
     <uses-permission android:name="android.permission.INTERNET" />
      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
