@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape3" >
+    
+     <TextView
+           android:id="@+id/recipeAddView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true"
+           android:text="Add Recipe" />
+     
+      <TextView
+           android:id="@+id/recipeNameView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/recipeAddView"
+           android:layout_marginTop="22dp"
+           android:gravity="left"
+           android:text="Recipe name:" />
+      
+       <EditText
+         android:id="@+id/recipenameEditText"
+         android:layout_width="wrap_content"
+         android:layout_height="30dp"
+         android:layout_toRightOf="@+id/recipeNameView"
+         android:layout_below="@+id/recipeAddView"
+         android:layout_marginTop="22dp"
+         android:ems="10"
+         android:textSize="14dp"
+         android:textColor="#FFFFFF"
+         />
+       
+        <TextView
+           android:id="@+id/recipeBookView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/recipeNameView"
+           android:layout_marginTop="22dp"
+           android:gravity="left"
+           android:text="Cookbook:" />
+
+        <Spinner
+            android:id="@+id/recipeBookSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/recipeBookView"
+            android:layout_below="@+id/recipenameEditText"
+            android:layout_marginTop="22dp"
+            android:ems="10"
+            android:textSize="14dp" 
+            android:textColor="#FFFFFF"/>
+        
+         <TextView
+           android:id="@+id/recipeDescView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/recipeBookView"
+           android:layout_marginTop="22dp"
+           android:gravity="left"
+           android:text="Description:" />
+
+         <EditText
+             android:id="@+id/recipeDescEdit"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_toRightOf="@+id/recipeDescView"
+             android:layout_below="@+id/recipeBookSpinner"
+             android:layout_marginTop="22dp"
+             android:ems="10"
+             android:inputType="textMultiLine" >
+
+            
+         </EditText>
+
+</RelativeLayout>

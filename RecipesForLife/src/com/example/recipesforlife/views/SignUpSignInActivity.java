@@ -70,7 +70,7 @@ public class SignUpSignInActivity extends Activity {
 		counter = 0;
 		//View for activity
 		setContentView(R.layout.signupsigninactivity);
-		utils = new util();
+		utils = new util(getApplicationContext(), this);
 		//Get shared pref
 		sharedpreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//If false its the first time been created - set initial sync time
@@ -89,10 +89,10 @@ public class SignUpSignInActivity extends Activity {
 		}
 		//Style for activity
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-		setText(R.id.textView1, 28); 	
-		setText(R.id.emailView, 22);	
-		setText(R.id.passwordView, 22);
-		setButtonText(R.id.button1, 22);
+		utils.setText(R.id.textView1, 28); 	
+		utils.setText(R.id.emailView, 22);	
+		utils.setText(R.id.passwordView, 22);
+		utils.setButtonText(R.id.button1, 22);
 
 
 		//Sign in button
@@ -122,15 +122,13 @@ public class SignUpSignInActivity extends Activity {
 					//Creates a custom dialog
 					final Dialog dialog = new Dialog(SignUpSignInActivity.this);
 					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-					Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
-					d.setAlpha(80);
 					dialog.setContentView(R.layout.signupcustomdialog);
 					dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 					//Set dialogs style
-					setDialogText(R.id.nameView,dialog,22);
-					setDialogText(R.id.emailView,dialog,22);
-					setDialogText(R.id.passwordView,dialog,22);
-					setDialogText(R.id.createView,dialog,28);
+					utils.setDialogText(R.id.nameView,dialog,22);
+					utils.setDialogText(R.id.emailView,dialog,22);
+					utils.setDialogText(R.id.passwordView,dialog,22);
+					utils.setDialogText(R.id.createView,dialog,28);
 					//Show dialog
 					dialog.show(); 
 
@@ -156,11 +154,11 @@ public class SignUpSignInActivity extends Activity {
 							nextDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 							
 							//Set style
-							setDialogText(R.id.additionalView,nextDialog,28);
-							setDialogText(R.id.cityView,nextDialog,22);
-							setDialogText(R.id.countryView,nextDialog,22);
-							setDialogText(R.id.bioView,nextDialog,22);
-							setDialogText(R.id.interestView,nextDialog,22);
+							utils.setDialogText(R.id.additionalView,nextDialog,28);
+							utils.setDialogText(R.id.cityView,nextDialog,22);
+							utils.setDialogText(R.id.countryView,nextDialog,22);
+							utils.setDialogText(R.id.bioView,nextDialog,22);
+							utils.setDialogText(R.id.interestView,nextDialog,22);
 							//Set button click
 							Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
 							nextDialogButton.setTypeface(typeFace);
@@ -210,6 +208,8 @@ public class SignUpSignInActivity extends Activity {
 		   super.onResume();
 	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
 	      Context.MODE_PRIVATE);
+	    //Style for activity
+			typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 	      if (sharedpreferences.contains(emailk))
 	      {
 	    	  if(sharedpreferences.contains(pass))
@@ -270,45 +270,9 @@ public class SignUpSignInActivity extends Activity {
 		}
 		
 		
-		/**
-		 * Set custom text
-		 * @param resource
-		 * @param fontSize
-		 */
-		public void setText(int resource,int fontSize)
-		{
-			TextView view = (TextView) findViewById(resource);
-			view.setTypeface(typeFace);
-			view.setTextSize(fontSize);
-			view.setTextColor(Color.parseColor("#FFFFFFFF"));
-		}
 		
-		/**
-		 * Set custom text for button
-		 * @param resource
-		 * @param fontSize
-		 */
-		public void setButtonText(int resource, int fontSize)
-		{
-			Button  button = (Button) findViewById(resource);
-			button.setTypeface(typeFace);
-			button.setTextSize(fontSize);
-			button.setTextColor(Color.parseColor("#FFFFFFFF"));
-		}
 		
-		/**
-		 * Set custom text for the dialog
-		 * @param resource
-		 * @param dialog
-		 * @param fontSize
-		 */
-		public void setDialogText(int resource, Dialog dialog, int fontSize)
-		{
-			TextView view = (TextView)	 dialog.findViewById(resource);
-			view.setTypeface(typeFace);
-			view.setTextSize(fontSize);
-			view.setTextColor(Color.parseColor("#FFFFFFFF"));
-		}
+		
 		
 		/**
 		 * Checks the details entered is a valid account and logs them in
@@ -345,7 +309,7 @@ public class SignUpSignInActivity extends Activity {
 				dialog.setContentView(R.layout.textviewdialog);
 				dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 				//Set dialogs style
-				setDialogText(R.id.textView,dialog,18);
+				utils.setDialogText(R.id.textView,dialog,18);
 				TextView txtView =  (TextView) dialog.findViewById(R.id.textView);
 				txtView.setText("Error : The details you have entered are incorrect, please try again");
 				
@@ -377,7 +341,7 @@ public class SignUpSignInActivity extends Activity {
 			passwordEdit = (EditText) dialog.findViewById(R.id.passwordEdit);
 			TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
 			
-			setDialogText(R.id.errorView,dialog,16);
+			utils.setDialogText(R.id.errorView,dialog,16);
 			errorView.setTextColor(Color.parseColor("#F70521"));
 			name= nameEdit.getText().toString();
 			password = passwordEdit.getText().toString();
@@ -422,7 +386,7 @@ public class SignUpSignInActivity extends Activity {
 			bioEdit = (EditText) nextDialog.findViewById(R.id.bioEditText);
 			interestEdit = (EditText) nextDialog.findViewById(R.id.interestEditText);
 			TextView errorView = (TextView) nextDialog.findViewById(R.id.errorView);
-			setDialogText(R.id.errorView,nextDialog,16);
+			utils.setDialogText(R.id.errorView,nextDialog,16);
 			errorView.setTextColor(Color.parseColor("#F70521"));
 			city = cityEdit.getText().toString();
 			country = countryEdit.getText().toString();
