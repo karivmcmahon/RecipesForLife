@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" 
-    android:background="@drawable/shape2"
+    android:background="@drawable/shape3"
     >
 
 
@@ -59,8 +59,7 @@
            android:layout_toRightOf="@+id/passwordView"
            android:ems="10"
            android:hint="password"
-           android:textColor="#FFFFFF"
-           android:textColorHint="#FFFFFF"
+           android:background="#FFFFFF"
            android:inputType="textPassword" 
             >
        </EditText>
@@ -82,8 +81,7 @@
            android:textSize="14dp"
            android:layout_alignLeft="@+id/passwordEdit"
            android:layout_alignTop="@+id/emailView"
-           android:textColor="#FFFFFF"
-           android:textColorHint="#FFFFFF"
+           android:background="#FFFFFF"
            android:ems="10"
            android:hint="jane@aol.co.uk"
            android:inputType="textEmailAddress"/>
@@ -96,8 +94,7 @@
            android:hint="Jane Doe"
            android:layout_alignRight="@+id/emailEdit"
            android:layout_alignTop="@+id/nameView"
-           android:textColor="#FFFFFF"
-           android:textColorHint="#FFFFFF"
+           android:background="#FFFFFF"
            android:inputType="textPersonName"
            android:ems="10" />
  

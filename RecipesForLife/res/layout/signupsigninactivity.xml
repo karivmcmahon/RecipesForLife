@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="300dp"
+        android:layout_width="310dp"
         android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" 
@@ -44,13 +44,12 @@
 
    <EditText
         android:id="@+id/editText2"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignRight="@+id/imageView1"
         android:layout_alignTop="@+id/passwordView"
         android:textSize="14dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
+        android:background="#FFFFFF"
         android:hint="password"
         android:ems="10" 
          android:inputType="textPassword" >
@@ -59,13 +58,12 @@
 
     <EditText
         android:id="@+id/editText1"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignTop="@+id/emailView"
         android:layout_toRightOf="@+id/passwordView"
         android:textSize="14dp"
-        android:textColor="#FFFFFF"
-         android:textColorHint="#FFFFFF"
+       android:background="#FFFFFF"
         android:hint="janedoe@aol.co.uk"
         android:ems="10"
         android:inputType="textEmailAddress" />
