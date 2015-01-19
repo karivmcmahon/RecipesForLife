@@ -222,6 +222,26 @@ public class MainActivity extends Activity {
 								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 								Spinner sItems = (Spinner) dialog5.findViewById(R.id.recipeDifficultySpinner);
 								sItems.setAdapter(adapter);
+								
+								dialogButton.setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										// TODO Auto-generated method stub
+										EditText imageEdit = (EditText) dialog5.findViewById(R.id.recipeImagesEditText);
+										String image = imageEdit.getText().toString();
+										EditText cusineEdit = (EditText) dialog5.findViewById(R.id.recipeCusineEditText);
+										String cusine = cusineEdit.getText().toString();
+										EditText dietaryEdit = (EditText) dialog5.findViewById(R.id.recipeDietaryEditText);
+										String dietary = dietaryEdit.getText().toString();
+										EditText tipsEdit = (EditText) dialog5.findViewById(R.id.recipeTipsEditText);
+										String tips = tipsEdit.getText().toString();
+										Spinner spinner = (Spinner) dialog5.findViewById(R.id.recipeDifficultySpinner);
+										String difficulty = spinner.getSelectedItem().toString();
+										
+										Log.v("DETS 2 ", "DETS 2 " + image + " " + cusine + " " + dietary + " " + tips + " " + difficulty);
+										
+									}});
 								dialog5.show();
 							}
 							
