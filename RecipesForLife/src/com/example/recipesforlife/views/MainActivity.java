@@ -193,8 +193,36 @@ public class MainActivity extends Activity {
 								EditText cookingEdit = (EditText) dialog2.findViewById(R.id.recipeCookingEditText);
 								String cooking = cookingEdit.getText().toString();
 								Log.v("DETS", "DETS " + ingreds + " " + steps + " " + serves + " " + prep + " " + cooking);
-							
+								dialog2.dismiss();
 								
+								final Dialog dialog5 = new Dialog(MainActivity.this);
+								dialog5.requestWindowFeature(Window.FEATURE_NO_TITLE);
+								dialog5.setContentView(R.layout.recipe3dialog);
+								dialog5.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+								utils.setDialogText(R.id.recipeImagesView, dialog5, 22);
+								utils.setDialogText(R.id.browseButton, dialog5, 22);
+								utils.setDialogText(R.id.recipeAddView3, dialog5, 22);
+								utils.setDialogText(R.id.recipeCusineView, dialog5, 22);
+								utils.setDialogText(R.id.recipeDifficultyView, dialog5, 22);
+								utils.setDialogText(R.id.recipeDietaryView, dialog5, 22);
+								utils.setDialogText(R.id.recipeTipsView, dialog5, 22);
+								Button dialogButton = (Button) dialog5.findViewById(R.id.addRecipeButton);
+								dialogButton.setTypeface(typeFace);
+								dialogButton.setTextSize(22);
+								dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+								
+								List<String> spinnerArray =  new ArrayList<String>();
+								spinnerArray.add("Easy");
+								spinnerArray.add("Medium");
+								spinnerArray.add("Hard");
+
+								ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+								    MainActivity.this, R.layout.item, spinnerArray);
+
+								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+								Spinner sItems = (Spinner) dialog5.findViewById(R.id.recipeDifficultySpinner);
+								sItems.setAdapter(adapter);
+								dialog5.show();
 							}
 							
 							
