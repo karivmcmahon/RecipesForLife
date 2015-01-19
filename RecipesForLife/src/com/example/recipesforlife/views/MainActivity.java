@@ -282,8 +282,21 @@ public class MainActivity extends Activity {
 		addIngredButton.setTextSize(22);
 		addIngredButton.setTextColor(Color.parseColor("#FFFFFFFF"));
 		List<String> spinnerArray =  new ArrayList<String>();
-		spinnerArray.add("item1");
-		spinnerArray.add("item2");
+		spinnerArray.add("teaspoon");
+		spinnerArray.add("tablespoon");
+		spinnerArray.add("cup");
+		spinnerArray.add("kg");
+		spinnerArray.add("g");
+		spinnerArray.add("l");
+		spinnerArray.add("ml");
+		spinnerArray.add("oz");
+		spinnerArray.add("pint");
+		spinnerArray.add("quart");
+		spinnerArray.add("gallon");
+		spinnerArray.add("lb");
+		spinnerArray.add("ounces");
+		spinnerArray.add("pinch");
+		spinnerArray.add(" ");
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 		    MainActivity.this, R.layout.item, spinnerArray);
