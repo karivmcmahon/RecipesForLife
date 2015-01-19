@@ -27,7 +27,9 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -117,6 +119,63 @@ public class MainActivity extends Activity {
 						dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
 						dialog2.show();
 						
+						ImageButton ingredsButton = (ImageButton) dialog2.findViewById(R.id.ingredsAddButton);
+						
+						ingredsButton.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								final Dialog dialog3 = new Dialog(MainActivity.this);
+								dialog3.requestWindowFeature(Window.FEATURE_NO_TITLE);
+								dialog3.setContentView(R.layout.ingredsdialog);
+								dialog3.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+								utils.setDialogText(R.id.addIngredientView, dialog3, 22);
+								utils.setDialogText(R.id.ingredsView, dialog3, 22);
+								utils.setDialogText(R.id.valueView, dialog3, 22);
+								utils.setDialogText(R.id.amountView, dialog3, 22);
+								utils.setDialogText(R.id.noteView, dialog3, 22);
+								Button dialogButton = (Button) dialog3.findViewById(R.id.addIngredButton);
+								dialogButton.setTypeface(typeFace);
+								dialogButton.setTextSize(22);
+								dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+								List<String> spinnerArray =  new ArrayList<String>();
+								spinnerArray.add("item1");
+								spinnerArray.add("item2");
+
+								ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+								    MainActivity.this, R.layout.item, spinnerArray);
+
+								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+								Spinner sItems = (Spinner) dialog3.findViewById(R.id.valueSpinner);
+								sItems.setAdapter(adapter);
+								dialog3.show();
+								
+							}});
+						
+						ImageButton stepsButton = (ImageButton) dialog2.findViewById(R.id.stepsAddButton);
+						stepsButton.setOnClickListener(new OnClickListener()
+						{
+
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								final Dialog dialog4 = new Dialog(MainActivity.this);
+								dialog4.requestWindowFeature(Window.FEATURE_NO_TITLE);
+								dialog4.setContentView(R.layout.methoddialog);
+								dialog4.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+								utils.setDialogText(R.id.stepNumView,dialog4,22);
+								utils.setDialogText(R.id.stepView, dialog4, 22);
+								utils.setDialogText(R.id.addStepView, dialog4, 22);
+								Button dialogButton = (Button) dialog4.findViewById(R.id.addStepButton);
+								dialogButton.setTypeface(typeFace);
+								dialogButton.setTextSize(22);
+								dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+								dialog4.show();
+								
+							}
+							
+						});
+						
 						dialogButton.setOnClickListener(new OnClickListener()
 						{
 
@@ -135,29 +194,7 @@ public class MainActivity extends Activity {
 								String cooking = cookingEdit.getText().toString();
 								Log.v("DETS", "DETS " + ingreds + " " + steps + " " + serves + " " + prep + " " + cooking);
 							
-								ImageButton ingredsButton = (ImageButton) dialog2.findViewById(R.id.ingredsAddButton);
-								ingredsButton.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										Log.v("Click 1", "Click 1");
-										
-										
-									}});
 								
-								ImageButton stepsButton = (ImageButton) dialog2.findViewById(R.id.stepsAddButton);
-								stepsButton.setOnClickListener(new OnClickListener()
-								{
-
-									@Override
-									public void onClick(View v) {
-										// TODO Auto-generated method stub
-										Log.v("Click 2", "Click 2");
-										
-										
-									}
-									
-								});
 							}
 							
 							
