@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
 	Typeface typeFace;
 	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
 	Button nextButton, nextButton2, addIngredButton, addRecipeButton;
+	ArrayList<String> ingredientList, amountList, valueList, noteList, stepNumList, stepList;
 	
 	
 	@Override
@@ -68,6 +69,12 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
+				ingredientList = new ArrayList<String>();
+				amountList = new ArrayList<String>();
+				noteList = new ArrayList<String>();
+				valueList = new ArrayList<String>();
+				stepNumList = new ArrayList<String>();
+				stepList = new ArrayList<String>();
 				setUpInitialRecipeAddDialog();
 				nextButton.setOnClickListener(new OnClickListener() {
 
@@ -93,7 +100,30 @@ public class MainActivity extends Activity {
 									@Override
 									public void onClick(View v) {
 										// TODO Auto-generated method stub
-										
+										Log.v("ADD", "ADD");
+										EditText ingredEdit = (EditText) recipeIngredDialog.findViewById(R.id.ingredEditText);
+										String ingredient = ingredEdit.getText().toString();
+										EditText amountEdit = (EditText) recipeIngredDialog.findViewById(R.id.amountEditText);
+										String amount = amountEdit.getText().toString();
+										EditText noteEdit =  (EditText) recipeIngredDialog.findViewById(R.id.noteEditText);
+										String note = noteEdit.getText().toString();
+										Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
+										String value = spinner.getSelectedItem().toString();
+										Log.v("Ingred ", "Ingred " + ingredient + " " + amount + " " + note + " " + value);
+										ingredientList.add(ingredient);
+										amountList.add(amount);
+										noteList.add(note);
+										valueList.add(value);
+										recipeIngredDialog.dismiss();
+										EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
+										if(note.equals(""))
+										{
+											ingredsEdit.append(  amount + " " + value + " " + ingredient + " ,");
+										}
+										else
+										{
+											ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
+										}
 									}});
 							}});
 						
@@ -106,6 +136,23 @@ public class MainActivity extends Activity {
 								// TODO Auto-generated method stub
 							   
 								setUpStepAddDialog();
+								Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
+								addStepButton.setOnClickListener(new OnClickListener() {
+
+									@Override
+									public void onClick(View arg0) {
+										// TODO Auto-generated method stub
+										EditText stepNumEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
+										String stepNum = stepNumEdit.getText().toString();
+										EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
+										String step = stepEdit.getText().toString();
+										Log.v("Add step ", "Add step " + stepNum + " " + step );
+										stepList.add(step);
+										stepNumList.add(stepNum);
+										EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
+										stepsEdit.append(stepNum +  ". " + step +  ", ");
+										recipeAddStepDialog.dismiss();
+									}});
 							}
 							
 						});
