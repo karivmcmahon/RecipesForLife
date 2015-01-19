@@ -47,6 +47,9 @@ public class MainActivity extends Activity {
 	private SharedPreferences sharedpreferences;
 	util utils;
 	Typeface typeFace;
+	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
+	Button nextButton, nextButton2, addIngredButton, addRecipeButton;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,92 +67,34 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				final Dialog recipeAddDialog = new Dialog(MainActivity.this);
-				recipeAddDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				recipeAddDialog.setContentView(R.layout.recipe1dialog);
-				recipeAddDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-				utils.setDialogText(R.id.recipeAddView,recipeAddDialog,22);
-				utils.setDialogText(R.id.recipeBookView,recipeAddDialog,22);
-				utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
-				utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);
-				
-				List<String> spinnerArray =  new ArrayList<String>();
-				spinnerArray.add("item1");
-				spinnerArray.add("item2");
-
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				    MainActivity.this, R.layout.item, spinnerArray);
-
-				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
-				sItems.setAdapter(adapter);
-				
-				 typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-				Button nextButton = (Button) recipeAddDialog.findViewById(R.id.nextButton);
-				nextButton.setTypeface(typeFace);
-				nextButton.setTextSize(22);
-				nextButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+				typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
+				setUpInitialRecipeAddDialog();
 				nextButton.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						EditText recipeName = (EditText) recipeAddDialog.findViewById(R.id.recipenameEditText);
-						String name = recipeName.getText().toString();
-						EditText recipeDesc = (EditText) recipeAddDialog.findViewById(R.id.recipeDescEdit);
-						String desc = recipeDesc.getText().toString();
-						Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
-						String recipeBook = spinner.getSelectedItem().toString();
-						recipeAddDialog.dismiss();
+						getInitialRecipeAddDialogData();
+						setUpSecondRecipeAddDialog();
 						
 						
-						final Dialog recipeAddDialog2 = new Dialog(MainActivity.this);
-						recipeAddDialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
-						recipeAddDialog2.setContentView(R.layout.recipe2dialog);
-						recipeAddDialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-						utils.setDialogText(R.id.recipeAddView2, recipeAddDialog2, 22);
-						utils.setDialogText(R.id.recipeIngredsView, recipeAddDialog2, 22);
-						utils.setDialogText(R.id.recipeStepsView, recipeAddDialog2, 22);
-						utils.setDialogText(R.id.recipeServesView, recipeAddDialog2, 22);
-						utils.setDialogText(R.id.recipePrepView, recipeAddDialog2, 22);
-						utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
-						Button nextButton2 = (Button) recipeAddDialog2.findViewById(R.id.nextButton);
-						nextButton2.setTypeface(typeFace);
-						nextButton2.setTextSize(22);
-						nextButton2.setTextColor(Color.parseColor("#FFFFFFFF"));
-						recipeAddDialog2.show();
+					    
 						
-						ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);
-						
+						ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
 						ingredsPlusButton.setOnClickListener(new OnClickListener() {
 
 							@Override
 							public void onClick(View v) {
-								final Dialog recipeIngredDialog = new Dialog(MainActivity.this);
-								recipeIngredDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-								recipeIngredDialog.setContentView(R.layout.ingredsdialog);
-								recipeIngredDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-								utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
-								utils.setDialogText(R.id.ingredsView, recipeIngredDialog, 22);
-								utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
-								utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
-								utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
-								Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
-								addIngredButton.setTypeface(typeFace);
-								addIngredButton.setTextSize(22);
-								addIngredButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-								List<String> spinnerArray =  new ArrayList<String>();
-								spinnerArray.add("item1");
-								spinnerArray.add("item2");
-
-								ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-								    MainActivity.this, R.layout.item, spinnerArray);
-
-								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-								Spinner sItems = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
-								sItems.setAdapter(adapter);
-								recipeIngredDialog.show();
 								
+								setUpIngredAddDialog();
+								Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
+								addIngredButton.setOnClickListener(new OnClickListener() {
+
+									@Override
+									public void onClick(View v) {
+										// TODO Auto-generated method stub
+										
+									}});
 							}});
 						
 						ImageButton stepsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.stepsAddButton);
@@ -159,19 +104,8 @@ public class MainActivity extends Activity {
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
-								final Dialog recipeAddStepDialog = new Dialog(MainActivity.this);
-								recipeAddStepDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-								recipeAddStepDialog.setContentView(R.layout.methoddialog);
-								recipeAddStepDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-								utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
-								utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
-								utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
-								Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
-								addStepButton.setTypeface(typeFace);
-								addStepButton.setTextSize(22);
-								addStepButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-								recipeAddStepDialog.show();
-								
+							   
+								setUpStepAddDialog();
 							}
 							
 						});
@@ -182,64 +116,16 @@ public class MainActivity extends Activity {
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
-								EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
-								String ingreds = ingredsEdit.getText().toString();
-								EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
-								String steps = stepsEdit.getText().toString();
-								EditText servesEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeServesEditText);
-								String serves = servesEdit.getText().toString();
-								EditText prepEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
-								String prep = prepEdit.getText().toString();
-								EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
-								String cooking = cookingEdit.getText().toString();
-								Log.v("DETS", "DETS " + ingreds + " " + steps + " " + serves + " " + prep + " " + cooking);
-								recipeAddDialog2.dismiss();
-								
-								final Dialog addRecipeDialog3 = new Dialog(MainActivity.this);
-								addRecipeDialog3.requestWindowFeature(Window.FEATURE_NO_TITLE);
-								addRecipeDialog3.setContentView(R.layout.recipe3dialog);
-								addRecipeDialog3.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-								utils.setDialogText(R.id.recipeImagesView, addRecipeDialog3, 22);
-								utils.setDialogText(R.id.browseButton, addRecipeDialog3, 22);
-								utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
-								utils.setDialogText(R.id.recipeCusineView, addRecipeDialog3, 22);
-								utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
-								utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
-								utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
-								Button addRecipeButton = (Button) addRecipeDialog3.findViewById(R.id.addRecipeButton);
-								addRecipeButton.setTypeface(typeFace);
-								addRecipeButton.setTextSize(22);
-								addRecipeButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-								
-								List<String> spinnerArray =  new ArrayList<String>();
-								spinnerArray.add("Easy");
-								spinnerArray.add("Medium");
-								spinnerArray.add("Hard");
-
-								ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-								    MainActivity.this, R.layout.item, spinnerArray);
-
-								adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-								Spinner sItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
-								sItems.setAdapter(adapter);
+								getSecondDialogData();
+								setUpThirdRecipeAddDialog();
+							   
 								
 								addRecipeButton.setOnClickListener(new OnClickListener(){
 
 									@Override
 									public void onClick(View v) {
 										// TODO Auto-generated method stub
-										EditText imageEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeImagesEditText);
-										String image = imageEdit.getText().toString();
-										EditText cusineEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeCusineEditText);
-										String cusine = cusineEdit.getText().toString();
-										EditText dietaryEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeDietaryEditText);
-										String dietary = dietaryEdit.getText().toString();
-										EditText tipsEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeTipsEditText);
-										String tips = tipsEdit.getText().toString();
-										Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
-										String difficulty = spinner.getSelectedItem().toString();
-										
-										Log.v("DETS 2 ", "DETS 2 " + image + " " + cusine + " " + dietary + " " + tips + " " + difficulty);
+										getThirdDialogData();
 										
 									}});
 								addRecipeDialog3.show();
@@ -278,6 +164,167 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	public void setUpInitialRecipeAddDialog()
+	{
+		recipeAddDialog = new Dialog(MainActivity.this);
+		recipeAddDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		recipeAddDialog.setContentView(R.layout.recipe1dialog);
+		recipeAddDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		utils.setDialogText(R.id.recipeAddView,recipeAddDialog,22);
+		utils.setDialogText(R.id.recipeBookView,recipeAddDialog,22);
+		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
+		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);		
+		List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("item1");
+		spinnerArray.add("item2");
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+		    MainActivity.this, R.layout.item, spinnerArray);
+
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
+		sItems.setAdapter(adapter);
+		nextButton = (Button) recipeAddDialog.findViewById(R.id.nextButton);
+		nextButton.setTypeface(typeFace);
+		nextButton.setTextSize(22);
+		nextButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+	}
+	
+	public void setUpSecondRecipeAddDialog()
+	{
+		recipeAddDialog2 = new Dialog(MainActivity.this);
+		recipeAddDialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		recipeAddDialog2.setContentView(R.layout.recipe2dialog);
+		recipeAddDialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		utils.setDialogText(R.id.recipeAddView2, recipeAddDialog2, 22);
+		utils.setDialogText(R.id.recipeIngredsView, recipeAddDialog2, 22);
+		utils.setDialogText(R.id.recipeStepsView, recipeAddDialog2, 22);
+		utils.setDialogText(R.id.recipeServesView, recipeAddDialog2, 22);
+		utils.setDialogText(R.id.recipePrepView, recipeAddDialog2, 22);
+		utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
+		nextButton2 = (Button) recipeAddDialog2.findViewById(R.id.nextButton);
+		nextButton2.setTypeface(typeFace);
+		nextButton2.setTextSize(22);
+		nextButton2.setTextColor(Color.parseColor("#FFFFFFFF"));
+		recipeAddDialog2.show();
+	}
+	
+	public void getInitialRecipeAddDialogData()
+	{
+		EditText recipeName = (EditText) recipeAddDialog.findViewById(R.id.recipenameEditText);
+		String name = recipeName.getText().toString();
+		EditText recipeDesc = (EditText) recipeAddDialog.findViewById(R.id.recipeDescEdit);
+		String desc = recipeDesc.getText().toString();
+		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
+		String recipeBook = spinner.getSelectedItem().toString();
+		recipeAddDialog.dismiss();
+	}
+	
+	public void setUpIngredAddDialog()
+	{
+		recipeIngredDialog = new Dialog(MainActivity.this);
+		recipeIngredDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		recipeIngredDialog.setContentView(R.layout.ingredsdialog);
+		recipeIngredDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.ingredsView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
+		Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
+		addIngredButton.setTypeface(typeFace);
+		addIngredButton.setTextSize(22);
+		addIngredButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+		List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("item1");
+		spinnerArray.add("item2");
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+		    MainActivity.this, R.layout.item, spinnerArray);
+
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner sItems = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
+		sItems.setAdapter(adapter);
+		recipeIngredDialog.show();
+	}
+	
+	public void setUpStepAddDialog()
+	{
+		 recipeAddStepDialog = new Dialog(MainActivity.this);
+			recipeAddStepDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			recipeAddStepDialog.setContentView(R.layout.methoddialog);
+			recipeAddStepDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+			utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
+			utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
+			utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
+			Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
+			addStepButton.setTypeface(typeFace);
+			addStepButton.setTextSize(22);
+			addStepButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+			recipeAddStepDialog.show();
+	}
+	
+	public void getSecondDialogData()
+	{
+		EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
+		String ingreds = ingredsEdit.getText().toString();
+		EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
+		String steps = stepsEdit.getText().toString();
+		EditText servesEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeServesEditText);
+		String serves = servesEdit.getText().toString();
+		EditText prepEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
+		String prep = prepEdit.getText().toString();
+		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
+		String cooking = cookingEdit.getText().toString();
+		Log.v("DETS", "DETS " + ingreds + " " + steps + " " + serves + " " + prep + " " + cooking);
+		recipeAddDialog2.dismiss();
+	}
+	
+	public void setUpThirdRecipeAddDialog()
+	{
+		 addRecipeDialog3 = new Dialog(MainActivity.this);
+			addRecipeDialog3.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			addRecipeDialog3.setContentView(R.layout.recipe3dialog);
+			addRecipeDialog3.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+			utils.setDialogText(R.id.recipeImagesView, addRecipeDialog3, 22);
+			utils.setDialogText(R.id.browseButton, addRecipeDialog3, 22);
+			utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
+			utils.setDialogText(R.id.recipeCusineView, addRecipeDialog3, 22);
+			utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
+			utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
+			utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
+		    addRecipeButton = (Button) addRecipeDialog3.findViewById(R.id.addRecipeButton);
+			addRecipeButton.setTypeface(typeFace);
+			addRecipeButton.setTextSize(22);
+			addRecipeButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+			
+			List<String> spinnerArray =  new ArrayList<String>();
+			spinnerArray.add("Easy");
+			spinnerArray.add("Medium");
+			spinnerArray.add("Hard");
+
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+			    MainActivity.this, R.layout.item, spinnerArray);
+
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			Spinner sItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
+			sItems.setAdapter(adapter);
+	}
+	
+	public void getThirdDialogData()
+	{
+		EditText imageEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeImagesEditText);
+		String image = imageEdit.getText().toString();
+		EditText cusineEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeCusineEditText);
+		String cusine = cusineEdit.getText().toString();
+		EditText dietaryEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeDietaryEditText);
+		String dietary = dietaryEdit.getText().toString();
+		EditText tipsEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeTipsEditText);
+		String tips = tipsEdit.getText().toString();
+		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
+		String difficulty = spinner.getSelectedItem().toString();
+		
+		Log.v("DETS 2 ", "DETS 2 " + image + " " + cusine + " " + dietary + " " + tips + " " + difficulty);
+	}
 	
 	
 	
