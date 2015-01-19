@@ -262,6 +262,7 @@ public class accountModel extends baseDataSource
 	    values.put("cookingInterest", accountInfo.get(5));     	 
     	id = database.insertOrThrow("Users", null, values);
     	insertAccountData(accountInfo, id);
+    	Log.v("m","m");
 	}
 	
 	/**
@@ -276,6 +277,7 @@ public class accountModel extends baseDataSource
 	    accountValues.put("id", (int)id);
 	    accountValues.put("email", accountInfo.get(6));
 	    accountValues.put("updateTime", lastUpdated);
+	    Log.v("LAST UPDATEzz", "LAST UPDATEzz " + lastUpdated);
 	    accountValues.put("password", accountInfo.get(7));
 	    database.insertOrThrow("Account", null, accountValues);
 	}

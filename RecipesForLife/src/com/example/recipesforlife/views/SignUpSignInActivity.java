@@ -266,6 +266,8 @@ public class SignUpSignInActivity extends Activity {
 				dbConnection.createDataBase();
 			} catch (IOException ioe) {
 				throw new Error("Unable to create database");
+				
+				
 			}
 		}
 		
