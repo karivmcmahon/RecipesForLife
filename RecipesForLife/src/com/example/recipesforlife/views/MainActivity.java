@@ -100,30 +100,7 @@ public class MainActivity extends Activity {
 									@Override
 									public void onClick(View v) {
 										// TODO Auto-generated method stub
-										Log.v("ADD", "ADD");
-										EditText ingredEdit = (EditText) recipeIngredDialog.findViewById(R.id.ingredEditText);
-										String ingredient = ingredEdit.getText().toString();
-										EditText amountEdit = (EditText) recipeIngredDialog.findViewById(R.id.amountEditText);
-										String amount = amountEdit.getText().toString();
-										EditText noteEdit =  (EditText) recipeIngredDialog.findViewById(R.id.noteEditText);
-										String note = noteEdit.getText().toString();
-										Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
-										String value = spinner.getSelectedItem().toString();
-										Log.v("Ingred ", "Ingred " + ingredient + " " + amount + " " + note + " " + value);
-										ingredientList.add(ingredient);
-										amountList.add(amount);
-										noteList.add(note);
-										valueList.add(value);
-										recipeIngredDialog.dismiss();
-										EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
-										if(note.equals(""))
-										{
-											ingredsEdit.append(  amount + " " + value + " " + ingredient + " ,");
-										}
-										else
-										{
-											ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
-										}
+										getIngredient();
 									}});
 							}});
 						
@@ -142,16 +119,7 @@ public class MainActivity extends Activity {
 									@Override
 									public void onClick(View arg0) {
 										// TODO Auto-generated method stub
-										EditText stepNumEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
-										String stepNum = stepNumEdit.getText().toString();
-										EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
-										String step = stepEdit.getText().toString();
-										Log.v("Add step ", "Add step " + stepNum + " " + step );
-										stepList.add(step);
-										stepNumList.add(stepNum);
-										EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
-										stepsEdit.append(stepNum +  ". " + step +  ", ");
-										recipeAddStepDialog.dismiss();
+										getRecipeStep();
 									}});
 							}
 							
@@ -386,6 +354,47 @@ public class MainActivity extends Activity {
 		Log.v("DETS 2 ", "DETS 2 " + image + " " + cusine + " " + dietary + " " + tips + " " + difficulty);
 	}
 	
+	public void getRecipeStep()
+	{
+		EditText stepNumEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
+		String stepNum = stepNumEdit.getText().toString();
+		EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
+		String step = stepEdit.getText().toString();
+		Log.v("Add step ", "Add step " + stepNum + " " + step );
+		stepList.add(step);
+		stepNumList.add(stepNum);
+		EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
+		stepsEdit.append(stepNum +  ". " + step +  ", ");
+		recipeAddStepDialog.dismiss();
+	}
+	
+	public void getIngredient()
+	{
+		Log.v("ADD", "ADD");
+		EditText ingredEdit = (EditText) recipeIngredDialog.findViewById(R.id.ingredEditText);
+		String ingredient = ingredEdit.getText().toString();
+		EditText amountEdit = (EditText) recipeIngredDialog.findViewById(R.id.amountEditText);
+		String amount = amountEdit.getText().toString();
+		EditText noteEdit =  (EditText) recipeIngredDialog.findViewById(R.id.noteEditText);
+		String note = noteEdit.getText().toString();
+		Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
+		String value = spinner.getSelectedItem().toString();
+		Log.v("Ingred ", "Ingred " + ingredient + " " + amount + " " + note + " " + value);
+		ingredientList.add(ingredient);
+		amountList.add(amount);
+		noteList.add(note);
+		valueList.add(value);
+		recipeIngredDialog.dismiss();
+		EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
+		if(note.equals(""))
+		{
+			ingredsEdit.append(  amount + " " + value + " " + ingredient + " ,");
+		}
+		else
+		{
+			ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
+		}
+	}
 	
 	
 	 @Override
