@@ -5,6 +5,20 @@ import java.util.ArrayList;
 public class recipeBean {
 	String name;
 	ArrayList<String> ingredients;
+	ArrayList<String> stepNum;
+	public ArrayList<String> getStepNum() {
+		return stepNum;
+	}
+	public void setStepNum(ArrayList<String> stepNum) {
+		this.stepNum = stepNum;
+	}
+	public ArrayList<String> getSteps() {
+		return steps;
+	}
+	public void setSteps(ArrayList<String> steps) {
+		this.steps = steps;
+	}
+	ArrayList<String> steps;
 	
 	public ArrayList<String> getIngredients() {
 		return ingredients;

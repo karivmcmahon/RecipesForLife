@@ -46,35 +46,42 @@ public class recipeModel extends baseDataSource {
 	    values.put("addedBy", sharedpreferences.getString(emailk, "")); 
     	recipeID = database.insertOrThrow("Recipe", null, values);
     	insertIngredient(recipe);
+    	insertPrep(recipe);
     	close();
 	}
 	
-	public void insertPrep(List<String> prepList)
+	public void insertPrep(recipeBean recipe)
 	{
 		open();
 		Calendar cal = Calendar.getInstance(); // creates calendar
         cal.setTime(new Date()); // sets calendar time/date
         Date today = cal.getTime();
         lastUpdated = dateToString(today);
-        prepvalues.put("instruction", "recipes");
-        prepvalues.put("instructionNum", 1);
-        prepvalues.put("updateTime", lastUpdated); 
-        database.insertOrThrow("Preperation", null, prepvalues);
+        prepvalues = new ContentValues();
+        for(int i = 0; i < recipe.getStepNum().size(); i++)
+        {
+	        prepvalues.put("instruction", recipe.getSteps().get(i).toString());
+	        prepvalues.put("instructionNum", Integer.parseInt(recipe.getStepNum().get(i).toString()));
+	        prepvalues.put("updateTime", lastUpdated); 
+	        prepID = database.insertOrThrow("Preperation", null, prepvalues);
+	        insertPrepToRecipe();
+        }
         close();
 	}
 	
 	public void insertPrepToRecipe()
 	{
-		open();
+		
 		Calendar cal = Calendar.getInstance(); // creates calendar
         cal.setTime(new Date()); // sets calendar time/date
         Date today = cal.getTime();
         lastUpdated = dateToString(today);
-        preptorecipevalues.put("recipeid", 1);
-        preptorecipevalues.put("Preperationid", 1);
+        preptorecipevalues = new ContentValues();
+        preptorecipevalues.put("recipeId", recipeID);
+        preptorecipevalues.put("Preperationid", prepID);
         preptorecipevalues.put("updateTime", lastUpdated); 
-        prepID = database.insertOrThrow("PrepRecipe", null, prepvalues);
-        close();
+        database.insertOrThrow("PrepRecipe", null, preptorecipevalues);
+        
 	}
 	
 	public void insertIngredient(recipeBean recipe)

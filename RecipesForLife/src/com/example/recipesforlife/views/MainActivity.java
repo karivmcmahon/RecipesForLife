@@ -507,6 +507,8 @@ public class MainActivity extends Activity  {
 		recipe.setNotes(noteList);
 		recipe.setValues(valueList);
 		recipe.setAmount(amountList);
+		recipe.setStepNum(stepNumList);
+		recipe.setSteps(stepList);
 		Context context = getApplicationContext();
 		recipeModel model = new recipeModel(context);
 		model.insertRecipe(recipe);
