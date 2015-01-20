@@ -11,14 +11,22 @@ import java.util.List;
 import org.json.JSONException;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.*;
 
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,10 +46,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.util.Log;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity  {
 	
 	public static final String MyPREFERENCES = "MyPrefs";
 	private SharedPreferences sharedpreferences;
@@ -50,7 +59,58 @@ public class MainActivity extends Activity {
 	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
 	Button nextButton, nextButton2, addIngredButton, addRecipeButton;
 	ArrayList<String> ingredientList, amountList, valueList, noteList, stepNumList, stepList;
-	
+	String name, desc,recipeBook, serves, prep, cooking;
+
+	    
+	    Handler mHandler = new Handler(){
+	        @Override
+	        public void handleMessage(Message m){
+	            /** Creating a bundle object to pass currently set date to the fragment */
+	            Bundle b = m.getData();
+	 
+	            /** Getting the day of month from bundle */
+	            String hour = b.getString("hour");
+	 
+	            /** Getting the month of year from bundle */
+	            String minute = b.getString("minute");
+	            Log.v("DATEEEE", "DATEEEE " + hour + " " + minute);
+	            if(hour.length() == 1)
+	            {
+	            	hour = "0" + hour;
+	            }
+	            if(minute.length() == 1)
+	            {
+	            	minute = "0" + minute;
+	            }
+	            EditText edit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
+	            edit.setText(hour + ":" + minute);
+	        }
+	    };
+	    
+	    Handler mHandler2 = new Handler(){
+	        @Override
+	        public void handleMessage(Message m){
+	            /** Creating a bundle object to pass currently set date to the fragment */
+	            Bundle b = m.getData();
+	 
+	            /** Getting the day of month from bundle */
+	            String hour = b.getString("hour");
+	 
+	            /** Getting the month of year from bundle */
+	            String minute = b.getString("minute");
+	            if(hour.length() == 1)
+	            {
+	            	hour = "0" + hour;
+	            }
+	            if(minute.length() == 1)
+	            {
+	            	minute = "0" + minute;
+	            }
+	            Log.v("DATEEEE", "DATEEEE " + hour + " " + minute);
+	            EditText edit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
+	            edit.setText(hour + ":" + minute);
+	        }
+	    };
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +192,7 @@ public class MainActivity extends Activity {
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
 								getSecondDialogData();
+								sendDataToModel();
 								setUpThirdRecipeAddDialog();
 							   
 								
@@ -216,6 +277,56 @@ public class MainActivity extends Activity {
 		utils.setDialogText(R.id.recipeServesView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipePrepView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
+		EditText editText = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
+		editText.setOnClickListener(new OnClickListener(){
+
+			@SuppressLint("NewApi")
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				  /** Instantiating DatePickerDialogFragment */
+                TimePickerFragment datePicker = new TimePickerFragment(mHandler);
+ 
+               
+                /** Getting fragment manger for this activity */
+                android.app.FragmentManager fm = getFragmentManager();
+ 
+                /** Starting a fragment transaction */
+                android.app.FragmentTransaction ft = fm.beginTransaction();
+ 
+                /** Adding the fragment object to the fragment transaction */
+                ft.add(datePicker, "date_picker");
+ 
+                /** Opening the DatePicker fragment */
+                ft.commit();
+		
+		   
+			}});
+		EditText editText2 = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
+		editText2.setOnClickListener(new OnClickListener(){
+
+			@SuppressLint("NewApi")
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				  /** Instantiating DatePickerDialogFragment */
+                TimePickerFragment datePicker = new TimePickerFragment(mHandler2);
+ 
+               
+                /** Getting fragment manger for this activity */
+                android.app.FragmentManager fm = getFragmentManager();
+ 
+                /** Starting a fragment transaction */
+                android.app.FragmentTransaction ft = fm.beginTransaction();
+ 
+                /** Adding the fragment object to the fragment transaction */
+                ft.add(datePicker, "date_picker");
+ 
+                /** Opening the DatePicker fragment */
+                ft.commit();
+		
+		   
+			}});
 		nextButton2 = (Button) recipeAddDialog2.findViewById(R.id.nextButton);
 		nextButton2.setTypeface(typeFace);
 		nextButton2.setTextSize(22);
@@ -226,11 +337,11 @@ public class MainActivity extends Activity {
 	public void getInitialRecipeAddDialogData()
 	{
 		EditText recipeName = (EditText) recipeAddDialog.findViewById(R.id.recipenameEditText);
-		String name = recipeName.getText().toString();
+		name = recipeName.getText().toString();
 		EditText recipeDesc = (EditText) recipeAddDialog.findViewById(R.id.recipeDescEdit);
-		String desc = recipeDesc.getText().toString();
+	    desc = recipeDesc.getText().toString();
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
-		String recipeBook = spinner.getSelectedItem().toString();
+	    recipeBook = spinner.getSelectedItem().toString();
 		recipeAddDialog.dismiss();
 	}
 	
@@ -293,17 +404,14 @@ public class MainActivity extends Activity {
 	
 	public void getSecondDialogData()
 	{
-		EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
-		String ingreds = ingredsEdit.getText().toString();
-		EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
-		String steps = stepsEdit.getText().toString();
+		
+		
 		EditText servesEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeServesEditText);
-		String serves = servesEdit.getText().toString();
+	    serves = servesEdit.getText().toString();
 		EditText prepEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
-		String prep = prepEdit.getText().toString();
+        prep = prepEdit.getText().toString();
 		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
-		String cooking = cookingEdit.getText().toString();
-		Log.v("DETS", "DETS " + ingreds + " " + steps + " " + serves + " " + prep + " " + cooking);
+	    cooking = cookingEdit.getText().toString();
 		recipeAddDialog2.dismiss();
 	}
 	
@@ -394,6 +502,20 @@ public class MainActivity extends Activity {
 		{
 			ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
 		}
+	}
+	
+	public void sendDataToModel()
+	{
+		recipeBean recipe = new recipeBean();
+		recipe.setName(name);
+		recipe.setDesc(desc);
+		recipe.setCooking(cooking);
+		recipe.setServes(serves);
+		recipe.setPrep(prep);
+		recipe.setRecipeBook(recipeBook);
+		Context context = getApplicationContext();
+		recipeModel model = new recipeModel(context);
+		model.insertRecipe(recipe);
 	}
 	
 	

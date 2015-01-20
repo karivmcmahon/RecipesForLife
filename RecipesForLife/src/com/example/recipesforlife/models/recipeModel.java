@@ -5,8 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.example.recipesforlife.controllers.recipeBean;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 public class recipeModel extends baseDataSource {
@@ -15,28 +18,32 @@ public class recipeModel extends baseDataSource {
 	ContentValues values,  prepvalues, preptorecipevalues, ingredValues, ingredToDetailsValues, ingredDetailsValues, ingredToRecipeValues;
 	String lastUpdated;
 	long recipeID, prepID, ingredID, ingredDetsID;
-	protected recipeModel(Context context) {
+	public static final String MyPREFERENCES = "MyPrefs" ;
+	public static final String emailk = "emailKey"; 
+	public recipeModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.context = context;
 	}
 	
-	public void insertRecipe(List<String> recipeInfo)
+	public void insertRecipe(recipeBean recipe)
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		Log.v("Shared", "Shared " + sharedpreferences.getString(emailk, ""));
 		open();
 		Calendar cal = Calendar.getInstance(); // creates calendar
         cal.setTime(new Date()); // sets calendar time/date
         Date today = cal.getTime();
         lastUpdated = dateToString(today);	
 	    values = new ContentValues();
-	    values.put("name", "recipe"); 
+	    values.put("name", recipe.getName()); 
 	    values.put("updateTime", lastUpdated); 
-	    values.put("description", "desc"); 
-	    values.put("prepTime", "1:00:00"); 
-	    values.put("cookingTime", "2:00:00"); 
+	    values.put("description", recipe.getDesc()); 
+	    values.put("prepTime", recipe.getPrep()); 
+	    values.put("cookingTime", recipe.getCooking()); 
 	    values.put("totalTime", "4:00:00");    
-	    values.put("serves", 4); 
-	    values.put("addedBy", "jane"); 
+	    values.put("serves", recipe.getServes()); 
+	    values.put("addedBy", sharedpreferences.getString(emailk, "")); 
     	recipeID = database.insertOrThrow("Recipe", null, values);
     	close();
 	}
