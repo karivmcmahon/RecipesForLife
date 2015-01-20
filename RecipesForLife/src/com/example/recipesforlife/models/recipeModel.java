@@ -1,15 +1,18 @@
 package com.example.recipesforlife.models;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.userBean;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.util.Log;
 
 public class recipeModel extends baseDataSource {
@@ -95,9 +98,17 @@ public class recipeModel extends baseDataSource {
         for(int i = 0; i < recipe.getIngredients().size(); i++)
         {
         	Log.v( "Ingred " , "Ingred " + recipe.getIngredients().get(i).toString());
-        	ingredValues.put("name", recipe.getIngredients().get(i).toString());
+        	int id = selectIngredient(recipe, i);
+        	if(id == 0)
+        	{
+        	ingredValues.put("name", recipe.getIngredients().get(i).toString().toLowerCase());
             ingredValues.put("updateTime", lastUpdated); 
             ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
+        	}
+        	else
+        	{
+        		ingredID = id;
+        	}
             insertIngredientDetails(i, recipe);
             insertRecipeToIngredient();
             insertIngredToDetails();
@@ -137,6 +148,7 @@ public class recipeModel extends baseDataSource {
        // close();
 	}
 	
+	
 	public void insertRecipeToIngredient()
 	{
 		//open();
@@ -151,6 +163,25 @@ public class recipeModel extends baseDataSource {
         database.insertOrThrow("RecipeIngredient", null, ingredToRecipeValues);
        // close();
 	}
+	
+	public int selectIngredient(recipeBean recipe, int x)
+	{
+		
+			int id = 0;
+	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { recipe.getIngredients().get(x).toString().toLowerCase() });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                id = (cursor.getInt(getIndex("id",cursor)));       
+	                
+	            }
+	        }
+	        cursor.close();
+	       return id;
+	
+	}
+	
+	
 	private String dateToString(Date date) 
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

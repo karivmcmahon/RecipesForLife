@@ -127,6 +127,22 @@ public class accountModel extends baseDataSource
 	}
 	
 	/**
+	 * Sets info from db to the controller
+	 * @param cursor
+	 * @return userBean
+	 */
+	 public userBean cursorToUser(Cursor cursor) {
+	        userBean ub = new userBean();
+	        ub.setId(cursor.getInt(getIndex("id",cursor)));       
+	        ub.setName(cursor.getString(getIndex("name", cursor)));
+	        ub.setBio(cursor.getString(getIndex("bio", cursor)));
+	        ub.setCity(cursor.getString(getIndex("city", cursor)));
+	        ub.setCountry(cursor.getString(getIndex("country", cursor)));
+	        ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
+	        return ub;
+	    }
+	
+	/**
 	 * Converts date into string
 	 * @param date
 	 * @return
