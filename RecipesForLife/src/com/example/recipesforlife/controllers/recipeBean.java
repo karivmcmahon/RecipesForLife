@@ -1,7 +1,38 @@
 package com.example.recipesforlife.controllers;
 
+import java.util.ArrayList;
+
 public class recipeBean {
 	String name;
+	ArrayList<String> ingredients;
+	
+	public ArrayList<String> getIngredients() {
+		return ingredients;
+	}
+	public void setIngredients(ArrayList<String> ingredients) {
+		this.ingredients = ingredients;
+	}
+	public ArrayList<String> getNotes() {
+		return notes;
+	}
+	public void setNotes(ArrayList<String> notes) {
+		this.notes = notes;
+	}
+	public ArrayList<String> getValues() {
+		return values;
+	}
+	public void setValues(ArrayList<String> values) {
+		this.values = values;
+	}
+	public ArrayList<String> getAmount() {
+		return amount;
+	}
+	public void setAmount(ArrayList<String> amount) {
+		this.amount = amount;
+	}
+	ArrayList<String> notes;
+	ArrayList<String> values;
+	ArrayList<String> amount;
 	public String getName() {
 		return name;
 	}

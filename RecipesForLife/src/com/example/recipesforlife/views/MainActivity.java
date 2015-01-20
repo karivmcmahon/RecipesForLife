@@ -65,15 +65,10 @@ public class MainActivity extends Activity  {
 	    Handler mHandler = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
-	            /** Creating a bundle object to pass currently set date to the fragment */
+	            
 	            Bundle b = m.getData();
-	 
-	            /** Getting the day of month from bundle */
 	            String hour = b.getString("hour");
-	 
-	            /** Getting the month of year from bundle */
 	            String minute = b.getString("minute");
-	            Log.v("DATEEEE", "DATEEEE " + hour + " " + minute);
 	            if(hour.length() == 1)
 	            {
 	            	hour = "0" + hour;
@@ -90,13 +85,8 @@ public class MainActivity extends Activity  {
 	    Handler mHandler2 = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
-	            /** Creating a bundle object to pass currently set date to the fragment */
 	            Bundle b = m.getData();
-	 
-	            /** Getting the day of month from bundle */
 	            String hour = b.getString("hour");
-	 
-	            /** Getting the month of year from bundle */
 	            String minute = b.getString("minute");
 	            if(hour.length() == 1)
 	            {
@@ -513,6 +503,10 @@ public class MainActivity extends Activity  {
 		recipe.setServes(serves);
 		recipe.setPrep(prep);
 		recipe.setRecipeBook(recipeBook);
+		recipe.setIngredients(ingredientList);
+		recipe.setNotes(noteList);
+		recipe.setValues(valueList);
+		recipe.setAmount(amountList);
 		Context context = getApplicationContext();
 		recipeModel model = new recipeModel(context);
 		model.insertRecipe(recipe);
