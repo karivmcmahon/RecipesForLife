@@ -7,6 +7,7 @@ import java.util.Date;
 
 import com.example.recipesforlife.controllers.accountBean;
 import com.example.recipesforlife.controllers.ingredientBean;
+import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
@@ -89,6 +90,35 @@ public class syncRecipeModel extends baseDataSource {
 		ib.setDetsConnectId(cursor.getInt(getIndex("IngredToIngredDetails.ingredientDetailsid", cursor)));
 		ib.setDetsConnectIngredId(cursor.getInt(getIndex("IngredToIngredDetails.ingredientid", cursor)));
 		return ib;
+	}
+	
+	public ArrayList<preperationBean> getPrep()
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		getCurrentDate();
+		open();
+	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+	    Cursor cursor = database.rawQuery("SELECT * FROM Preperation, PrepRecipe WHERE datetime(Preperation.updateTime) > datetime(?) OR datetime(PrepRecipe.updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                prepList.add(cursorToPreperation(cursor));
+            }
+        }
+        cursor.close();
+        close();
+        return prepList;
+	}
+	
+	public preperationBean cursorToPreperation(Cursor cursor)
+	{
+		preperationBean pb = new preperationBean();
+		pb.setId(cursor.getInt(getIndex("Preperation.id",cursor)));
+		pb.setPreperation(cursor.getString(getIndex("Preperation.instruction", cursor)));
+		pb.setPrepNum(cursor.getInt(getIndex("Preperation.instructionNum", cursor)));
+		pb.setPrepId(cursor.getInt(getIndex("PrepRecipe.Preperationid", cursor)));
+		pb.setRecipeId(cursor.getInt(getIndex("PrepRecipe.recipeId",cursor)));
+		return pb;
 	}
 	private String dateToString(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
