@@ -6,6 +6,27 @@ public class recipeBean {
 	String name;
 	ArrayList<String> ingredients;
 	ArrayList<String> stepNum;
+	int id;
+	public String getAddedBy() {
+		return addedBy;
+	}
+	public void setAddedBy(String addedBy) {
+		this.addedBy = addedBy;
+	}
+	String addedBy;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	String updateTime;
 	public ArrayList<String> getStepNum() {
 		return stepNum;
 	}

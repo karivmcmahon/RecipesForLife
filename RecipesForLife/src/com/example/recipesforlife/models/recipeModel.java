@@ -23,21 +23,19 @@ public class recipeModel extends baseDataSource {
 	long recipeID, prepID, ingredID, ingredDetsID;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
+	syncRecipeModel sync;
 	public recipeModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.context = context;
+		sync = new syncRecipeModel(context);
 	}
 	
 	public void insertRecipe(recipeBean recipe)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		Log.v("Shared", "Shared " + sharedpreferences.getString(emailk, ""));
 		open();
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        lastUpdated = dateToString(today);	
+		getLastUpdated();
 	    values = new ContentValues();
 	    values.put("name", recipe.getName()); 
 	    values.put("updateTime", lastUpdated); 
@@ -50,16 +48,15 @@ public class recipeModel extends baseDataSource {
     	recipeID = database.insertOrThrow("Recipe", null, values);
     	insertIngredient(recipe);
     	insertPrep(recipe);
+    	
     	close();
+    	sync.getIngred();
 	}
 	
 	public void insertPrep(recipeBean recipe)
 	{
 		open();
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        lastUpdated = dateToString(today);
+		getLastUpdated();
         prepvalues = new ContentValues();
         for(int i = 0; i < recipe.getStepNum().size(); i++)
         {
@@ -90,10 +87,7 @@ public class recipeModel extends baseDataSource {
 	public void insertIngredient(recipeBean recipe)
 	{
 		open();
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        lastUpdated = dateToString(today);
+		getLastUpdated();
         ingredValues = new ContentValues();
         for(int i = 0; i < recipe.getIngredients().size(); i++)
         {
@@ -101,9 +95,9 @@ public class recipeModel extends baseDataSource {
         	int id = selectIngredient(recipe, i);
         	if(id == 0)
         	{
-        	ingredValues.put("name", recipe.getIngredients().get(i).toString().toLowerCase());
-            ingredValues.put("updateTime", lastUpdated); 
-            ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
+	        	ingredValues.put("name", recipe.getIngredients().get(i).toString().toLowerCase());
+	            ingredValues.put("updateTime", lastUpdated); 
+	            ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
         	}
         	else
         	{
@@ -118,11 +112,7 @@ public class recipeModel extends baseDataSource {
 	
 	public void insertIngredientDetails(int i, recipeBean recipe)
 	{
-		//open();
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        lastUpdated = dateToString(today);
+		getLastUpdated();
         ingredDetailsValues = new ContentValues();
         ingredDetailsValues.put("ingredientId", ingredID);
         ingredDetailsValues.put("amount", Integer.parseInt(recipe.getAmount().get(i).toString()));
@@ -130,38 +120,28 @@ public class recipeModel extends baseDataSource {
         ingredDetailsValues.put("value", recipe.getValues().get(i).toString());
         ingredDetailsValues.put("updateTime", lastUpdated); 
         ingredDetsID = database.insertOrThrow("IngredientDetails", null, ingredDetailsValues);
-        //close();
+        
 	}
 	
 	public void insertIngredToDetails()
 	{
-		//open();
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        lastUpdated = dateToString(today);
+		getLastUpdated();
         ingredToDetailsValues = new ContentValues();
         ingredToDetailsValues.put("ingredientid",ingredID);
         ingredToDetailsValues.put("IngredientDetailsid",ingredDetsID);
         ingredToDetailsValues.put("updateTime", lastUpdated); 
         database.insertOrThrow("IngredToIngredDetails", null, ingredToDetailsValues);
-       // close();
 	}
 	
 	
 	public void insertRecipeToIngredient()
 	{
-		//open();
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        lastUpdated = dateToString(today);
+		getLastUpdated();
         ingredToRecipeValues = new ContentValues();
         ingredToRecipeValues.put("Recipeid",recipeID);
         ingredToRecipeValues.put("ingredientDetailsId", ingredDetsID);
         ingredToRecipeValues.put("updateTime", lastUpdated); 
         database.insertOrThrow("RecipeIngredient", null, ingredToRecipeValues);
-       // close();
 	}
 	
 	public int selectIngredient(recipeBean recipe, int x)
@@ -187,6 +167,14 @@ public class recipeModel extends baseDataSource {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentDate = formatter.format(date);
 		return currentDate;
+	}
+	
+	private void getLastUpdated()
+	{
+		Calendar cal = Calendar.getInstance(); // creates calendar
+        cal.setTime(new Date()); // sets calendar time/date
+        Date today = cal.getTime();
+        lastUpdated = dateToString(today);
 	}
 	
 }
