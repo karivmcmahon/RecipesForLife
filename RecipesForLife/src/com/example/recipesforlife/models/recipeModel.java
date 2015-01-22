@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONException;
+
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.controllers.userBean;
 
@@ -50,7 +52,14 @@ public class recipeModel extends baseDataSource {
     	insertPrep(recipe);
     	
     	close();
-    	sync.getIngred();
+    	//sync.getIngred();
+    	//sync.getPrep(1);
+    	try {
+			sync.getAndCreateJSON();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void insertPrep(recipeBean recipe)
