@@ -176,6 +176,7 @@ public class syncRecipeModel extends baseDataSource {
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
 		ArrayList<String> prepSteps = new ArrayList<String>();
+		ArrayList<String> prepNums = new ArrayList<String>();
 		ArrayList<String> ingred = new ArrayList<String>();
 		
 		for(int i = 0; i < recipeList.size(); i++)
@@ -188,13 +189,23 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
+			
+			JSONObject prepObj = new JSONObject();
+			JSONObject prepNumObj = new JSONObject();
 			for(int x = 0; x < prepList.size(); x++)
 			{
-				prepSteps.add(prepList.get(x).getPreperation());
-				prepSteps.add(Integer.toString(prepList.get(x).getPrepNum()));
+				prepSteps.add(prepList.get(x).getPreperation().toString());
+				prepNums.add(Integer.toString(prepList.get(x).getPrepNum()));
 		    }
 			ArrayList<ingredientBean> ingredList = getIngred(recipeList.get(i).getId());
-			recipe.put("Preperation", prepSteps);
+			JSONArray prepStepArray = new JSONArray(prepSteps);
+			JSONArray prepNumArray = new JSONArray(prepNums);
+			prepObj.put("prep", prepStepArray);
+			JSONObject p2 = new JSONObject();
+			prepNumObj.put("prepNums", prepNumArray);	
+			recipe.put("Preperation", prepObj );
+			recipe.accumulate("Preperation", prepNumObj );
+			
 			for(int y = 0; y < ingredList.size(); y++)
 			{
 				ingred.add(Integer.toString(ingredList.get(y).getAmount()));
@@ -211,7 +222,7 @@ public class syncRecipeModel extends baseDataSource {
 			jsonArray.put(recipe);			
 			Log.v("Json", "Json " + jsonArray);
 		} 
-	//sendJSONToServer(jsonArray);
+	sendJSONToServer(jsonArray);
 	}
 	
 	
@@ -220,7 +231,7 @@ public class syncRecipeModel extends baseDataSource {
 		String str = "";
 		HttpResponse response = null;
         HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
+        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");      	   	
 		try 
 		{
 			myConnection.setEntity(new ByteArrayEntity(
@@ -230,7 +241,6 @@ public class syncRecipeModel extends baseDataSource {
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
-				
 			} 
 			catch (ClientProtocolException e) 
 			{							
