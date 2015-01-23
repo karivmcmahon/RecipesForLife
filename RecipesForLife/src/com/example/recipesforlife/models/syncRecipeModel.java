@@ -175,8 +175,7 @@ public class syncRecipeModel extends baseDataSource {
 	{
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
-		ArrayList<String> prepSteps = new ArrayList<String>();
-		ArrayList<String> prepNums = new ArrayList<String>();
+		
 		ArrayList<String> ingred = new ArrayList<String>();
 		
 		for(int i = 0; i < recipeList.size(); i++)
@@ -189,7 +188,8 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
-			
+			ArrayList<String> prepSteps = new ArrayList<String>();
+			ArrayList<String> prepNums = new ArrayList<String>();
 			JSONObject prepObj = new JSONObject();
 			JSONObject prepNumObj = new JSONObject();
 			for(int x = 0; x < prepList.size(); x++)
@@ -206,17 +206,38 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("Preperation", prepObj );
 			recipe.accumulate("Preperation", prepNumObj );
 			
+			JSONObject ingredObj = new JSONObject();
+			JSONObject ingredValObj = new JSONObject();
+			JSONObject ingredNoteObj = new JSONObject();
+			JSONObject ingredAmountObj = new JSONObject();
+			ArrayList<String> ingredsList = new ArrayList<String>();
+			ArrayList<String> ingredAmount = new ArrayList<String>();
+			ArrayList<String> ingredNote = new ArrayList<String>();
+			ArrayList<String> ingredValue = new ArrayList<String>();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
-				ingred.add(Integer.toString(ingredList.get(y).getAmount()));
-				ingred.add(ingredList.get(y).getValue());
-				ingred.add(ingredList.get(y).getNote());
+				ingredAmount.add(Integer.toString(ingredList.get(y).getAmount()));
+				ingredValue.add(ingredList.get(y).getValue());
+				ingredNote.add(ingredList.get(y).getNote());
 				String name = getIngredName(ingredList.get(y).getIngredId());
-				ingred.add(name);
+				ingredsList.add(name);
 				
 			}
-			//ArrayList<ingredientBean> ingredList = getIngred(recipeList.get(i).getId());
-			recipe.put("Ingredient", ingred);
+			JSONArray ingredarray = new JSONArray(ingredsList);
+			ingredObj.put("Ingredients", ingredarray);
+			JSONArray valuearray = new JSONArray(ingredValue);
+			ingredValObj.put("Value", valuearray);
+			JSONArray amountarray = new JSONArray(ingredAmount);
+			ingredAmountObj.put("Amount", amountarray);
+			JSONArray notearray = new JSONArray(ingredNote);
+			ingredNoteObj.put("Notes", notearray);
+			//ingredObj.put("name", value)
+			//ArrayList<ingredientBean> ingredList = getIngred(rcipeList.get(i).getId(
+			recipe.put("Ingredient", ingredObj);
+			recipe.accumulate("Ingredient", ingredValObj);
+			recipe.accumulate("Ingredient", ingredAmountObj);
+			recipe.accumulate("Ingredient", ingredNoteObj);
+			
 			
 			
 			jsonArray.put(recipe);			
