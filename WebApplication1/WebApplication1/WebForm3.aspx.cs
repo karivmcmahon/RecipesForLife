@@ -57,7 +57,8 @@ namespace WebApplication1
                                      try
                                      {
 
-                                         insert3.ExecuteReader();
+                                          SqlDataReader rdr = insert3.ExecuteReader();
+                                          rdr.Close();
                
                                      }
                                      catch (Exception ex)
@@ -75,9 +76,79 @@ namespace WebApplication1
                                  }
                                  
                              
-                             //  Response.Write(recipe[i].Preperation[1].prepNums[z] + "\n");
+                            
+                         }
+                         
+                         for (int a = 0; a < recipe[i].Ingredient[0].Ingredients.Count(); a++)
+                         {
+                             SqlCommand insert4 = new SqlCommand(" INSERT INTO Ingredient(name, updateTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime)", connn);
+                             insert4.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
+                             insert4.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+                             try
+                             {
+
+                                 Int32 ingredId = (Int32)insert4.ExecuteScalar();
+                                 SqlCommand insert5 = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime)", connn);
+                                 insert5.Parameters.AddWithValue("@id", ingredId);
+                                 insert5.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
+                                 insert5.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
+                                 insert5.Parameters.AddWithValue("@value", recipe[i].Ingredient[1].Value[a]);
+                                 insert5.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+                                 try
+                                 {
+
+                                     Int32 ingredDetsId = (Int32)insert5.ExecuteScalar();
+                                     SqlCommand insert6 = new SqlCommand(" INSERT INTO RecipeIngredient(Recipeid, ingredientDetailsId, updateTime)  VALUES (@recipeid,@detsid, @updateTime)", connn);
+                                     insert6.Parameters.AddWithValue("@recipeid", recipeId);
+                                     insert6.Parameters.AddWithValue("@detsid", ingredDetsId);
+                                     insert6.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+                                     try
+                                     {
+
+                                         SqlDataReader rdr = insert6.ExecuteReader();
+                                         rdr.Close();
+                                         SqlCommand insert7 = new SqlCommand(" INSERT INTO IngredToIngredDetails(Ingredientdetailsid, ingredientid, updateTime)  VALUES (@detsid,@ingredid, @updateTime)", connn);
+                                         insert7.Parameters.AddWithValue("@ingredid", ingredId);
+                                         insert7.Parameters.AddWithValue("@detsid", ingredDetsId);
+                                         insert7.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+                                         try
+                                         {
+
+                                             SqlDataReader rdrs = insert7.ExecuteReader();
+                                             rdrs.Close();
+
+                                         }
+                                         catch (Exception ex)
+                                         {
+
+                                             Response.Write("Error ");
+                                             Response.Write(ex);
+                                         }
+
+                                     }
+                                     catch (Exception ex)
+                                     {
+
+                                         Response.Write("Error ");
+                                         Response.Write(ex);
+                                     }
+
+                                 }
+                                 catch (Exception ex)
+                                 {
+
+                                     Response.Write("Error ");
+                                     Response.Write(ex);
+                                 }
+
+                             }
+                             catch (Exception ex)
+                             {
+
+                                 Response.Write("Error ");
+                                 Response.Write(ex);
+                             }
                              
-                             //  Response.Write(recipe[i].Preperation[0].prep[y] + "\n");
                          }
 
                         
@@ -96,28 +167,7 @@ namespace WebApplication1
                      
                          
 
-                        for(int a = 0; a < recipe[i].Ingredient[0].Ingredients.Count(); a++)
-                        {
-                          //  Response.Write(recipe[i].Ingredient[0].Ingredients[a]);
-                        }
-
-                        for(int b = 0; b < recipe[i].Ingredient[1].Value.Count(); b++)
-                        {
-                          //  Response.Write(recipe[i].Ingredient[1].Value[b]);
-                        }
-
-                        for(int c = 0; c < recipe[i].Ingredient[2].Amount.Count(); c++)
-                        {
-                         //   Response.Write(recipe[i].Ingredient[2].Amount[c]);
-                        }
-
-                        for(int d = 0; d < recipe[i].Ingredient[3].Notes.Count(); d++)
-                         {
-                            // Response.Write(recipe[i].Ingredient[3].Notes[d]);
-                         }
-
-                     
-                    // Response.Write(recipe[i].Preperation.prepNums[0]);
+                       
                  }
              }
         }
