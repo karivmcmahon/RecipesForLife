@@ -5,3 +5,4 @@ C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\Newtonsoft.Js
 C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\Newtonsoft.Json.xml
 C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\obj\Debug\WebApplication1.dll
 C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\obj\Debug\WebApplication1.pdb
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache

@@ -13,7 +13,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/29/2014 21:29:01</publishTime>
     </File>
     <File Include="bin/WebApplication1.dll">
-      <publishTime>12/31/2014 20:46:41</publishTime>
+      <publishTime>01/02/2015 21:22:16</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>12/29/2014 21:31:47</publishTime>
@@ -23,6 +23,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="WebForm1.aspx">
       <publishTime>12/30/2014 12:41:37</publishTime>
+    </File>
+    <File Include="WebForm2.aspx">
+      <publishTime>01/02/2015 19:52:32</publishTime>
     </File>
   </ItemGroup>
 </Project>
