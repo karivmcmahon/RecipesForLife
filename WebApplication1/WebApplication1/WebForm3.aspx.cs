@@ -81,13 +81,43 @@ namespace WebApplication1
                          
                          for (int a = 0; a < recipe[i].Ingredient[0].Ingredients.Count(); a++)
                          {
+                             
+                             Int32 ingredId = 0;
+                             SqlCommand select = new SqlCommand(" SELECT id FROM Ingredient WHERE name=@name", connn);
+                             select.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
+                             try
+                             {
+
+                                 SqlDataReader rdr = select.ExecuteReader();
+                                 if(rdr.HasRows)
+                                 {
+                                     while (rdr.Read())
+                                     {
+                                         // read a row, for example:
+                                         ingredId= rdr.GetInt32(0);
+                                     }
+                                 }
+                                 rdr.Close();
+
+                             }
+                             catch (Exception ex)
+                             {
+
+                                 Response.Write("Error ");
+                                 Response.Write(ex);
+                             }
+                             
+                            
                              SqlCommand insert4 = new SqlCommand(" INSERT INTO Ingredient(name, updateTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime)", connn);
                              insert4.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
                              insert4.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
                              try
                              {
-
-                                 Int32 ingredId = (Int32)insert4.ExecuteScalar();
+                                 if (ingredId == 0)
+                                 {
+                                     ingredId = (Int32)insert4.ExecuteScalar();
+                                 }
+                              
                                  SqlCommand insert5 = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime)", connn);
                                  insert5.Parameters.AddWithValue("@id", ingredId);
                                  insert5.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
