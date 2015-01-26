@@ -111,7 +111,18 @@ public class MainActivity extends Activity  {
 		setContentView(R.layout.activity_main);
 		utils = new util(getApplicationContext(), this);
 		
-		
+		Button viewButton = (Button) findViewById(R.id.viewButton);
+		viewButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 Intent i = new Intent(MainActivity.this, RecipeViewActivity.class);
+			      startActivity(i);
+			}
+			
+			
+		});
 		Button addButton = (Button) findViewById(R.id.addButton);
 		addButton.setOnClickListener(new OnClickListener()
 		{

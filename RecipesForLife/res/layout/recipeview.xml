@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<RelativeLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
+ 
      <TextView
         android:id="@+id/recipeTitle"
         android:layout_width="wrap_content"
@@ -18,7 +23,6 @@
         android:layout_below="@+id/recipeTitle"
         android:layout_centerHorizontal="true"
         android:text="Best choc chip cookies"
-        android:color="#F3216C"
         android:textStyle="italic" />
 
       <ImageView
@@ -84,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/foodImage"
         android:layout_alignParentRight="true"       
-        android:text="18:00:"
+        android:text="18:00"
        />
        
          
@@ -104,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/prepTimeVal"
         android:layout_alignParentRight="true"       
-        android:text="18:00:"
+        android:text="18:00"
        />
           
         <TextView
@@ -148,5 +152,5 @@
         android:layout_marginLeft="10dp"
        />
        
-
 </RelativeLayout>
+</ScrollView>

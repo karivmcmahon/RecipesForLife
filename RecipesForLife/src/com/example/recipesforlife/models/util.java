@@ -81,6 +81,36 @@ public class util {
 	}
 	
 	/**
+	 * Set custom text
+	 * @param resource
+	 * @param fontSize
+	 */
+	public void setTextPink(int resource,int fontSize)
+	{
+		TextView view = (TextView) activity.findViewById(resource);
+		view.setTypeface(typeFace);
+		view.setTextSize(fontSize);
+		view.setTextColor(Color.parseColor("#F3216C"));
+	}
+	
+	public void setTextBlack(int resource,int fontSize)
+	{
+		TextView view = (TextView) activity.findViewById(resource);
+		view.setTypeface(typeFace);
+		view.setTextSize(fontSize);
+		//view.setTextColor(Color.parseColor("#F3216C"));
+	}
+	
+	public void setTextBlackItalic(int resource,int fontSize)
+	{
+		TextView view = (TextView) activity.findViewById(resource);
+		//view.setTypeface(typeFace);
+		view.setTextSize(fontSize);
+		view.setTypeface(typeFace, Typeface.ITALIC);
+		//view.setTextColor(Color.parseColor("#F3216C"));
+	}
+	
+	/**
 	 * Set custom text for button
 	 * @param resource
 	 * @param fontSize
