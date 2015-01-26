@@ -202,6 +202,32 @@ public class recipeModel extends baseDataSource {
 	}
 	
 	/**
+	 * Retrieve recipe from database by a certain a user so we do not add duplicate recipes
+	 * @param recipe
+	 * @param x
+	 * @return id 
+	 */
+	public boolean selectRecipe(String name, String user)
+	{
+		
+			int id = 0;
+	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=? and addedBy=?", new String[] { name, user });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                return true;  
+	                
+	            }
+	        }
+	        cursor.close();
+	        return false;
+	        
+	       
+	      
+	
+	}
+	
+	/**
 	 * Create date to string
 	 * @param date
 	 * @return

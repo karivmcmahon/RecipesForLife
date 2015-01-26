@@ -54,6 +54,7 @@ public class MainActivity extends Activity  {
 	
 	public static final String MyPREFERENCES = "MyPrefs";
 	private SharedPreferences sharedpreferences;
+	public static final String emailk = "emailKey"; 
 	util utils;
 	Typeface typeFace;
 	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
@@ -289,7 +290,13 @@ public class MainActivity extends Activity  {
 	    desc = recipeDesc.getText().toString();
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 	    recipeBook = spinner.getSelectedItem().toString();
-		
+		Context context = getApplicationContext();
+	    recipeModel model = new recipeModel(context);
+	    SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		if(model.selectRecipe(name, sharedpreferences.getString(emailk, "")) == true)
+		{
+			errorView.setText("You already have a recipe with this name");
+		}
 		if(name.equals(""))
 		{
 			errorView.setText("Please enter a recipe name");
@@ -388,6 +395,7 @@ public class MainActivity extends Activity  {
 		addIngredButton.setTypeface(typeFace);
 		addIngredButton.setTextSize(22);
 		addIngredButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+		//Spinner set up with varying measurement amounts
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("teaspoon");
 		spinnerArray.add("tablespoon");
@@ -438,7 +446,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void getSecondDialogData()
 	{
-		
+		//Getting text for edit text boxes
 		TextView errorView = (TextView) recipeAddDialog2.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddDialog2,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -448,6 +456,7 @@ public class MainActivity extends Activity  {
         prep = prepEdit.getText().toString();
 		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
 	    cooking = cookingEdit.getText().toString();
+	    //Error catching before moving to next stage
 	    if(serves.equals(""))
 	    {
 	    	errorView.setText("Please enter a value for serves");
@@ -533,7 +542,6 @@ public class MainActivity extends Activity  {
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		String difficulty = spinner.getSelectedItem().toString();
 		
-	
 	}
 	
 	/**
@@ -541,6 +549,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void getRecipeStep()
 	{
+		//Getting text
 		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -548,6 +557,7 @@ public class MainActivity extends Activity  {
 		String stepNum = stepNumEdit.getText().toString();
 		EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
 		String step = stepEdit.getText().toString();
+		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
 		{
 			errorView.setText("Please enter a step number");
@@ -571,7 +581,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void getIngredient()
 	{
-		
+		//Getting text
 		EditText ingredEdit = (EditText) recipeIngredDialog.findViewById(R.id.ingredEditText);
 		String ingredient = ingredEdit.getText().toString();
 		EditText amountEdit = (EditText) recipeIngredDialog.findViewById(R.id.amountEditText);
@@ -583,6 +593,7 @@ public class MainActivity extends Activity  {
 		TextView errorView = (TextView) recipeIngredDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeIngredDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
+		//Error catching before moving onto next stage
 		if(ingredient.equals(""))
 		{
 			errorView.setText("Please enter an ingredient name");
