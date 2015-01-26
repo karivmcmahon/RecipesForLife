@@ -188,6 +188,7 @@ public class recipeModel extends baseDataSource {
 	{
 		
 			int id = 0;
+			
 	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { recipe.getIngredients().get(x).toString().toLowerCase() });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
@@ -210,22 +211,70 @@ public class recipeModel extends baseDataSource {
 	public boolean selectRecipe(String name, String user)
 	{
 		
-			int id = 0;
-	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=? and addedBy=?", new String[] { name, user });
+			open();
+	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE name=? and addedBy=?", new String[] { name, user });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
-	                return true;  
+	              return true;
 	                
 	            }
 	        }
 	        cursor.close();
+	        close();
 	        return false;
 	        
 	       
 	      
 	
 	}
+	
+	/**
+	 * Sets info from db to the controller
+	 * @param cursor
+	 * @return userBean
+	 */
+	 public recipeBean cursorToRecipe(Cursor cursor) {
+	        recipeBean rb = new recipeBean();
+	        rb.setName(cursor.getString(getIndex("name",cursor)));
+	        rb.setDesc(cursor.getString(getIndex("description",cursor)));
+	        rb.setServes(cursor.getString(getIndex("serves", cursor)));
+	        rb.setPrep(cursor.getString(getIndex("prepTime", cursor)));
+	        rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
+	        rb.setId(cursor.getInt(getIndex("id",cursor))); 
+	        return rb;
+	    }
+	
+	/**
+	 * Retrieve recipe from database by a certain a user so we do not add duplicate recipes
+	 * @param recipe
+	 * @param x
+	 * @return id 
+	 */
+	public recipeBean selectRecipe2(String name, String user)
+	{
+		
+		    recipeBean rb = new recipeBean();
+		    open();
+	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE name=? and addedBy=?", new String[] { name, user });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                rb = cursorToRecipe(cursor);
+	                
+	                
+	            }
+	        }
+	        cursor.close();
+	        close();
+	        return rb;
+	        
+	       
+	      
+	
+	}
+	
+	
 	
 	/**
 	 * Create date to string

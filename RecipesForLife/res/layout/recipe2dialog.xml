@@ -37,6 +37,7 @@
 	         android:background="#FFFFFF"
 	         android:inputType="textMultiLine"
 	         android:hint="Press plus to add an ingredient"
+	         android:focusable="false"
 	         />
 	       
 		 <ImageButton
@@ -75,6 +76,7 @@
 	         android:background="#FFFFFF"
 	         android:inputType="textMultiLine"
 	         android:hint="Press plus to add a step"
+	          android:focusable="false"
 	         />
 	       
 	        <ImageButton

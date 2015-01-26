@@ -271,8 +271,8 @@ public class syncRecipeModel extends baseDataSource {
 			jsonArray.put(recipe);			
 			//Log.v("Json", "Json " + jsonArray);
 		} 
-	sendJSONToServer(jsonArray);
-		getJSONFromServer();
+	//sendJSONToServer(jsonArray);
+	//	getJSONFromServer();
 	}
 	
 	/**

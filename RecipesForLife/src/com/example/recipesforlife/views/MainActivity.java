@@ -467,8 +467,22 @@ public class MainActivity extends Activity  {
         prep = prepEdit.getText().toString();
 		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
 	    cooking = cookingEdit.getText().toString();
+	   
+	    EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
+	    EditText methodEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
+	    String methods = methodEdit.getText().toString();
+	    String i = ingredsEdit.getText().toString();
+	 Log.v("I "," I " + i);
 	    //Error catching before moving to next stage
-	    if(serves.equals(""))
+	    if(i.equals(""))
+	    {
+	    	errorView.setText("Please enter ingredients");
+	    }
+	    else if(methods.equals(""))
+	    {
+	    	errorView.setText("Please enter methods");
+	    }
+	    else if(serves.equals(""))
 	    {
 	    	errorView.setText("Please enter a value for serves");
 	    }
