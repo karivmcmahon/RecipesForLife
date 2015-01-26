@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 public class RecipeViewActivity extends Activity {
@@ -49,9 +50,9 @@ public class RecipeViewActivity extends Activity {
 		recipeBean recipe = new recipeBean();
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
-		
+		Intent intent = getIntent();
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		recipe = model.selectRecipe2("pizza", sharedpreferences.getString(emailk, "") );
+		recipe = model.selectRecipe2(intent.getStringExtra("name"), sharedpreferences.getString(emailk, "") );
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
 		

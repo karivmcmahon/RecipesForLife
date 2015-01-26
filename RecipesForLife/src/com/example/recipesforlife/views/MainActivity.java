@@ -123,6 +123,19 @@ public class MainActivity extends Activity  {
 			
 			
 		});
+		
+		Button viewListButton = (Button) findViewById(R.id.viewListButton);
+		viewListButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(MainActivity.this, RecipeListViewActivity.class);
+			      startActivity(i);
+				
+			}
+			
+		});
 		Button addButton = (Button) findViewById(R.id.addButton);
 		addButton.setOnClickListener(new OnClickListener()
 		{

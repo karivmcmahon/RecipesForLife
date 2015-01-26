@@ -276,6 +276,29 @@ public class recipeModel extends baseDataSource {
 	
 	}
 	
+	public ArrayList<recipeBean> selectRecipesByUser(String user)
+	{
+		
+		    ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
+		    open();
+	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE addedBy=?", new String[] {  user });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                rb.add(cursorToRecipe(cursor));
+	                
+	                
+	            }
+	        }
+	        cursor.close();
+	        close();
+	        return rb;
+	        
+	       
+	      
+	
+	}
+	
 	public ArrayList<preperationBean> selectPreperation(int id)
 	{
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
