@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import com.example.recipesforlife.controllers.ingredientBean;
+import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.controllers.userBean;
 
@@ -274,6 +276,63 @@ public class recipeModel extends baseDataSource {
 	
 	}
 	
+	public ArrayList<preperationBean> selectPreperation(int id)
+	{
+		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+		open();
+        Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = ?", new String[] { Integer.toString(id) });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                prepList.add(cursorToPrep(cursor));
+                
+                
+            }
+        }
+        cursor.close();
+        close();
+		return prepList;
+	}
+	
+	
+	public ArrayList<ingredientBean> selectIngredients(int id)
+	{
+		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
+		open();
+        Cursor cursor = database.rawQuery("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = ?;", new String[] { Integer.toString(id) });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                ingredList.add(cursorToIngred(cursor));
+                
+                
+            }
+        }
+        cursor.close();
+        close();
+		return ingredList;
+	}
+	
+	public ingredientBean cursorToIngred(Cursor cursor) {
+        ingredientBean ib = new ingredientBean();
+        ib.setName(cursor.getString(getIndex("name",cursor)));
+        ib.setAmount(cursor.getInt(getIndex("amount",cursor)));
+        ib.setValue(cursor.getString(getIndex("value", cursor)));
+        ib.setNote(cursor.getString(getIndex("note",cursor)));
+        return ib;
+    }
+	
+	/**
+	 * Sets info from db to the controller
+	 * @param cursor
+	 * @return userBean
+	 */
+	 public preperationBean cursorToPrep(Cursor cursor) {
+	        preperationBean pb = new preperationBean();
+	        pb.setPreperation(cursor.getString(getIndex("instruction",cursor)));
+	        pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
+	        return pb;
+	    }
 	
 	
 	/**

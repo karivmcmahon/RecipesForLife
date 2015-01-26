@@ -5,7 +5,7 @@ package com.example.recipesforlife.controllers;
  * @author Kari
  *
  */
-public class preperationBean {
+public class preperationBean  {
 	int id;
 	int prepNum;
 	String preperation;
@@ -28,6 +28,7 @@ public class preperationBean {
 	public void setPreperation(String preperation) {
 		this.preperation = preperation;
 	}
+	
 	
 	
 

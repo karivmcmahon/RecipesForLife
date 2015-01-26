@@ -127,7 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ingredientTitle"
         android:layout_marginTop="10dp"
-        android:text=" - Hi \n -Bye "
+        android:text=""
          android:layout_marginLeft="10dp"
        />
         
@@ -148,7 +148,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/methodTitle"
         android:layout_marginTop="10dp"
-        android:text=" 1 Hi \n 2 Bye "
+        android:text=" "
         android:layout_marginLeft="10dp"
        />
        
