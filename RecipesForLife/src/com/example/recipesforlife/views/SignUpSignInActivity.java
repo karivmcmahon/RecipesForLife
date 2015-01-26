@@ -210,16 +210,16 @@ public class SignUpSignInActivity extends Activity {
 	      Context.MODE_PRIVATE);
 	    //Style for activity
 			typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-	      if (sharedpreferences.contains(emailk))
-	      {
-	    	  if(sharedpreferences.contains(pass))
-	    	  {   
-	    		  sync();
+	 //     if (sharedpreferences.contains(emailk))
+	 //     {
+	    	 // if(sharedpreferences.contains(pass))
+	    	 // {   
+	    		//  sync();
 	    		  			
 		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
 			      startActivity(i);
-	    	  }
-	     }
+	    	 // }
+	     //}
 	   }
 	      
 	   

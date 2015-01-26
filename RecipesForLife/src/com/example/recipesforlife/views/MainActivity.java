@@ -135,88 +135,13 @@ public class MainActivity extends Activity  {
 						// TODO Auto-generated method stub
 						
 						//Get data from the dialog
-						getInitialRecipeAddDialogData();
-						//Set up the second recipe add dialog
-						setUpSecondRecipeAddDialog();
-						
-						
-					    
-						//If ingredient plus button is pressed - show a dialog to add an ingredient
-						ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
-						ingredsPlusButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								//Set up the dialog style
-								setUpIngredAddDialog();
-								//Once add is pressed
-								Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
-								addIngredButton.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										// TODO Auto-generated method stub
-										//Get ingredient info
-										getIngredient();
-									}});
-							}});
-						
-						//If steps plus button is pressed - show a dialog to add a step
-						ImageButton stepsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.stepsAddButton);
-						stepsPlusButton.setOnClickListener(new OnClickListener()
-						{
-
-							@Override
-							public void onClick(View v) {
-								// TODO Auto-generated method stub
-							    //Set up style
-								setUpStepAddDialog();
-								//Once add is pressed
-								Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
-								addStepButton.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View arg0) {
-										// TODO Auto-generated method stub
-										//Get info
-										getRecipeStep();
-									}});
-							}
-							
-						});
-						//Once next button is clicked
-						nextButton2.setOnClickListener(new OnClickListener()
-						{
-
-							@Override
-							public void onClick(View v) {
-								// TODO Auto-generated method stub
-								
-								//Get second data and send to the server
-								getSecondDialogData();
-								sendDataToModel();
-								
-								//Third - recipe add dialog - not done yet
-								setUpThirdRecipeAddDialog();
-							   
-								
-								addRecipeButton.setOnClickListener(new OnClickListener(){
-
-									@Override
-									public void onClick(View v) {
-										// TODO Auto-generated method stub
-										getThirdDialogData();
-										
-									}});
-								addRecipeDialog3.show();
-							}
-							
-							
-						});
-						
-					}});
-				recipeAddDialog.show();
+					    getInitialRecipeAddDialogData();
+					}
+					});
+				recipeAddDialog.show();		
+				
 			}
+		
 			
 		});
 		
@@ -288,54 +213,60 @@ public class MainActivity extends Activity  {
 		utils.setDialogText(R.id.recipePrepView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
 		EditText editText = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
-		editText.setOnClickListener(new OnClickListener(){
+		editText.setOnTouchListener(new OnTouchListener(){
 			//When clicked opens the timepicker fragment
 			@SuppressLint("NewApi")
 			@Override
-			public void onClick(View arg0) {
+			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-				  /** Instantiating DatePickerDialogFragment */
-                TimePickerFragment timePicker = new TimePickerFragment(mHandler);
- 
-               
-                /** Getting fragment manger for this activity */
-                android.app.FragmentManager fm = getFragmentManager();
- 
-                /** Starting a fragment transaction */
-                android.app.FragmentTransaction ft = fm.beginTransaction();
- 
-                /** Adding the fragment object to the fragment transaction */
-                ft.add(timePicker, "time_picker");
- 
-                /** Opening the DatePicker fragment */
-                ft.commit();
-		
-		   
+				if(event.getAction()  == MotionEvent.ACTION_DOWN)
+				{
+					  /** Instantiating DatePickerDialogFragment */
+	                TimePickerFragment timePicker = new TimePickerFragment(mHandler);
+	 
+	               
+	                /** Getting fragment manger for this activity */
+	                android.app.FragmentManager fm = getFragmentManager();
+	 
+	                /** Starting a fragment transaction */
+	                android.app.FragmentTransaction ft = fm.beginTransaction();
+	 
+	                /** Adding the fragment object to the fragment transaction */
+	                ft.add(timePicker, "time_picker");
+	 
+	                /** Opening the DatePicker fragment */
+	                ft.commit();
+				}
+				
+				return false;
 			}});
 		EditText editText2 = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
-		editText2.setOnClickListener(new OnClickListener(){
+		editText2.setOnTouchListener(new OnTouchListener(){
 			//When clicked opens the timepicker fragment
 			@SuppressLint("NewApi")
 			@Override
-			public void onClick(View arg0) {
+			public boolean onTouch(View arg0, MotionEvent arg1) {
 				// TODO Auto-generated method stub
-				  /** Instantiating DatePickerDialogFragment */
-                TimePickerFragment timePicker = new TimePickerFragment(mHandler2);
- 
-               
-                /** Getting fragment manger for this activity */
-                android.app.FragmentManager fm = getFragmentManager();
- 
-                /** Starting a fragment transaction */
-                android.app.FragmentTransaction ft = fm.beginTransaction();
- 
-                /** Adding the fragment object to the fragment transaction */
-                ft.add(timePicker, "time_picker");
- 
-                /** Opening the DatePicker fragment */
-                ft.commit();
-		
-		   
+				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
+				{
+					 /** Instantiating DatePickerDialogFragment */
+	                TimePickerFragment timePicker = new TimePickerFragment(mHandler2);
+	 
+	               
+	                /** Getting fragment manger for this activity */
+	                android.app.FragmentManager fm = getFragmentManager();
+	 
+	                /** Starting a fragment transaction */
+	                android.app.FragmentTransaction ft = fm.beginTransaction();
+	 
+	                /** Adding the fragment object to the fragment transaction */
+	                ft.add(timePicker, "time_picker");
+	 
+	                /** Opening the DatePicker fragment */
+	                ft.commit();
+
+				}
+				return false;
 			}});
 		nextButton2 = (Button) recipeAddDialog2.findViewById(R.id.nextButton);
 		nextButton2.setTypeface(typeFace);
@@ -349,13 +280,94 @@ public class MainActivity extends Activity  {
 	 */
 	public void getInitialRecipeAddDialogData()
 	{
+		TextView errorView = (TextView) recipeAddDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,recipeAddDialog,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
 		EditText recipeName = (EditText) recipeAddDialog.findViewById(R.id.recipenameEditText);
 		name = recipeName.getText().toString();
 		EditText recipeDesc = (EditText) recipeAddDialog.findViewById(R.id.recipeDescEdit);
 	    desc = recipeDesc.getText().toString();
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 	    recipeBook = spinner.getSelectedItem().toString();
-		recipeAddDialog.dismiss();
+		
+		if(name.equals(""))
+		{
+			errorView.setText("Please enter a recipe name");
+		}
+		else if(desc.equals(""))
+		{
+			errorView.setText("Please enter a description");
+		}
+		else
+		{
+			recipeAddDialog.dismiss();
+			setUpSecondRecipeAddDialog();
+			
+			
+			
+		    
+			//If ingredient plus button is pressed - show a dialog to add an ingredient
+			ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
+			ingredsPlusButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					//Set up the dialog style
+					setUpIngredAddDialog();
+					//Once add is pressed
+					Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
+					addIngredButton.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							//Get ingredient info
+							getIngredient();
+						}});
+				}});
+			
+			//If steps plus button is pressed - show a dialog to add a step
+			ImageButton stepsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.stepsAddButton);
+			stepsPlusButton.setOnClickListener(new OnClickListener()
+			{
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+				    //Set up style
+					setUpStepAddDialog();
+					//Once add is pressed
+					Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
+					addStepButton.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							//Get info
+							getRecipeStep();
+						}});
+				}
+				
+			});
+			//Once next button is clicked
+			nextButton2.setOnClickListener(new OnClickListener()
+			{
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+					//Get second data and send to the server
+					getSecondDialogData();
+					
+				}
+				
+				
+			});
+			
+		}
+		
+		
 	}
 	
 	/**
@@ -427,14 +439,48 @@ public class MainActivity extends Activity  {
 	public void getSecondDialogData()
 	{
 		
-		
+		TextView errorView = (TextView) recipeAddDialog2.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,recipeAddDialog2,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
 		EditText servesEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeServesEditText);
 	    serves = servesEdit.getText().toString();
 		EditText prepEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
         prep = prepEdit.getText().toString();
 		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
 	    cooking = cookingEdit.getText().toString();
+	    if(serves.equals(""))
+	    {
+	    	errorView.setText("Please enter a value for serves");
+	    }
+	    else if(prep.equals(""))
+	    {
+	    	errorView.setText("Please enter a value for prep time");
+	    	
+	    }
+	    else if(cooking.equals(""))
+	    {
+	    	errorView.setText("Please enter a value for cooking time");
+	    }
+	    else
+	    {
 		recipeAddDialog2.dismiss();
+		sendDataToModel();
+		
+		//Third - recipe add dialog - not done yet
+		setUpThirdRecipeAddDialog();
+	   
+		
+		addRecipeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getThirdDialogData();
+				
+			}
+			});
+		addRecipeDialog3.show();
+	}
 	}
 	
 	/**
@@ -495,15 +541,29 @@ public class MainActivity extends Activity  {
 	 */
 	public void getRecipeStep()
 	{
+		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
+		errorView.setTextColor(Color.parseColor("#FFFFFF"));
 		EditText stepNumEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
 		String stepNum = stepNumEdit.getText().toString();
 		EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
 		String step = stepEdit.getText().toString();
-		stepList.add(step);
-		stepNumList.add(stepNum);
-		EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
-		stepsEdit.append(stepNum +  ". " + step +  ", ");
-		recipeAddStepDialog.dismiss();
+		if(stepNum.equals(""))
+		{
+			errorView.setText("Please enter a step number");
+		}
+		else if(step.equals(""))
+		{
+			errorView.setText("Please enter a step");
+		}
+		else
+		{
+			stepList.add(step);
+			stepNumList.add(stepNum);
+			EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
+			stepsEdit.append(stepNum +  ". " + step +  ", ");
+			recipeAddStepDialog.dismiss();
+		}
 	}
 	
 	/**
@@ -511,7 +571,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void getIngredient()
 	{
-		Log.v("ADD", "ADD");
+		
 		EditText ingredEdit = (EditText) recipeIngredDialog.findViewById(R.id.ingredEditText);
 		String ingredient = ingredEdit.getText().toString();
 		EditText amountEdit = (EditText) recipeIngredDialog.findViewById(R.id.amountEditText);
@@ -520,20 +580,36 @@ public class MainActivity extends Activity  {
 		String note = noteEdit.getText().toString();
 		Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
 		String value = spinner.getSelectedItem().toString();
-		ingredientList.add(ingredient);
-		amountList.add(amount);
-		noteList.add(note);
-		valueList.add(value);
-		recipeIngredDialog.dismiss();
-		EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
-		if(note.equals(""))
+		TextView errorView = (TextView) recipeIngredDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,recipeIngredDialog,16);
+		errorView.setTextColor(Color.parseColor("#FFFFFF"));
+		if(ingredient.equals(""))
 		{
-			ingredsEdit.append(  amount + " " + value + " " + ingredient + " ,");
+			errorView.setText("Please enter an ingredient name");
+		}
+		else if(amount.equals(""))
+		{
+			errorView.setText("Please enter an amount");
 		}
 		else
 		{
-			ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
+			ingredientList.add(ingredient);
+			amountList.add(amount);
+			noteList.add(note);
+			valueList.add(value);
+			recipeIngredDialog.dismiss();
+			EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
+			if(note.equals(""))
+			{
+				ingredsEdit.append(  amount + " " + value + " " + ingredient + " ,");
+			}
+			else
+			{
+				ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
+			}
 		}
+		
+		
 	}
 	
 	/**
@@ -592,10 +668,8 @@ public class MainActivity extends Activity  {
 	    					
 	    				}
 	    			
-	    	
-	    				
-	    	  
-	     }
+	  	     }
+	    		 
 	      
 	   }
 	

@@ -216,7 +216,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("cookingTime", recipeList.get(i).getCooking());
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
-			recipe.put("updateTime", "2015-01-25 18:10:00");
+			recipe.put("updateTime", "2015-01-26 18:10:00");
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();
@@ -271,7 +271,7 @@ public class syncRecipeModel extends baseDataSource {
 			jsonArray.put(recipe);			
 			//Log.v("Json", "Json " + jsonArray);
 		} 
-	//sendJSONToServer(jsonArray);
+	sendJSONToServer(jsonArray);
 		getJSONFromServer();
 	}
 	

@@ -28,7 +28,7 @@
 	       <EditText
 	         android:id="@+id/recipeIngredsEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
+	         android:layout_height="50dp"
 	         android:layout_toRightOf="@+id/recipeIngredsView"
 	         android:layout_below="@+id/recipeAddView2"
 	         android:layout_marginTop="22dp"
@@ -36,6 +36,7 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:inputType="textMultiLine"
+	         android:hint="Press plus to add an ingredient"
 	         />
 	       
 		 <ImageButton
@@ -65,7 +66,7 @@
 	       <EditText
 	         android:id="@+id/recipeStepsEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
+	         android:layout_height="50dp"
 	         android:layout_toRightOf="@+id/recipeStepsView"
 	         android:layout_below="@+id/recipeIngredsView"
 	         android:layout_marginTop="22dp"
@@ -73,6 +74,7 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:inputType="textMultiLine"
+	         android:hint="Press plus to add a step"
 	         />
 	       
 	        <ImageButton
@@ -97,7 +99,8 @@
 	           android:layout_below="@+id/recipeMethodView"
 	           android:layout_marginTop="22dp"
 	           android:gravity="left"
-	           android:text="Serves: " />
+	           android:text="Serves: "
+	           android:inputType="number" />
 	      
 	       <EditText
 	         android:id="@+id/recipeServesEditText"
@@ -129,8 +132,8 @@
 	      
 	       <EditText
 	         android:id="@+id/recipePrepEditText"
-	        android:layout_width="wrap_content"
-	          android:layout_height="wrap_content"
+	        android:layout_width="40dp"
+	          android:layout_height="30dp"
 	          android:layout_weight="1"
 	         android:layout_toRightOf="@+id/recipePrepView"
 	         android:layout_below="@+id/recipeServesView"
@@ -165,6 +168,14 @@
 	         
 	         />
        </LinearLayout>
+       <TextView
+	           android:id="@+id/errorView"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_marginTop="22dp"
+	           android:gravity="center"
+	           android:text="" />
+       
           <Button
            android:id="@+id/nextButton"
            android:layout_width="60dp"

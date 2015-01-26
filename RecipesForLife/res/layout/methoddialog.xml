@@ -39,6 +39,7 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:padding="2dp"
+	         android:inputType="number"
 	         />
 	       
 	       <TextView
@@ -65,6 +66,14 @@
 	         android:inputType="textMultiLine"
 	         />
 	       </LinearLayout>
+	       
+      <TextView
+	           android:id="@+id/errorView"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_marginTop="22dp"
+	           android:gravity="center"
+	           android:text="" />
 	       
      <Button
            android:id="@+id/addStepButton"

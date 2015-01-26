@@ -23,6 +23,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -155,6 +156,8 @@ public class syncModel extends baseDataSource
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
 		try 
 		{
+			 HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+		    HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -192,10 +195,13 @@ public class syncModel extends baseDataSource
 		HttpResponse response = null;
         HttpClient myClient = new DefaultHttpClient();
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
-		try 
+        HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+        HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+        try 
 		{
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
+			
 			try 
 			{
 				response = myClient.execute(myConnection);
