@@ -33,6 +33,10 @@ public class recipeModel extends baseDataSource {
 		sync = new syncRecipeModel(context);
 	}
 	
+	/**
+	 * Inserts recipeBean data into database
+	 * @param recipe
+	 */
 	public void insertRecipe(recipeBean recipe)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -50,7 +54,6 @@ public class recipeModel extends baseDataSource {
     	recipeID = database.insertOrThrow("Recipe", null, values);
     	insertIngredient(recipe);
     	insertPrep(recipe);
-    	
     	close();
     	//sync.getIngred();
     	//sync.getPrep(1);
@@ -62,6 +65,10 @@ public class recipeModel extends baseDataSource {
 		}
 	}
 	
+	/**
+	 * Insert preperation information into database based on recipeBean
+	 * @param recipe
+	 */
 	public void insertPrep(recipeBean recipe)
 	{
 		open();
@@ -78,6 +85,9 @@ public class recipeModel extends baseDataSource {
         close();
 	}
 	
+	/**
+	 * Insert prep id and recipe ids into PrepRecipe in the database
+	 */
 	public void insertPrepToRecipe()
 	{
 		
@@ -93,6 +103,10 @@ public class recipeModel extends baseDataSource {
         
 	}
 	
+	/**
+	 * Insert ingredient information into database
+	 * @param recipe
+	 */
 	public void insertIngredient(recipeBean recipe)
 	{
 		open();
@@ -119,6 +133,11 @@ public class recipeModel extends baseDataSource {
         close();
 	}
 	
+	/**
+	 * Insert ingredient details into database
+	 * @param i
+	 * @param recipe
+	 */
 	public void insertIngredientDetails(int i, recipeBean recipe)
 	{
 		getLastUpdated();
@@ -132,6 +151,9 @@ public class recipeModel extends baseDataSource {
         
 	}
 	
+	/**
+	 * Insert connected ingred details id and ingred id into database
+	 */
 	public void insertIngredToDetails()
 	{
 		getLastUpdated();
@@ -143,6 +165,9 @@ public class recipeModel extends baseDataSource {
 	}
 	
 	
+	/**
+	 * Insert connected ingred details id and recipe id into database
+	 */
 	public void insertRecipeToIngredient()
 	{
 		getLastUpdated();
@@ -153,6 +178,12 @@ public class recipeModel extends baseDataSource {
         database.insertOrThrow("RecipeIngredient", null, ingredToRecipeValues);
 	}
 	
+	/**
+	 * Retrieve ingredient from database the helps us know whether to insert ingredient. If id 0 then insert
+	 * @param recipe
+	 * @param x
+	 * @return id 
+	 */
 	public int selectIngredient(recipeBean recipe, int x)
 	{
 		
@@ -170,7 +201,11 @@ public class recipeModel extends baseDataSource {
 	
 	}
 	
-	
+	/**
+	 * Create date to string
+	 * @param date
+	 * @return
+	 */
 	private String dateToString(Date date) 
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -178,6 +213,9 @@ public class recipeModel extends baseDataSource {
 		return currentDate;
 	}
 	
+	/**
+	 * Get current date
+	 */
 	private void getLastUpdated()
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar

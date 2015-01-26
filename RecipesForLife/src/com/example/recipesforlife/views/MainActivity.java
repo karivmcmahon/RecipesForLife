@@ -61,7 +61,7 @@ public class MainActivity extends Activity  {
 	ArrayList<String> ingredientList, amountList, valueList, noteList, stepNumList, stepList;
 	String name, desc,recipeBook, serves, prep, cooking;
 
-	    
+	    // Handles message from time dialog 1
 	    Handler mHandler = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
@@ -82,6 +82,7 @@ public class MainActivity extends Activity  {
 	        }
 	    };
 	    
+	    //Handles message from time dialog 2
 	    Handler mHandler2 = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
@@ -96,7 +97,6 @@ public class MainActivity extends Activity  {
 	            {
 	            	minute = "0" + minute;
 	            }
-	            Log.v("DATEEEE", "DATEEEE " + hour + " " + minute);
 	            EditText edit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
 	            edit.setText(hour + ":" + minute);
 	        }
@@ -125,35 +125,43 @@ public class MainActivity extends Activity  {
 				valueList = new ArrayList<String>();
 				stepNumList = new ArrayList<String>();
 				stepList = new ArrayList<String>();
+				//Set up dialog style
 				setUpInitialRecipeAddDialog();
+				//Once next pressed
 				nextButton.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
+						
+						//Get data from the dialog
 						getInitialRecipeAddDialogData();
+						//Set up the second recipe add dialog
 						setUpSecondRecipeAddDialog();
 						
 						
 					    
-						
+						//If ingredient plus button is pressed - show a dialog to add an ingredient
 						ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
 						ingredsPlusButton.setOnClickListener(new OnClickListener() {
 
 							@Override
 							public void onClick(View v) {
-								
+								//Set up the dialog style
 								setUpIngredAddDialog();
+								//Once add is pressed
 								Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
 								addIngredButton.setOnClickListener(new OnClickListener() {
 
 									@Override
 									public void onClick(View v) {
 										// TODO Auto-generated method stub
+										//Get ingredient info
 										getIngredient();
 									}});
 							}});
 						
+						//If steps plus button is pressed - show a dialog to add a step
 						ImageButton stepsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.stepsAddButton);
 						stepsPlusButton.setOnClickListener(new OnClickListener()
 						{
@@ -161,28 +169,34 @@ public class MainActivity extends Activity  {
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
-							   
+							    //Set up style
 								setUpStepAddDialog();
+								//Once add is pressed
 								Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
 								addStepButton.setOnClickListener(new OnClickListener() {
 
 									@Override
 									public void onClick(View arg0) {
 										// TODO Auto-generated method stub
+										//Get info
 										getRecipeStep();
 									}});
 							}
 							
 						});
-						
+						//Once next button is clicked
 						nextButton2.setOnClickListener(new OnClickListener()
 						{
 
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
+								
+								//Get second data and send to the server
 								getSecondDialogData();
 								sendDataToModel();
+								
+								//Third - recipe add dialog - not done yet
 								setUpThirdRecipeAddDialog();
 							   
 								
@@ -208,7 +222,7 @@ public class MainActivity extends Activity  {
 		
 		
 		
-		
+		//Log off app code
 		Button logOff = (Button) findViewById(R.id.logOffButton);
 		logOff.setOnClickListener(new OnClickListener()
 		{
@@ -230,6 +244,9 @@ public class MainActivity extends Activity  {
 		
 	}
 	
+	/**
+	 * Set up initial dialog style with correct fonts and spinner filled 
+	 */
 	public void setUpInitialRecipeAddDialog()
 	{
 		recipeAddDialog = new Dialog(MainActivity.this);
@@ -255,6 +272,9 @@ public class MainActivity extends Activity  {
 		nextButton.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
 	
+	/**
+	 * Set up second dialog style with correct fonts and spinner filled 
+	 */
 	public void setUpSecondRecipeAddDialog()
 	{
 		recipeAddDialog2 = new Dialog(MainActivity.this);
@@ -269,13 +289,13 @@ public class MainActivity extends Activity  {
 		utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
 		EditText editText = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
 		editText.setOnClickListener(new OnClickListener(){
-
+			//When clicked opens the timepicker fragment
 			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				  /** Instantiating DatePickerDialogFragment */
-                TimePickerFragment datePicker = new TimePickerFragment(mHandler);
+                TimePickerFragment timePicker = new TimePickerFragment(mHandler);
  
                
                 /** Getting fragment manger for this activity */
@@ -285,7 +305,7 @@ public class MainActivity extends Activity  {
                 android.app.FragmentTransaction ft = fm.beginTransaction();
  
                 /** Adding the fragment object to the fragment transaction */
-                ft.add(datePicker, "date_picker");
+                ft.add(timePicker, "time_picker");
  
                 /** Opening the DatePicker fragment */
                 ft.commit();
@@ -294,13 +314,13 @@ public class MainActivity extends Activity  {
 			}});
 		EditText editText2 = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
 		editText2.setOnClickListener(new OnClickListener(){
-
+			//When clicked opens the timepicker fragment
 			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				  /** Instantiating DatePickerDialogFragment */
-                TimePickerFragment datePicker = new TimePickerFragment(mHandler2);
+                TimePickerFragment timePicker = new TimePickerFragment(mHandler2);
  
                
                 /** Getting fragment manger for this activity */
@@ -310,7 +330,7 @@ public class MainActivity extends Activity  {
                 android.app.FragmentTransaction ft = fm.beginTransaction();
  
                 /** Adding the fragment object to the fragment transaction */
-                ft.add(datePicker, "date_picker");
+                ft.add(timePicker, "time_picker");
  
                 /** Opening the DatePicker fragment */
                 ft.commit();
@@ -324,6 +344,9 @@ public class MainActivity extends Activity  {
 		recipeAddDialog2.show();
 	}
 	
+	/**
+	 * Get data from the first dialog
+	 */
 	public void getInitialRecipeAddDialogData()
 	{
 		EditText recipeName = (EditText) recipeAddDialog.findViewById(R.id.recipenameEditText);
@@ -335,6 +358,9 @@ public class MainActivity extends Activity  {
 		recipeAddDialog.dismiss();
 	}
 	
+	/**
+	 * Setup ingredient add dialog with font and spinnner
+	 */
 	public void setUpIngredAddDialog()
 	{
 		recipeIngredDialog = new Dialog(MainActivity.this);
@@ -376,6 +402,9 @@ public class MainActivity extends Activity  {
 		recipeIngredDialog.show();
 	}
 	
+	/**
+	 * Set up step dialog with correct fonts
+	 */
 	public void setUpStepAddDialog()
 	{
 		 recipeAddStepDialog = new Dialog(MainActivity.this);
@@ -392,6 +421,9 @@ public class MainActivity extends Activity  {
 			recipeAddStepDialog.show();
 	}
 	
+	/**
+	 * Get second dialog data 
+	 */
 	public void getSecondDialogData()
 	{
 		
@@ -405,6 +437,9 @@ public class MainActivity extends Activity  {
 		recipeAddDialog2.dismiss();
 	}
 	
+	/**
+	 * Set up third recipe add dialog
+	 */
 	public void setUpThirdRecipeAddDialog()
 	{
 		 addRecipeDialog3 = new Dialog(MainActivity.this);
@@ -436,6 +471,9 @@ public class MainActivity extends Activity  {
 			sItems.setAdapter(adapter);
 	}
 	
+	/**
+	 * Get third dialog data
+	 */
 	public void getThirdDialogData()
 	{
 		EditText imageEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeImagesEditText);
@@ -449,16 +487,18 @@ public class MainActivity extends Activity  {
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		String difficulty = spinner.getSelectedItem().toString();
 		
-		Log.v("DETS 2 ", "DETS 2 " + image + " " + cusine + " " + dietary + " " + tips + " " + difficulty);
+	
 	}
 	
+	/**
+	 * Get information from step dialog
+	 */
 	public void getRecipeStep()
 	{
 		EditText stepNumEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
 		String stepNum = stepNumEdit.getText().toString();
 		EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
 		String step = stepEdit.getText().toString();
-		Log.v("Add step ", "Add step " + stepNum + " " + step );
 		stepList.add(step);
 		stepNumList.add(stepNum);
 		EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
@@ -466,6 +506,9 @@ public class MainActivity extends Activity  {
 		recipeAddStepDialog.dismiss();
 	}
 	
+	/**
+	 * Get information from ingredient dialogs
+	 */
 	public void getIngredient()
 	{
 		Log.v("ADD", "ADD");
@@ -477,7 +520,6 @@ public class MainActivity extends Activity  {
 		String note = noteEdit.getText().toString();
 		Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
 		String value = spinner.getSelectedItem().toString();
-		Log.v("Ingred ", "Ingred " + ingredient + " " + amount + " " + note + " " + value);
 		ingredientList.add(ingredient);
 		amountList.add(amount);
 		noteList.add(note);
@@ -494,6 +536,9 @@ public class MainActivity extends Activity  {
 		}
 	}
 	
+	/**
+	 * Prepare the data to send to the model
+	 */
 	public void sendDataToModel()
 	{
 		recipeBean recipe = new recipeBean();

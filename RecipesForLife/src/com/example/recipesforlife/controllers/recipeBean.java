@@ -2,6 +2,11 @@ package com.example.recipesforlife.controllers;
 
 import java.util.ArrayList;
 
+/**
+ * Bean stores recipe information
+ * @author Kari
+ *
+ */
 public class recipeBean {
 	String name;
 	ArrayList<String> ingredients;

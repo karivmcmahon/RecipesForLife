@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -39,6 +40,10 @@ public class syncRecipeModel extends baseDataSource {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Gets recipe to send to server based on date they were added using shared preferecnes
+	 * @return ArrayList<recipeBean> recipeList
+	 */
 	public ArrayList<recipeBean> getRecipe()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -57,6 +62,11 @@ public class syncRecipeModel extends baseDataSource {
         return recipeList;
 	}
 	
+	/**
+	 * Sets the recipe data from the database to recipebean
+	 * @param cursor
+	 * @return recipeBean
+	 */
 	public recipeBean cursorToRecipe(Cursor cursor) {
         recipeBean rb = new recipeBean();
         rb.setId(cursor.getInt(getIndex("id",cursor)));       
@@ -70,6 +80,11 @@ public class syncRecipeModel extends baseDataSource {
         return rb;
     }
 	
+	/**
+	 * Get ingredients for recipes based on recipe id within the date time frame
+	 * @param id
+	 * @return ArrayList<IngredientBean>
+	 */
 	public ArrayList<ingredientBean> getIngred(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -96,6 +111,11 @@ public class syncRecipeModel extends baseDataSource {
         return ingredientList;
 	}
 	
+	/**
+	 * Retrieves name of ingredient based on id then returns name
+	 * @param id
+	 * @return name
+	 */
 	public String getIngredName(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -115,6 +135,11 @@ public class syncRecipeModel extends baseDataSource {
         return name;
 	}
 	
+	/**
+	 * Sets the ingredient data from the database to ingredientbean
+	 * @param cursor
+	 * @return recipeBean
+	 */
 	public ingredientBean cursorToIngredientDetails(Cursor cursor)
 	{
 		ingredientBean ib = new ingredientBean();
@@ -125,6 +150,11 @@ public class syncRecipeModel extends baseDataSource {
 		return ib;
 	}
 	
+	/**
+	 * Gets preperation information from recipe within date frame for syncing
+	 * @param id
+	 * @return ArrayList<preperationBean>
+	 */
 	public ArrayList<preperationBean> getPrep(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -150,34 +180,33 @@ public class syncRecipeModel extends baseDataSource {
         cursor.close();
       //  cursor2.close();
        close();
-        Log.v("PREP ", "PREP " + prepList.get(0).getPreperation());
-    /**    try {
-			getAndCreateJSON();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} **/
+       
         return prepList;
 	}
 	
+	/**
+	 * Set preperation bean data based on database
+	 * @param cursor
+	 * @return preperationBean
+	 */
 	public preperationBean cursorToPreperation(Cursor cursor)
 	{
 		preperationBean pb = new preperationBean();
-		//pb.setId(cursor.getInt(getIndex("Preperation.id",cursor)));
 		pb.setPreperation(cursor.getString(getIndex("instruction", cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
-		//pb.setPrepId(cursor.getInt(getIndex("PrepRecipe.Preperationid", cursor)));
-		//pb.setRecipeId(cursor.getInt(getIndex("PrepRecipe.recipeId",cursor)));
 		return pb;
 	}
 	
+	/**
+	 * Builds a json with all the recipe data to send to the server
+	 * @throws JSONException
+	 */
 	public void getAndCreateJSON() throws JSONException
 	{
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
-		
-		ArrayList<String> ingred = new ArrayList<String>();
-		
+		getCurrentDate();
+	
 		for(int i = 0; i < recipeList.size(); i++)
 		{
 			JSONObject recipe = new JSONObject();		
@@ -187,6 +216,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("cookingTime", recipeList.get(i).getCooking());
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
+			recipe.put("updateTime", "2015-01-25 18:10:00");
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();
@@ -230,9 +260,7 @@ public class syncRecipeModel extends baseDataSource {
 			JSONArray amountarray = new JSONArray(ingredAmount);
 			ingredAmountObj.put("Amount", amountarray);
 			JSONArray notearray = new JSONArray(ingredNote);
-			ingredNoteObj.put("Notes", notearray);
-			//ingredObj.put("name", value)
-			//ArrayList<ingredientBean> ingredList = getIngred(rcipeList.get(i).getId(
+			ingredNoteObj.put("Notes", notearray);	
 			recipe.put("Ingredient", ingredObj);
 			recipe.accumulate("Ingredient", ingredValObj);
 			recipe.accumulate("Ingredient", ingredAmountObj);
@@ -241,12 +269,77 @@ public class syncRecipeModel extends baseDataSource {
 			
 			
 			jsonArray.put(recipe);			
-			Log.v("Json", "Json " + jsonArray);
+			//Log.v("Json", "Json " + jsonArray);
 		} 
-	sendJSONToServer(jsonArray);
+	//sendJSONToServer(jsonArray);
+		getJSONFromServer();
 	}
 	
+	/**
+	 * Gets the json with it's sync info from the server
+	 * @throws JSONException
+	 */
+	public void getJSONFromServer() throws JSONException
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		JSONObject date = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject json;
+		date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
+		jsonArray.put(date);
+		String str = "";
+		HttpResponse response = null;
+        HttpClient myClient = new DefaultHttpClient();
+        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");      	   	
+		try 
+		{
+			myConnection.setEntity(new ByteArrayEntity(
+					jsonArray.toString().getBytes("UTF8")));
+			try 
+			{
+				response = myClient.execute(myConnection);
+				str = EntityUtils.toString(response.getEntity(), "UTF-8");
+				Log.v("RESPONSE", "RESPONSE " + str);
+				
+			} 
+			catch (ClientProtocolException e) 
+			{							
+				e.printStackTrace();
+			} 
+			
+		/**	JSONArray jArray = new JSONArray(str);
+            if (jArray.length() != 0) 
+            {
+                json = jArray.getJSONObject(0);
+                for (int i = 0; i < jArray.length(); i++) 
+                {
+                	List<String> accountInfo = new ArrayList<String>();
+                    json = jArray.getJSONObject(i);
+                    accountInfo.add(json.getString("name"));
+                    accountInfo.add(json.getString("name"));
+                    accountInfo.add(json.getString("country"));
+                    accountInfo.add(json.getString("bio"));
+                    accountInfo.add(json.getString("city"));
+                    accountInfo.add(json.getString("cookingInterest"));
+                    accountInfo.add(json.getString("email"));
+                    accountInfo.add(json.getString("password"));
+        			accountModel accountmodel = new accountModel(context);
+        			accountmodel.insertAccount(accountInfo);
+                }
+            } **/
+                    
+                    
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * Sends json to the server
+	 * @param jsonArray
+	 */
 	public void sendJSONToServer(JSONArray jsonArray)
 	{
 		String str = "";
@@ -274,17 +367,24 @@ public class syncRecipeModel extends baseDataSource {
 		}
 	
 	}
+	/**
+	 * Puts date in string format
+	 * @param date
+	 * @return currentDate
+	 */
 	private String dateToString(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentDate = formatter.format(date);
 		return currentDate;
 	}
 	
+	/**
+	 * Retrieves the current date
+	 */
 	public void getCurrentDate()
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar
         cal.setTime(new Date()); // sets calendar time/date
-        cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
         Date today = cal.getTime();
         currentDate = dateToString(today);
 	}

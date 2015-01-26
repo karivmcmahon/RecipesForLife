@@ -1,7 +1,15 @@
 package com.example.recipesforlife.controllers;
 
+/**
+ * Bean stores preperation info
+ * @author Kari
+ *
+ */
 public class preperationBean {
 	int id;
+	int prepNum;
+	String preperation;
+	
 	public int getId() {
 		return id;
 	}
@@ -20,23 +28,10 @@ public class preperationBean {
 	public void setPreperation(String preperation) {
 		this.preperation = preperation;
 	}
-	public int getPrepId() {
-		return prepId;
-	}
-	public void setPrepId(int prepId) {
-		this.prepId = prepId;
-	}
-	public int getRecipeId() {
-		return recipeId;
-	}
-	public void setRecipeId(int recipeId) {
-		this.recipeId = recipeId;
-	}
-	int prepNum;
-	String preperation;
-	//Connectors
-	int prepId;
-	int recipeId;
+	
+	
+
+	
 	
 
 }

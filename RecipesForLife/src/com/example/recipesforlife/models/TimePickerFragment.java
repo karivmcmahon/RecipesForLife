@@ -20,6 +20,13 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 @SuppressLint("NewApi")
+/**
+ * A time picker dialog which enables the user to set hours and minutes 
+ * Based on the Android documentation
+ * Data is sent based on bundles
+ * @author Kari
+ *
+ */
 public class TimePickerFragment extends DialogFragment 
 {
 
