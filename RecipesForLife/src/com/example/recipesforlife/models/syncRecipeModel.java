@@ -216,7 +216,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("cookingTime", recipeList.get(i).getCooking());
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
-			recipe.put("updateTime", "2015-01-26 18:10:00");
+			recipe.put("updateTime", "2015-01-27 18:10:00");
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();
@@ -272,7 +272,7 @@ public class syncRecipeModel extends baseDataSource {
 			//Log.v("Json", "Json " + jsonArray);
 		} 
 	//sendJSONToServer(jsonArray);
-	//	getJSONFromServer();
+	getJSONFromServer();
 	}
 	
 	/**
@@ -306,27 +306,55 @@ public class syncRecipeModel extends baseDataSource {
 			{							
 				e.printStackTrace();
 			} 
+			JSONObject jObject = new JSONObject(str);
+			JSONArray jArray = (JSONArray) jObject.get("Recipe");
 			
-		/**	JSONArray jArray = new JSONArray(str);
-            if (jArray.length() != 0) 
-            {
-                json = jArray.getJSONObject(0);
-                for (int i = 0; i < jArray.length(); i++) 
+			
+			for(int i = 0; i < jArray.length(); i++)
+			{
+				
+				json = jArray.getJSONObject(i);
+                Log.v("jsonName", json.getString("name"));
+                
+                //Ingredient
+                ArrayList<String> ingredientsList = new ArrayList<String>(); 
+				ArrayList<String> notesList = new ArrayList<String>(); 
+				ArrayList<String> amountsList = new ArrayList<String>(); 
+				ArrayList<String> valuesList = new ArrayList<String>(); 
+                JSONArray ingredArray = (JSONArray) json.get("Ingredient");
+                for(int a = 0; a < ingredArray.length(); a++)
                 {
-                	List<String> accountInfo = new ArrayList<String>();
-                    json = jArray.getJSONObject(i);
-                    accountInfo.add(json.getString("name"));
-                    accountInfo.add(json.getString("name"));
-                    accountInfo.add(json.getString("country"));
-                    accountInfo.add(json.getString("bio"));
-                    accountInfo.add(json.getString("city"));
-                    accountInfo.add(json.getString("cookingInterest"));
-                    accountInfo.add(json.getString("email"));
-                    accountInfo.add(json.getString("password"));
-        			accountModel accountmodel = new accountModel(context);
-        			accountmodel.insertAccount(accountInfo);
+                	JSONObject ingredObject = ingredArray.getJSONObject(a);
+                	JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
+                	JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
+                	JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
+                	JSONArray valueArray = (JSONArray) ingredObject.get("Ingredients");
+                	for(int b = 0; b < ingredsArray.length(); b++)
+                	{
+                		ingredientsList.add(ingredsArray.get(b).toString());
+                		notesList.add(notesArray.get(b).toString());
+                		amountsList.add(amountArray.get(b).toString());
+                		valuesList.add(valueArray.get(b).toString());
+                	}
                 }
-            } **/
+                
+                //Preperation
+                JSONArray preperationArray = (JSONArray) json.get("Preperation");
+                ArrayList<String> prepList = new ArrayList<String>(); 
+				ArrayList<String> numList = new ArrayList<String>(); 
+                for(int c = 0; c < preperationArray.length(); c++)
+                {
+                	 JSONObject prepObject =  preperationArray.getJSONObject(c);
+                	JSONArray prepArray = (JSONArray) prepObject.get("prep");
+                	JSONArray numArray = (JSONArray) prepObject.get("prepNums");
+                	for(int d = 0; d < prepArray.length(); d++)
+                	{
+                		prepList.add(prepArray.get(d).toString());
+                		numList.add(numArray.get(d).toString());
+                	}
+                }
+			}
+	
                     
                     
 		}
