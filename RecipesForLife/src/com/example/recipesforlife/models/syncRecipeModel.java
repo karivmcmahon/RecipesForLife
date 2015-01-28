@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -18,11 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.recipesforlife.controllers.accountBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.userBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import android.content.Context;
@@ -216,7 +213,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("cookingTime", recipeList.get(i).getCooking());
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
-			recipe.put("updateTime", currentDate);
+			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();

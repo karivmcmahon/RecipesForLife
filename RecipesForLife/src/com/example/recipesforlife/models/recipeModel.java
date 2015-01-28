@@ -4,14 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-
-import org.json.JSONException;
 
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.userBean;
 
 import android.content.ContentValues;
 import android.content.Context;

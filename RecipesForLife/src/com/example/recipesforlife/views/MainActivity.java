@@ -55,6 +55,7 @@ public class MainActivity extends Activity  {
 	public static final String MyPREFERENCES = "MyPrefs";
 	private SharedPreferences sharedpreferences;
 	public static final String emailk = "emailKey"; 
+	public static final String pass = "passwordKey"; 
 	util utils;
 	Typeface typeFace;
 	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
@@ -183,7 +184,9 @@ public class MainActivity extends Activity  {
 				  SharedPreferences sharedpreferences = getSharedPreferences
 					      (SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 					      Editor editor = sharedpreferences.edit();
-					      editor.clear();
+					     editor.remove(emailk);
+					     editor.remove(pass);
+					     // editor.clear();
 					      editor.commit();
 					     Intent i = new Intent(MainActivity.this, SignUpSignInActivity.class);
 					     startActivity(i);
@@ -512,7 +515,35 @@ public class MainActivity extends Activity  {
 	    {
 		recipeAddDialog2.dismiss();
 		sendDataToModel();
-		
+	/**	 if(utils.checkInternetConnection(getApplicationContext()))
+			{
+				//syncModel sync = new syncModel(getApplicationContext());
+				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
+				try {
+					//sync.getAndCreateAccountJSON();
+					//sync.getJSONFromServer();
+					syncRecipe.getAndCreateJSON();
+					//syncRecipe.getJSONFromServer();
+					sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+					
+					Calendar cal = Calendar.getInstance(); // creates calendar
+		            cal.setTime(new Date()); // sets calendar time/date
+		            Date today = cal.getTime();
+		            String lastUpdated = utils.dateToString(today);
+					Editor editor = sharedpreferences.edit();
+			        editor.putString("Date", lastUpdated);
+			        editor.commit();
+			        Toast.makeText(getApplicationContext(), 
+			        	    "App synced", Toast.LENGTH_LONG).show();
+				} catch (JSONException e) {
+					//uto-generated catch block
+					e.printStackTrace();
+					
+					
+				} **/
+			
+    } 
 		//Third - recipe add dialog - not done yet
 		setUpThirdRecipeAddDialog();
 	   
@@ -528,7 +559,7 @@ public class MainActivity extends Activity  {
 			});
 		addRecipeDialog3.show();
 	}
-	}
+//	}
 	
 	/**
 	 * Set up third recipe add dialog
@@ -697,10 +728,11 @@ public class MainActivity extends Activity  {
 	    				syncModel sync = new syncModel(getApplicationContext());
 	    				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
 	    				try {
-	    					sync.getAndCreateAccountJSON();
 	    					sync.getJSONFromServer();
+	    					sync.getAndCreateAccountJSON();
+	    					syncRecipe.getJSONFromServer();
 	    					syncRecipe.getAndCreateJSON();
-							syncRecipe.getJSONFromServer();
+							
 	    					sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	    					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 	    					

@@ -1,7 +1,6 @@
 package com.example.recipesforlife.views;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,9 +23,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Html;
@@ -69,24 +65,31 @@ public class SignUpSignInActivity extends Activity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		counter = 0;
-		//View for activity
 		setContentView(R.layout.signupsigninactivity);
 		utils = new util(getApplicationContext(), this);
 		//Get shared pref
-		sharedpreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		//If false its the first time been created - set initial sync time
-		if (sharedpreferences.getBoolean("firstTime",false) == false) {
+		 
+		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		Log.v("BOOL" , "BOOL " + sharedpreferences.getBoolean("firstTime",false) );
+		//Editor editors = sharedpreferences.edit();
+		//editors.clear();
+		//editors.commit();
+		boolean compare = sharedpreferences.getBoolean("firstTime",false);
+		if ( sharedpreferences.getBoolean("firstTime",false) == false) {
 			Editor editor = sharedpreferences.edit();
-			editor.putBoolean("firstTime", false);
+			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
+			Log.v("FIRST TIME ", "FIRST TIME " + sharedpreferences.getBoolean("firstTime",false) );
+			buildDatabase();
+			sync();
 
-		} else {
-			Editor editor = sharedpreferences.edit();
-			editor.putBoolean("firstTime", true);
-			editor.commit();
+		}
+		else
+		{
+			sync();
 		}
 		//Style for activity
 		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
@@ -187,8 +190,8 @@ public class SignUpSignInActivity extends Activity {
 				}
 			}
 		});
-		buildDatabase();
-		sync();
+	//	buildDatabase();
+	//	sync();
 	}
 		
 		
@@ -210,12 +213,13 @@ public class SignUpSignInActivity extends Activity {
 	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
 	      Context.MODE_PRIVATE);
 	    //Style for activity
+	      sync();
 			typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 	      if (sharedpreferences.contains(emailk))
 	      {
 	     if(sharedpreferences.contains(pass))
 	    	  {   
-	    	//	 sync();
+	    		
 	    		  			
 		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
 			      startActivity(i);
@@ -234,12 +238,13 @@ public class SignUpSignInActivity extends Activity {
 				syncModel sync = new syncModel(getApplicationContext());
 				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
 				try {
-					
-					sync.getAndCreateAccountJSON();
 					sync.getJSONFromServer();
+					sync.getAndCreateAccountJSON();
+					
 					try {
-						syncRecipe.getAndCreateJSON();
 						syncRecipe.getJSONFromServer();
+						syncRecipe.getAndCreateJSON();
+						
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
