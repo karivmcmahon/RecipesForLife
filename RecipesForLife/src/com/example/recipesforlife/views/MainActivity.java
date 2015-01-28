@@ -692,12 +692,15 @@ public class MainActivity extends Activity  {
 	      Context.MODE_PRIVATE);
 	      
 	    		  
-	    		 if(utils.checkInternetConnection(getApplicationContext()))
+	    	 if(utils.checkInternetConnection(getApplicationContext()))
 	    			{
 	    				syncModel sync = new syncModel(getApplicationContext());
+	    				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
 	    				try {
 	    					sync.getAndCreateAccountJSON();
 	    					sync.getJSONFromServer();
+	    					syncRecipe.getAndCreateJSON();
+							syncRecipe.getJSONFromServer();
 	    					sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	    					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 	    					
@@ -717,7 +720,7 @@ public class MainActivity extends Activity  {
 	    					
 	    				}
 	    			
-	  	     }
+	  	     } 
 	    		 
 	      
 	   }

@@ -13,6 +13,7 @@ import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
 import com.example.recipesforlife.models.syncModel;
+import com.example.recipesforlife.models.syncRecipeModel;
 import com.example.recipesforlife.models.util;
 
 import android.app.Activity;
@@ -214,7 +215,7 @@ public class SignUpSignInActivity extends Activity {
 	      {
 	     if(sharedpreferences.contains(pass))
 	    	  {   
-	    		 sync();
+	    	//	 sync();
 	    		  			
 		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
 			      startActivity(i);
@@ -231,10 +232,17 @@ public class SignUpSignInActivity extends Activity {
 		   if(utils.checkInternetConnection(getApplicationContext()))
 			{
 				syncModel sync = new syncModel(getApplicationContext());
+				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
 				try {
 					
 					sync.getAndCreateAccountJSON();
 					sync.getJSONFromServer();
+					try {
+						syncRecipe.getAndCreateJSON();
+						syncRecipe.getJSONFromServer();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
 					sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 					

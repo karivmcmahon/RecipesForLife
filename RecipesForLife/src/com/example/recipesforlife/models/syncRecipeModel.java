@@ -216,7 +216,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("cookingTime", recipeList.get(i).getCooking());
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
-			recipe.put("updateTime", "2015-01-27 18:10:00");
+			recipe.put("updateTime", currentDate);
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();
@@ -271,8 +271,7 @@ public class syncRecipeModel extends baseDataSource {
 			jsonArray.put(recipe);			
 			//Log.v("Json", "Json " + jsonArray);
 		} 
-	//sendJSONToServer(jsonArray);
-	getJSONFromServer();
+	sendJSONToServer(jsonArray);
 	}
 	
 	/**
@@ -309,12 +308,19 @@ public class syncRecipeModel extends baseDataSource {
 			JSONObject jObject = new JSONObject(str);
 			JSONArray jArray = (JSONArray) jObject.get("Recipe");
 			
-			
+			Log.v("JARRAY L", "JARRAY L " + jArray.length());
 			for(int i = 0; i < jArray.length(); i++)
 			{
 				
+				
 				json = jArray.getJSONObject(i);
-                Log.v("jsonName", json.getString("name"));
+                recipeBean recipe = new recipeBean();
+                recipe.setName( json.getString("name"));
+                recipe.setDesc(json.getString("description"));
+                recipe.setServes(json.getString("serves"));
+                recipe.setCooking(json.getString("cookingTime"));
+                recipe.setPrep(json.getString("prepTime"));
+                recipe.setAddedBy(json.getString("addedBy"));
                 
                 //Ingredient
                 ArrayList<String> ingredientsList = new ArrayList<String>(); 
@@ -328,7 +334,7 @@ public class syncRecipeModel extends baseDataSource {
                 	JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
                 	JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
                 	JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
-                	JSONArray valueArray = (JSONArray) ingredObject.get("Ingredients");
+                	JSONArray valueArray = (JSONArray) ingredObject.get("Value");
                 	for(int b = 0; b < ingredsArray.length(); b++)
                 	{
                 		ingredientsList.add(ingredsArray.get(b).toString());
@@ -337,8 +343,10 @@ public class syncRecipeModel extends baseDataSource {
                 		valuesList.add(valueArray.get(b).toString());
                 	}
                 }
-                
-                //Preperation
+                recipe.setIngredients(ingredientsList);
+                recipe.setValues(valuesList);
+                recipe.setAmount(amountsList);
+                recipe.setNotes(notesList);
                 JSONArray preperationArray = (JSONArray) json.get("Preperation");
                 ArrayList<String> prepList = new ArrayList<String>(); 
 				ArrayList<String> numList = new ArrayList<String>(); 
@@ -353,6 +361,11 @@ public class syncRecipeModel extends baseDataSource {
                 		numList.add(numArray.get(d).toString());
                 	}
                 }
+                recipe.setSteps(prepList);
+                recipe.setStepNum(numList);
+                recipeModel model = new recipeModel(context);
+                model.insertRecipe(recipe);
+                
 			}
 	
                     

@@ -57,14 +57,8 @@ public class recipeModel extends baseDataSource {
     	insertIngredient(recipe);
     	insertPrep(recipe);
     	close();
-    	//sync.getIngred();
-    	//sync.getPrep(1);
-    	try {
-			sync.getAndCreateJSON();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	
+    	
 	}
 	
 	/**
