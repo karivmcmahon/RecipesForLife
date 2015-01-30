@@ -1,8 +1,7 @@
 package com.example.recipesforlife.views;
 
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,45 +9,40 @@ import java.util.List;
 
 import org.json.JSONException;
 
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.*;
-
-import android.net.ConnectivityManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.view.Menu;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-import android.util.Log;
+
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.models.TimePickerFragment;
+import com.example.recipesforlife.models.recipeModel;
+import com.example.recipesforlife.models.syncModel;
+import com.example.recipesforlife.models.syncRecipeModel;
+import com.example.recipesforlife.models.util;
 
 public class MainActivity extends Activity  {
 	
@@ -63,11 +57,11 @@ public class MainActivity extends Activity  {
 	ArrayList<String> ingredientList, amountList, valueList, noteList, stepNumList, stepList;
 	String name, desc,recipeBook, serves, prep, cooking;
 
-	    // Handles message from time dialog 1
+	    // Handles message from time dialog 1 - preptime
 	    Handler mHandler = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
-	            
+	            //Bundle retrieves data
 	            Bundle b = m.getData();
 	            String hour = b.getString("hour");
 	            String minute = b.getString("minute");
@@ -79,6 +73,7 @@ public class MainActivity extends Activity  {
 	            {
 	            	minute = "0" + minute;
 	            }
+	            //Displays it in edittext once set
 	            EditText edit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
 	            edit.setText(hour + ":" + minute);
 	        }
@@ -88,6 +83,7 @@ public class MainActivity extends Activity  {
 	    Handler mHandler2 = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
+	        	 //Bundle retrieves data
 	            Bundle b = m.getData();
 	            String hour = b.getString("hour");
 	            String minute = b.getString("minute");
@@ -99,6 +95,7 @@ public class MainActivity extends Activity  {
 	            {
 	            	minute = "0" + minute;
 	            }
+	            //Displays it in edittext once set
 	            EditText edit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
 	            edit.setText(hour + ":" + minute);
 	        }
@@ -145,6 +142,7 @@ public class MainActivity extends Activity  {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
+				//Set up lists to store inputs
 				ingredientList = new ArrayList<String>();
 				amountList = new ArrayList<String>();
 				noteList = new ArrayList<String>();
@@ -249,20 +247,20 @@ public class MainActivity extends Activity  {
 				// TODO Auto-generated method stub
 				if(event.getAction()  == MotionEvent.ACTION_DOWN)
 				{
-					  /** Instantiating DatePickerDialogFragment */
+					 //Instantiating TimPickerDialogFragment 
 	                TimePickerFragment timePicker = new TimePickerFragment(mHandler);
 	 
 	               
-	                /** Getting fragment manger for this activity */
+	                // Getting fragment manger for this activity *
 	                android.app.FragmentManager fm = getFragmentManager();
 	 
-	                /** Starting a fragment transaction */
+	                //Starting a fragment transaction 
 	                android.app.FragmentTransaction ft = fm.beginTransaction();
 	 
-	                /** Adding the fragment object to the fragment transaction */
+	                // Adding the fragment object to the fragment transaction 
 	                ft.add(timePicker, "time_picker");
 	 
-	                /** Opening the DatePicker fragment */
+	                // Opening the TimePicker fragment 
 	                ft.commit();
 				}
 				
@@ -277,20 +275,20 @@ public class MainActivity extends Activity  {
 				// TODO Auto-generated method stub
 				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
 				{
-					 /** Instantiating DatePickerDialogFragment */
+					 // Instantiating TimePickerDialogFragment 
 	                TimePickerFragment timePicker = new TimePickerFragment(mHandler2);
 	 
 	               
-	                /** Getting fragment manger for this activity */
+	                // Getting fragment manger for this activity 
 	                android.app.FragmentManager fm = getFragmentManager();
 	 
-	                /** Starting a fragment transaction */
+	                // Starting a fragment transaction 
 	                android.app.FragmentTransaction ft = fm.beginTransaction();
 	 
-	                /** Adding the fragment object to the fragment transaction */
+	                // Adding the fragment object to the fragment transaction 
 	                ft.add(timePicker, "time_picker");
 	 
-	                /** Opening the DatePicker fragment */
+	                // Opening the TimePicker fragment 
 	                ft.commit();
 
 				}
@@ -308,6 +306,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void getInitialRecipeAddDialogData()
 	{
+		//Getting data
 		TextView errorView = (TextView) recipeAddDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -320,7 +319,8 @@ public class MainActivity extends Activity  {
 		Context context = getApplicationContext();
 	    recipeModel model = new recipeModel(context);
 	    SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		if(model.selectRecipe(name, sharedpreferences.getString(emailk, "")) == true)
+	    //Error checking
+	    if(model.selectRecipe(name, sharedpreferences.getString(emailk, "")) == true)
 		{
 			errorView.setText("You already have a recipe with this name");
 		}
@@ -335,11 +335,8 @@ public class MainActivity extends Activity  {
 		else
 		{
 			recipeAddDialog.dismiss();
+			//Set up second dialog
 			setUpSecondRecipeAddDialog();
-			
-			
-			
-		    
 			//If ingredient plus button is pressed - show a dialog to add an ingredient
 			ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
 			ingredsPlusButton.setOnClickListener(new OnClickListener() {
@@ -482,13 +479,11 @@ public class MainActivity extends Activity  {
 		EditText prepEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
         prep = prepEdit.getText().toString();
 		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
-	    cooking = cookingEdit.getText().toString();
-	   
+	    cooking = cookingEdit.getText().toString();	   
 	    EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
 	    EditText methodEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
 	    String methods = methodEdit.getText().toString();
 	    String i = ingredsEdit.getText().toString();
-	 Log.v("I "," I " + i);
 	    //Error catching before moving to next stage
 	    if(i.equals(""))
 	    {
@@ -513,51 +508,27 @@ public class MainActivity extends Activity  {
 	    }
 	    else
 	    {
-		recipeAddDialog2.dismiss();
-		sendDataToModel();
-	/**	 if(utils.checkInternetConnection(getApplicationContext()))
-			{
-				//syncModel sync = new syncModel(getApplicationContext());
-				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
-				try {
-					//sync.getAndCreateAccountJSON();
-					//sync.getJSONFromServer();
-					syncRecipe.getAndCreateJSON();
-					//syncRecipe.getJSONFromServer();
-					sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-					
-					Calendar cal = Calendar.getInstance(); // creates calendar
-		            cal.setTime(new Date()); // sets calendar time/date
-		            Date today = cal.getTime();
-		            String lastUpdated = utils.dateToString(today);
-					Editor editor = sharedpreferences.edit();
-			        editor.putString("Date", lastUpdated);
-			        editor.commit();
-			        Toast.makeText(getApplicationContext(), 
-			        	    "App synced", Toast.LENGTH_LONG).show();
-				} catch (JSONException e) {
-					//uto-generated catch block
-					e.printStackTrace();
-					
-					
-				} **/
+			recipeAddDialog2.dismiss();
+			//insert data to database
+			sendDataToModel();
+	
 			
-    } 
-		//Third - recipe add dialog - not done yet
-		setUpThirdRecipeAddDialog();
-	   
-		
-		addRecipeButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				getThirdDialogData();
-				
-			}
-			});
-		addRecipeDialog3.show();
+   
+			//Third - recipe add dialog - not done yet
+			setUpThirdRecipeAddDialog();
+		   
+			
+			addRecipeButton.setOnClickListener(new OnClickListener(){
+	
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					getThirdDialogData();
+					
+				}
+				});
+			addRecipeDialog3.show();
+	    }
 	}
 //	}
 	
@@ -618,7 +589,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void getRecipeStep()
 	{
-		//Getting text
+		//Getting 
 		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -639,6 +610,7 @@ public class MainActivity extends Activity  {
 		{
 			stepList.add(step);
 			stepNumList.add(stepNum);
+			//Append steps to edit text box
 			EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
 			stepsEdit.append(stepNum +  ". " + step +  ", ");
 			recipeAddStepDialog.dismiss();
@@ -697,6 +669,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void sendDataToModel()
 	{
+		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		recipeBean recipe = new recipeBean();
 		recipe.setName(name);
 		recipe.setDesc(desc);
@@ -710,6 +683,7 @@ public class MainActivity extends Activity  {
 		recipe.setAmount(amountList);
 		recipe.setStepNum(stepNumList);
 		recipe.setSteps(stepList);
+		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
 		Context context = getApplicationContext();
 		recipeModel model = new recipeModel(context);
 		model.insertRecipe(recipe);
@@ -748,7 +722,8 @@ public class MainActivity extends Activity  {
 	    				} catch (JSONException e) {
 	    					//uto-generated catch block
 	    					e.printStackTrace();
-	    					
+	    					Toast.makeText(getApplicationContext(), 
+	    			        	    "App sync failed", Toast.LENGTH_LONG).show();
 	    					
 	    				}
 	    			

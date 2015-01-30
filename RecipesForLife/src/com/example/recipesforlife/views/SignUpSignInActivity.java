@@ -67,14 +67,11 @@ public class SignUpSignInActivity extends Activity {
 		counter = 0;
 		setContentView(R.layout.signupsigninactivity);
 		utils = new util(getApplicationContext(), this);
-		//Get shared pref
-		 
-		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		Log.v("BOOL" , "BOOL " + sharedpreferences.getBoolean("firstTime",false) );
+		//Get shared pref		 
+		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);		
 		//Editor editors = sharedpreferences.edit();
 		//editors.clear();
 		//editors.commit();
-		boolean compare = sharedpreferences.getBoolean("firstTime",false);
 		if ( sharedpreferences.getBoolean("firstTime",false) == false) {
 			Editor editor = sharedpreferences.edit();
 			editor.putBoolean("firstTime", true);
@@ -82,7 +79,6 @@ public class SignUpSignInActivity extends Activity {
 			Editor editor2 = sharedpreferences.edit();
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
-			Log.v("FIRST TIME ", "FIRST TIME " + sharedpreferences.getBoolean("firstTime",false) );
 			buildDatabase();
 			sync();
 
@@ -213,7 +209,7 @@ public class SignUpSignInActivity extends Activity {
 	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
 	      Context.MODE_PRIVATE);
 	    //Style for activity
-	      sync();
+	      //sync();
 			typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 	      if (sharedpreferences.contains(emailk))
 	      {

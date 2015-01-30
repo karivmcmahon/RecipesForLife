@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Log;
 
 public class recipeModel extends baseDataSource {
@@ -37,7 +38,7 @@ public class recipeModel extends baseDataSource {
 	 */
 	public void insertRecipe(recipeBean recipe)
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		
 		open();
 		getLastUpdated();
 	    values = new ContentValues();
@@ -48,10 +49,21 @@ public class recipeModel extends baseDataSource {
 	    values.put("cookingTime", recipe.getCooking()); 
 	    values.put("totalTime", "4:00:00");    
 	    values.put("serves", recipe.getServes()); 
-	    values.put("addedBy", sharedpreferences.getString(emailk, "")); 
-    	recipeID = database.insertOrThrow("Recipe", null, values);
-    	insertIngredient(recipe);
-    	insertPrep(recipe);
+	    values.put("addedBy", recipe.getAddedBy()); 
+	    database.beginTransaction();
+        try
+        {
+        	recipeID = database.insertOrThrow("Recipe", null, values);
+        	insertIngredient(recipe);
+        	insertPrep(recipe);
+        	database.setTransactionSuccessful();
+        	database.endTransaction(); 
+        	Log.v("suc", "suc");
+        }catch(SQLException e)
+        {
+        	database.endTransaction();
+        	Log.v("Transaction fail", "Transaction fail for recipe insert");
+        }
     	close();
     	
     	
@@ -63,7 +75,7 @@ public class recipeModel extends baseDataSource {
 	 */
 	public void insertPrep(recipeBean recipe)
 	{
-		open();
+	//	open();
 		getLastUpdated();
         prepvalues = new ContentValues();
         for(int i = 0; i < recipe.getStepNum().size(); i++)
@@ -74,7 +86,7 @@ public class recipeModel extends baseDataSource {
 	        prepID = database.insertOrThrow("Preperation", null, prepvalues);
 	        insertPrepToRecipe();
         }
-        close();
+       // close();
 	}
 	
 	/**
@@ -101,12 +113,11 @@ public class recipeModel extends baseDataSource {
 	 */
 	public void insertIngredient(recipeBean recipe)
 	{
-		open();
+	//	open();
 		getLastUpdated();
         ingredValues = new ContentValues();
         for(int i = 0; i < recipe.getIngredients().size(); i++)
         {
-        	Log.v( "Ingred " , "Ingred " + recipe.getIngredients().get(i).toString());
         	int id = selectIngredient(recipe, i);
         	if(id == 0)
         	{
@@ -122,7 +133,7 @@ public class recipeModel extends baseDataSource {
             insertRecipeToIngredient();
             insertIngredToDetails();
         }
-        close();
+     //   close();
 	}
 	
 	/**
@@ -177,10 +188,8 @@ public class recipeModel extends baseDataSource {
 	 * @return id 
 	 */
 	public int selectIngredient(recipeBean recipe, int x)
-	{
-		
+	{	
 			int id = 0;
-			
 	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { recipe.getIngredients().get(x).toString().toLowerCase() });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
@@ -191,7 +200,6 @@ public class recipeModel extends baseDataSource {
 	        }
 	        cursor.close();
 	       return id;
-	
 	}
 	
 	/**
@@ -201,8 +209,7 @@ public class recipeModel extends baseDataSource {
 	 * @return id 
 	 */
 	public boolean selectRecipe(String name, String user)
-	{
-		
+	{		
 			open();
 	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE name=? and addedBy=?", new String[] { name, user });
 	        if (cursor != null && cursor.getCount() > 0) {
@@ -215,10 +222,6 @@ public class recipeModel extends baseDataSource {
 	        cursor.close();
 	        close();
 	        return false;
-	        
-	       
-	      
-	
 	}
 	
 	/**
@@ -226,7 +229,8 @@ public class recipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return userBean
 	 */
-	 public recipeBean cursorToRecipe(Cursor cursor) {
+	 public recipeBean cursorToRecipe(Cursor cursor) 
+	 {
 	        recipeBean rb = new recipeBean();
 	        rb.setName(cursor.getString(getIndex("name",cursor)));
 	        rb.setDesc(cursor.getString(getIndex("description",cursor)));
@@ -244,8 +248,7 @@ public class recipeModel extends baseDataSource {
 	 * @return id 
 	 */
 	public recipeBean selectRecipe2(String name, String user)
-	{
-		
+	{		
 		    recipeBean rb = new recipeBean();
 		    open();
 	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE name=? and addedBy=?", new String[] { name, user });
@@ -259,13 +262,14 @@ public class recipeModel extends baseDataSource {
 	        }
 	        cursor.close();
 	        close();
-	        return rb;
-	        
-	       
-	      
-	
+	        return rb;	
 	}
 	
+	/**
+	 * Selects all recipes by a specific user 
+	 * @param user
+	 * @return ArrayList<recipeBean>
+	 */
 	public ArrayList<recipeBean> selectRecipesByUser(String user)
 	{
 		
@@ -275,20 +279,19 @@ public class recipeModel extends baseDataSource {
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
-	                rb.add(cursorToRecipe(cursor));
-	                
-	                
+	                rb.add(cursorToRecipe(cursor));	                
 	            }
 	        }
 	        cursor.close();
 	        close();
-	        return rb;
-	        
-	       
-	      
-	
+	        return rb;	
 	}
 	
+	/**
+	 * Selects preperation info based on recipe
+	 * @param id
+	 * @return ArrayList<preperationBean>
+	 */
 	public ArrayList<preperationBean> selectPreperation(int id)
 	{
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
@@ -307,7 +310,11 @@ public class recipeModel extends baseDataSource {
 		return prepList;
 	}
 	
-	
+	/**
+	 * Select ingredients info based on recipe id
+	 * @param id
+	 * @return ArrayList<ingredientBean>
+	 */
 	public ArrayList<ingredientBean> selectIngredients(int id)
 	{
 		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
@@ -316,9 +323,7 @@ public class recipeModel extends baseDataSource {
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
-                ingredList.add(cursorToIngred(cursor));
-                
-                
+                ingredList.add(cursorToIngred(cursor));               
             }
         }
         cursor.close();
@@ -326,6 +331,11 @@ public class recipeModel extends baseDataSource {
 		return ingredList;
 	}
 	
+	/**
+	 * Sets info from db to the ingredient controller
+	 * @param cursor
+	 * @return ingredientBean
+	 */
 	public ingredientBean cursorToIngred(Cursor cursor) {
         ingredientBean ib = new ingredientBean();
         ib.setName(cursor.getString(getIndex("name",cursor)));

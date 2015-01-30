@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public abstract class baseDataSource {
     protected SQLiteDatabase database;
-    protected databaseConnection dbHelper;
+    public databaseConnection dbHelper;
 
 
 

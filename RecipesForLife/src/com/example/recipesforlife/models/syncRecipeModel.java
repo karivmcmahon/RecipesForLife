@@ -12,6 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.Toast;
 
 public class syncRecipeModel extends baseDataSource {
 	Context context;
@@ -175,7 +177,6 @@ public class syncRecipeModel extends baseDataSource {
            
         }
         cursor.close();
-      //  cursor2.close();
        close();
        
         return prepList;
@@ -266,7 +267,6 @@ public class syncRecipeModel extends baseDataSource {
 			
 			
 			jsonArray.put(recipe);			
-			//Log.v("Json", "Json " + jsonArray);
 		} 
 	sendJSONToServer(jsonArray);
 	}
@@ -289,6 +289,8 @@ public class syncRecipeModel extends baseDataSource {
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");      	   	
 		try 
 		{
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -305,7 +307,6 @@ public class syncRecipeModel extends baseDataSource {
 			JSONObject jObject = new JSONObject(str);
 			JSONArray jArray = (JSONArray) jObject.get("Recipe");
 			
-			Log.v("JARRAY L", "JARRAY L " + jArray.length());
 			for(int i = 0; i < jArray.length(); i++)
 			{
 				
@@ -371,6 +372,8 @@ public class syncRecipeModel extends baseDataSource {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			 Toast.makeText(context, 
+		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -386,8 +389,12 @@ public class syncRecipeModel extends baseDataSource {
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");      	   	
 		try 
 		{
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+			 HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
+			 
+			
 			try 
 			{
 				response = myClient.execute(myConnection);
@@ -402,6 +409,8 @@ public class syncRecipeModel extends baseDataSource {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			 Toast.makeText(context, 
+		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
 		}
 	
 	}

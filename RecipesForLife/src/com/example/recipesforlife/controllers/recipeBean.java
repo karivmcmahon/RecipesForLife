@@ -12,6 +12,16 @@ public class recipeBean {
 	ArrayList<String> ingredients;
 	ArrayList<String> stepNum;
 	int id;
+	ArrayList<String> steps;
+	ArrayList<String> notes;
+	ArrayList<String> values;
+	ArrayList<String> amount;
+	String desc;
+	String recipeBook;
+	String prep;
+	String serves;
+	String cooking;
+	
 	public String getAddedBy() {
 		return addedBy;
 	}
@@ -44,7 +54,7 @@ public class recipeBean {
 	public void setSteps(ArrayList<String> steps) {
 		this.steps = steps;
 	}
-	ArrayList<String> steps;
+	
 	
 	public ArrayList<String> getIngredients() {
 		return ingredients;
@@ -70,9 +80,7 @@ public class recipeBean {
 	public void setAmount(ArrayList<String> amount) {
 		this.amount = amount;
 	}
-	ArrayList<String> notes;
-	ArrayList<String> values;
-	ArrayList<String> amount;
+	
 	public String getName() {
 		return name;
 	}
@@ -109,10 +117,6 @@ public class recipeBean {
 	public void setCooking(String cooking) {
 		this.cooking = cooking;
 	}
-	String desc;
-	String recipeBook;
-	String prep;
-	String serves;
-	String cooking;
+	
 
 }

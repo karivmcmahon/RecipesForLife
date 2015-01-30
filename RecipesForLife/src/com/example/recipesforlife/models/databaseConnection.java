@@ -22,7 +22,7 @@ import android.util.Log;
 public class databaseConnection extends SQLiteOpenHelper {
 	
   private static String DB_PATH;
-  private static String DB_NAME = "dv.sqlite";
+  public static String DB_NAME = "dv.sqlite";
   private SQLiteDatabase myDataBase;
   private Context myContext;
   private Resources resources;
@@ -101,6 +101,7 @@ public class databaseConnection extends SQLiteOpenHelper {
 	    try 
 	    {
 	        String myPath = DB_PATH + DB_NAME;
+	        Log.v("PATH ", "PATH " + myPath);
 	        checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 	        Log.v("Database Debug", "Database does exist");
 	
@@ -184,6 +185,7 @@ public class databaseConnection extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
+	
 		
 	}
 	
