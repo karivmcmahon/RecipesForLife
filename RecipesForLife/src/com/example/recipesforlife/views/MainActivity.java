@@ -3,11 +3,7 @@ package com.example.recipesforlife.views;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import org.json.JSONException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,26 +18,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.TimePickerFragment;
 import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.syncModel;
-import com.example.recipesforlife.models.syncRecipeModel;
 import com.example.recipesforlife.models.util;
 
 public class MainActivity extends Activity  {
@@ -186,7 +177,7 @@ public class MainActivity extends Activity  {
 					     editor.remove(pass);
 					     // editor.clear();
 					      editor.commit();
-					     Intent i = new Intent(MainActivity.this, SignUpSignInActivity.class);
+					      Intent i = new Intent(MainActivity.this, SignUpSignInActivity.class);
 					     startActivity(i);
 				
 			}
@@ -200,10 +191,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void setUpInitialRecipeAddDialog()
 	{
-		recipeAddDialog = new Dialog(MainActivity.this);
-		recipeAddDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		recipeAddDialog.setContentView(R.layout.recipe1dialog);
-		recipeAddDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		recipeAddDialog = utils.createDialog(MainActivity.this , R.layout.recipe1dialog);
 		utils.setDialogText(R.id.recipeAddView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeBookView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
@@ -228,10 +216,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void setUpSecondRecipeAddDialog()
 	{
-		recipeAddDialog2 = new Dialog(MainActivity.this);
-		recipeAddDialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		recipeAddDialog2.setContentView(R.layout.recipe2dialog);
-		recipeAddDialog2.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		recipeAddDialog2 = utils.createDialog(MainActivity.this, R.layout.recipe2dialog);
 		utils.setDialogText(R.id.recipeAddView2, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeIngredsView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeStepsView, recipeAddDialog2, 22);
@@ -310,10 +295,8 @@ public class MainActivity extends Activity  {
 		TextView errorView = (TextView) recipeAddDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
-		EditText recipeName = (EditText) recipeAddDialog.findViewById(R.id.recipenameEditText);
-		name = recipeName.getText().toString();
-		EditText recipeDesc = (EditText) recipeAddDialog.findViewById(R.id.recipeDescEdit);
-	    desc = recipeDesc.getText().toString();
+		name = utils.getTextFromDialog(R.id.recipenameEditText, recipeAddDialog);
+		desc = utils.getTextFromDialog(R.id.recipeDescEdit, recipeAddDialog);
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 	    recipeBook = spinner.getSelectedItem().toString();
 		Context context = getApplicationContext();
@@ -406,10 +389,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void setUpIngredAddDialog()
 	{
-		recipeIngredDialog = new Dialog(MainActivity.this);
-		recipeIngredDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		recipeIngredDialog.setContentView(R.layout.ingredsdialog);
-		recipeIngredDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		recipeIngredDialog = utils.createDialog(MainActivity.this,R.layout.ingredsdialog);
 		utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.ingredsView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
@@ -451,10 +431,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void setUpStepAddDialog()
 	{
-		 recipeAddStepDialog = new Dialog(MainActivity.this);
-			recipeAddStepDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			recipeAddStepDialog.setContentView(R.layout.methoddialog);
-			recipeAddStepDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+		   recipeAddStepDialog = utils.createDialog(MainActivity.this, R.layout.methoddialog);		
 			utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
 			utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 			utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
@@ -474,18 +451,15 @@ public class MainActivity extends Activity  {
 		TextView errorView = (TextView) recipeAddDialog2.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddDialog2,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
-		EditText servesEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeServesEditText);
-	    serves = servesEdit.getText().toString();
-		EditText prepEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
-        prep = prepEdit.getText().toString();
-		EditText cookingEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
-	    cooking = cookingEdit.getText().toString();	   
-	    EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
-	    EditText methodEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
-	    String methods = methodEdit.getText().toString();
-	    String i = ingredsEdit.getText().toString();
+		
+	    
+	    serves = utils.getTextFromDialog(R.id.recipeServesEditText, recipeAddDialog2);
+	    prep = utils.getTextFromDialog(R.id.recipePrepEditText, recipeAddDialog2);
+		cooking = utils.getTextFromDialog(R.id.recipeCookingEditText, recipeAddDialog2);
+		String methods = utils.getTextFromDialog(R.id.recipeIngredsEditText, recipeAddDialog2);
+	    String ingredient = utils.getTextFromDialog(R.id.recipeStepsEditText, recipeAddDialog2);
 	    //Error catching before moving to next stage
-	    if(i.equals(""))
+	    if(ingredient.equals(""))
 	    {
 	    	errorView.setText("Please enter ingredients");
 	    }
@@ -537,10 +511,7 @@ public class MainActivity extends Activity  {
 	 */
 	public void setUpThirdRecipeAddDialog()
 	{
-		 addRecipeDialog3 = new Dialog(MainActivity.this);
-			addRecipeDialog3.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			addRecipeDialog3.setContentView(R.layout.recipe3dialog);
-			addRecipeDialog3.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+			addRecipeDialog3 = utils.createDialog(MainActivity.this, R.layout.recipe3dialog);		
 			utils.setDialogText(R.id.recipeImagesView, addRecipeDialog3, 22);
 			utils.setDialogText(R.id.browseButton, addRecipeDialog3, 22);
 			utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
@@ -570,18 +541,13 @@ public class MainActivity extends Activity  {
 	 * Get third dialog data
 	 */
 	public void getThirdDialogData()
-	{
-		EditText imageEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeImagesEditText);
-		String image = imageEdit.getText().toString();
-		EditText cusineEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeCusineEditText);
-		String cusine = cusineEdit.getText().toString();
-		EditText dietaryEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeDietaryEditText);
-		String dietary = dietaryEdit.getText().toString();
-		EditText tipsEdit = (EditText) addRecipeDialog3.findViewById(R.id.recipeTipsEditText);
-		String tips = tipsEdit.getText().toString();
+	{	
+		String image = utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3);
+		String cusine =  utils.getTextFromDialog(R.id.recipeCusineEditText, addRecipeDialog3);
+		String dietary =  utils.getTextFromDialog(R.id.recipeDietaryEditText, addRecipeDialog3);
+		String tips =  utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
-		String difficulty = spinner.getSelectedItem().toString();
-		
+		String difficulty = spinner.getSelectedItem().toString();	
 	}
 	
 	/**
@@ -593,10 +559,9 @@ public class MainActivity extends Activity  {
 		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
-		EditText stepNumEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
-		String stepNum = stepNumEdit.getText().toString();
-		EditText stepEdit = (EditText) recipeAddStepDialog.findViewById(R.id.stepEditText);
-		String step = stepEdit.getText().toString();
+		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
+		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
+		
 		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
 		{
@@ -623,14 +588,12 @@ public class MainActivity extends Activity  {
 	public void getIngredient()
 	{
 		//Getting text
-		EditText ingredEdit = (EditText) recipeIngredDialog.findViewById(R.id.ingredEditText);
-		String ingredient = ingredEdit.getText().toString();
-		EditText amountEdit = (EditText) recipeIngredDialog.findViewById(R.id.amountEditText);
-		String amount = amountEdit.getText().toString();
-		EditText noteEdit =  (EditText) recipeIngredDialog.findViewById(R.id.noteEditText);
-		String note = noteEdit.getText().toString();
+		String ingredient = utils.getTextFromDialog(R.id.ingredEditText, recipeIngredDialog);
+		String amount = utils.getTextFromDialog(R.id.amountEditText, recipeIngredDialog);
+		String note = utils.getTextFromDialog(R.id.noteEditText, recipeIngredDialog);
 		Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
 		String value = spinner.getSelectedItem().toString();
+		
 		TextView errorView = (TextView) recipeIngredDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeIngredDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -693,41 +656,7 @@ public class MainActivity extends Activity  {
 	 @Override
 	   protected void onResume() {
 		   super.onResume();
-	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
-	      Context.MODE_PRIVATE);
-	      
-	    		  
-	    	 if(utils.checkInternetConnection(getApplicationContext()))
-	    			{
-	    				syncModel sync = new syncModel(getApplicationContext());
-	    				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
-	    				try {
-	    					sync.getJSONFromServer();
-	    					sync.getAndCreateAccountJSON();
-	    					syncRecipe.getJSONFromServer();
-	    					syncRecipe.getAndCreateJSON();
-							
-	    					sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-	    					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-	    					
-	    					Calendar cal = Calendar.getInstance(); // creates calendar
-	    		            cal.setTime(new Date()); // sets calendar time/date
-	    		            Date today = cal.getTime();
-	    		            String lastUpdated = utils.dateToString(today);
-	    					Editor editor = sharedpreferences.edit();
-	    			        editor.putString("Date", lastUpdated);
-	    			        editor.commit();
-	    			        Toast.makeText(getApplicationContext(), 
-	    			        	    "App synced", Toast.LENGTH_LONG).show();
-	    				} catch (JSONException e) {
-	    					//uto-generated catch block
-	    					e.printStackTrace();
-	    					Toast.makeText(getApplicationContext(), 
-	    			        	    "App sync failed", Toast.LENGTH_LONG).show();
-	    					
-	    				}
-	    			
-	  	     } 
+	       utils.sync();
 	    		 
 	      
 	   }

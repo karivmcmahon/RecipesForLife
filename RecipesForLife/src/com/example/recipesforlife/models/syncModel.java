@@ -37,7 +37,6 @@ import org.json.JSONObject;
 public class syncModel extends baseDataSource
 {
 	Context context;
-	String currentDate;
 	public syncModel(Context context) {
 		super(context);
 		this.context = context;
@@ -51,7 +50,6 @@ public class syncModel extends baseDataSource
 	public ArrayList<userBean> getUsers()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		getCurrentDate();
 		open();
 		 ArrayList<userBean> userList = new ArrayList<userBean>();
 	        Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
@@ -73,7 +71,6 @@ public class syncModel extends baseDataSource
 	public ArrayList<accountBean> getAccount()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		getCurrentDate();
 		open();
 		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
 	        Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });
@@ -244,20 +241,6 @@ public class syncModel extends baseDataSource
 	}
 	
 	
-	private String dateToString(Date date) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentDate = formatter.format(date);
-		return currentDate;
-	}
-	
-	public void getCurrentDate()
-	{
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-        Date today = cal.getTime();
-        currentDate = dateToString(today);
-	}
 	
 	
 }

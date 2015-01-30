@@ -40,39 +40,41 @@ import android.widget.Toast;
 
 /**
  * Class that handles the sign in/sign up page that is showed initially
+ * 
  * @author Kari
- *
+ * 
  */
 public class SignUpSignInActivity extends Activity {
-	//Edit text stores
-	EditText emailEdit,nameEdit,passwordEdit,countryEdit, cityEdit, interestEdit, bioEdit;
-	//Strings to store info from edit text box
-	String email,name,password,country,city,interest,bio;
-	//List to store account information
+	// Strings to store info from edit text box
+	String email, name, password, country, city, interest, bio;
+	// List to store account information
 	List<String> account;
-	//Typeface to change to custom font
+	// Typeface to change to custom font
 	Typeface typeFace;
-	//Shared prefs to store log in data
-	public static final String MyPREFERENCES = "MyPrefs" ;
-	public static final String emailk = "emailKey"; 
-	public static final String pass = "passwordKey"; 
+	// Shared prefs to store log in data
+	public static final String MyPREFERENCES = "MyPrefs";
+	public static final String emailk = "emailKey";
+	public static final String pass = "passwordKey";
 	util utils;
 	int counter;
 	SharedPreferences sharedpreferences;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		counter = 0;
 		setContentView(R.layout.signupsigninactivity);
 		utils = new util(getApplicationContext(), this);
-		//Get shared pref		 
-		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);		
-		//Editor editors = sharedpreferences.edit();
-		//editors.clear();
-		//editors.commit();
-		if ( sharedpreferences.getBoolean("firstTime",false) == false) {
+		// Get shared pref
+		sharedpreferences = getSharedPreferences(MyPREFERENCES,
+				Context.MODE_PRIVATE);
+		// Editor editors = sharedpreferences.edit();
+		// editors.clear();
+		// editors.commit();
+		if (sharedpreferences.getBoolean("firstTime", false) == false) {
 			Editor editor = sharedpreferences.edit();
 			editor.putBoolean("firstTime", true);
 			editor.commit();
@@ -80,35 +82,31 @@ public class SignUpSignInActivity extends Activity {
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
 			buildDatabase();
-			sync();
+			utils.sync();
 
+		} else {
+			utils.sync();
 		}
-		else
-		{
-			sync();
-		}
-		//Style for activity
-		typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-		utils.setText(R.id.textView1, 28); 	
-		utils.setText(R.id.emailView, 22);	
+		// Style for activity
+		typeFace = Typeface.createFromAsset(getAssets(), "fonts/elsie.ttf");
+		utils.setText(R.id.textView1, 28);
+		utils.setText(R.id.emailView, 22);
 		utils.setText(R.id.passwordView, 22);
 		utils.setButtonText(R.id.button1, 22);
 
-
-		//Sign in button
+		// Sign in button
 		Button button1 = (Button) findViewById(R.id.button1);
 		button1.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) 
-			{	
-				//Check login details
+			public void onClick(View arg0) {
+				// Check login details
 				checkLogin();
 			}
 
 		});
 
-		//Style and on touch listener for create account
-		TextView  signupView = (TextView) findViewById(R.id.signUpView);
+		// Style and on touch listener for create account
+		TextView signupView = (TextView) findViewById(R.id.signUpView);
 		signupView.setText(Html.fromHtml("<p><u>Create an account</u></p>"));
 		signupView.setTypeface(typeFace);
 		signupView.setTextSize(22);
@@ -116,24 +114,22 @@ public class SignUpSignInActivity extends Activity {
 		signupView.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction()  == MotionEvent.ACTION_DOWN)
-				{
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					account = new ArrayList<String>();
-					//Creates a custom dialog
-					final Dialog dialog = new Dialog(SignUpSignInActivity.this);
-					dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-					dialog.setContentView(R.layout.signupcustomdialog);
-					dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-					//Set dialogs style
-					utils.setDialogText(R.id.nameView,dialog,22);
-					utils.setDialogText(R.id.emailView,dialog,22);
-					utils.setDialogText(R.id.passwordView,dialog,22);
-					utils.setDialogText(R.id.createView,dialog,28);
-					//Show dialog
-					dialog.show(); 
+					// Creates a custom dialog
+					final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.signupcustomdialog);
+				
+					// Set dialogs style
+					utils.setDialogText(R.id.nameView, dialog, 22);
+					utils.setDialogText(R.id.emailView, dialog, 22);
+					utils.setDialogText(R.id.passwordView, dialog, 22);
+					utils.setDialogText(R.id.createView, dialog, 28);
+					// Show dialog
+					dialog.show();
 
-					//Next button on dialog
-					Button dialogButton = (Button) dialog.findViewById(R.id.nextButton);
+					// Next button on dialog
+					Button dialogButton = (Button) dialog
+							.findViewById(R.id.nextButton);
 					dialogButton.setTypeface(typeFace);
 					dialogButton.setTextSize(22);
 					dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
@@ -141,303 +137,214 @@ public class SignUpSignInActivity extends Activity {
 						@Override
 						public void onClick(View v) {
 							counter++;
-							//get the info from the dialog
+							// get the info from the dialog
 							boolean show = getInitialDialogInfo(dialog);
-							if(show == true)
-							{
-							//Show another dialog
-							final Dialog nextDialog = new Dialog(SignUpSignInActivity.this);
-							nextDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-							//Drawable d = new ColorDrawable(Color.parseColor("#A6A6A6"));
-							//d.setAlpha(80);
-							nextDialog.setContentView(R.layout.signupnextcustomdialog);
-							nextDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-							
-							//Set style
-							utils.setDialogText(R.id.additionalView,nextDialog,28);
-							utils.setDialogText(R.id.cityView,nextDialog,22);
-							utils.setDialogText(R.id.countryView,nextDialog,22);
-							utils.setDialogText(R.id.bioView,nextDialog,22);
-							utils.setDialogText(R.id.interestView,nextDialog,22);
-							//Set button click
-							Button nextDialogButton = (Button) nextDialog.findViewById(R.id.signUpButton);
-							nextDialogButton.setTypeface(typeFace);
-							nextDialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
-							nextDialogButton.setTextSize(22);
-							nextDialogButton.setOnClickListener(new OnClickListener()
-							{
-								@Override
-								public void onClick(View v) 
-								{
-									getSecondDialogInfo(nextDialog);
-								}
+							if (show == true) {
+								// Show another dialog
+								final Dialog nextDialog = utils.createDialog(
+										SignUpSignInActivity.this, R.layout.signupnextcustomdialog);
 
-							});					
-							nextDialog.show();						
-						}
-						}
-					});  
+								// Set style
+								utils.setDialogText(R.id.additionalView,
+										nextDialog, 28);
+								utils.setDialogText(R.id.cityView, nextDialog,
+										22);
+								utils.setDialogText(R.id.countryView,
+										nextDialog, 22);
+								utils.setDialogText(R.id.bioView, nextDialog,
+										22);
+								utils.setDialogText(R.id.interestView,
+										nextDialog, 22);
+								// Set button click
+								Button nextDialogButton = (Button) nextDialog
+										.findViewById(R.id.signUpButton);
+								nextDialogButton.setTypeface(typeFace);
+								nextDialogButton.setTextColor(Color
+										.parseColor("#FFFFFFFF"));
+								nextDialogButton.setTextSize(22);
+								nextDialogButton
+										.setOnClickListener(new OnClickListener() {
+											@Override
+											public void onClick(View v) {
+												getSecondDialogInfo(nextDialog);
+											}
 
-					return false; 
-				}
-				else
-				{
+										});
+								nextDialog.show();
+							}
+						}
+					});
+
+					return false;
+				} else {
 					return false;
 				}
 			}
 		});
-	//	buildDatabase();
-	//	sync();
+		// buildDatabase();
+		// sync();
 	}
-		
-		
 
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-		/**
-		 * On resume takes user to activity if logged in
-		 */
-	   @Override
-	   protected void onResume() {
-		   super.onResume();
-	      sharedpreferences=getSharedPreferences(MyPREFERENCES, 
-	      Context.MODE_PRIVATE);
-	    //Style for activity
-	      //sync();
-			typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-	      if (sharedpreferences.contains(emailk))
-	      {
-	     if(sharedpreferences.contains(pass))
-	    	  {   
-	    		
-	    		  			
-		    	  Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
-			      startActivity(i);
-	    	  }
-	     }
-	   }
-	      
-	   
-	   /**
-	    * Syncs the databases
-	    */
-	   public void sync()
-	   {
-		   if(utils.checkInternetConnection(getApplicationContext()))
-			{
-				syncModel sync = new syncModel(getApplicationContext());
-				syncRecipeModel syncRecipe = new syncRecipeModel(getApplicationContext());
-				try {
-					sync.getJSONFromServer();
-					sync.getAndCreateAccountJSON();
-					
-					try {
-						syncRecipe.getJSONFromServer();
-						syncRecipe.getAndCreateJSON();
-						
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-					 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-					
-					Calendar cal = Calendar.getInstance(); // creates calendar
-		            cal.setTime(new Date()); // sets calendar time/dat
-		            Date today = cal.getTime();
-		            String lastUpdated = utils.dateToString(today);
-					Editor editor = sharedpreferences.edit();
-			        editor.putString("Date", lastUpdated);
-			        editor.commit();
-			        Toast.makeText(getApplicationContext(), 
-			        	    "App synced", Toast.LENGTH_LONG).show();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-								
-				}
-			}
-	   }
-	
-	 	/**
-	 	 * Build database
-	 	 */
-		public void buildDatabase() 
-		{
-			databaseConnection dbConnection = new databaseConnection(this);
-			dbConnection.deleteDatabase();
-			try {
-				dbConnection.createDataBase();
-			} catch (IOException ioe) {
-				throw new Error("Unable to create database");
-				
-				
-			}
-		}
-		
-		
-		
-		
-		
-		
-		/**
-		 * Checks the details entered is a valid account and logs them in
-		 */
-		public void checkLogin()
-		{
-			//Get text from edit textbox
-			EditText emailEdit = (EditText) findViewById(R.id.editText1);
-			EditText passwordEdit = (EditText) findViewById(R.id.editText2);
-			String email = emailEdit.getText().toString();
-			String password = passwordEdit.getText().toString();
-			//Check if these details are correct
-			Context t = getApplicationContext();
-			accountModel accountmodel = new accountModel(t);
-			boolean access = accountmodel.logIn(email, password);
-			//If allowed access save pref
-			if(access == true)
-			{
-			  //Store details in shared preferences
-			  Editor editor = sharedpreferences.edit();
-		      editor.putString(emailk, email);
-		      editor.putString(pass, password);
-		      editor.commit();
-		      //Start activity
-		      Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
-		      startActivity(i);
-			}
-			else
-			{
-				final Dialog dialog = new Dialog(SignUpSignInActivity.this);
-				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				//Drawable d = new ColorDrawable(Color.parseColor("#FFFFFFFF"));
-				//d.setAlpha(80);
-				dialog.setContentView(R.layout.textviewdialog);
-				dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-				//Set dialogs style
-				utils.setDialogText(R.id.textView,dialog,18);
-				TextView txtView =  (TextView) dialog.findViewById(R.id.textView);
-				txtView.setText("Error : The details you have entered are incorrect, please try again");
-				
-				//Show dialog
-				dialog.show(); 
-				Button button = (Button) dialog.findViewById(R.id.okButton);
-				button.setTypeface(typeFace);
-				button.setTextSize(22);
-				button.setTextColor(Color.parseColor("#FFFFFFFF"));
-				button.setOnClickListener(new OnClickListener(){
 
-					@Override
-					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
-						dialog.dismiss();
-					}});
+	/**
+	 * On resume takes user to activity if logged in
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		sharedpreferences = getSharedPreferences(MyPREFERENCES,
+				Context.MODE_PRIVATE);
+		if (sharedpreferences.contains(emailk)) {
+			if (sharedpreferences.contains(pass)) {
+
+				Intent i = new Intent(SignUpSignInActivity.this,
+						MainActivity.class);
+				startActivity(i);
 			}
 		}
-		
-		/**
-		 * Get information from the first dialog box when creating account
-		 * @param dialog
-		 */
-		public boolean getInitialDialogInfo(Dialog dialog)
-		{
-			//Get info from edit text box
-			emailEdit = (EditText) dialog.findViewById(R.id.emailEdit);
-			nameEdit = (EditText) dialog.findViewById(R.id.nameEdit);
-			passwordEdit = (EditText) dialog.findViewById(R.id.passwordEdit);
-			TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
-			
-			utils.setDialogText(R.id.errorView,dialog,16);
-			errorView.setTextColor(Color.parseColor("#F70521"));
-			name= nameEdit.getText().toString();
-			password = passwordEdit.getText().toString();
-			email = emailEdit.getText().toString(); 
-			Context t = getApplicationContext();
-			accountModel accountmodel = new accountModel(t);
-			if(accountmodel.checkEmail(email) == true)
-			{
-				errorView.setText("Email already in use \n");
-			}
-			else if(email.equals(""))
-			{
-				errorView.setText("Please enter an email address \n" );
-			}
-			else if(password.equals("") )
-			{
-				errorView.setText("Please enter a password \n");
-			}
-			else if(name.equals("") )
-			{
-				errorView.setText("Please enter a name \n");
-			}
-			
-			else
-			{
-				dialog.dismiss();
-				return true;
-			}
-			return false;
-		}
-		
-		/**
-		 * Get information from the second dialog box when creating account
-		 * Adds to a list and then sends to model to insert into database
-		 * @param nextDialog
-		 */
-		public void getSecondDialogInfo(Dialog nextDialog)
-		{
-			//Get info from textboxes
-			cityEdit = (EditText) nextDialog.findViewById(R.id.cityEdit);
-			countryEdit = (EditText) nextDialog.findViewById(R.id.countryEdit);
-			bioEdit = (EditText) nextDialog.findViewById(R.id.bioEditText);
-			interestEdit = (EditText) nextDialog.findViewById(R.id.interestEditText);
-			TextView errorView = (TextView) nextDialog.findViewById(R.id.errorView);
-			utils.setDialogText(R.id.errorView,nextDialog,16);
-			errorView.setTextColor(Color.parseColor("#F70521"));
-			city = cityEdit.getText().toString();
-			country = countryEdit.getText().toString();
-			bio = bioEdit.getText().toString();
-			interest = interestEdit.getText().toString();
-			if(country.equals(""))
-			{
-				errorView.setText("Please enter a country \n");
-			}
-			else
-			{
-				//Add info to list
-				account.add(name);
-				account.add(name);
-				account.add(country);
-				account.add(bio);
-				account.add(city);
-				account.add(interest);
-				account.add(email);
-				account.add(password);	
-				//Insert to db
-				try
-				{
-					Context t = getApplicationContext();
-					accountModel accountmodel = new accountModel(t);
-					accountmodel.insertAccount(account);
-					nextDialog.dismiss();
-					
-				}
-				catch(Exception e)
-				{
-					Log.v("Error ", "Error with account insert. Exception " + e);
-					errorView.setText("Error creating account");
-					
-				}
-			}
-		}
-		
-		
 	}
+
+	/**
+	 * Build database
+	 */
+	public void buildDatabase() {
+		databaseConnection dbConnection = new databaseConnection(this);
+		dbConnection.deleteDatabase();
+		try {
+			dbConnection.createDataBase();
+		} catch (IOException ioe) {
+			throw new Error("Unable to create database");
+
+		}
+	}
+
+	/**
+	 * Checks the details entered is a valid account and logs them in
+	 */
+	public void checkLogin() {
+		String email = utils.getText(R.id.editText1);
+		String password = utils.getText(R.id.editText2);
+		// Check if these details are correct
+		Context t = getApplicationContext();
+		accountModel accountmodel = new accountModel(t);
+		boolean access = accountmodel.logIn(email, password);
+		// If allowed access save pref
+		if (access == true) {
+			// Store details in shared preferences
+			Editor editor = sharedpreferences.edit();
+			editor.putString(emailk, email);
+			editor.putString(pass, password);
+			editor.commit();
+			// Start activity
+			Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
+			startActivity(i);
+		} else {
+			final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.textviewdialog);
+			
+			// Set dialogs style
+			utils.setDialogText(R.id.textView, dialog, 18);
+			TextView txtView = (TextView) dialog.findViewById(R.id.textView);
+			txtView.setText("Error : The details you have entered are incorrect, please try again");
+
+			// Show dialog
+			dialog.show();
+			Button button = (Button) dialog.findViewById(R.id.okButton);
+			button.setTypeface(typeFace);
+			button.setTextSize(22);
+			button.setTextColor(Color.parseColor("#FFFFFFFF"));
+			button.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+				}
+			});
+		}
+	}
+
+	/**
+	 * Get information from the first dialog box when creating account
+	 * 
+	 * @param dialog
+	 */
+	public boolean getInitialDialogInfo(Dialog dialog) {
 		
+		TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView, dialog, 16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
+	   
+		email = utils.getTextFromDialog(R.id.emailEdit, dialog);
+		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
+		name = utils.getTextFromDialog(R.id.nameEdit, dialog);
+		
+		Context t = getApplicationContext();
+		accountModel accountmodel = new accountModel(t);
+		if (accountmodel.checkEmail(email) == true) {
+			errorView.setText("Email already in use \n");
+		} else if (email.equals("")) {
+			errorView.setText("Please enter an email address \n");
+		} else if (password.equals("")) {
+			errorView.setText("Please enter a password \n");
+		} else if (name.equals("")) {
+			errorView.setText("Please enter a name \n");
+		}
 
+		else {
+			dialog.dismiss();
+			return true;
+		}
+		return false;
+	}
 
+	/**
+	 * Get information from the second dialog box when creating account Adds to
+	 * a list and then sends to model to insert into database
+	 * 
+	 * @param nextDialog
+	 */
+	public void getSecondDialogInfo(Dialog nextDialog) {
+		// Get info from textboxes
+		TextView errorView = (TextView) nextDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView, nextDialog, 16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
+	
+		city =utils.getTextFromDialog(R.id.cityEdit, nextDialog);
+		country = utils.getTextFromDialog(R.id.countryEdit, nextDialog);
+		bio = utils.getTextFromDialog(R.id.bioEditText, nextDialog);
+		interest = utils.getTextFromDialog(R.id.interestEditText, nextDialog);
+		
+		if (country.equals("")) {
+			errorView.setText("Please enter a country \n");
+		} else {
+			// Add info to list
+			account.add(name);
+			account.add(name);
+			account.add(country);
+			account.add(bio);
+			account.add(city);
+			account.add(interest);
+			account.add(email);
+			account.add(password);
+			// Insert to db
+			try {
+				Context t = getApplicationContext();
+				accountModel accountmodel = new accountModel(t);
+				accountmodel.insertAccount(account);
+				nextDialog.dismiss();
+
+			} catch (Exception e) {
+				Log.v("Error ", "Error with account insert. Exception " + e);
+				errorView.setText("Error creating account");
+
+			}
+		}
+	}
+
+}

@@ -57,15 +57,16 @@ public class accountModel extends baseDataSource
 	String str;
 	ContentValues values;
 	ContentValues accountValues;
-	String lastUpdated;
 	Context context;
 	syncModel sync;
+	utility utils;
 	
 	public accountModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor st
 		this.context = context;
 		sync = new syncModel(context);
+		utils = new utility();
 	}
 
 	/**
@@ -75,10 +76,6 @@ public class accountModel extends baseDataSource
 	public void insertAccount(List<String> accountInfo) 
 	{
 			open();
-			Calendar cal = Calendar.getInstance(); // creates calendar
-            cal.setTime(new Date()); // sets calendar time/date
-            Date today = cal.getTime();
-            lastUpdated = dateToString(today);	
             database.beginTransaction();
             try
             {
@@ -142,17 +139,7 @@ public class accountModel extends baseDataSource
 	        return ub;
 	    }
 	
-	/**
-	 * Converts date into string
-	 * @param date
-	 * @return
-	 */
-	private String dateToString(Date date) 
-	{
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentDate = formatter.format(date);
-		return currentDate;
-	}
+
 	
 	/**
 	 * Check if details provided are an account
@@ -213,7 +200,7 @@ public class accountModel extends baseDataSource
 				    account.put("cookingInterest", accountInfo.get(5)); // in
 				    account.put("id", (int)id);
 				    account.put("email", accountInfo.get(6));
-				    account.put("updateTime", lastUpdated);
+				    account.put("updateTime", utils.getLastUpdated());
 				    account.put("password", accountInfo.get(7));
 				    JSONArray jsonArray = new JSONArray();
 					jsonArray.put(account);
@@ -271,14 +258,13 @@ public class accountModel extends baseDataSource
 		 //User values
 	    values = new ContentValues();
 	    values.put("name", accountInfo.get(0)); 
-	    values.put("updateTime", lastUpdated); 
+	    values.put("updateTime", utils.getLastUpdated()); 
 	    values.put("country", accountInfo.get(2)); 
 	    values.put("bio", accountInfo.get(3)); 
 	    values.put("city", accountInfo.get(4)); 
 	    values.put("cookingInterest", accountInfo.get(5));     	 
     	id = database.insertOrThrow("Users", null, values);
     	insertAccountData(accountInfo, id);
-    	Log.v("m","m");
 	}
 	
 	/**
@@ -292,8 +278,7 @@ public class accountModel extends baseDataSource
 	    accountValues = new ContentValues();
 	    accountValues.put("id", (int)id);
 	    accountValues.put("email", accountInfo.get(6));
-	    accountValues.put("updateTime", lastUpdated);
-	    Log.v("LAST UPDATEzz", "LAST UPDATEzz " + lastUpdated);
+	    accountValues.put("updateTime", utils.getLastUpdated());
 	    accountValues.put("password", accountInfo.get(7));
 	    database.insertOrThrow("Account", null, accountValues);
 	}

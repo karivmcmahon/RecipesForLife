@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class syncRecipeModel extends baseDataSource {
 	Context context;
-	String currentDate;
+	
 	
 	public syncRecipeModel(Context context) {
 		super(context);
@@ -46,7 +46,6 @@ public class syncRecipeModel extends baseDataSource {
 	public ArrayList<recipeBean> getRecipe()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		getCurrentDate();
 		open();
 	    ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
 	    Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });
@@ -87,7 +86,6 @@ public class syncRecipeModel extends baseDataSource {
 	public ArrayList<ingredientBean> getIngred(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		getCurrentDate();
 		open();
 	    ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
 	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  datetime(updateTime) > datetime(?) AND Recipeid = ? ", new String[] { sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
@@ -118,7 +116,6 @@ public class syncRecipeModel extends baseDataSource {
 	public String getIngredName(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		getCurrentDate();
 		open();
 		String name = null;
 	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  datetime(updateTime) > datetime(?) AND id = ? ", new String[] { sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
@@ -157,7 +154,6 @@ public class syncRecipeModel extends baseDataSource {
 	public ArrayList<preperationBean> getPrep(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		getCurrentDate();
 		open();
 	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(updateTime) > datetime(?) AND recipeId = ?", new String[] { sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(id) });
@@ -203,7 +199,6 @@ public class syncRecipeModel extends baseDataSource {
 	{
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
-		getCurrentDate();
 	
 		for(int i = 0; i < recipeList.size(); i++)
 		{
@@ -414,26 +409,6 @@ public class syncRecipeModel extends baseDataSource {
 		}
 	
 	}
-	/**
-	 * Puts date in string format
-	 * @param date
-	 * @return currentDate
-	 */
-	private String dateToString(Date date) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currentDate = formatter.format(date);
-		return currentDate;
-	}
 	
-	/**
-	 * Retrieves the current date
-	 */
-	public void getCurrentDate()
-	{
-		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        currentDate = dateToString(today);
-	}
 
 }
