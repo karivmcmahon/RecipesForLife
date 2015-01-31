@@ -48,7 +48,7 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
-	    Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });
+	    Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -88,12 +88,12 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
-	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  datetime(updateTime) > datetime(?) AND Recipeid = ? ", new String[] { sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND Recipeid = ? ", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE datetime(updateTime) > datetime(?) AND id = ?", new String[] { sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(detsId) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(detsId) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);
@@ -118,7 +118,7 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		String name = null;
-	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  datetime(updateTime) > datetime(?) AND id = ? ", new String[] { sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ? ", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -156,12 +156,12 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(updateTime) > datetime(?) AND recipeId = ?", new String[] { sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND recipeId = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(id) });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int prepid = cursor.getInt(getIndex("Preperationid", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(updateTime) > datetime(?) AND id = ?", new String[] { sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(prepid) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(prepid) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);

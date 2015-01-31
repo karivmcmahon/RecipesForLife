@@ -52,7 +52,8 @@ public class syncModel extends baseDataSource
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		 ArrayList<userBean> userList = new ArrayList<userBean>();
-	        Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
+		 Cursor cursor;
+		 cursor = database.rawQuery("SELECT * FROM Users WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
@@ -73,7 +74,8 @@ public class syncModel extends baseDataSource
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
-	        Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE datetime(updateTime) > datetime(?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });
+	        Cursor cursor;
+	        cursor = database.rawQuery("SELECT * FROM Account WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) ", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") });        
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);

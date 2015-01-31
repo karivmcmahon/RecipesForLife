@@ -67,6 +67,16 @@ public class util {
 		return currentDate;
 	}
 	
+	public String getLastUpdated2()
+	{
+		Calendar cal = Calendar.getInstance(); // creates calendar
+		cal.add(Calendar.SECOND, 30);
+        cal.setTime(new Date()); // sets calendar time/date
+        Date today = cal.getTime();
+        String lastUpdated = dateToString(today);
+        return lastUpdated;
+	}
+	
 	/**
 	 * Get current date
 	 */
@@ -179,20 +189,25 @@ public class util {
 	{
 	 if(checkInternetConnection(context))
 		{
+		 sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 			syncModel sync = new syncModel(context);
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			try {
 				sync.getJSONFromServer();
-				sync.getAndCreateAccountJSON();
 				syncRecipe.getJSONFromServer();
-				syncRecipe.getAndCreateJSON();
-				
-				sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-				 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-				
 				Editor editor = sharedpreferences.edit();
-		        editor.putString("Date", getLastUpdated());
+		        editor.putString("Date", getLastUpdated2());
 		        editor.commit();
+				sync.getAndCreateAccountJSON();
+				syncRecipe.getAndCreateJSON();
+				editor.putString("Date Server", getLastUpdated2());
+		        editor.commit();
+				
+				
+				 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+				 Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Date Server", "DEFAULT"));
+				
+				
 		        Toast.makeText(context, 
 		        	    "App synced", Toast.LENGTH_LONG).show();
 			} catch (JSONException e) {

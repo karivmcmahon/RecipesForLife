@@ -33,5 +33,15 @@ public class utility {
         String lastUpdated = dateToString(today);
         return lastUpdated;
 	}
+	
+	public String getLastUpdated2()
+	{
+		Calendar cal = Calendar.getInstance(); // creates calendar
+		cal.add(Calendar.SECOND, 30);
+        cal.setTime(new Date()); // sets calendar time/date
+        Date today = cal.getTime();
+        String lastUpdated = dateToString(today);
+        return lastUpdated;
+	}
 
 }
