@@ -6,39 +6,77 @@ import java.util.Comparator;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.controllers.preperationBean;
+import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.util;
 
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.view.Menu;
-import android.widget.TextView;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-public class RecipeViewActivity extends Activity {
+public class RecipeEditActivity extends Activity {
+	
 	util utils;
 	
 	private SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs";
-
+    Dialog titleDialog, servesDialog, timeDialog;
 	public static final String emailk = "emailKey";
 	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.recipeview);
+        StrictMode.setThreadPolicy(policy);
+		setContentView(R.layout.recipeeditview);
 		utils = new util(getApplicationContext(), this);
 		setStyle();
 		setTextForLayout();
 		
+		ImageView titleButton = (ImageView) findViewById(R.id.recipeTitleEditImage);
+		titleButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				titleDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe1editdialog);
+				titleDialog.show();
+			}});
 		
+		ImageView servesButton = (ImageView) findViewById(R.id.servesEditImage);
+		servesButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				servesDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe2editdialog);
+				servesDialog.show();
+			}});
 		
+		ImageView timeButton = (ImageView) findViewById(R.id.timeEditImage);
+		timeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				timeDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe3editdialog);
+				timeDialog.show();
+				
+			}});
+
+			
 	}
 	
 	@Override
@@ -77,7 +115,7 @@ public class RecipeViewActivity extends Activity {
 			ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			recipe = model.selectRecipe2(intent.getStringExtra("name"), sharedpreferences.getString(emailk, "") );
+			recipe = model.selectRecipe2("pizza", sharedpreferences.getString(emailk, "") );
 			prepList = model.selectPreperation(recipe.getId());
 			ingredList = model.selectIngredients(recipe.getId());
 			

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+ 
+     <TextView
+        android:id="@+id/recipeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Choc Chip Heaven"
+        android:textColor="#F3216C" />
+     
+      <ImageView
+          android:id="@+id/recipeTitleEditImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:padding="5dp"
+          android:layout_toRightOf="@+id/recipeTitle"
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+          android:clickable="true"
+           />
+     
+      <TextView
+        android:id="@+id/recipeDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recipeTitle"
+        android:layout_centerHorizontal="true"
+        android:text="Best choc chip cookies"
+        android:textStyle="italic" />
+
+      <ImageView
+          android:id="@+id/foodImage"
+          android:layout_width="fill_parent"
+          android:layout_height="150dp"
+          android:layout_below="@+id/recipeDesc"
+          android:scaleType="fitXY"
+          android:layout_marginTop="44dp"
+          android:src="@drawable/cookie" />
+      <ImageView
+          android:id="@+id/imageEditImage"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+         android:layout_alignTop="@+id/foodImage"
+           android:layout_alignParentRight="true"
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+           />
+      
+      
+       <ImageView
+          android:id="@+id/forkImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:layout_below="@+id/foodImage"
+          android:scaleType="fitXY"     
+          android:src="@drawable/cross85" />
+       
+        <TextView
+        android:id="@+id/serves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/foodImage"
+        android:layout_toRightOf="@+id/forkImage"
+        android:text="Serves: "
+        android:textColor="#F3216C"
+       />
+        
+        <TextView
+        android:id="@+id/servesVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/foodImage"
+        android:layout_toRightOf="@+id/serves"
+        android:text="8"
+        
+       />
+        
+         <ImageView
+          android:id="@+id/servesEditImage"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:padding="5dp"
+           android:layout_below="@+id/foodImage"
+          android:layout_toRightOf="@+id/servesVal"
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+           />
+        
+         <ImageView
+          android:id="@+id/timeImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:layout_below="@+id/foodImage"
+          android:layout_toLeftOf="@+id/cookingTime"
+          android:scaleType="fitXY"     
+          android:src="@drawable/black407" 
+           />
+         
+        <TextView
+        android:id="@+id/prepTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/foodImage"
+        android:layout_toLeftOf="@+id/prepTimeVal"
+        android:text="Prep Time:"
+        android:textColor="#F3216C"
+       />
+        
+         <TextView
+        android:id="@+id/prepTimeVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/foodImage"
+        android:layout_toLeftOf="@+id/timeEditImage"    
+        android:text="18:00"
+       />
+         
+         <ImageView
+          android:id="@+id/timeEditImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:padding="5dp"
+           android:layout_below="@+id/foodImage"
+         
+          android:layout_alignParentRight="true"  
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+           />
+       
+         
+          <TextView
+        android:id="@+id/cookingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/prepTime"
+        android:layout_toLeftOf="@+id/cookingTimeVal"
+        android:text="Cooking Time:"
+        android:textColor="#F3216C"
+       />
+          
+          <TextView
+        android:id="@+id/cookingTimeVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/prepTimeVal"
+        android:layout_toLeftOf="@+id/timeEditImage"    
+        android:text="18:00"
+       />
+          
+        <TextView
+        android:id="@+id/ingredientTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/forkImage"
+        android:layout_marginTop="20dp"
+        android:text="Ingredients: "
+        android:textColor="#F3216C"
+       />
+        
+         <ImageView
+          android:id="@+id/ingredEditImage"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+         android:layout_below="@+id/forkImage"
+   		  android:layout_toRightOf="@+id/ingredientTitle"
+   		   android:layout_marginTop="20dp"
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+           />
+        
+         <TextView
+        android:id="@+id/ingredientList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingredientTitle"
+        android:layout_marginTop="10dp"
+        android:text=""
+         android:layout_marginLeft="10dp"
+       />
+        
+         <TextView
+        android:id="@+id/methodTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingredientList"
+        android:layout_marginTop="20dp"
+        android:text="Method: "
+        android:textColor="#F3216C"
+        
+       />
+         
+         <ImageView
+          android:id="@+id/methodEditImage"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+         android:layout_below="@+id/ingredientList"
+   		  android:layout_toRightOf="@+id/methodTitle"
+   		   android:layout_marginTop="20dp"
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink"
+          android:clickable="true" 
+           />
+         
+          <TextView
+        android:id="@+id/methodList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/methodTitle"
+        android:layout_marginTop="10dp"
+        android:text=" "
+        android:layout_marginLeft="10dp"
+       />
+       
+</RelativeLayout>
+</ScrollView>

@@ -43,6 +43,12 @@
              android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
            
         </activity>
+         <activity
+            android:name="com.example.recipesforlife.views.RecipeEditActivity"
+            android:label="@string/app_name" 
+             android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
+           
+        </activity>
         <uses-library android:name="android.test.runner" /> 
     </application>
     

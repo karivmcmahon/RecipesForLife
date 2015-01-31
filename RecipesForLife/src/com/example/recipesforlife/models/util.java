@@ -119,6 +119,18 @@ public class util {
 	}
 	
 	/**
+	 * Set custom text
+	 * @param resource
+	 * @param fontSize
+	 */
+	public void setTextString(int resource,String text)
+	{
+		TextView view = (TextView) activity.findViewById(resource);
+		view.setText(text);
+		
+	}
+	
+	/**
 	 * Get text
 	 * @param resource
 	 * @param fontSize

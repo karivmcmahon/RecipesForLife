@@ -19,7 +19,7 @@
         android:layout_below="@+id/addButton"
          android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="View recipe" />
+        android:text="Edit recipe" />
      
       <Button
         android:id="@+id/viewListButton"
