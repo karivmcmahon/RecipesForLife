@@ -130,11 +130,7 @@ public class SignUpSignInActivity extends Activity {
 					dialog.show();
 
 					// Next button on dialog
-					Button dialogButton = (Button) dialog
-							.findViewById(R.id.nextButton);
-					dialogButton.setTypeface(typeFace);
-					dialogButton.setTextSize(22);
-					dialogButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+					Button dialogButton = utils.setButtonTextDialog(R.id.nextButton, 22, dialog);
 					dialogButton.setOnClickListener(new OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -158,12 +154,7 @@ public class SignUpSignInActivity extends Activity {
 								utils.setDialogText(R.id.interestView,
 										nextDialog, 22);
 								// Set button click
-								Button nextDialogButton = (Button) nextDialog
-										.findViewById(R.id.signUpButton);
-								nextDialogButton.setTypeface(typeFace);
-								nextDialogButton.setTextColor(Color
-										.parseColor("#FFFFFFFF"));
-								nextDialogButton.setTextSize(22);
+								Button nextDialogButton = utils.setButtonTextDialog(R.id.signUpButton, 22, nextDialog);
 								nextDialogButton
 										.setOnClickListener(new OnClickListener() {
 											@Override
@@ -256,10 +247,7 @@ public class SignUpSignInActivity extends Activity {
 
 			// Show dialog
 			dialog.show();
-			Button button = (Button) dialog.findViewById(R.id.okButton);
-			button.setTypeface(typeFace);
-			button.setTextSize(22);
-			button.setTextColor(Color.parseColor("#FFFFFFFF"));
+			Button button = utils.setButtonTextDialog(R.id.okButton, 22, dialog);
 			button.setOnClickListener(new OnClickListener() {
 
 				@Override

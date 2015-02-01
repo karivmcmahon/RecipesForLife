@@ -9,6 +9,7 @@ import org.json.JSONException;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -17,9 +18,12 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -103,6 +107,20 @@ public class util {
 		view.setTypeface(typeFace);
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
+	}
+	
+	/**
+	 * Set custom text for the dialog
+	 * @param resource
+	 * @param dialog
+	 * @param fontSize
+	 */
+	public void setDialogTextString(int resource, Dialog dialog, String text)
+	{
+		//Style for activity
+		//typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
+		EditText view = (EditText)	 dialog.findViewById(resource);
+		view.setText(text);
 	}
 	
 	/**
@@ -195,6 +213,47 @@ public class util {
 		button.setTypeface(typeFace);
 		button.setTextSize(fontSize);
 		button.setTextColor(Color.parseColor("#FFFFFFFF"));
+	}
+	
+	public Button setButtonTextDialog(int resource, int fontSize, Dialog dialog)
+	{
+		Button  button = (Button) dialog.findViewById(resource);
+		button.setTypeface(typeFace);
+		button.setTextSize(fontSize);
+		button.setTextColor(Color.parseColor("#FFFFFFFF"));
+		return button;
+	}
+	
+	public void setTimePickerFrag(Dialog dialog, int res, final Handler handler)
+	{
+		EditText editText2 = (EditText) dialog.findViewById(res);
+		editText2.setOnTouchListener(new OnTouchListener(){
+			//When clicked opens the timepicker fragment
+			@SuppressLint("NewApi")
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				// TODO Auto-generated method stub
+				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
+				{
+					 // Instantiating TimePickerDialogFragment 
+	                TimePickerFragment timePicker = new TimePickerFragment(handler);
+	 
+	               
+	                // Getting fragment manger for this activity 
+	                android.app.FragmentManager fm = activity.getFragmentManager();
+	 
+	                // Starting a fragment transaction 
+	                android.app.FragmentTransaction ft = fm.beginTransaction();
+	 
+	                // Adding the fragment object to the fragment transaction 
+	                ft.add(timePicker, "time_picker");
+	 
+	                // Opening the TimePicker fragment 
+	                ft.commit();
+
+				}
+				return false;
+			}});
 	}
 	
 	public void sync()

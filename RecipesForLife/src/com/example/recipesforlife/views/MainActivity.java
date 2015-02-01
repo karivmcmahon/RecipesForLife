@@ -205,10 +205,7 @@ public class MainActivity extends Activity  {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		sItems.setAdapter(adapter);
-		nextButton = (Button) recipeAddDialog.findViewById(R.id.nextButton);
-		nextButton.setTypeface(typeFace);
-		nextButton.setTextSize(22);
-		nextButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+		nextButton = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog);
 	}
 	
 	/**
@@ -223,66 +220,9 @@ public class MainActivity extends Activity  {
 		utils.setDialogText(R.id.recipeServesView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipePrepView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
-		EditText editText = (EditText) recipeAddDialog2.findViewById(R.id.recipePrepEditText);
-		editText.setOnTouchListener(new OnTouchListener(){
-			//When clicked opens the timepicker fragment
-			@SuppressLint("NewApi")
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
-				if(event.getAction()  == MotionEvent.ACTION_DOWN)
-				{
-					 //Instantiating TimPickerDialogFragment 
-	                TimePickerFragment timePicker = new TimePickerFragment(mHandler);
-	 
-	               
-	                // Getting fragment manger for this activity *
-	                android.app.FragmentManager fm = getFragmentManager();
-	 
-	                //Starting a fragment transaction 
-	                android.app.FragmentTransaction ft = fm.beginTransaction();
-	 
-	                // Adding the fragment object to the fragment transaction 
-	                ft.add(timePicker, "time_picker");
-	 
-	                // Opening the TimePicker fragment 
-	                ft.commit();
-				}
-				
-				return false;
-			}});
-		EditText editText2 = (EditText) recipeAddDialog2.findViewById(R.id.recipeCookingEditText);
-		editText2.setOnTouchListener(new OnTouchListener(){
-			//When clicked opens the timepicker fragment
-			@SuppressLint("NewApi")
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
-				{
-					 // Instantiating TimePickerDialogFragment 
-	                TimePickerFragment timePicker = new TimePickerFragment(mHandler2);
-	 
-	               
-	                // Getting fragment manger for this activity 
-	                android.app.FragmentManager fm = getFragmentManager();
-	 
-	                // Starting a fragment transaction 
-	                android.app.FragmentTransaction ft = fm.beginTransaction();
-	 
-	                // Adding the fragment object to the fragment transaction 
-	                ft.add(timePicker, "time_picker");
-	 
-	                // Opening the TimePicker fragment 
-	                ft.commit();
-
-				}
-				return false;
-			}});
-		nextButton2 = (Button) recipeAddDialog2.findViewById(R.id.nextButton);
-		nextButton2.setTypeface(typeFace);
-		nextButton2.setTextSize(22);
-		nextButton2.setTextColor(Color.parseColor("#FFFFFFFF"));
+		utils.setTimePickerFrag(recipeAddDialog2, R.id.recipePrepEditText, mHandler);
+		utils.setTimePickerFrag(recipeAddDialog2, R.id.recipeCookingEditText, mHandler2);
+		nextButton2 = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog2);
 		recipeAddDialog2.show();
 	}
 	
@@ -395,10 +335,8 @@ public class MainActivity extends Activity  {
 		utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
-		Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
-		addIngredButton.setTypeface(typeFace);
-		addIngredButton.setTextSize(22);
-		addIngredButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+		Button addIngredButton = utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
+				
 		//Spinner set up with varying measurement amounts
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("teaspoon");
@@ -435,10 +373,7 @@ public class MainActivity extends Activity  {
 			utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
 			utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 			utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
-			Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
-			addStepButton.setTypeface(typeFace);
-			addStepButton.setTextSize(22);
-			addStepButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+			Button addStepButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
 			recipeAddStepDialog.show();
 	}
 	
@@ -519,10 +454,8 @@ public class MainActivity extends Activity  {
 			utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
 			utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
 			utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
-		    addRecipeButton = (Button) addRecipeDialog3.findViewById(R.id.addRecipeButton);
-			addRecipeButton.setTypeface(typeFace);
-			addRecipeButton.setTextSize(22);
-			addRecipeButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+		    addRecipeButton = utils.setButtonTextDialog(R.id.addRecipeButton, 22, addRecipeDialog3);
+		   
 			
 			List<String> spinnerArray =  new ArrayList<String>();
 			spinnerArray.add("Easy");
