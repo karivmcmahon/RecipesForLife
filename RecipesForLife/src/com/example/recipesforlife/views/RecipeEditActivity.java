@@ -16,6 +16,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,9 +26,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RecipeEditActivity extends Activity {
@@ -36,8 +39,10 @@ public class RecipeEditActivity extends Activity {
 	recipeBean recipe; 
 	private SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs";
-    Dialog titleDialog, servesDialog, timeDialog;
+    Dialog titleDialog, servesDialog, timeDialog, prepDialog;
 	public static final String emailk = "emailKey";
+	ArrayList<preperationBean> prepList;
+	int id = 1;
 	
 	 // Handles message from time dialog 1 - preptime
     Handler mHandler = new Handler(){
@@ -171,6 +176,57 @@ public class RecipeEditActivity extends Activity {
 				timeDialog.show();
 				
 			}});
+		
+		ImageView prepButton = (ImageView) findViewById(R.id.methodEditImage);
+	    prepButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				prepDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe4editdialog);
+				utils.setDialogText(R.id.recipeEditView, prepDialog, 22);
+				LinearLayout linearLayout = (LinearLayout)prepDialog.findViewById(R.id.editdialog);
+				for(int i = 0; i < prepList.size(); i++)
+				{
+					LinearLayout linearLayout2 = new LinearLayout(RecipeEditActivity.this);
+					linearLayout2.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					TextView prepView = new TextView(RecipeEditActivity.this);
+					prepView.setText("Preperation");
+					prepView.setId(i);
+					
+					TextView prepNumView = new TextView(RecipeEditActivity.this);
+					prepNumView.setText("Preperation Num");
+					int ids = findId();
+					prepNumView.setId(ids);
+					
+					
+					EditText prepEdit = new EditText(RecipeEditActivity.this);
+					prepEdit.setId(i);
+					prepEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
+					
+					EditText prepNumEdit = new EditText(RecipeEditActivity.this);
+					prepNumEdit.setId(ids);
+					prepNumEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
+					
+					linearLayout2.addView(prepNumView);
+					linearLayout2.addView(prepNumEdit);
+					linearLayout2.addView(prepView);
+					linearLayout2.addView(prepEdit);
+					linearLayout.addView(linearLayout2);
+					utils.setDialogText(i, prepDialog, 22);
+					prepEdit.setText(prepList.get(i).getPreperation());
+					utils.setDialogText(ids, prepDialog, 22);
+					prepNumEdit.setText(Integer.toString(prepList.get(i).getPrepNum()));
+				}
+		//		Button buttton = utils.setButtonTextDialog(resource, fontSize, dialog)
+				prepDialog.show();
+			}});
+		
+	/**	LinearLayout linearLayout = (LinearLayout)findViewById(R.layout.recipe4editdialog);
+		TextView tv = new TextView(RecipeEditActivity.this);
+		tv.setId(1);
+		linearLayout.addView(tv); **/
+
 
 			
 	}
@@ -207,7 +263,7 @@ public class RecipeEditActivity extends Activity {
 	 {
 		 recipeModel model = new recipeModel(getApplicationContext());
 			
-			ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+		    prepList = new ArrayList<preperationBean>();
 			ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -238,5 +294,13 @@ public class RecipeEditActivity extends Activity {
 			utils.setTextString(R.id.cookingTimeVal, recipe.getCooking());
 			
 	 }
+	 
+	 public int findId(){  
+		    View v = findViewById(id);  
+		    while (v != null){  
+		        v = findViewById(++id);  
+		    }  
+		    return id++;  
+		}
 
 }
