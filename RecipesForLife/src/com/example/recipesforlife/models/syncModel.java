@@ -72,6 +72,7 @@ public class syncModel extends baseDataSource
 	public ArrayList<accountBean> getAccount()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+	///	Log.v("Date server ", "Date server " + sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"));
 		open();
 		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
 	        Cursor cursor;

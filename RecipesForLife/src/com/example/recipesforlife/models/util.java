@@ -73,10 +73,11 @@ public class util {
 	
 	public String getLastUpdated2()
 	{
-		Calendar cal = Calendar.getInstance(); // creates calendar
-		cal.add(Calendar.SECOND, 30);
+		Calendar cal = Calendar.getInstance(); // creates calendar		
         cal.setTime(new Date()); // sets calendar time/date
+        cal.add(Calendar.SECOND, -3);
         Date today = cal.getTime();
+        
         String lastUpdated = dateToString(today);
         return lastUpdated;
 	}
@@ -274,11 +275,11 @@ public class util {
 				sync.getJSONFromServer();
 				syncRecipe.getJSONFromServer();
 				Editor editor = sharedpreferences.edit();
-		        editor.putString("Date", getLastUpdated2());
+		        editor.putString("Date", getLastUpdated());
 		        editor.commit();
 				sync.getAndCreateAccountJSON();
 				syncRecipe.getAndCreateJSON();
-				editor.putString("Date Server", getLastUpdated2());
+				editor.putString("Date Server", getLastUpdated());
 		        editor.commit();
 				
 				

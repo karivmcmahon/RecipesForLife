@@ -79,10 +79,11 @@ public class SignUpSignInActivity extends Activity {
 			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();
-			editor2.putString("Date", "2015-01-01 12:00:00");
-			editor2.commit();
-			editor2.putString("Date Server", "2015-01-01 12:00:00");
-			editor2.commit();
+	        editor2.putString("Date", "2015-01-01 12:00:00");
+	        editor2.commit();
+			Editor editor3 = sharedpreferences.edit();
+			editor3.putString("Date Server", "2015-01-01 12:00:00");
+			editor3.commit();
 			buildDatabase();
 			utils.sync();
 
