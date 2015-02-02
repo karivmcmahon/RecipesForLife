@@ -41,7 +41,8 @@ public class RecipeEditActivity extends Activity {
 	public static final String MyPREFERENCES = "MyPrefs";
     Dialog titleDialog, servesDialog, timeDialog, prepDialog;
 	public static final String emailk = "emailKey";
-	ArrayList<preperationBean> prepList;
+	ArrayList<preperationBean> prepList, modifiedPrepList;
+	ArrayList<Integer> prepNumEditIds, prepEditIds;
 	int id = 1;
 	
 	 // Handles message from time dialog 1 - preptime
@@ -185,7 +186,10 @@ public class RecipeEditActivity extends Activity {
 				// TODO Auto-generated method stub
 				prepDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe4editdialog);
 				utils.setDialogText(R.id.recipeEditView, prepDialog, 22);
+				prepNumEditIds = new ArrayList<Integer>();
+				prepEditIds = new ArrayList<Integer>();
 				LinearLayout linearLayout = (LinearLayout)prepDialog.findViewById(R.id.editdialog);
+				
 				for(int i = 0; i < prepList.size(); i++)
 				{
 					LinearLayout linearLayout2 = new LinearLayout(RecipeEditActivity.this);
@@ -196,15 +200,19 @@ public class RecipeEditActivity extends Activity {
 					
 					TextView prepNumView = new TextView(RecipeEditActivity.this);
 					prepNumView.setText("Preperation Num");
-					int ids = findId();
-					prepNumView.setId(ids);
+					int idss = findId();
+					prepNumView.setId(idss);
 					
 					
 					EditText prepEdit = new EditText(RecipeEditActivity.this);
-					prepEdit.setId(i);
+					int prepEditId = findId();
+					prepEditIds.add(prepEditId);
+					prepEdit.setId(prepEditId);
 					prepEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
 					
 					EditText prepNumEdit = new EditText(RecipeEditActivity.this);
+					int ids = findId();
+					prepNumEditIds.add(ids);
 					prepNumEdit.setId(ids);
 					prepNumEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
 					
@@ -215,17 +223,48 @@ public class RecipeEditActivity extends Activity {
 					linearLayout.addView(linearLayout2);
 					utils.setDialogText(i, prepDialog, 22);
 					prepEdit.setText(prepList.get(i).getPreperation());
-					utils.setDialogText(ids, prepDialog, 22);
+					utils.setDialogText(idss, prepDialog, 22);
 					prepNumEdit.setText(Integer.toString(prepList.get(i).getPrepNum()));
 				}
-		//		Button buttton = utils.setButtonTextDialog(resource, fontSize, dialog)
+				Button button = new Button(RecipeEditActivity.this);
+				int buttonId = findId();
+				button.setId(buttonId);
+				button.setText("Ok");
+				button.setBackgroundResource(R.drawable.button);
+			    linearLayout.addView(button);
+			    button = utils.setButtonTextDialog(buttonId, 16, prepDialog);
+			    button.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						modifiedPrepList = new ArrayList<preperationBean>();
+						for(int i = 0; i < prepList.size(); i++)
+						{
+							preperationBean prep = new preperationBean();
+							prep.setPreperation(utils.getTextFromDialog(prepEditIds.get(i), prepDialog));
+							prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
+							modifiedPrepList.add(prep);
+						}
+						TextView instructions = (TextView) findViewById(R.id.methodList);
+						instructions.setText("");
+						 Collections.sort(modifiedPrepList, new Comparator<preperationBean>() {
+						        @Override 
+						        public int compare(preperationBean p1, preperationBean p2) {
+						            return p1.getPrepNum() - p2.getPrepNum(); // Ascending
+						        }});
+						 for(int i = 0; i < modifiedPrepList.size(); i++)
+							{
+								instructions.append(Integer.toString(modifiedPrepList.get(i).getPrepNum()) + ". " +modifiedPrepList.get(i).getPreperation().toString() + "\n");
+							} 
+						 prepList = modifiedPrepList;
+						 prepDialog.dismiss();
+						
+					}});
 				prepDialog.show();
 			}});
 		
-	/**	LinearLayout linearLayout = (LinearLayout)findViewById(R.layout.recipe4editdialog);
-		TextView tv = new TextView(RecipeEditActivity.this);
-		tv.setId(1);
-		linearLayout.addView(tv); **/
+	
 
 
 			
