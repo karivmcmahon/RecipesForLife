@@ -219,5 +219,16 @@
         android:layout_marginLeft="10dp"
        />
        
+         <Button
+           android:id="@+id/saveButton"
+           android:layout_width="60dp"
+           android:layout_height="25dp"
+           android:layout_centerHorizontal="true"
+           android:layout_centerVertical="true"
+   		   android:layout_gravity="center_vertical|center_horizontal"
+   		    android:layout_below="@+id/methodList"
+           android:layout_marginTop="10dp"
+           android:background="@drawable/button"
+           android:text="Save" />
 </RelativeLayout>
 </ScrollView>

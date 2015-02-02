@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -401,6 +402,35 @@ public class RecipeEditActivity extends Activity {
 	    
 	    }});
 
+	    Button saveButton = (Button) findViewById(R.id.saveButton);
+	    utils.setButtonText(R.id.saveButton, 22);
+	    saveButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String recipename = utils.getTextView(R.id.recipeTitle);
+				String recipedesc = utils.getTextView(R.id.recipeDesc);
+				String serves = utils.getTextView(R.id.servesVal);
+				String prepTime = utils.getTextView(R.id.prepTimeVal);
+				String cookingTime = utils.getTextView(R.id.cookingTimeVal);
+				for(int i = 0; i < prepList.size(); i++)
+				{
+					int prepNum = prepList.get(i).getPrepNum();
+					String prep = prepList.get(i).getPreperation();
+					
+				}
+				for(int i = 0; i < ingredList.size(); i++)
+				{
+					int amount = ingredList.get(i).getAmount();
+					String ingredient = ingredList.get(i).getName();
+					String value = ingredList.get(i).getValue();
+					String note = ingredList.get(i).getNote();
+					Log.v("SAVE ", "SAVE " + ingredient + " " + value + " " + note + " " + amount);
+				}
+				
+				
+			}});
 			
 	}
 	

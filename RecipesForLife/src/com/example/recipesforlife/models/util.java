@@ -160,6 +160,13 @@ public class util {
 		return text;
 	}
 	
+	public String getTextView(int resource )
+	{
+		TextView view = (TextView) activity.findViewById(resource);
+		String text = view.getText().toString();
+		return text;
+	}
+	
 	/**
 	 * Get text from Dialog
 	 * @param resource
