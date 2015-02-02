@@ -199,14 +199,22 @@ public class RecipeEditActivity extends Activity {
 				{
 					LinearLayout linearLayoutInDialog = new LinearLayout(RecipeEditActivity.this);
 					linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+					        LayoutParams.WRAP_CONTENT,      
+					        LayoutParams.WRAP_CONTENT
+					);
+					params.setMargins(5,5,5,5);
 					TextView prepView = new TextView(RecipeEditActivity.this);
 					prepView.setText("Preperation");
-					prepView.setId(i);
+					int prepviewid = findId();
+					prepView.setId(prepviewid);
+					prepView.setLayoutParams(params);
 					
 					TextView prepNumView = new TextView(RecipeEditActivity.this);
 					prepNumView.setText("Preperation Num");
 					int prepNumViewId = findId();
 					prepNumView.setId(prepNumViewId);
+					prepNumView.setLayoutParams(params);
 					
 					
 					EditText prepEdit = new EditText(RecipeEditActivity.this);
@@ -214,19 +222,21 @@ public class RecipeEditActivity extends Activity {
 					prepEditIds.add(prepEditId);
 					prepEdit.setId(prepEditId);
 					prepEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
+					prepEdit.setLayoutParams(params);
 					
 					EditText prepNumEdit = new EditText(RecipeEditActivity.this);
 					int ids = findId();
 					prepNumEditIds.add(ids);
 					prepNumEdit.setId(ids);
 					prepNumEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
+					prepNumEdit.setLayoutParams(params);
 					
 					linearLayoutInDialog.addView(prepNumView);
 					linearLayoutInDialog.addView(prepNumEdit);
 					linearLayoutInDialog.addView(prepView);
 					linearLayoutInDialog.addView(prepEdit);
 					prepDialogLinearLayout.addView(linearLayoutInDialog);
-					utils.setDialogText(i, prepDialog, 22);
+					utils.setDialogText(prepviewid, prepDialog, 22);
 					prepEdit.setText(prepList.get(i).getPreperation());
 					utils.setDialogText(prepNumViewId, prepDialog, 22);
 					prepNumEdit.setText(Integer.toString(prepList.get(i).getPrepNum()));
@@ -301,7 +311,7 @@ public class RecipeEditActivity extends Activity {
 					amountEdit.setId(amountEditId);
 					amountEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
 					amountEdit.setLayoutParams(params);
-					amountEdit.setWidth(40);
+					amountEdit.setWidth(80);
 					
 					//Spinner set up with varying measurement amounts
 					List<String> spinnerArray =  new ArrayList<String>();
@@ -340,8 +350,9 @@ public class RecipeEditActivity extends Activity {
 					ingredEdit.setWidth(100);
 					
 					TextView view = new TextView(RecipeEditActivity.this);
+					int viewid = findId();
 					view.setText(" - ");
-					view.setId(i);
+					view.setId(viewid);
 					
 					EditText noteEdit = new EditText(RecipeEditActivity.this);
 					int noteEditId = findId();
@@ -362,7 +373,7 @@ public class RecipeEditActivity extends Activity {
 					ingredEdit.setText(ingredList.get(i).getName());
 					noteEdit.setText(ingredList.get(i).getNote());
 					sItems.setSelection(getIndex(sItems, ingredList.get(i).getValue()));
-					utils.setDialogText(i, ingredDialog, 22);
+					utils.setDialogText(viewid, ingredDialog, 22);
 				}
 				Button okButton = new Button(RecipeEditActivity.this);
 				int buttonId = findId();
@@ -409,26 +420,38 @@ public class RecipeEditActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String recipename = utils.getTextView(R.id.recipeTitle);
-				String recipedesc = utils.getTextView(R.id.recipeDesc);
-				String serves = utils.getTextView(R.id.servesVal);
-				String prepTime = utils.getTextView(R.id.prepTimeVal);
-				String cookingTime = utils.getTextView(R.id.cookingTimeVal);
+				recipeBean recipechange = new recipeBean();
+				recipechange.setName(utils.getTextView(R.id.recipeTitle));
+				recipechange.setDesc(utils.getTextView(R.id.recipeDesc));
+				recipechange.setServes(utils.getTextView(R.id.servesVal));
+				recipechange.setPrep(utils.getTextView(R.id.prepTimeVal));
+				recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
+				ArrayList<String> prepnumlist = new ArrayList<String>();
+				ArrayList<String> prep = new ArrayList<String>();
 				for(int i = 0; i < prepList.size(); i++)
 				{
-					int prepNum = prepList.get(i).getPrepNum();
-					String prep = prepList.get(i).getPreperation();
+					
+					prepnumlist.add(Integer.toString(prepList.get(i).getPrepNum()));
+					prep.add(prepList.get(i).getPreperation());
 					
 				}
+				ArrayList<String> ingred = new ArrayList<String>();
+				ArrayList<String> amount = new ArrayList<String>();
+				ArrayList<String> value = new ArrayList<String>();
+				ArrayList<String> note = new ArrayList<String>();
 				for(int i = 0; i < ingredList.size(); i++)
 				{
-					int amount = ingredList.get(i).getAmount();
-					String ingredient = ingredList.get(i).getName();
-					String value = ingredList.get(i).getValue();
-					String note = ingredList.get(i).getNote();
-					Log.v("SAVE ", "SAVE " + ingredient + " " + value + " " + note + " " + amount);
+					amount.add(Integer.toString(ingredList.get(i).getAmount()));
+					ingred.add(ingredList.get(i).getName());
+					value.add( ingredList.get(i).getValue());
+					note.add(ingredList.get(i).getNote());
 				}
-				
+				recipe.setAmount(amount);
+				recipe.setValues(value);
+				recipe.setIngredients(ingred);
+				recipe.setNotes(note);
+				recipe.setSteps(prep);
+				recipe.setStepNum(prepnumlist);
 				
 			}});
 			
@@ -470,7 +493,7 @@ public class RecipeEditActivity extends Activity {
 		    ingredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			recipe = model.selectRecipe2("pizza", sharedpreferences.getString(emailk, "") );
+			recipe = model.selectRecipe2("milkshake", sharedpreferences.getString(emailk, "") );
 			prepList = model.selectPreperation(recipe.getId());
 			ingredList = model.selectIngredients(recipe.getId());
 			
