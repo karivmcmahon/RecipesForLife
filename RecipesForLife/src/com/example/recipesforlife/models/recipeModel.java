@@ -22,7 +22,7 @@ public class recipeModel extends baseDataSource {
 	Context context;
 	ContentValues values,  prepvalues, preptorecipevalues, ingredValues, ingredToDetailsValues, ingredDetailsValues, ingredToRecipeValues;
 	String lastUpdated;
-	long recipeID, prepID, ingredID, ingredDetsID;
+	long recipeID, prepID, ingredID, ingredDetsID, recipeUpdateID;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 	SharedPreferences sharedpreferences;
@@ -34,6 +34,92 @@ public class recipeModel extends baseDataSource {
 		this.context = context;
 		sync = new syncRecipeModel(context);
 		utils = new utility();
+	}
+	
+	public void updateRecipe(recipeBean newRecipe, recipeBean oldRecipe, ArrayList<preperationBean> prepList, ArrayList<preperationBean> oldPrepList, ArrayList<ingredientBean> ingredList, ArrayList<ingredientBean> oldIngredList)
+	{
+		open();
+		ContentValues recipeUpdateVals = new ContentValues();
+		recipeUpdateVals.put("name", newRecipe.getName());
+		recipeUpdateVals.put("description", newRecipe.getDesc());
+		recipeUpdateVals.put("prepTime", newRecipe.getPrep());
+		recipeUpdateVals.put("cookingTime", newRecipe.getCooking());
+		recipeUpdateVals.put("serves", newRecipe.getServes());
+		recipeUpdateVals.put("changeTime", utils.getLastUpdated());
+		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE name=?", new String[] {oldRecipe.getName()});
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                recipeUpdateID = (cursor.getInt(getIndex("id",cursor))); 
+            }
+        }
+        cursor.close();
+        String[] args = new String[]{oldRecipe.getName()};
+        database.update("Recipe", recipeUpdateVals, "name=?", args);
+		updateRecipePrep(prepList, oldPrepList);
+		updateRecipeIngredient(ingredList, oldIngredList);
+		close();
+	}
+	
+	public void updateRecipePrep(ArrayList<preperationBean> prepList, ArrayList<preperationBean> oldPrepList)
+	{
+		int prepid;
+        Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum FROM PrepRecipe INNER JOIN Preperation WHERE PrepRecipe.recipeid=? AND Preperation.id = PrepRecipe.Preperationid", new String[] {Long.toString(recipeUpdateID)});
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                prepid = (cursor.getInt(getIndex("Preperationid",cursor))); 
+                String instruction = (cursor.getString(getIndex("instruction",cursor))); 
+                ContentValues prepUpdateVals = new ContentValues();
+                
+                if(instruction.equals(oldPrepList.get(i).getPreperation().toString()))
+                {
+                	
+                		prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
+                		prepUpdateVals.put("instructionNum", prepList.get(i).getPrepNum());
+                		String[] args = new String[]{Integer.toString(prepid)};
+                		database.update("Preperation", prepUpdateVals, "id=?", args);
+        				
+        			
+        		}
+        		
+                
+            }
+        }
+        else
+        {
+        	 Log.v("FAIL", "FAIL " + Long.toString(recipeUpdateID));
+        }
+        cursor.close();
+
+		
+	}
+	
+	public void updateRecipeIngredient(ArrayList<ingredientBean> ingredBeanList, ArrayList<ingredientBean> oldIngredBeanList)
+	{
+		 Cursor cursor = database.rawQuery("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = ?;", new String[] { Long.toString(recipeUpdateID) });
+	        if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                String ingredient = (cursor.getString(getIndex("name",cursor)));
+	                int detsId =  (cursor.getInt(getIndex("IngredientDetails.id",cursor)));
+	                if(ingredient.equals(oldIngredBeanList.get(i).getName()))
+	                {
+	                	long id = selectIngredientByName(ingredBeanList.get(i).getName());
+	                    ContentValues ingredVals = new ContentValues();
+	                    ingredVals.put("amount", ingredBeanList.get(i).getAmount() );
+	                    ingredVals.put("value", ingredBeanList.get(i).getValue());
+	                    ingredVals.put("note", ingredBeanList.get(i).getNote());
+	                    ingredVals.put("ingredientId", id);
+	                	Log.v("MATCH", "MATCH");
+	                	String[] args = new String[]{Integer.toString(detsId)};
+                		database.update("IngredientDetails", ingredVals, "id=?", args);
+	                }
+	                
+	            }
+	        }
+	        cursor.close();
+	        close();
 	}
 	
 	/**
@@ -202,6 +288,27 @@ public class recipeModel extends baseDataSource {
 	       return id;
 	}
 	
+	public long selectIngredientByName(String name)
+	{
+		long id = 0;
+        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] {name });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                id = (cursor.getInt(getIndex("id",cursor)));       
+                
+            }
+        }
+        else
+        {			ContentValues ingredAddValues = new ContentValues();
+    	        	ingredAddValues.put("name", name);
+    	            ingredAddValues.put("updateTime", utils.getLastUpdated()); 
+    	            ingredAddValues.put("changeTime", "2015-01-01 12:00:00.000");
+    	            id = database.insertOrThrow("Ingredient", null, ingredAddValues);
+        }
+        cursor.close();
+       return id;
+	}
 	/**
 	 * Retrieve recipe from database by a certain a user so we do not add duplicate recipes
 	 * @param recipe
@@ -296,7 +403,7 @@ public class recipeModel extends baseDataSource {
 	{
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 		open();
-        Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = ?", new String[] { Integer.toString(id) });
+		Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = ?", new String[] { Integer.toString(id) });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);

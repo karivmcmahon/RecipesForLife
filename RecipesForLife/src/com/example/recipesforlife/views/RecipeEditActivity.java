@@ -40,13 +40,13 @@ import android.widget.TextView;
 public class RecipeEditActivity extends Activity {
 	
 	util utils;
-	recipeBean recipe; 
+	recipeBean recipe, oldRecipe; 
 	private SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs";
     Dialog titleDialog, servesDialog, timeDialog, prepDialog, ingredDialog;
 	public static final String emailk = "emailKey";
-	ArrayList<preperationBean> prepList, modifiedPrepList;
-	ArrayList<ingredientBean> ingredList, modifiedIngredList;
+	ArrayList<preperationBean> prepList, modifiedPrepList, oldPrepList;
+	ArrayList<ingredientBean> ingredList, modifiedIngredList, oldIngredList;
 	ArrayList<Integer> prepNumEditIds, prepEditIds, amountEditIds, valueEditIds, ingredEditIds, noteEditIds;
 	int id = 1;
 	
@@ -103,6 +103,8 @@ public class RecipeEditActivity extends Activity {
 		setContentView(R.layout.recipeeditview);
 		utils = new util(getApplicationContext(), this);
 		recipe = new recipeBean();
+		oldRecipe = new recipeBean();
+		oldPrepList = new ArrayList<preperationBean>();
 		setStyle();
 		setTextForLayout();
 		
@@ -203,28 +205,34 @@ public class RecipeEditActivity extends Activity {
 			
 		    prepList = new ArrayList<preperationBean>();
 		    ingredList = new ArrayList<ingredientBean>();
+		    oldPrepList = new ArrayList<preperationBean>();
+		    oldIngredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 			recipe = model.selectRecipe2("milkshake", sharedpreferences.getString(emailk, "") );
 			prepList = model.selectPreperation(recipe.getId());
 			ingredList = model.selectIngredients(recipe.getId());
 			
+			oldRecipe = recipe;
 			TextView instructions = (TextView) findViewById(R.id.methodList);
 			 Collections.sort(prepList, new Comparator<preperationBean>() {
 			        @Override 
 			        public int compare(preperationBean p1, preperationBean p2) {
 			            return p1.getPrepNum() - p2.getPrepNum(); // Ascending
 			        }});
+			
 			for(int i = 0; i < prepList.size(); i++)
 			{
 				instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n");
+				//oldRecipe.setStepNum(prepList.);
 			}
-			
+			oldPrepList = prepList;
 			TextView ingredients = (TextView) findViewById(R.id.ingredientList);
 			for(int i = 0; i < ingredList.size(); i++)
 			{
 				ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue() + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
-			}			
+			}
+			oldIngredList = ingredList;
 			utils.setTextString(R.id.recipeTitle, recipe.getName());
 			utils.setTextString(R.id.recipeDesc, recipe.getDesc());
 			utils.setTextString(R.id.servesVal, recipe.getServes());
@@ -547,12 +555,17 @@ public class RecipeEditActivity extends Activity {
 				value.add( ingredList.get(i).getValue());
 				note.add(ingredList.get(i).getNote());
 			}
-			recipe.setAmount(amount);
-			recipe.setValues(value);
-			recipe.setIngredients(ingred);
-			recipe.setNotes(note);
-			recipe.setSteps(prep);
-			recipe.setStepNum(prepnumlist);
+			recipechange.setAmount(amount);
+			recipechange.setValues(value);
+			recipechange.setIngredients(ingred);
+			recipechange.setNotes(note);
+			recipechange.setSteps(prep);
+			recipechange.setStepNum(prepnumlist);
+			
+			recipeModel rm = new recipeModel(getApplicationContext());
+			rm.updateRecipe(recipechange, oldRecipe, prepList, oldPrepList, ingredList, oldIngredList);
+			Log.v("SIZE", " " + prepList.size() +  " " + oldPrepList.size());
+			
 	 }
 	 
 	 
