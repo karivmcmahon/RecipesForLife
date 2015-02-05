@@ -69,6 +69,7 @@ public class syncRecipeModel extends baseDataSource {
         recipeBean rb = new recipeBean();
         rb.setId(cursor.getInt(getIndex("id",cursor)));       
         rb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
+        rb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
         rb.setName(cursor.getString(getIndex("name", cursor)));
         rb.setDesc(cursor.getString(getIndex("description",cursor)));
         rb.setPrep(cursor.getString(getIndex("prepTime", cursor)));
@@ -210,6 +211,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("serves", recipeList.get(i).getServes());
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
+			recipe.put("changeTime", recipeList.get(i).getChangeTime());
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();

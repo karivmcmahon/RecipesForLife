@@ -39,7 +39,16 @@ namespace WebApplication1
                 {
 
                     Recipe recipe = new Recipe();
+					recipe.Preperation = new List<Preperation>();
+					recipe.Ingredient = new List<Ingredient>();
+					
                     recipe.id = (Int32)reader["id"];
+					recipe.name = (string)reader["name"];
+                    recipe.description = (string)reader["description"];
+                    recipe.prepTime = (string)reader["prepTime"];
+                    recipe.cookingTime = (string)reader["cookingTime"];
+                    recipe.addedBy = (string)reader["addedBy"];
+                    recipe.serves = (Int32)reader["serves"];
                    
                     SqlCommand select2 = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", conn);
                     select2.Parameters.AddWithValue("@recipe", recipe.id);
@@ -48,7 +57,14 @@ namespace WebApplication1
                     while (reader2.Read())
                     {
 
-                       
+                        //Preperation preps = new Preperation();
+							Preperation preps = new Preperation();
+                            preps.prep = new List<string>();
+                            preps.prepNums = new List<Int32>();
+                            preps.prep.Add((string)reader2["instruction"]);
+                            preps.prepNums.Add((Int32)reader2["instructionNum"]);
+                            recipe.Preperation.Add(preps);
+					}
                         
                        SqlCommand select3 = new SqlCommand("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = @recipe;", connn);
                         select3.Parameters.AddWithValue("@recipe", recipe.id);
@@ -56,21 +72,9 @@ namespace WebApplication1
                         while (reader3.Read())
                         {
                           
-                            recipe.name = (string)reader["name"];
-                            recipe.description = (string)reader["description"];
-                            recipe.prepTime = (string)reader["prepTime"];
-                            recipe.cookingTime = (string)reader["cookingTime"];
-                            recipe.addedBy = (string)reader["addedBy"];
-                            recipe.serves = (Int32)reader["serves"];
+                            
 
-                            Preperation preps = new Preperation();
-                            preps.prep = new List<string>();
-                            preps.prepNums = new List<Int32>();
-                            preps.prep.Add((string)reader2["instruction"]);
-                            preps.prepNums.Add((Int32)reader2["instructionNum"]);
-
-                            recipe.Preperation = new List<Preperation>();
-                            recipe.Preperation.Add(preps);
+                           
                            
 
                             Ingredient ingreds = new Ingredient();
@@ -83,29 +87,31 @@ namespace WebApplication1
                             ingreds.Value.Add((string)reader3["value"]);
                             ingreds.Notes.Add((string)reader3["note"]);
 
-                            recipe.Ingredient = new List<Ingredient>();
+                            
                             recipe.Ingredient.Add(ingreds); 
 
-                            recipes.Recipe.Add(recipe); 
+                           
                             
                         }
                       
 
                       
-                     
+                      recipes.Recipe.Add(recipe); 
                     }
+					
 
-                }
+                
                 con.Close();
                 conn.Close();
                 connn.Close();
                 string json = js.Serialize(recipes);
                 Response.Write(json);
+				}
 
             }
         }
     }
-}
+
     public class Date
     {
         public string updateTime { get; set; }

@@ -8,6 +8,7 @@ import java.util.Date;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,6 +25,7 @@ public class recipeModel extends baseDataSource {
 	long recipeID, prepID, ingredID, ingredDetsID;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
+	SharedPreferences sharedpreferences;
 	syncRecipeModel sync;
 	utility utils;
 	public recipeModel(Context context) {
@@ -40,11 +42,12 @@ public class recipeModel extends baseDataSource {
 	 */
 	public void insertRecipe(recipeBean recipe)
 	{
-		
+		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    values = new ContentValues();
 	    values.put("name", recipe.getName()); 
 	    values.put("updateTime", utils.getLastUpdated()); 
+	    values.put("changeTime", "2015-01-01 12:00:00.000");
 	    values.put("description", recipe.getDesc()); 
 	    values.put("prepTime", recipe.getPrep()); 
 	    values.put("cookingTime", recipe.getCooking()); 
@@ -83,6 +86,7 @@ public class recipeModel extends baseDataSource {
 	        prepvalues.put("instruction", recipe.getSteps().get(i).toString());
 	        prepvalues.put("instructionNum", Integer.parseInt(recipe.getStepNum().get(i).toString()));
 	        prepvalues.put("updateTime", utils.getLastUpdated()); 
+	        prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
 	        prepID = database.insertOrThrow("Preperation", null, prepvalues);
 	        insertPrepToRecipe();
         }
@@ -99,6 +103,7 @@ public class recipeModel extends baseDataSource {
         preptorecipevalues.put("recipeId", recipeID);
         preptorecipevalues.put("Preperationid", prepID);
         preptorecipevalues.put("updateTime", utils.getLastUpdated()); 
+        preptorecipevalues.put("changeTime", "2015-01-01 12:00:00.000");
         database.insertOrThrow("PrepRecipe", null, preptorecipevalues);
         
 	}
@@ -117,6 +122,7 @@ public class recipeModel extends baseDataSource {
         	{
 	        	ingredValues.put("name", recipe.getIngredients().get(i).toString().toLowerCase());
 	            ingredValues.put("updateTime", utils.getLastUpdated()); 
+	            ingredValues.put("changeTime", "2015-01-01 12:00:00.000");
 	            ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
         	}
         	else
@@ -143,6 +149,7 @@ public class recipeModel extends baseDataSource {
         ingredDetailsValues.put("note", recipe.getNotes().get(i).toString());
         ingredDetailsValues.put("value", recipe.getValues().get(i).toString());
         ingredDetailsValues.put("updateTime", utils.getLastUpdated()); 
+        ingredDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
         ingredDetsID = database.insertOrThrow("IngredientDetails", null, ingredDetailsValues);
         
 	}
@@ -156,6 +163,7 @@ public class recipeModel extends baseDataSource {
         ingredToDetailsValues.put("ingredientid",ingredID);
         ingredToDetailsValues.put("IngredientDetailsid",ingredDetsID);
         ingredToDetailsValues.put("updateTime", utils.getLastUpdated()); 
+        ingredToDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
         database.insertOrThrow("IngredToIngredDetails", null, ingredToDetailsValues);
 	}
 	
@@ -168,7 +176,8 @@ public class recipeModel extends baseDataSource {
         ingredToRecipeValues = new ContentValues();
         ingredToRecipeValues.put("Recipeid",recipeID);
         ingredToRecipeValues.put("ingredientDetailsId", ingredDetsID);
-        ingredToRecipeValues.put("updateTime", utils.getLastUpdated()); 
+        ingredToRecipeValues.put("updateTime", utils.getLastUpdated());
+        ingredToRecipeValues.put("changeTime", "2015-01-01 12:00:00.000");
         database.insertOrThrow("RecipeIngredient", null, ingredToRecipeValues);
 	}
 	

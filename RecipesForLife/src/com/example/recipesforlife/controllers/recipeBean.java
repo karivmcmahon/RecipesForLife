@@ -21,7 +21,14 @@ public class recipeBean {
 	String prep;
 	String serves;
 	String cooking;
+	String changeTime;
 	
+	public String getChangeTime() {
+		return changeTime;
+	}
+	public void setChangeTime(String changeTime) {
+		this.changeTime = changeTime;
+	}
 	public String getAddedBy() {
 		return addedBy;
 	}

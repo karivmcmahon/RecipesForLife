@@ -84,6 +84,10 @@ public class SignUpSignInActivity extends Activity {
 			Editor editor3 = sharedpreferences.edit();
 			editor3.putString("Date Server", "2015-01-01 12:00:00");
 			editor3.commit();
+			editor3.putString("Change", "2015-01-01 12:00:00");
+			editor3.commit();
+			editor3.putString("Change Server", "2015-01-01 12:00:00");
+			editor3.commit();
 			buildDatabase();
 			utils.sync();
 
