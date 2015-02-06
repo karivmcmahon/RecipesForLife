@@ -24,8 +24,8 @@ namespace WebApplication1
                 emp.Name = "a";
                 emp.age = 12;
                 string json = js.Serialize(emp);
+              
 
-                
                var p2 = js.Deserialize<List<Account>>(jsonInput);
                for (int i = 0; i < p2.Count(); i++)
                {
@@ -36,7 +36,7 @@ namespace WebApplication1
                    Response.Write("Bio " + p2[i].bio);
                    Response.Write("Cooking interest " + p2[i].cookingInterest);
                    Response.Write("Update time " + p2[i].updateTime); **/
-                   //con.Open();
+
                    SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
                    SqlCommand insert = new SqlCommand(" INSERT INTO Users(name, cookingInterest, updateTime, bio, city, country) OUTPUT INSERTED.id VALUES (@name, @cookingInterest, @updateTime, @bio, @city, @country)", con);
                   // insert.Parameters.AddWithValue("@id", p2[i].id);
@@ -52,7 +52,7 @@ namespace WebApplication1
                    try
                    {
                       
-                       
+                       con.Open();
                        Int32 newId = (Int32) insert.ExecuteScalar();
                        Response.Write(newId);
                       // Response.Write("Success");
@@ -64,7 +64,6 @@ namespace WebApplication1
                        insert2.Parameters.AddWithValue("@updateTime", p2[i].updateTime);
                        insert2.ExecuteNonQuery();
                        Response.Write("Success");
-                       //con.close();
 
                    }
                    catch (Exception ex)
@@ -77,7 +76,7 @@ namespace WebApplication1
                   
                   
                }
-             
+			   con.close();
                
 
                 
