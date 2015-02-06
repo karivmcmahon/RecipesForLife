@@ -9,7 +9,14 @@ public class preperationBean  {
 	int id;
 	int prepNum;
 	String preperation;
+	String uniqueid;
 	
+	public String getUniqueid() {
+		return uniqueid;
+	}
+	public void setUniqueid(String uniqueid) {
+		this.uniqueid = uniqueid;
+	}
 	public int getId() {
 		return id;
 	}

@@ -11,7 +11,13 @@ public class ingredientBean {
 	int amount;
 	String value;
 	String note;
-	
+	String uniqueid;
+	public String getUniqueid() {
+		return uniqueid;
+	}
+	public void setUniqueid(String uniqueid) {
+		this.uniqueid = uniqueid;
+	}
 	public String getName() {
 		return name;
 	}

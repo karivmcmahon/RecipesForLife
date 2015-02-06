@@ -582,7 +582,7 @@ public class MainActivity extends Activity  {
 		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
 		Context context = getApplicationContext();
 		recipeModel model = new recipeModel(context);
-		model.insertRecipe(recipe);
+		model.insertRecipe(recipe, false);
 	}
 	
 	

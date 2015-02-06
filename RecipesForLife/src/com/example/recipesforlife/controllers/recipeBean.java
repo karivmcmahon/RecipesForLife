@@ -22,7 +22,14 @@ public class recipeBean {
 	String serves;
 	String cooking;
 	String changeTime;
+	String uniqueid;
 	
+	public String getUniqueid() {
+		return uniqueid;
+	}
+	public void setUniqueid(String uniqueid) {
+		this.uniqueid = uniqueid;
+	}
 	public String getChangeTime() {
 		return changeTime;
 	}

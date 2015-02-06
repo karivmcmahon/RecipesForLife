@@ -378,6 +378,10 @@ public class RecipeEditActivity extends Activity {
 						preperationBean prep = new preperationBean();
 						prep.setPreperation(utils.getTextFromDialog(prepEditIds.get(i), prepDialog));
 						prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
+						prep.setUniqueid(prepList.get(i).getUniqueid());
+						Log.v("MODIFIED " , "MODIFIED " + (utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
+						Log.v("MODIFIED " , "MODIFIED " + (utils.getTextFromDialog(prepEditIds.get(i), prepDialog)));
+						Log.v("MODIFIED " , "MODIFIED " + prepList.get(i).getUniqueid());
 						modifiedPrepList.add(prep);
 					}
 					TextView instructions = (TextView) findViewById(R.id.methodList);
@@ -511,6 +515,7 @@ public class RecipeEditActivity extends Activity {
 						Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
 						String value = spinner.getSelectedItem().toString();
 						ingred.setValue(value);			
+						ingred.setUniqueid(ingredList.get(i).getUniqueid());
 						modifiedIngredList.add(ingred);
 					}
 					TextView ingredients = (TextView) findViewById(R.id.ingredientList);
@@ -535,35 +540,9 @@ public class RecipeEditActivity extends Activity {
 			recipechange.setServes(utils.getTextView(R.id.servesVal));
 			recipechange.setPrep(utils.getTextView(R.id.prepTimeVal));
 			recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
-			ArrayList<String> prepnumlist = new ArrayList<String>();
-			ArrayList<String> prep = new ArrayList<String>();
-			for(int i = 0; i < prepList.size(); i++)
-			{
-				
-				prepnumlist.add(Integer.toString(prepList.get(i).getPrepNum()));
-				prep.add(prepList.get(i).getPreperation());
-				
-			}
-			ArrayList<String> ingred = new ArrayList<String>();
-			ArrayList<String> amount = new ArrayList<String>();
-			ArrayList<String> value = new ArrayList<String>();
-			ArrayList<String> note = new ArrayList<String>();
-			for(int i = 0; i < ingredList.size(); i++)
-			{
-				amount.add(Integer.toString(ingredList.get(i).getAmount()));
-				ingred.add(ingredList.get(i).getName());
-				value.add( ingredList.get(i).getValue());
-				note.add(ingredList.get(i).getNote());
-			}
-			recipechange.setAmount(amount);
-			recipechange.setValues(value);
-			recipechange.setIngredients(ingred);
-			recipechange.setNotes(note);
-			recipechange.setSteps(prep);
-			recipechange.setStepNum(prepnumlist);
-			
+			recipechange.setUniqueid(recipe.getUniqueid());
 			recipeModel rm = new recipeModel(getApplicationContext());
-			rm.updateRecipe(recipechange, oldRecipe, prepList, oldPrepList, ingredList, oldIngredList);
+			rm.updateRecipe(recipechange, prepList, ingredList );
 			Log.v("SIZE", " " + prepList.size() +  " " + oldPrepList.size());
 			
 	 }

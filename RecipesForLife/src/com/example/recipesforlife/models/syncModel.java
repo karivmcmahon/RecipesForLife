@@ -121,8 +121,9 @@ public class syncModel extends baseDataSource
 	 /**
 	  * Create a json with the recently added account info to send to server
 	  * @throws JSONException
+	 * @throws IOException 
 	  */
-	public void getAndCreateAccountJSON() throws JSONException
+	public void getAndCreateAccountJSON() throws JSONException, IOException
 	{
 		ArrayList<userBean> userList = getUsers();
 		ArrayList<accountBean> accountList = getAccount();
@@ -147,8 +148,9 @@ public class syncModel extends baseDataSource
 	/**
 	 * Sends the json with account info to the server
 	 * @param jsonArray
+	 * @throws IOException 
 	 */
-	public void sendJSONToServer(JSONArray jsonArray)
+	public void sendJSONToServer(JSONArray jsonArray) throws IOException
 	{
 		String str = "";
 		HttpResponse response = null;
@@ -156,8 +158,8 @@ public class syncModel extends baseDataSource
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
 		try 
 		{
-			 HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		    HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+		//	 HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+		//    HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -170,11 +172,13 @@ public class syncModel extends baseDataSource
 			catch (ClientProtocolException e) 
 			{							
 				e.printStackTrace();
+				throw e;
 			} 
 		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			throw e;
 		}
 	
 	}
@@ -182,8 +186,9 @@ public class syncModel extends baseDataSource
 	/**
 	 * Gets the json with it's sync info from the server
 	 * @throws JSONException
+	 * @throws IOException 
 	 */
-	public void getJSONFromServer() throws JSONException
+	public void getJSONFromServer() throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		JSONObject date = new JSONObject();
@@ -195,8 +200,8 @@ public class syncModel extends baseDataSource
 		HttpResponse response = null;
         HttpClient myClient = new DefaultHttpClient();
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
-        HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-        HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+     //   HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+     //   HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
         try 
 		{
 			myConnection.setEntity(new ByteArrayEntity(
@@ -212,6 +217,7 @@ public class syncModel extends baseDataSource
 			catch (ClientProtocolException e) 
 			{							
 				e.printStackTrace();
+				throw e;
 			} 
 			
 			JSONArray jArray = new JSONArray(str);
@@ -240,6 +246,7 @@ public class syncModel extends baseDataSource
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			throw e;
 		}
 	}
 	

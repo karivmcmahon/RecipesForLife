@@ -1,19 +1,7 @@
 package com.example.recipesforlife.models;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,13 +15,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
-import android.widget.Toast;
 
-public class syncRecipeModel extends baseDataSource {
-	Context context;
+public class syncRecipeUpdateModel  extends baseDataSource {
+
+Context context;
 	
 	
-	public syncRecipeModel(Context context) {
+	public syncRecipeUpdateModel(Context context) {
 		super(context);
 		this.context = context;
 		// TODO Auto-generated constructor stub
@@ -48,7 +36,7 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
-	    Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
+	    Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -89,12 +77,12 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
-	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND Recipeid = ? ", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND Recipeid = ? ", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT"), Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(detsId) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND id = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(detsId) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);
@@ -119,7 +107,7 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		String name = null;
-	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ? ", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND id = ? ", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT"), Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -157,12 +145,12 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND recipeId = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND recipeId = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(id) });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int prepid = cursor.getInt(getIndex("Preperationid", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(prepid) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND id = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(prepid) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);
@@ -195,9 +183,8 @@ public class syncRecipeModel extends baseDataSource {
 	/**
 	 * Builds a json with all the recipe data to send to the server
 	 * @throws JSONException
-	 * @throws IOException 
 	 */
-	public void getAndCreateJSON() throws JSONException, IOException
+	public void getAndCreateJSON() throws JSONException
 	{
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
@@ -266,158 +253,7 @@ public class syncRecipeModel extends baseDataSource {
 			
 			jsonArray.put(recipe);			
 		} 
-	sendJSONToServer(jsonArray);
+	//sendJSONToServer(jsonArray);
+		Log.v("UPDATE JSON ", "UPDATE JSON " + jsonArray);
 	}
-	
-	/**
-	 * Gets the json with it's sync info from the server
-	 * @throws JSONException
-	 * @throws IOException 
-	 */
-	public void getJSONFromServer() throws JSONException, IOException
-	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		JSONObject date = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
-		JSONObject json;
-		date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
-		jsonArray.put(date);
-		String str = "";
-		HttpResponse response = null;
-        HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");      	   	
-		try 
-		{
-			//HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			//HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-			JSONObject jObject = new JSONObject(str);
-			JSONArray jArray = (JSONArray) jObject.get("Recipe");
-			
-			for(int i = 0; i < jArray.length(); i++)
-			{
-				
-				
-				json = jArray.getJSONObject(i);
-                recipeBean recipe = new recipeBean();
-                recipe.setName( json.getString("name"));
-                recipe.setDesc(json.getString("description"));
-                recipe.setServes(json.getString("serves"));
-                recipe.setCooking(json.getString("cookingTime"));
-                recipe.setPrep(json.getString("prepTime"));
-                recipe.setAddedBy(json.getString("addedBy"));
-                
-                //Ingredient
-                ArrayList<String> ingredientsList = new ArrayList<String>(); 
-				ArrayList<String> notesList = new ArrayList<String>(); 
-				ArrayList<String> amountsList = new ArrayList<String>(); 
-				ArrayList<String> valuesList = new ArrayList<String>(); 
-                JSONArray ingredArray = (JSONArray) json.get("Ingredient");
-                for(int a = 0; a < ingredArray.length(); a++)
-                {
-                	JSONObject ingredObject = ingredArray.getJSONObject(a);
-                	JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
-                	JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
-                	JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
-                	JSONArray valueArray = (JSONArray) ingredObject.get("Value");
-                	for(int b = 0; b < ingredsArray.length(); b++)
-                	{
-                		ingredientsList.add(ingredsArray.get(b).toString());
-                		notesList.add(notesArray.get(b).toString());
-                		amountsList.add(amountArray.get(b).toString());
-                		valuesList.add(valueArray.get(b).toString());
-                	}
-                }
-                recipe.setIngredients(ingredientsList);
-                recipe.setValues(valuesList);
-                recipe.setAmount(amountsList);
-                recipe.setNotes(notesList);
-                JSONArray preperationArray = (JSONArray) json.get("Preperation");
-                ArrayList<String> prepList = new ArrayList<String>(); 
-				ArrayList<String> numList = new ArrayList<String>(); 
-                for(int c = 0; c < preperationArray.length(); c++)
-                {
-                	 JSONObject prepObject =  preperationArray.getJSONObject(c);
-                	JSONArray prepArray = (JSONArray) prepObject.get("prep");
-                	JSONArray numArray = (JSONArray) prepObject.get("prepNums");
-                	for(int d = 0; d < prepArray.length(); d++)
-                	{
-                		prepList.add(prepArray.get(d).toString());
-                		numList.add(numArray.get(d).toString());
-                	}
-                }
-                recipe.setSteps(prepList);
-                recipe.setStepNum(numList);
-                recipeModel model = new recipeModel(context);
-                model.insertRecipe(recipe, true);
-                
-			}
-	
-                    
-                    
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			 Toast.makeText(context, 
-		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
-			 throw e;
-		}
-	}
-	
-	/**
-	 * Sends json to the server
-	 * @param jsonArray
-	 * @throws IOException 
-	 */
-	public void sendJSONToServer(JSONArray jsonArray) throws IOException
-	{
-		String str = "";
-		HttpResponse response = null;
-        HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");      	   	
-		try 
-		{
-		//	HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		//	 HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			 
-			
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			 Toast.makeText(context, 
-		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
-			 throw e;
-		}
-	
-	}
-	
-
 }

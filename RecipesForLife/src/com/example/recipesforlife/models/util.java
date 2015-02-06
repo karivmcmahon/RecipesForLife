@@ -1,5 +1,6 @@
 package com.example.recipesforlife.models;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -272,8 +273,8 @@ public class util {
 			syncModel sync = new syncModel(context);
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			try {
-				sync.getJSONFromServer();
-				syncRecipe.getJSONFromServer();
+			    sync.getJSONFromServer();
+			//	syncRecipe.getJSONFromServer();
 				Editor editor = sharedpreferences.edit();
 		        editor.putString("Date", getLastUpdated());
 		        editor.commit();
@@ -290,11 +291,15 @@ public class util {
 		        Toast.makeText(context, 
 		        	    "App synced", Toast.LENGTH_LONG).show();
 			} catch (JSONException e) {
-				//uto-generated catch block
 				e.printStackTrace();
 				Toast.makeText(context, 
 		        	    "App sync failed", Toast.LENGTH_LONG).show();
 				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Toast.makeText(context, 
+		        	    "App sync failed", Toast.LENGTH_LONG).show();
 			}
 		}
 } 
