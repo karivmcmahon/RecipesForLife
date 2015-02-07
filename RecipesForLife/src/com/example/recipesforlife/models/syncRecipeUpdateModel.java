@@ -156,12 +156,12 @@ Context context;
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND recipeId = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND recipeId = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(id) });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int prepid = cursor.getInt(getIndex("Preperationid", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND id = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(prepid) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(prepid) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);
@@ -225,6 +225,7 @@ Context context;
 			for(int x = 0; x < prepList.size(); x++)
 			{
 				prepSteps.add(prepList.get(x).getPreperation().toString());
+				Log.v("x ", "QWERTY " + prepList.get(x).getPreperation().toString());
 				prepNums.add(Integer.toString(prepList.get(x).getPrepNum()));
 				uniqueid.add(prepList.get(x).getUniqueid().toString());
 		    }

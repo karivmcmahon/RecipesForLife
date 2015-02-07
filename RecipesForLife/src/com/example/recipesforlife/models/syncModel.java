@@ -53,7 +53,7 @@ public class syncModel extends baseDataSource
 		open();
 		 ArrayList<userBean> userList = new ArrayList<userBean>();
 		 Cursor cursor;
-		 cursor = database.rawQuery("SELECT * FROM Users WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
+		 cursor = database.rawQuery("SELECT * FROM Users WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT")   });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
@@ -76,7 +76,7 @@ public class syncModel extends baseDataSource
 		open();
 		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
 	        Cursor cursor;
-	        cursor = database.rawQuery("SELECT * FROM Account WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) ", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") });        
+	        cursor = database.rawQuery("SELECT * FROM Account WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) ", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT") });        
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
@@ -194,7 +194,7 @@ public class syncModel extends baseDataSource
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT") );
+		date.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT") );
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;

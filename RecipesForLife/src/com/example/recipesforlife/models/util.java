@@ -274,11 +274,16 @@ public class util {
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			try {
 			    sync.getJSONFromServer();
+			    Editor editor = sharedpreferences.edit();
+		        editor.putString("Account Date", getLastUpdated());
+		        editor.commit();
 				syncRecipe.getJSONFromServer();
-				Editor editor = sharedpreferences.edit();
 		        editor.putString("Date", getLastUpdated());
 		        editor.commit();
-				sync.getAndCreateAccountJSON();
+				
+		        sync.getAndCreateAccountJSON();
+		        editor.putString("Account Date Server", getLastUpdated());
+		        editor.commit();
 				syncRecipe.getAndCreateJSON();
 				editor.putString("Date Server", getLastUpdated());
 		        editor.commit();
