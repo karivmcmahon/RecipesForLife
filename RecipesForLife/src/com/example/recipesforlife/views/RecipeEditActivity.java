@@ -209,7 +209,7 @@ public class RecipeEditActivity extends Activity {
 		    oldIngredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			recipe = model.selectRecipe2("milkshake", sharedpreferences.getString(emailk, "") );
+			recipe = model.selectRecipe2("pizza", sharedpreferences.getString(emailk, "") );
 			prepList = model.selectPreperation(recipe.getId());
 			ingredList = model.selectIngredients(recipe.getId());
 			

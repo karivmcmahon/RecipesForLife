@@ -23,6 +23,20 @@ public class recipeBean {
 	String cooking;
 	String changeTime;
 	String uniqueid;
+	ArrayList<String> ingredIdList;
+	public ArrayList<String> getIngredIdList() {
+		return ingredIdList;
+	}
+	public void setIngredIdList(ArrayList<String> ingredIdList) {
+		this.ingredIdList = ingredIdList;
+	}
+	public ArrayList<String> getPrepIdList() {
+		return prepIdList;
+	}
+	public void setPrepIdList(ArrayList<String> prepIdList) {
+		this.prepIdList = prepIdList;
+	}
+	ArrayList<String> prepIdList;
 	
 	public String getUniqueid() {
 		return uniqueid;

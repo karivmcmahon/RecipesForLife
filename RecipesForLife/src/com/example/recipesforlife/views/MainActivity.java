@@ -30,6 +30,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.ingredientBean;
+import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.TimePickerFragment;
 import com.example.recipesforlife.models.recipeModel;
@@ -43,9 +45,10 @@ public class MainActivity extends Activity  {
 	public static final String pass = "passwordKey"; 
 	util utils;
 	Typeface typeFace;
+	ArrayList<ingredientBean> ingredBeanList;
+	ArrayList<preperationBean> prepBeanList;
 	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
 	Button nextButton, nextButton2, addIngredButton, addRecipeButton;
-	ArrayList<String> ingredientList, amountList, valueList, noteList, stepNumList, stepList;
 	String name, desc,recipeBook, serves, prep, cooking;
 
 	    // Handles message from time dialog 1 - preptime
@@ -99,7 +102,8 @@ public class MainActivity extends Activity  {
         StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.activity_main);
 		utils = new util(getApplicationContext(), this);
-		
+		ingredBeanList = new ArrayList<ingredientBean>();
+		prepBeanList = new ArrayList<preperationBean>();
 		Button viewButton = (Button) findViewById(R.id.viewButton);
 		viewButton.setOnClickListener(new OnClickListener(){
 
@@ -133,13 +137,7 @@ public class MainActivity extends Activity  {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
-				//Set up lists to store inputs
-				ingredientList = new ArrayList<String>();
-				amountList = new ArrayList<String>();
-				noteList = new ArrayList<String>();
-				valueList = new ArrayList<String>();
-				stepNumList = new ArrayList<String>();
-				stepList = new ArrayList<String>();
+				
 				//Set up dialog style
 				setUpInitialRecipeAddDialog();
 				//Once next pressed
@@ -506,8 +504,10 @@ public class MainActivity extends Activity  {
 		}
 		else
 		{
-			stepList.add(step);
-			stepNumList.add(stepNum);
+			preperationBean prepBean = new preperationBean();
+			prepBean.setPreperation(step);
+			prepBean.setPrepNum(Integer.parseInt(stepNum));
+			prepBeanList.add(prepBean);
 			//Append steps to edit text box
 			EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
 			stepsEdit.append(stepNum +  ". " + step +  ", ");
@@ -541,10 +541,12 @@ public class MainActivity extends Activity  {
 		}
 		else
 		{
-			ingredientList.add(ingredient);
-			amountList.add(amount);
-			noteList.add(note);
-			valueList.add(value);
+			ingredientBean ingredBean = new ingredientBean();
+			ingredBean.setName(ingredient);
+			ingredBean.setAmount(Integer.parseInt(amount));
+			ingredBean.setNote(note);
+			ingredBean.setValue(value);
+			ingredBeanList.add(ingredBean);
 			recipeIngredDialog.dismiss();
 			EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
 			if(note.equals(""))
@@ -573,16 +575,10 @@ public class MainActivity extends Activity  {
 		recipe.setServes(serves);
 		recipe.setPrep(prep);
 		recipe.setRecipeBook(recipeBook);
-		recipe.setIngredients(ingredientList);
-		recipe.setNotes(noteList);
-		recipe.setValues(valueList);
-		recipe.setAmount(amountList);
-		recipe.setStepNum(stepNumList);
-		recipe.setSteps(stepList);
 		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
 		Context context = getApplicationContext();
 		recipeModel model = new recipeModel(context);
-		model.insertRecipe(recipe, false);
+		model.insertRecipe(recipe, false, ingredBeanList, prepBeanList);
 	}
 	
 	

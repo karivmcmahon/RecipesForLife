@@ -1,5 +1,6 @@
 package com.example.recipesforlife.models;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,6 +71,9 @@ public class recipeModel extends baseDataSource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.v("ISSUE", "ISSUE");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -83,11 +87,11 @@ public class recipeModel extends baseDataSource {
                String prepid = (cursor.getString(getIndex("uniqueid",cursor))); 
                Log.v("PREP  id", "PREP id" + prepid);
                Log.v("PREP id", "PREP id " + prepList.get(i).getUniqueid().toString());
-              // for (int a = 0; a <= prepList.size(); a++)
-              // {
-              //  ContentValues prepUpdateVals = new ContentValues();
+              for (int a = 0; a < prepList.size(); a++)
+               {
+               ContentValues prepUpdateVals = new ContentValues();
                 
-                if(prepid.equals(prepList.get(i).getUniqueid().toString()))
+                if(prepid.equals(prepList.get(a).getUniqueid().toString()))
                 {
                 	
                 		prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
@@ -99,11 +103,12 @@ public class recipeModel extends baseDataSource {
         				
         			
         		}
-              // }
                 else
                 {
                 	Log.v("no inst num", "no inst num " + prepList.get(i).getPrepNum());
                 }
+               }
+      
         		
                 
             }
@@ -125,6 +130,8 @@ public class recipeModel extends baseDataSource {
 	                cursor.moveToPosition(i);
 	                String ingredient = (cursor.getString(getIndex("name",cursor)));
 	                String detsId =  (cursor.getString(getIndex("uniqueid",cursor)));
+	                for (int a = 0; a < ingredBeanList.size(); a++)
+	                {
 	                if(detsId.equals(ingredBeanList.get(i).getUniqueid()))
 	                {
 	                	long id = selectIngredientByName(ingredBeanList.get(i).getName());
@@ -138,6 +145,7 @@ public class recipeModel extends baseDataSource {
 	                	String[] args = new String[]{detsId};
                 		database.update("IngredientDetails", ingredVals, "uniqueid=?", args);
 	                }
+	                }
 	                
 	            }
 	        }
@@ -149,7 +157,7 @@ public class recipeModel extends baseDataSource {
 	 * Inserts recipeBean data into database
 	 * @param recipe
 	 */
-	public void insertRecipe(recipeBean recipe, boolean server)
+	public void insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -165,7 +173,7 @@ public class recipeModel extends baseDataSource {
 	    values.put("addedBy", recipe.getAddedBy()); 
 	    if(server == true)
 	    {
-	    values.put("uniqueid", "");
+	    values.put("uniqueid", recipe.getUniqueid());
 	    }
 	    else
 	    {
@@ -175,8 +183,8 @@ public class recipeModel extends baseDataSource {
         try
         {
         	recipeID = database.insertOrThrow("Recipe", null, values);
-        	insertIngredient(recipe, server);
-        	insertPrep(recipe, server);
+        	insertIngredient(server, ingredList, recipe.getAddedBy());
+        	insertPrep(prepList, server, recipe.getAddedBy());
         	database.setTransactionSuccessful();
         	database.endTransaction(); 
         	Log.v("suc", "suc");
@@ -194,21 +202,21 @@ public class recipeModel extends baseDataSource {
 	 * Insert preperation information into database based on recipeBean
 	 * @param recipe
 	 */
-	public void insertPrep(recipeBean recipe, boolean server)
+	public void insertPrep(ArrayList<preperationBean> prepList, boolean server, String addedBy)
 	{
 	
         prepvalues = new ContentValues();
-        for(int i = 0; i < recipe.getStepNum().size(); i++)
+        for(int i = 0; i < prepList.size(); i++)
         {
-	        prepvalues.put("instruction", recipe.getSteps().get(i).toString());
-	        prepvalues.put("instructionNum", Integer.parseInt(recipe.getStepNum().get(i).toString()));
+	        prepvalues.put("instruction", prepList.get(i).getPreperation().toString());
+	        prepvalues.put("instructionNum", prepList.get(i).getPrepNum());
 	        if(server == true)
 		    {
-		     prepvalues.put("uniqueid", "");
+		     prepvalues.put("uniqueid", prepList.get(i).getUniqueid());
 		    }
 		    else
 		    {
-		    	 prepvalues.put("uniqueid", generateUUID(recipe.getAddedBy(), "Preperation"));
+		    	 prepvalues.put("uniqueid", generateUUID(addedBy, "Preperation"));
 		    }
 	        prepvalues.put("updateTime", utils.getLastUpdated()); 
 	        prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
@@ -237,15 +245,15 @@ public class recipeModel extends baseDataSource {
 	 * Insert ingredient information into database
 	 * @param recipe
 	 */
-	public void insertIngredient(recipeBean recipe, boolean server)
+	public void insertIngredient( boolean server, ArrayList<ingredientBean> ingredList, String addedBy)
 	{
         ingredValues = new ContentValues();
-        for(int i = 0; i < recipe.getIngredients().size(); i++)
+        for(int i = 0; i < ingredList.size(); i++)
         {
-        	int id = selectIngredient(recipe, i);
+        	int id = selectIngredient(ingredList.get(i).getName());
         	if(id == 0)
         	{
-	        	ingredValues.put("name", recipe.getIngredients().get(i).toString().toLowerCase());
+	        	ingredValues.put("name", ingredList.get(i).getName());
 	            ingredValues.put("updateTime", utils.getLastUpdated()); 
 	            ingredValues.put("changeTime", "2015-01-01 12:00:00.000");
 	            ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
@@ -254,7 +262,7 @@ public class recipeModel extends baseDataSource {
         	{
         		ingredID = id;
         	}
-            insertIngredientDetails(i, recipe,server);
+            insertIngredientDetails(i,ingredList,server, addedBy);
             insertRecipeToIngredient();
             insertIngredToDetails();
         }
@@ -266,22 +274,22 @@ public class recipeModel extends baseDataSource {
 	 * @param i
 	 * @param recipe
 	 */
-	public void insertIngredientDetails(int i, recipeBean recipe, boolean server)
+	public void insertIngredientDetails(int i, ArrayList<ingredientBean> ingredList, boolean server, String addedBy)
 	{
         ingredDetailsValues = new ContentValues();
         ingredDetailsValues.put("ingredientId", ingredID);
-        ingredDetailsValues.put("amount", Integer.parseInt(recipe.getAmount().get(i).toString()));
-        ingredDetailsValues.put("note", recipe.getNotes().get(i).toString());
-        ingredDetailsValues.put("value", recipe.getValues().get(i).toString());
+        ingredDetailsValues.put("amount", ingredList.get(i).getAmount());
+        ingredDetailsValues.put("note", ingredList.get(i).getNote());
+        ingredDetailsValues.put("value", ingredList.get(i).getValue());
         ingredDetailsValues.put("updateTime", utils.getLastUpdated()); 
         ingredDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
         if(server == true)
 	    {
-	     ingredDetailsValues.put("uniqueid", "");
+	     ingredDetailsValues.put("uniqueid", ingredList.get(i).getUniqueid());
 	    }
 	    else
 	    {
-	    	 ingredDetailsValues.put("uniqueid", generateUUID(recipe.getAddedBy(), "IngredientDetails"));
+	    	 ingredDetailsValues.put("uniqueid", generateUUID(addedBy, "IngredientDetails"));
 	    }
         ingredDetsID = database.insertOrThrow("IngredientDetails", null, ingredDetailsValues);
         
@@ -320,10 +328,10 @@ public class recipeModel extends baseDataSource {
 	 * @param x
 	 * @return id 
 	 */
-	public int selectIngredient(recipeBean recipe, int x)
+	public int selectIngredient(String name)
 	{	
 			int id = 0;
-	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { recipe.getIngredients().get(x).toString().toLowerCase() });
+	        Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { name });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);

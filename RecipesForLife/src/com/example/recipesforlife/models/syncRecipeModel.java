@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 import org.apache.http.HttpResponse;
@@ -76,6 +77,7 @@ public class syncRecipeModel extends baseDataSource {
         rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
         rb.setServes(cursor.getString(getIndex("serves", cursor)));
         rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
+        rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
         return rb;
     }
 	
@@ -144,6 +146,7 @@ public class syncRecipeModel extends baseDataSource {
 		ib.setValue(cursor.getString(getIndex("value",cursor)));
 		ib.setNote(cursor.getString(getIndex("note", cursor)));
 		ib.setIngredId(cursor.getInt(getIndex("ingredientId", cursor)));	
+		ib.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		return ib;
 	}
 	
@@ -189,6 +192,7 @@ public class syncRecipeModel extends baseDataSource {
 		preperationBean pb = new preperationBean();
 		pb.setPreperation(cursor.getString(getIndex("instruction", cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
+		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		return pb;
 	}
 	
@@ -213,38 +217,49 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			recipe.put("changeTime", recipeList.get(i).getChangeTime());
+			recipe.put("uniqueid", recipeList.get(i).getUniqueid());
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();
+			ArrayList<String> uniqueid = new ArrayList<String>();
 			JSONObject prepObj = new JSONObject();
 			JSONObject prepNumObj = new JSONObject();
+			JSONObject prepIdObj = new JSONObject();
+			
 			for(int x = 0; x < prepList.size(); x++)
 			{
 				prepSteps.add(prepList.get(x).getPreperation().toString());
 				prepNums.add(Integer.toString(prepList.get(x).getPrepNum()));
+				uniqueid.add(prepList.get(x).getUniqueid().toString());
 		    }
 			ArrayList<ingredientBean> ingredList = getIngred(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray(prepSteps);
 			JSONArray prepNumArray = new JSONArray(prepNums);
+			JSONArray prepIdArray = new JSONArray(uniqueid);
 			prepObj.put("prep", prepStepArray);
 			JSONObject p2 = new JSONObject();
-			prepNumObj.put("prepNums", prepNumArray);	
+			prepNumObj.put("prepNums", prepNumArray);
+			prepIdObj.put("uniqueid", prepIdArray);
 			recipe.put("Preperation", prepObj );
 			recipe.accumulate("Preperation", prepNumObj );
+			recipe.accumulate("Preperation", prepIdObj );
 			
 			JSONObject ingredObj = new JSONObject();
 			JSONObject ingredValObj = new JSONObject();
 			JSONObject ingredNoteObj = new JSONObject();
 			JSONObject ingredAmountObj = new JSONObject();
+			JSONObject ingredIdObj = new JSONObject();
 			ArrayList<String> ingredsList = new ArrayList<String>();
 			ArrayList<String> ingredAmount = new ArrayList<String>();
 			ArrayList<String> ingredNote = new ArrayList<String>();
 			ArrayList<String> ingredValue = new ArrayList<String>();
+			ArrayList<String> ingredId = new ArrayList<String>();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
 				ingredAmount.add(Integer.toString(ingredList.get(y).getAmount()));
 				ingredValue.add(ingredList.get(y).getValue());
 				ingredNote.add(ingredList.get(y).getNote());
+				ingredId.add(ingredList.get(y).getUniqueid());
 				String name = getIngredName(ingredList.get(y).getIngredId());
 				ingredsList.add(name);
 				
@@ -257,10 +272,13 @@ public class syncRecipeModel extends baseDataSource {
 			ingredAmountObj.put("Amount", amountarray);
 			JSONArray notearray = new JSONArray(ingredNote);
 			ingredNoteObj.put("Notes", notearray);	
+			JSONArray ingredidarray = new JSONArray(ingredId);
+			ingredIdObj.put("uniqueid", ingredidarray);	
 			recipe.put("Ingredient", ingredObj);
 			recipe.accumulate("Ingredient", ingredValObj);
 			recipe.accumulate("Ingredient", ingredAmountObj);
 			recipe.accumulate("Ingredient", ingredNoteObj);
+			recipe.accumulate("Ingredient", ingredIdObj);
 			
 			
 			
@@ -319,12 +337,9 @@ public class syncRecipeModel extends baseDataSource {
                 recipe.setCooking(json.getString("cookingTime"));
                 recipe.setPrep(json.getString("prepTime"));
                 recipe.setAddedBy(json.getString("addedBy"));
+                recipe.setUniqueid(json.getString("uniqueid"));
                 
-                //Ingredient
-                ArrayList<String> ingredientsList = new ArrayList<String>(); 
-				ArrayList<String> notesList = new ArrayList<String>(); 
-				ArrayList<String> amountsList = new ArrayList<String>(); 
-				ArrayList<String> valuesList = new ArrayList<String>(); 
+                ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
                 JSONArray ingredArray = (JSONArray) json.get("Ingredient");
                 for(int a = 0; a < ingredArray.length(); a++)
                 {
@@ -333,36 +348,38 @@ public class syncRecipeModel extends baseDataSource {
                 	JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
                 	JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
                 	JSONArray valueArray = (JSONArray) ingredObject.get("Value");
+                	JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
                 	for(int b = 0; b < ingredsArray.length(); b++)
                 	{
-                		ingredientsList.add(ingredsArray.get(b).toString());
-                		notesList.add(notesArray.get(b).toString());
-                		amountsList.add(amountArray.get(b).toString());
-                		valuesList.add(valueArray.get(b).toString());
+                		ingredientBean ingredBean = new ingredientBean();
+                		ingredBean.setName(ingredsArray.get(b).toString());
+                		ingredBean.setNote(notesArray.get(b).toString());
+                		ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
+                		ingredBean.setValue(valueArray.get(b).toString());
+                		ingredBean.setUniqueid(ingredIdArray.get(b).toString());
+                		ingredBeanList.add(ingredBean);
                 	}
                 }
-                recipe.setIngredients(ingredientsList);
-                recipe.setValues(valuesList);
-                recipe.setAmount(amountsList);
-                recipe.setNotes(notesList);
+               
                 JSONArray preperationArray = (JSONArray) json.get("Preperation");
-                ArrayList<String> prepList = new ArrayList<String>(); 
-				ArrayList<String> numList = new ArrayList<String>(); 
+                ArrayList<preperationBean> prepBeanList = new ArrayList<preperationBean>();
                 for(int c = 0; c < preperationArray.length(); c++)
                 {
                 	 JSONObject prepObject =  preperationArray.getJSONObject(c);
                 	JSONArray prepArray = (JSONArray) prepObject.get("prep");
                 	JSONArray numArray = (JSONArray) prepObject.get("prepNums");
+                	JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
                 	for(int d = 0; d < prepArray.length(); d++)
                 	{
-                		prepList.add(prepArray.get(d).toString());
-                		numList.add(numArray.get(d).toString());
+                		preperationBean prepBean = new preperationBean();
+                		prepBean.setPreperation(prepArray.get(d).toString());
+                		prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
+                		prepBean.setUniqueid(idArray.get(d).toString());
+                		prepBeanList.add(prepBean);
                 	}
                 }
-                recipe.setSteps(prepList);
-                recipe.setStepNum(numList);
                 recipeModel model = new recipeModel(context);
-                model.insertRecipe(recipe, true);
+                model.insertRecipe(recipe, true, ingredBeanList, prepBeanList);
                 
 			}
 	

@@ -103,7 +103,10 @@ public class recipeTestCase extends AndroidTestCase{
 		prepNum.add("1");
 		recipe.setSteps(prep);
 		recipe.setStepNum(prepNum);
-		recipemodel.insertRecipe(recipe, false);
+		/**
+		 * TOOOOO CHANGE
+		 */
+		//recipemodel.insertRecipe(recipe, false);
 		
 		recipeBean recipeSelect = new recipeBean();
 		recipeSelect = recipemodel.selectRecipe2("Chicken Soup","addison");
@@ -143,7 +146,10 @@ public class recipeTestCase extends AndroidTestCase{
 		prepNum.add("1");
 		recipe.setSteps(prep);
 		recipe.setStepNum(prepNum);
-		recipemodel.insertRecipe(recipe, false);
+		/**
+		 * TO CHANGEEE
+		 */
+		//recipemodel.insertRecipe(recipe, false);
 		 fail("Expected NumberFormatException");
 		}
 		catch(NumberFormatException e) {

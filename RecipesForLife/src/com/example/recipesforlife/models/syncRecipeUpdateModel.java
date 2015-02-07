@@ -1,7 +1,15 @@
 package com.example.recipesforlife.models;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.Toast;
 
 public class syncRecipeUpdateModel  extends baseDataSource {
 
@@ -64,6 +73,7 @@ Context context;
         rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
         rb.setServes(cursor.getString(getIndex("serves", cursor)));
         rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
+        rb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
         return rb;
     }
 	
@@ -132,6 +142,7 @@ Context context;
 		ib.setValue(cursor.getString(getIndex("value",cursor)));
 		ib.setNote(cursor.getString(getIndex("note", cursor)));
 		ib.setIngredId(cursor.getInt(getIndex("ingredientId", cursor)));	
+		ib.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		return ib;
 	}
 	
@@ -177,14 +188,16 @@ Context context;
 		preperationBean pb = new preperationBean();
 		pb.setPreperation(cursor.getString(getIndex("instruction", cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
+		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		return pb;
 	}
 	
 	/**
 	 * Builds a json with all the recipe data to send to the server
 	 * @throws JSONException
+	 * @throws IOException 
 	 */
-	public void getAndCreateJSON() throws JSONException
+	public void getAndCreateJSON() throws JSONException, IOException
 	{
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
@@ -200,38 +213,49 @@ Context context;
 			recipe.put("addedBy", recipeList.get(i).getAddedBy());
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			recipe.put("changeTime", recipeList.get(i).getChangeTime());
+			recipe.put("uniqueid", recipeList.get(i).getUniqueid());
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			ArrayList<String> prepSteps = new ArrayList<String>();
 			ArrayList<String> prepNums = new ArrayList<String>();
+			ArrayList<String> uniqueid = new ArrayList<String>();
 			JSONObject prepObj = new JSONObject();
 			JSONObject prepNumObj = new JSONObject();
+			JSONObject prepIdObj = new JSONObject();
+			
 			for(int x = 0; x < prepList.size(); x++)
 			{
 				prepSteps.add(prepList.get(x).getPreperation().toString());
 				prepNums.add(Integer.toString(prepList.get(x).getPrepNum()));
+				uniqueid.add(prepList.get(x).getUniqueid().toString());
 		    }
 			ArrayList<ingredientBean> ingredList = getIngred(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray(prepSteps);
 			JSONArray prepNumArray = new JSONArray(prepNums);
+			JSONArray prepIdArray = new JSONArray(uniqueid);
 			prepObj.put("prep", prepStepArray);
 			JSONObject p2 = new JSONObject();
-			prepNumObj.put("prepNums", prepNumArray);	
+			prepNumObj.put("prepNums", prepNumArray);
+			prepIdObj.put("uniqueid", prepIdArray);
 			recipe.put("Preperation", prepObj );
 			recipe.accumulate("Preperation", prepNumObj );
+			recipe.accumulate("Preperation", prepIdObj );
 			
 			JSONObject ingredObj = new JSONObject();
 			JSONObject ingredValObj = new JSONObject();
 			JSONObject ingredNoteObj = new JSONObject();
 			JSONObject ingredAmountObj = new JSONObject();
+			JSONObject ingredIdObj = new JSONObject();
 			ArrayList<String> ingredsList = new ArrayList<String>();
 			ArrayList<String> ingredAmount = new ArrayList<String>();
 			ArrayList<String> ingredNote = new ArrayList<String>();
 			ArrayList<String> ingredValue = new ArrayList<String>();
+			ArrayList<String> ingredId = new ArrayList<String>();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
 				ingredAmount.add(Integer.toString(ingredList.get(y).getAmount()));
 				ingredValue.add(ingredList.get(y).getValue());
 				ingredNote.add(ingredList.get(y).getNote());
+				ingredId.add(ingredList.get(y).getUniqueid());
 				String name = getIngredName(ingredList.get(y).getIngredId());
 				ingredsList.add(name);
 				
@@ -244,16 +268,60 @@ Context context;
 			ingredAmountObj.put("Amount", amountarray);
 			JSONArray notearray = new JSONArray(ingredNote);
 			ingredNoteObj.put("Notes", notearray);	
+			JSONArray ingredidarray = new JSONArray(ingredId);
+			ingredIdObj.put("uniqueid", ingredidarray);	
 			recipe.put("Ingredient", ingredObj);
 			recipe.accumulate("Ingredient", ingredValObj);
 			recipe.accumulate("Ingredient", ingredAmountObj);
 			recipe.accumulate("Ingredient", ingredNoteObj);
+			recipe.accumulate("Ingredient", ingredIdObj);
 			
 			
 			
 			jsonArray.put(recipe);			
 		} 
-	//sendJSONToServer(jsonArray);
-		Log.v("UPDATE JSON ", "UPDATE JSON " + jsonArray);
+	sendJSONToServer(jsonArray);
+		Log.v("UPDATE JSON", "UPDATE JSON " + jsonArray);
+	}
+	
+	/**
+	 * Sends json to the server
+	 * @param jsonArray
+	 * @throws IOException 
+	 */
+	public void sendJSONToServer(JSONArray jsonArray) throws IOException
+	{
+		String str = "";
+		HttpResponse response = null;
+        HttpClient myClient = new DefaultHttpClient();
+        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx");      	   	
+		try 
+		{
+		//	HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+		//	 HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			myConnection.setEntity(new ByteArrayEntity(
+					jsonArray.toString().getBytes("UTF8")));
+			 
+			
+			try 
+			{
+				response = myClient.execute(myConnection);
+				str = EntityUtils.toString(response.getEntity(), "UTF-8");
+				Log.v("RESPONSE", "RESPONSE " + str);
+			} 
+			catch (ClientProtocolException e) 
+			{							
+				e.printStackTrace();
+				throw e;
+			} 
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+			 Toast.makeText(context, 
+		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
+			 throw e;
+		}
+	
 	}
 }
