@@ -60,10 +60,22 @@ public class recipeModel extends baseDataSource {
         
         cursor.close();
         String[] args = new String[]{newRecipe.getUniqueid(), sharedpreferences.getString(emailk, "DEFAULT")};
-        database.update("Recipe", recipeUpdateVals, "uniqueid=? AND addedBy=?", args);
-		updateRecipePrep(prepList);
-		updateRecipeIngredient(ingredList);
-		close();
+        database.beginTransaction();
+        try
+        {
+        	database.update("Recipe", recipeUpdateVals, "uniqueid=? AND addedBy=?", args);
+    		updateRecipePrep(prepList);
+    		updateRecipeIngredient(ingredList);
+        	database.setTransactionSuccessful();
+        	database.endTransaction(); 
+        	Log.v("suc", "suc");
+        }catch(SQLException e)
+        {
+        	database.endTransaction();
+        	Log.v("Transaction fail", "Transaction fail for recipe insert");
+        }
+    	close();
+        
         }
 	}
 	
@@ -75,8 +87,6 @@ public class recipeModel extends baseDataSource {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                String prepid = (cursor.getString(getIndex("uniqueid",cursor))); 
-               Log.v("PREP  id", "PREP id" + prepid);
-               Log.v("PREP id", "PREP id " + prepList.get(i).getUniqueid().toString());
               for (int a = 0; a < prepList.size(); a++)
                {
                ContentValues prepUpdateVals = new ContentValues();
@@ -86,26 +96,18 @@ public class recipeModel extends baseDataSource {
                 	
                 		prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
                 		prepUpdateVals.put("instructionNum", prepList.get(i).getPrepNum());
-                		Log.v("inst num", "inst num " + prepList.get(i).getPrepNum());
                 		prepUpdateVals.put("changeTime", utils.getLastUpdated());
                 		String[] args = new String[]{prepid};
                 		database.update("Preperation", prepUpdateVals, "uniqueid=?", args);
         				
         			
         		}
-                else
-                {
-                	Log.v("no inst num", "no inst num " + prepList.get(i).getPrepNum());
-                }
+        
                }
       
         		
                 
             }
-        }
-        else
-        {
-        	 Log.v("FAIL", "FAIL " + Long.toString(recipeUpdateID));
         }
         cursor.close();
 
@@ -131,7 +133,6 @@ public class recipeModel extends baseDataSource {
 	                    ingredVals.put("note", ingredBeanList.get(i).getNote());
 	                    ingredVals.put("changeTime", utils.getLastUpdated());
 	                    ingredVals.put("ingredientId", id);
-	                	Log.v("MATCH", "MATCH");
 	                	String[] args = new String[]{detsId};
                 		database.update("IngredientDetails", ingredVals, "uniqueid=?", args);
 	                }
@@ -140,7 +141,7 @@ public class recipeModel extends baseDataSource {
 	            }
 	        }
 	        cursor.close();
-	        close();
+	        //close();
 	}
 	
 	/**

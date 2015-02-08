@@ -71,9 +71,6 @@ public class SignUpSignInActivity extends Activity {
 		// Get shared pref
 		sharedpreferences = getSharedPreferences(MyPREFERENCES,
 				Context.MODE_PRIVATE);
-		// Editor editors = sharedpreferences.edit();
-		// editors.clear();
-		// editors.commit();
 		if (sharedpreferences.getBoolean("firstTime", false) == false) {
 			Editor editor = sharedpreferences.edit();
 			editor.putBoolean("firstTime", true);
@@ -184,8 +181,6 @@ public class SignUpSignInActivity extends Activity {
 				}
 			}
 		});
-		// buildDatabase();
-		// sync();
 	}
 
 	@Override
