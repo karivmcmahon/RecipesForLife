@@ -326,4 +326,112 @@ Context context;
 		}
 	
 	}
+	
+	/**
+	 * Gets the json with it's sync info from the server
+	 * @throws JSONException
+	 * @throws IOException 
+	 */
+	public void getJSONFromServer() throws JSONException, IOException
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		JSONObject date = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject json;
+		date.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
+		jsonArray.put(date);
+		String str = "";
+		HttpResponse response = null;
+        HttpClient myClient = new DefaultHttpClient();
+        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx");      	   	
+		try 
+		{
+			//HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+			//HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			myConnection.setEntity(new ByteArrayEntity(
+					jsonArray.toString().getBytes("UTF8")));
+			try 
+			{
+				response = myClient.execute(myConnection);
+				str = EntityUtils.toString(response.getEntity(), "UTF-8");
+				Log.v("RESPONSE", "RESPONSE " + str);
+				
+			} 
+			catch (ClientProtocolException e) 
+			{							
+				e.printStackTrace();
+				throw e;
+			} 
+			JSONObject jObject = new JSONObject(str);
+			JSONArray jArray = (JSONArray) jObject.get("Recipe");
+			
+			for(int i = 0; i < jArray.length(); i++)
+			{
+				
+				
+				json = jArray.getJSONObject(i);
+                recipeBean recipe = new recipeBean();
+                recipe.setName( json.getString("name"));
+                recipe.setDesc(json.getString("description"));
+                recipe.setServes(json.getString("serves"));
+                recipe.setCooking(json.getString("cookingTime"));
+                recipe.setPrep(json.getString("prepTime"));
+                recipe.setAddedBy(json.getString("addedBy"));
+                recipe.setUniqueid(json.getString("uniqueid"));
+                
+                ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
+                JSONArray ingredArray = (JSONArray) json.get("Ingredient");
+                for(int a = 0; a < ingredArray.length(); a++)
+                {
+                	JSONObject ingredObject = ingredArray.getJSONObject(a);
+                	JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
+                	JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
+                	JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
+                	JSONArray valueArray = (JSONArray) ingredObject.get("Value");
+                	JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
+                	for(int b = 0; b < ingredsArray.length(); b++)
+                	{
+                		ingredientBean ingredBean = new ingredientBean();
+                		ingredBean.setName(ingredsArray.get(b).toString());
+                		ingredBean.setNote(notesArray.get(b).toString());
+                		ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
+                		ingredBean.setValue(valueArray.get(b).toString());
+                		ingredBean.setUniqueid(ingredIdArray.get(b).toString());
+                		ingredBeanList.add(ingredBean);
+                	}
+                }
+               
+                JSONArray preperationArray = (JSONArray) json.get("Preperation");
+                ArrayList<preperationBean> prepBeanList = new ArrayList<preperationBean>();
+                for(int c = 0; c < preperationArray.length(); c++)
+                {
+                	 JSONObject prepObject =  preperationArray.getJSONObject(c);
+                	JSONArray prepArray = (JSONArray) prepObject.get("prep");
+                	JSONArray numArray = (JSONArray) prepObject.get("prepNums");
+                	JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
+                	for(int d = 0; d < prepArray.length(); d++)
+                	{
+                		preperationBean prepBean = new preperationBean();
+                		prepBean.setPreperation(prepArray.get(d).toString());
+                		prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
+                		prepBean.setUniqueid(idArray.get(d).toString());
+                		prepBeanList.add(prepBean);
+                	}
+                }
+                recipeModel model = new recipeModel(context);
+                model.updateRecipe(recipe,  prepBeanList, ingredBeanList);
+                
+			}
+	
+                    
+                    
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+			 Toast.makeText(context, 
+		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
+			 throw e;
+		}
+	}
 }

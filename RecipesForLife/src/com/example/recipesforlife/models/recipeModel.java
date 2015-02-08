@@ -57,24 +57,14 @@ public class recipeModel extends baseDataSource {
                 cursor.moveToPosition(i);
                 recipeUpdateID = (cursor.getInt(getIndex("id",cursor))); 
             }
-        }
+        
         cursor.close();
         String[] args = new String[]{newRecipe.getUniqueid(), sharedpreferences.getString(emailk, "DEFAULT")};
         database.update("Recipe", recipeUpdateVals, "uniqueid=? AND addedBy=?", args);
 		updateRecipePrep(prepList);
 		updateRecipeIngredient(ingredList);
 		close();
-		syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
-		try {
-			updates.getAndCreateJSON();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.v("ISSUE", "ISSUE");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        }
 	}
 	
 	public void updateRecipePrep(ArrayList<preperationBean> prepList)

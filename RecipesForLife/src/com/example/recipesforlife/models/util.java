@@ -272,6 +272,7 @@ public class util {
 		 sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 			syncModel sync = new syncModel(context);
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
+			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
 			try {
 			    sync.getJSONFromServer();
 			    Editor editor = sharedpreferences.edit();
@@ -280,12 +281,18 @@ public class util {
 				syncRecipe.getJSONFromServer();
 		        editor.putString("Date", getLastUpdated());
 		        editor.commit();
+		        updates.getJSONFromServer();
+		        editor.putString("Change", getLastUpdated());
+		        editor.commit();
 				
 		        sync.getAndCreateAccountJSON();
 		        editor.putString("Account Date Server", getLastUpdated());
 		        editor.commit();
 				syncRecipe.getAndCreateJSON();
 				editor.putString("Date Server", getLastUpdated());
+		        editor.commit();
+		        updates.getAndCreateJSON();
+		        editor.putString("Change Server", getLastUpdated());
 		        editor.commit();
 				
 				
