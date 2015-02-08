@@ -48,9 +48,10 @@ namespace WebApplication1
                     recipe.prepTime = (string)reader["prepTime"];
                     recipe.cookingTime = (string)reader["cookingTime"];
                     recipe.addedBy = (string)reader["addedBy"];
+					recipe.uniqueid = (string)reader["uniqueid"];
                     recipe.serves = (Int32)reader["serves"];
                    
-                    SqlCommand select2 = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", conn);
+                    SqlCommand select2 = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", conn);
                     select2.Parameters.AddWithValue("@recipe", recipe.id);
                     var reader2 = select2.ExecuteReader();
                     // int i = 0;
@@ -60,8 +61,10 @@ namespace WebApplication1
                         //Preperation preps = new Preperation();
 							Preperation preps = new Preperation();
                             preps.prep = new List<string>();
+							 preps.uniqueid = new List<string>();
                             preps.prepNums = new List<Int32>();
                             preps.prep.Add((string)reader2["instruction"]);
+							preps.uniqueid.Add((string)reader2["uniqueid"]);
                             preps.prepNums.Add((Int32)reader2["instructionNum"]);
                             recipe.Preperation.Add(preps);
 					}
@@ -82,10 +85,13 @@ namespace WebApplication1
                             ingreds.Value = new List<string>();
                             ingreds.Amount = new List<Int32>();
                             ingreds.Notes = new List<string>();
+							ingreds.uniqueid = new List<string>();
                             ingreds.Ingredients.Add((string)reader3["name"]);
                             ingreds.Amount.Add((Int32)reader3["amount"]);
                             ingreds.Value.Add((string)reader3["value"]);
                             ingreds.Notes.Add((string)reader3["note"]);
+							 ingreds.uniqueid.Add((string)reader3["uniqueid"]);
+							
 
                             
                             recipe.Ingredient.Add(ingreds); 
@@ -126,6 +132,7 @@ namespace WebApplication1
         public string cookingTime { get; set; }
         public string addedBy { get; set; }
         public Int32 id { get; set; }
+		 public string uniqueid { get; set; }
         public List<Preperation> Preperation { get; set; }
         public List<Ingredient> Ingredient { get; set; }
         //  public List<Ingredient> Ingredient { get; set; }
@@ -141,6 +148,7 @@ public class Recipes
     {
         public List<String> prep { get; set; }
         public List<Int32> prepNums { get; set; }
+		public List<String> uniqueid { get; set; }
         
     }
 
@@ -150,4 +158,5 @@ public class Recipes
         public List<String> Value { get; set; }
         public List<Int32> Amount { get; set; }
         public List<String> Notes { get; set; }
+		public List<String> uniqueid { get; set; }
     }

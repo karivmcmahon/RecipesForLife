@@ -74,9 +74,9 @@ namespace WebApplication1
                    }
 
                   
-                  
+                  con.Close(); 
                }
-			   con.close();
+			  
                
 
                 

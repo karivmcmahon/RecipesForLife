@@ -87,7 +87,7 @@ Context context;
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
-	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND Recipeid = ? ", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ? ", new String[] {  Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -117,7 +117,7 @@ Context context;
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		String name = null;
-	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND id = ? ", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  id = ? ", new String[] {  Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -258,6 +258,7 @@ Context context;
 				ingredNote.add(ingredList.get(y).getNote());
 				ingredId.add(ingredList.get(y).getUniqueid());
 				String name = getIngredName(ingredList.get(y).getIngredId());
+				Log.v("NAME ", "NAME " + name);
 				ingredsList.add(name);
 				
 			}

@@ -22,7 +22,7 @@ namespace WebApplication1
                  for(int i = 0; i < recipe.Count(); i++)
                  {
                      SqlConnection connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-                     SqlCommand insert = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime)", connn);
+                     SqlCommand insert = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid)", connn);
                      insert.Parameters.AddWithValue("@name", recipe[i].name);
                      insert.Parameters.AddWithValue("@description", recipe[i].description);
                      insert.Parameters.AddWithValue("@serves", recipe[i].serves);
@@ -31,6 +31,7 @@ namespace WebApplication1
                      insert.Parameters.AddWithValue("@addedBy", recipe[i].addedBy);
                      insert.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 					 insert.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+					 insert.Parameters.AddWithValue("@uniqueid", recipe[i].uniqueid);
 
                     connn.Open();
                      try
@@ -42,11 +43,12 @@ namespace WebApplication1
                         
                          for (int y = 0; y < recipe[i].Preperation[0].prep.Count(); y++)
                          {
-                                SqlCommand insert2 = new SqlCommand(" INSERT INTO Preperation(instruction, instructionNum, updateTime, changeTime) OUTPUT INSERTED.id VALUES (@prep, @prepNums, @updateTime, @changeTime)", connn);
+                                SqlCommand insert2 = new SqlCommand(" INSERT INTO Preperation(instruction, instructionNum, updateTime, changeTime, uniqueid) OUTPUT INSERTED.id VALUES (@prep, @prepNums, @updateTime, @changeTime, @uniqueid)", connn);
                                  insert2.Parameters.AddWithValue("@prep", recipe[i].Preperation[0].prep[y]);
                                  insert2.Parameters.AddWithValue("@prepNums", recipe[i].Preperation[1].prepNums[y]);
                                  insert2.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 								  insert2.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+								  insert2.Parameters.AddWithValue("@uniqueid", recipe[i].Preperation[2].uniqueid[y]);
                                  try
                                  {
 
@@ -122,13 +124,14 @@ namespace WebApplication1
                                      ingredId = (Int32)insert4.ExecuteScalar();
                                  }
                               
-                                 SqlCommand insert5 = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime)", connn);
+                                 SqlCommand insert5 = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime, uniqueid)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime, @uniqueid)", connn);
                                  insert5.Parameters.AddWithValue("@id", ingredId);
                                  insert5.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
                                  insert5.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
                                  insert5.Parameters.AddWithValue("@value", recipe[i].Ingredient[1].Value[a]);
                                  insert5.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 								 insert5.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+								 insert5.Parameters.AddWithValue("@uniqueid", recipe[i].Ingredient[4].uniqueid[a]);
                                  try
                                  {
 
@@ -221,6 +224,7 @@ public class Recipe
     public string addedBy { get; set; }
     public string updateTime { get; set;  }
 	public string changeTime { get; set;  }
+    public string uniqueid { get; set;  }
     public List<Preperation> Preperation { get; set; }
     public List<Ingredient> Ingredient { get; set; }
 }
@@ -229,6 +233,7 @@ public class Preperation
 {
     public  List<String> prep { get; set; }
     public List<String> prepNums { get; set; }
+    public List<String> uniqueid { get; set;  }
   //  public int prepNums { get; set; }
 }
 
@@ -238,4 +243,5 @@ public class Ingredient
     public List<String> Value { get; set; }
     public List<String> Amount { get; set; }
     public List<String> Notes { get; set; }
+	public List<String> uniqueid {get;set;}
 }
