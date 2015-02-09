@@ -9,13 +9,7 @@ import java.util.ArrayList;
  */
 public class recipeBean {
 	String name;
-	ArrayList<String> ingredients;
-	ArrayList<String> stepNum;
 	int id;
-	ArrayList<String> steps;
-	ArrayList<String> notes;
-	ArrayList<String> values;
-	ArrayList<String> amount;
 	String desc;
 	String recipeBook;
 	String prep;
@@ -70,44 +64,6 @@ public class recipeBean {
 		this.updateTime = updateTime;
 	}
 	String updateTime;
-	public ArrayList<String> getStepNum() {
-		return stepNum;
-	}
-	public void setStepNum(ArrayList<String> stepNum) {
-		this.stepNum = stepNum;
-	}
-	public ArrayList<String> getSteps() {
-		return steps;
-	}
-	public void setSteps(ArrayList<String> steps) {
-		this.steps = steps;
-	}
-	
-	
-	public ArrayList<String> getIngredients() {
-		return ingredients;
-	}
-	public void setIngredients(ArrayList<String> ingredients) {
-		this.ingredients = ingredients;
-	}
-	public ArrayList<String> getNotes() {
-		return notes;
-	}
-	public void setNotes(ArrayList<String> notes) {
-		this.notes = notes;
-	}
-	public ArrayList<String> getValues() {
-		return values;
-	}
-	public void setValues(ArrayList<String> values) {
-		this.values = values;
-	}
-	public ArrayList<String> getAmount() {
-		return amount;
-	}
-	public void setAmount(ArrayList<String> amount) {
-		this.amount = amount;
-	}
 	
 	public String getName() {
 		return name;

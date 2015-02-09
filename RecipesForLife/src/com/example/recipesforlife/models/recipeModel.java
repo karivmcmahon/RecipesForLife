@@ -40,6 +40,12 @@ public class recipeModel extends baseDataSource {
 		utils = new utility();
 	}
 	
+	/**
+	 * Updates a recipe
+	 * @param newRecipe
+	 * @param prepList
+	 * @param ingredList
+	 */
 	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -68,20 +74,22 @@ public class recipeModel extends baseDataSource {
     		updateRecipeIngredient(ingredList);
         	database.setTransactionSuccessful();
         	database.endTransaction(); 
-        	Log.v("suc", "suc");
-        }catch(SQLException e)
+        }
+        catch(SQLException e)
         {
         	database.endTransaction();
-        	Log.v("Transaction fail", "Transaction fail for recipe insert");
         }
     	close();
         
         }
 	}
 	
+	/**
+	 * Update recipe preperation details
+	 * @param prepList
+	 */
 	public void updateRecipePrep(ArrayList<preperationBean> prepList)
 	{
-		//String prepid;
         Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation WHERE PrepRecipe.recipeid=? AND Preperation.id = PrepRecipe.Preperationid", new String[] {Long.toString(recipeUpdateID)});
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
@@ -92,28 +100,26 @@ public class recipeModel extends baseDataSource {
                ContentValues prepUpdateVals = new ContentValues();
                 
                 if(prepid.equals(prepList.get(a).getUniqueid().toString()))
-                {
-                	
+                {               	
                 		prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
                 		prepUpdateVals.put("instructionNum", prepList.get(i).getPrepNum());
                 		prepUpdateVals.put("changeTime", utils.getLastUpdated());
                 		String[] args = new String[]{prepid};
-                		database.update("Preperation", prepUpdateVals, "uniqueid=?", args);
-        				
+                		database.update("Preperation", prepUpdateVals, "uniqueid=?", args);				
         			
         		}
         
-               }
-      
-        		
-                
+               }    
             }
         }
-        cursor.close();
-
-		
+        cursor.close();		
 	}
 	
+	
+	/**
+	 * Update recipe ingredient details
+	 * @param ingredBeanList
+	 */
 	public void updateRecipeIngredient(ArrayList<ingredientBean> ingredBeanList)
 	{
 		 Cursor cursor = database.rawQuery("SELECT *, IngredientDetails.id AS ID FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = ?;", new String[] { Long.toString(recipeUpdateID) });
@@ -141,7 +147,6 @@ public class recipeModel extends baseDataSource {
 	            }
 	        }
 	        cursor.close();
-	        //close();
 	}
 	
 	/**
@@ -178,11 +183,9 @@ public class recipeModel extends baseDataSource {
         	insertPrep(prepList, server, recipe.getAddedBy());
         	database.setTransactionSuccessful();
         	database.endTransaction(); 
-        	Log.v("suc", "suc");
         }catch(SQLException e)
         {
         	database.endTransaction();
-        	Log.v("Transaction fail", "Transaction fail for recipe insert");
         }
     	close();
     	
@@ -334,6 +337,11 @@ public class recipeModel extends baseDataSource {
 	       return id;
 	}
 	
+	/**
+	 * Select ingredient by name and if it doesn't exist insert it and return id
+	 * @param name
+	 * @return
+	 */
 	public long selectIngredientByName(String name)
 	{
 		long id = 0;
@@ -513,6 +521,12 @@ public class recipeModel extends baseDataSource {
 	        return pb;
 	    }
 	 
+	 /**
+	  * Generates UUID then adds the name and type of table - to create a more detailed unique id
+	  * @param addedBy
+	  * @param table
+	  * @return
+	  */
 	 public String generateUUID(String addedBy, String table ) {
 		 //   final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		 final String uuid = UUID.randomUUID().toString();
@@ -525,9 +539,14 @@ public class recipeModel extends baseDataSource {
 		 return uniqueid;
 		}
 	 
+	 /**
+	  * Checks if unique id exists - if so create another one
+	  * @param table
+	  * @param uuid
+	  * @return
+	  */
 	 public boolean selectUUID(String table, String uuid )
 		{		
-			//	open();
 		        Cursor cursor = database.rawQuery("SELECT uniqueid FROM " + table + " WHERE uniqueid=?", new String[] { uuid});
 		        if (cursor != null && cursor.getCount() > 0) {
 		            for (int i = 0; i < cursor.getCount(); i++) {
@@ -537,7 +556,6 @@ public class recipeModel extends baseDataSource {
 		            }
 		        }
 		        cursor.close();
-		    //    close();
 		        return false;
 		}
 	

@@ -9,6 +9,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,7 @@ Context context;
 	}
 	
 	/**
-	 * Gets recipe to send to server based on date they were added using shared preferecnes
+	 * Gets recipe to send to server based on the last changed date
 	 * @return ArrayList<recipeBean> recipeList
 	 */
 	public ArrayList<recipeBean> getRecipe()
@@ -78,7 +79,7 @@ Context context;
     }
 	
 	/**
-	 * Get ingredients for recipes based on recipe id within the date time frame
+	 * Get ingredients for recipes based on recipe id w
 	 * @param id
 	 * @return ArrayList<IngredientBean>
 	 */
@@ -92,7 +93,7 @@ Context context;
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime) AND id = ?", new String[] {  sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT") , Integer.toString(detsId) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails  WHERE id = ?", new String[] {   Integer.toString(detsId) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);
@@ -147,13 +148,12 @@ Context context;
 	}
 	
 	/**
-	 * Gets preperation information from recipe within date frame for syncing
+	 * Gets preperation information from recipe
 	 * @param id
 	 * @return ArrayList<preperationBean>
 	 */
 	public ArrayList<preperationBean> getPrep(int id)
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM  PrepRecipe WHERE recipeId = ?", new String[] {   Integer.toString(id) });
@@ -169,12 +169,10 @@ Context context;
                     }
                 }
                 cursor2.close();
-            }
-           
+            }   
         }
         cursor.close();
-       close();
-       
+        close();
         return prepList;
 	}
 	
@@ -287,8 +285,8 @@ Context context;
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx");      	   	
 		try 
 		{
-		//	HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		//	 HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+		  HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+		  HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			 
@@ -334,8 +332,8 @@ Context context;
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx");      	   	
 		try 
 		{
-			//HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			//HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 

@@ -14,6 +14,9 @@ import com.example.recipesforlife.models.databaseConnection;
 import com.example.recipesforlife.models.syncModel;
 import com.example.recipesforlife.models.syncRecipeModel;
 import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.accountBean;
+import com.example.recipesforlife.controllers.userBean;
+
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -49,6 +52,8 @@ public class SignUpSignInActivity extends Activity {
 	String email, name, password, country, city, interest, bio;
 	// List to store account information
 	List<String> account;
+	accountBean accountBean;
+	userBean userBean;
 	// Typeface to change to custom font
 	Typeface typeFace;
 	// Shared prefs to store log in data
@@ -68,6 +73,8 @@ public class SignUpSignInActivity extends Activity {
 		counter = 0;
 		setContentView(R.layout.signupsigninactivity);
 		utils = new util(getApplicationContext(), this);
+		accountBean = new accountBean();
+		userBean = new userBean();
 		// Get shared pref
 		sharedpreferences = getSharedPreferences(MyPREFERENCES,
 				Context.MODE_PRIVATE);
@@ -319,19 +326,17 @@ public class SignUpSignInActivity extends Activity {
 			errorView.setText("Please enter a country \n");
 		} else {
 			// Add info to list
-			account.add(name);
-			account.add(name);
-			account.add(country);
-			account.add(bio);
-			account.add(city);
-			account.add(interest);
-			account.add(email);
-			account.add(password);
+			accountBean.setEmail(email);
+			accountBean.setPassword(password);
+			userBean.setName(name);
+			userBean.setCity(city);
+			userBean.setBio(bio);
+			userBean.setCountry(country);
+			userBean.setCookingInterest(interest);
 			// Insert to db
 			try {
-				Context t = getApplicationContext();
-				accountModel accountmodel = new accountModel(t);
-				accountmodel.insertAccount(account);
+				accountModel accountmodel = new accountModel(getApplicationContext());
+				accountmodel.insertAccount(accountBean, userBean);
 				nextDialog.dismiss();
 
 			} catch (Exception e) {

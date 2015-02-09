@@ -158,8 +158,8 @@ public class syncModel extends baseDataSource
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
 		try 
 		{
-		//	 HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		//    HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+		 HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+		    HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -200,8 +200,8 @@ public class syncModel extends baseDataSource
 		HttpResponse response = null;
         HttpClient myClient = new DefaultHttpClient();
         HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
-     //   HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-     //   HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+       HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+       HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
         try 
 		{
 			myConnection.setEntity(new ByteArrayEntity(
@@ -226,18 +226,18 @@ public class syncModel extends baseDataSource
                 json = jArray.getJSONObject(0);
                 for (int i = 0; i < jArray.length(); i++) 
                 {
-                	List<String> accountInfo = new ArrayList<String>();
+                	accountBean account = new accountBean();
+                	userBean user = new userBean();
                     json = jArray.getJSONObject(i);
-                    accountInfo.add(json.getString("name"));
-                    accountInfo.add(json.getString("name"));
-                    accountInfo.add(json.getString("country"));
-                    accountInfo.add(json.getString("bio"));
-                    accountInfo.add(json.getString("city"));
-                    accountInfo.add(json.getString("cookingInterest"));
-                    accountInfo.add(json.getString("email"));
-                    accountInfo.add(json.getString("password"));
+                    account.setEmail(json.getString("email"));
+                    account.setPassword(json.getString("password"));
+                    user.setName(json.getString("name"));
+                    user.setBio(json.getString("bio"));
+                    user.setCity(json.getString("city"));
+                    user.setCookingInterest(json.getString("cookingInterest"));
+                    user.setCountry(json.getString("country"));
         			accountModel accountmodel = new accountModel(context);
-        			accountmodel.insertAccount(accountInfo);
+        			accountmodel.insertAccount(account, user);
                 }
             }
                     

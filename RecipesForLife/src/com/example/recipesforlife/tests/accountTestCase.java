@@ -96,7 +96,7 @@ public class accountTestCase extends AndroidTestCase  {
 		Assert.assertEquals(loggedIn,true);
 	} 
 	
-	public void testAccountInsert() throws Exception
+/**	public void testAccountInsert() throws Exception
 	{
 		List<String> accountInfo = new ArrayList();
 		List<accountBean> account = new ArrayList<accountBean>();
@@ -128,7 +128,7 @@ public class accountTestCase extends AndroidTestCase  {
 		Assert.assertEquals(account.size(),0);
 		
 		
-	} 
+	} **/
 	
 	public void testGetUser() throws Exception
 	{

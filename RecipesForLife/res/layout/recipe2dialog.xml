@@ -102,7 +102,7 @@
 	           android:layout_marginTop="22dp"
 	           android:gravity="left"
 	           android:text="Serves: "
-	           android:inputType="number" />
+	            />
 	      
 	       <EditText
 	         android:id="@+id/recipeServesEditText"
@@ -114,6 +114,7 @@
 	         android:ems="10"
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
+	         android:inputType="number"
 	         
 	         />
        </LinearLayout>

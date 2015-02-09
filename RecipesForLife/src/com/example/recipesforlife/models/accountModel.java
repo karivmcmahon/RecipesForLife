@@ -73,13 +73,13 @@ public class accountModel extends baseDataSource
 	 * Code to insert sign up information into sqlite database
 	 * @param accountInfo
 	 */
-	public void insertAccount(List<String> accountInfo) 
+	public void insertAccount(accountBean account, userBean user) 
 	{
 			open();
             database.beginTransaction();
             try
             {
-            	insertUserData(accountInfo);
+            	insertUserData(account, user);
             	database.setTransactionSuccessful();
             	database.endTransaction(); 
             	Log.v("suc", "suc");
@@ -184,87 +184,23 @@ public class accountModel extends baseDataSource
 			return false;
 		} 	
 	}
-	/**
-	 * Create a json with information entered in app to send to SQL on the server database
-	 * @param accountInfo
-	 */
-	public void createAndSendJSON(List<String> accountInfo)
-	{
-		 JSONObject account = new JSONObject();
-			try 
-			{
-					account.put("name", accountInfo.get(0)); // inserting a string 
-				    account.put("country", accountInfo.get(2)); // inserting a string
-				    account.put("bio", accountInfo.get(3)); // inserting a string
-				    account.put("city", accountInfo.get(4)); // inserting a string
-				    account.put("cookingInterest", accountInfo.get(5)); // in
-				    account.put("id", (int)id);
-				    account.put("email", accountInfo.get(6));
-				    account.put("updateTime", utils.getLastUpdated());
-				    account.put("password", accountInfo.get(7));
-				    JSONArray jsonArray = new JSONArray();
-					jsonArray.put(account);
-				
-					HttpResponse response = null;
-			        HttpClient myClient = new DefaultHttpClient();
-			        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
-					try 
-					{
-						myConnection.setEntity(new ByteArrayEntity(
-								jsonArray.toString().getBytes("UTF8")));
-						try 
-						{
-							response = myClient.execute(myConnection);
-							str = EntityUtils.toString(response.getEntity(), "UTF-8");
-							
-						} 
-						catch (ClientProtocolException e) 
-						{	
-							Toast.makeText(context, 
-					        	    "Error with sync", Toast.LENGTH_LONG).show();
-							Log.v("Error", "Error with executing connection");
-							e.printStackTrace();
-						} 
-					catch (IOException e) 
-					{
-						Toast.makeText(context, 
-				        	    "Error with sync", Toast.LENGTH_LONG).show();
-						e.printStackTrace();
-					}
-				} 
-				catch (UnsupportedEncodingException e) 
-				{	
-					Toast.makeText(context, 
-			        	    "Error with sync", Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				}
-					
-			} 
-			catch (JSONException e) 
-			{
-				Toast.makeText(context, 
-		        	    "Error with sync", Toast.LENGTH_LONG).show();
-			    e.printStackTrace();
-			}
-			
-	}
 	
 	/**
 	 * Insert user info into the user sqlite table
 	 * @param accountInfo
 	 */
-	public void insertUserData(List<String> accountInfo)
+	public void insertUserData(accountBean account, userBean user)
 	{
 		 //User values
 	    values = new ContentValues();
-	    values.put("name", accountInfo.get(0)); 
+	    values.put("name", user.getName()); 
 	    values.put("updateTime", utils.getLastUpdated()); 
-	    values.put("country", accountInfo.get(2)); 
-	    values.put("bio", accountInfo.get(3)); 
-	    values.put("city", accountInfo.get(4)); 
-	    values.put("cookingInterest", accountInfo.get(5));     	 
+	    values.put("country", user.getCountry()); 
+	    values.put("bio", user.getBio()); 
+	    values.put("city", user.getCity()); 
+	    values.put("cookingInterest", user.getCookingInterest());     	 
     	id = database.insertOrThrow("Users", null, values);
-    	insertAccountData(accountInfo, id);
+    	insertAccountData(account, id);
 	}
 	
 	/**
@@ -272,14 +208,14 @@ public class accountModel extends baseDataSource
 	 * @param accountInfo
 	 * @param id
 	 */
-	public void insertAccountData(List<String> accountInfo, long id)
+	public void insertAccountData(accountBean account, long id)
 	{
 		//Account values
 	    accountValues = new ContentValues();
 	    accountValues.put("id", (int)id);
-	    accountValues.put("email", accountInfo.get(6));
+	    accountValues.put("email", account.getEmail());
 	    accountValues.put("updateTime", utils.getLastUpdated());
-	    accountValues.put("password", accountInfo.get(7));
+	    accountValues.put("password", account.getPassword());
 	    database.insertOrThrow("Account", null, accountValues);
 	}
 	
