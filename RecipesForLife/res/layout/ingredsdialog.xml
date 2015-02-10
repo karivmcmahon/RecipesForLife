@@ -57,7 +57,7 @@
 	          
 	          <EditText
 	         android:id="@+id/amountEditText"
-	         android:layout_width="wrap_content"
+	         android:layout_width="40dp"
 	         android:layout_height="30dp"
 	         android:layout_toRightOf="@+id/amountView"
 	         android:layout_marginTop="22dp"
@@ -98,7 +98,7 @@
 	
 	        
 		<LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
          android:orientation="horizontal">
 	           <TextView
@@ -112,8 +112,8 @@
 	          
 	          <EditText
 	         android:id="@+id/noteEditText"
-	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
+	         android:layout_width="fill_parent"
+	         android:layout_height="100dp"
 	         android:layout_toRightOf="@+id/noteView"
 	         android:layout_marginTop="22dp"
 	         android:ems="10"

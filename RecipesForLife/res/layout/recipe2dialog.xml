@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
+    >
+<LinearLayout 
+    android:layout_width="600dp"
+    android:layout_height="200dp"
     android:background="@drawable/shape3"
     android:orientation="vertical" >
     
@@ -28,7 +32,7 @@
 	       <EditText
 	         android:id="@+id/recipeIngredsEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="50dp"
+	         android:layout_height="100dp"
 	         android:layout_toRightOf="@+id/recipeIngredsView"
 	         android:layout_below="@+id/recipeAddView2"
 	         android:layout_marginTop="22dp"
@@ -67,7 +71,7 @@
 	       <EditText
 	         android:id="@+id/recipeStepsEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="50dp"
+	         android:layout_height="100dp"
 	         android:layout_toRightOf="@+id/recipeStepsView"
 	         android:layout_below="@+id/recipeIngredsView"
 	         android:layout_marginTop="22dp"
@@ -106,7 +110,7 @@
 	      
 	       <EditText
 	         android:id="@+id/recipeServesEditText"
-	         android:layout_width="wrap_content"
+	         android:layout_width="40dp"
 	         android:layout_height="30dp"
 	         android:layout_toRightOf="@+id/recipeServesView"
 	         android:layout_below="@+id/recipeServesView"
@@ -144,6 +148,7 @@
 	         android:ems="10"
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
+	          android:editable="false"
 	         >
 	      </EditText>
 	       
@@ -155,7 +160,8 @@
 	           android:layout_below="@+id/recipeServesView"
 	           android:layout_marginTop="22dp"
 	           android:gravity="left"
-	           android:text="Cooking time: " />
+	           android:text="Cooking time: "
+	           android:layout_marginLeft="15dp" />
 	      
 	       <EditText
 	         android:id="@+id/recipeCookingEditText"
@@ -168,6 +174,8 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:inputType="time"
+	          android:editable="false"
+	        
 	         
 	         />
        </LinearLayout>
@@ -191,3 +199,4 @@
     
 
 </LinearLayout>
+</ScrollView>

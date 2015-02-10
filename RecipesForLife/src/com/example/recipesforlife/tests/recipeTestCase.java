@@ -13,6 +13,8 @@ import android.test.InstrumentationTestCase;
 import android.test.ProviderTestCase2;
 import android.test.RenamingDelegatingContext;
 
+import com.example.recipesforlife.controllers.ingredientBean;
+import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.baseDataSource;
 import com.example.recipesforlife.models.databaseConnection;
@@ -74,15 +76,11 @@ public class recipeTestCase extends AndroidTestCase{
 	
 	
 	
-/**	public void testInsertRecipe()
+public void testInsertRecipe()
 	{
-		ArrayList<String> ingredients = new ArrayList<String>();
-		ArrayList<String> amount = new ArrayList<String>();
-		ArrayList<String> value = new ArrayList<String>();
-		ArrayList<String> notes = new ArrayList<String>();
-		ArrayList<String> prepNum = new ArrayList<String>();
-		ArrayList<String> prep = new ArrayList<String>();
-		
+	
+		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
+		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 		recipeBean recipe = new recipeBean();
 		recipe.setName("Chicken Soup");
 		recipe.setDesc("Soothes the cold");
@@ -90,75 +88,53 @@ public class recipeTestCase extends AndroidTestCase{
 		recipe.setPrep("1:00");
 		recipe.setCooking("1:00");
 		recipe.setAddedBy("addison");
-		ingredients.add("stock");
-		amount.add("1");
-		value.add("packet");
-		notes.add("");
-		recipe.setIngredients(ingredients);
-		recipe.setNotes(notes);
-		recipe.setValues(value);
-		recipe.setAmount(amount);
+		ingredientBean ingred = new ingredientBean();
+		ingred.setName("stock");
+		ingred.setAmount(1);
+	    ingred.setValue("packet");
+		ingred.setNote("");
+	    preperationBean prep = new preperationBean();
+	    prep.setPreperation("boil water");
+	    prep.setPrepNum(1);
+		prepList.add(prep);
+		ingredList.add(ingred);
 		
-		prep.add("boil water");
-		prepNum.add("1");
-		recipe.setSteps(prep);
-		recipe.setStepNum(prepNum);
-		/**
-		 * TOOOOO CHANGE
+		
 		 
-		//recipemodel.insertRecipe(recipe, false);
+		recipemodel.insertRecipe(recipe, false, ingredList, prepList);
 		
 		recipeBean recipeSelect = new recipeBean();
 		recipeSelect = recipemodel.selectRecipe2("Chicken Soup","addison");
 		Assert.assertEquals(recipeSelect.getName(), "Chicken Soup");
 		
 		
-	} **/
+	} 
+
+public void editRecipe()
+{
+
+	ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
+	ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+	recipeBean recipe = new recipeBean();
+	recipe.setName("pizza");
+	recipe.setDesc("good food");
+	recipe.setUniqueid("doeRecipe");
+	recipe.setAddedBy("doe");
+
+
 	
-/**	public void testInsertRecipeError() throws Exception
-	{
-		ArrayList<String> ingredients = new ArrayList<String>();
-		ArrayList<String> amount = new ArrayList<String>();
-		ArrayList<String> value = new ArrayList<String>();
-		ArrayList<String> notes = new ArrayList<String>();
-		ArrayList<String> prepNum = new ArrayList<String>();
-		ArrayList<String> prep = new ArrayList<String>();
-		
-		try
-		{
-		recipeBean recipe = new recipeBean();
-		recipe.setName("Chicken Soup");
-		recipe.setDesc("Soothes the cold");
-		recipe.setServes("k");
-		recipe.setPrep("1:00");
-		recipe.setCooking("1:00");
-		recipe.setAddedBy("addison");
-		ingredients.add("stock");
-		amount.add("k");
-		value.add("packet");
-		notes.add("");
-		recipe.setIngredients(ingredients);
-		recipe.setNotes(notes);
-		recipe.setValues(value);
-		recipe.setAmount(amount);
-		
-		prep.add("boil water");
-		prepNum.add("1");
-		recipe.setSteps(prep);
-		recipe.setStepNum(prepNum);
-		/**
-		 * TO CHANGEEE
-		 
-		//recipemodel.insertRecipe(recipe, false);
-		 fail("Expected NumberFormatException");
-		}
-		catch(NumberFormatException e) {
-			  // no-op (pass)
-			}
-		
-		
-		
-	} **/
+	
+	 
+	recipemodel.updateRecipe(recipe, prepList, ingredList);
+	
+	recipeBean recipeSelect = new recipeBean();
+	recipeSelect = recipemodel.selectRecipe2("pizza","doe");
+	Assert.assertEquals(recipeSelect.getName(), "good food");
+	
+	
+} 
+	
+
 	
 	public void testSelectRecipe()
 	{

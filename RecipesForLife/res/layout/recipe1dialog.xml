@@ -81,7 +81,7 @@
 	         <EditText
 	             android:id="@+id/recipeDescEdit"
 	             android:layout_width="wrap_content"
-	             android:layout_height="wrap_content"
+	             android:layout_height="30dp"
 	             android:layout_toRightOf="@+id/recipeDescView"
 	             android:layout_below="@+id/recipeBookSpinner"
 	            android:textSize="14dp"

@@ -96,45 +96,45 @@ public class accountTestCase extends AndroidTestCase  {
 		Assert.assertEquals(loggedIn,true);
 	} 
 	
-/**	public void testAccountInsert() throws Exception
+public void testAccountInsert() throws Exception
 	{
-		List<String> accountInfo = new ArrayList();
 		List<accountBean> account = new ArrayList<accountBean>();
 		List<userBean> user = new ArrayList<userBean>();
-		accountInfo.add("Hilary");
-		accountInfo.add("Hilary");
-		accountInfo.add("Scotland");
-		accountInfo.add("Home cook");
-		accountInfo.add("Edinburgh");
-		accountInfo.add("Home cook");
-		accountInfo.add("hilz@aol.co.uk");
-		accountInfo.add("whisk");	
-		accountmodel.insertAccount(accountInfo);
+		
+		accountBean anAccount = new accountBean();
+		anAccount.setEmail("hilz@aol.co.uk");
+		anAccount.setPassword("whisk");
+		userBean anUser = new userBean();
+		anUser.setName("Hilary");
+		anUser.setCity("Edinburgh");
+		anUser.setCookingInterest("Home cook");
+		anUser.setBio("Home cook");
+		anUser.setCountry("Scotland");
+		accountmodel.insertAccount(anAccount, anUser);
 		account = accountmodel.selectAccount("hilz@aol.co.uk", "whisk");
 		user = accountmodel.selectUser(account.get(0).getId());
 		Assert.assertEquals(account.get(0).getEmail(), "hilz@aol.co.uk");
 		Assert.assertEquals(user.get(0).getName(), "Hilary");
 		
-		accountInfo.add(null);
-		accountInfo.add("Hilary");
-		accountInfo.add("Scotland");
-		accountInfo.add("Home cook");
-		accountInfo.add("Edinburgh");
-		accountInfo.add("Home cook");
-		accountInfo.add("hils@aol.co.uk");
-		accountInfo.add("whisk");	
-		accountmodel.insertAccount(accountInfo);
+		anAccount.setEmail("hilz@aol.co.uk");
+		anAccount.setPassword("whisk");
+		anUser.setName(null);
+		anUser.setCity("Edinburgh");
+		anUser.setCookingInterest("Home cook");
+		anUser.setBio("Home cook");
+		anUser.setCountry("Scotland");
+		accountmodel.insertAccount(anAccount, anUser);
 		account = accountmodel.selectAccount("hils@aol.co.uk", "whisk");
 		Assert.assertEquals(account.size(),0);
 		
 		
-	} **/
+	} 
 	
 	public void testGetUser() throws Exception
 	{
 		List<userBean> user = new ArrayList<userBean>();
 		user = accountmodel.selectUser(1);
-		Assert.assertEquals(user.get(0).getName(), "jane");
+		Assert.assertEquals(user.get(0).getName(), "doe");
 		user = accountmodel.selectUser(10000000);
 		Assert.assertEquals(user.size(), 0);
 		
