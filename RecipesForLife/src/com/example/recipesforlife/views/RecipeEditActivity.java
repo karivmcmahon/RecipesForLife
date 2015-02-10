@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import org.json.JSONException;
+
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
@@ -13,6 +15,7 @@ import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.syncRecipeUpdateModel;
 import com.example.recipesforlife.models.util;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -181,6 +184,21 @@ public class RecipeEditActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					saveRecipe();
+					final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.textviewdialog);
+					utils.setDialogText(R.id.textView, dialog, 18);
+					TextView txtView = (TextView) dialog.findViewById(R.id.textView);
+					txtView.setText("Recipe has been saved");
+					// Show dialog
+					dialog.show();
+					Button button = utils.setButtonTextDialog(R.id.okButton, 22, dialog);
+					button.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							// TODO Auto-generated method stub
+							dialog.dismiss();
+						}
+					});
 				}
 				return false;
 			}});
@@ -197,8 +215,39 @@ public class RecipeEditActivity extends Activity {
 	 @Override
 	   protected void onResume() {
 		   super.onResume();
+		   
 	 }
 	 
+	 
+	 @Override
+	 public void onBackPressed() {
+		 final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.savedialog);
+			utils.setDialogText(R.id.textView, dialog, 18);
+			
+			// Show dialog
+			dialog.show();
+			Button button = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+			button.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					saveRecipe();
+					dialog.dismiss();
+					finish();
+				}
+			});
+			Button button2 = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+			button2.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					dialog.dismiss();
+					finish();
+				}
+			});
+	 }
 	 /**
 	  * Set text style
 	  */
@@ -448,8 +497,10 @@ public class RecipeEditActivity extends Activity {
 				public void onClick(View v) {
 					modifiedPrepList = new ArrayList<preperationBean>();
 					 boolean dismissed = false;
+					 int a = 0;
 					for(int i = 0; i < prepList.size(); i++)
 					{
+						
 						preperationBean prep = new preperationBean();
 						if(utils.getTextFromDialog(prepEditIds.get(i), prepDialog).equals(""))
 						{
@@ -461,12 +512,13 @@ public class RecipeEditActivity extends Activity {
 						}
 						else
 						{
+							
 							prep.setPreperation(utils.getTextFromDialog(prepEditIds.get(i), prepDialog));
 							prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
 							prep.setUniqueid(prepList.get(i).getUniqueid());
 							modifiedPrepList.add(prep);
-							
-							if(i == prepList.size() - 1)
+							a += 2;
+							if(a == (prepList.size() * 2))
 							{
 							 prepList = modifiedPrepList;
 							 prepDialog.dismiss();
@@ -611,6 +663,15 @@ public class RecipeEditActivity extends Activity {
 			okButton.setLayoutParams(params);
 		    ingredDialogLinearLayout.addView(okButton);
 		    okButton = utils.setButtonTextDialog(buttonId, 16, ingredDialog);
+		    
+			final TextView errorView = new TextView(RecipeEditActivity.this);
+			int errorId = findId();
+			errorView.setId(errorId);
+			params.gravity = Gravity.CENTER;
+			okButton.setLayoutParams(params);
+			ingredDialogLinearLayout.addView(errorView);
+			utils.setDialogText(errorId,ingredDialog,16);
+			errorView.setTextColor(Color.parseColor("#F70521"));
 			
 		    //When ok button clicked get new ingredient list
 		    okButton.setOnClickListener(new OnClickListener() {
@@ -619,28 +680,53 @@ public class RecipeEditActivity extends Activity {
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
 					modifiedIngredList = new ArrayList<ingredientBean>();
+					boolean dismissed = false;
+					int b = 0;
 					for(int i = 0; i < ingredList.size(); i++)
 					{
 						ingredientBean ingred = new ingredientBean();
-						ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
-						ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
-						ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
-						Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
-						String value = spinner.getSelectedItem().toString();
-						ingred.setValue(value);			
-						ingred.setUniqueid(ingredList.get(i).getUniqueid());
-						modifiedIngredList.add(ingred);
+						if(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog).equals(""))
+						{
+							errorView.setText("Please input text into all the textboxes");
+						}
+						else if(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog).equals(""))
+						{
+							errorView.setText("Please input text into all the textboxes");
+						}
+						else if(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog).equals(""))
+						{
+							errorView.setText("Please input text into all the textboxes");
+						}
+						else
+						{
+							b += 4;
+							ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
+							ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
+							ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
+							Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
+							String value = spinner.getSelectedItem().toString();
+							ingred.setValue(value);			
+							ingred.setUniqueid(ingredList.get(i).getUniqueid());
+							modifiedIngredList.add(ingred);
+							if(b == (ingredList.size() * 4))
+							{
+								//set ingred list to new modified ingred list
+								 ingredList = modifiedIngredList;
+								 ingredDialog.dismiss();
+							}
+						}
 					}
-					//Apply to edit page
-					TextView ingredients = (TextView) findViewById(R.id.ingredientList);
-					ingredients.setText("");
-					for(int i = 0; i < modifiedIngredList.size(); i++)
+					if(dismissed == true)
 					{
-						ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue() + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
+						//Apply to edit page
+						TextView ingredients = (TextView) findViewById(R.id.ingredientList);
+						ingredients.setText("");
+						for(int i = 0; i < modifiedIngredList.size(); i++)
+						{
+							ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue() + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
+						}
 					}
-					//set ingred list to new modified ingred list
-					 ingredList = modifiedIngredList;
-					 ingredDialog.dismiss();
+					
 				}});
 
 			ingredDialog.show();	
@@ -660,7 +746,8 @@ public class RecipeEditActivity extends Activity {
 			recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
 			recipechange.setUniqueid(recipe.getUniqueid());
 			recipeModel rm = new recipeModel(getApplicationContext());
-			rm.updateRecipe(recipechange, prepList, ingredList );			
+			rm.updateRecipe(recipechange, prepList, ingredList );	
+			
 	 }
 	 
 	 /**
