@@ -101,6 +101,24 @@ public class cookbookModel extends baseDataSource {
         return id;	
 	}
 	
+	public ArrayList<String> selectRecipesByCookbook(String name, String user)
+	{
+		open();
+		ArrayList<String> names = new ArrayList<String>();
+		Cursor cursor = database.rawQuery("SELECT *, Recipe.name AS recipename FROM Recipe INNER JOIN CookbookRecipe INNER JOIN Cookbook ON CookbookRecipe.Recipeid=Recipe.id WHERE Cookbook.name = ? AND Cookbook.creator = ?", new String[] { name, user });
+		  if (cursor != null && cursor.getCount() > 0) {
+	            for (int i = 0; i < cursor.getCount(); i++) {
+	                cursor.moveToPosition(i);
+	                names.add(cursor.getString(getIndex("recipename",cursor)));
+	                
+	                
+	            }
+	        }
+	    cursor.close();
+		close();
+		return names;
+	}
+	
 	public cookbookBean cursorToCookbook(Cursor cursor) {
         cookbookBean cb = new cookbookBean();
         cb.setName(cursor.getString(getIndex("name",cursor)));

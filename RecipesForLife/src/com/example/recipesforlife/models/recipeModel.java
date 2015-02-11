@@ -175,19 +175,19 @@ public class recipeModel extends baseDataSource {
 	    {
 	    	 values.put("uniqueid", generateUUID(recipe.getAddedBy(), "Recipe"));
 	    }
-	  /**  database.beginTransaction();
+	  database.beginTransaction();
         try
-        {**/
+        {
         	recipeID = database.insertOrThrow("Recipe", null, values);
         	insertIngredient(server, ingredList, recipe.getAddedBy());
         	insertPrep(prepList, server, recipe.getAddedBy());
         	insertCookbookRecipe(recipe.getRecipeBook(),recipe.getAddedBy());
-        //	database.setTransactionSuccessful();
-        //	database.endTransaction(); 
-        /**}catch(SQLException e)
+        	database.setTransactionSuccessful();
+        	database.endTransaction(); 
+        }catch(SQLException e)
         {
         	database.endTransaction();
-        }**/
+        }
     	close();
     	
     	

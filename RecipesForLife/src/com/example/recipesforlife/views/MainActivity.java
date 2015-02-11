@@ -132,6 +132,19 @@ public class MainActivity extends Activity  {
 			
 		});
 		
+		Button cookbookListButton = (Button) findViewById(R.id.cookbookListButton);
+		cookbookListButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(MainActivity.this, CookbookListActivity.class);
+			      startActivity(i);
+				
+			}
+			
+		});
+		
 		Button viewListButton = (Button) findViewById(R.id.viewListButton);
 		viewListButton.setOnClickListener(new OnClickListener() {
 

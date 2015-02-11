@@ -13,6 +13,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class CookbookViewActivity extends Activity{
 	
@@ -44,7 +46,11 @@ public class CookbookViewActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
 				bookAddDialog = utils.createDialog(CookbookViewActivity.this , R.layout.addcookbookdialog);
+				final TextView errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
+				utils.setDialogText(R.id.errorView,bookAddDialog,16);
+				errorView.setTextColor(Color.parseColor("#F70521"));
 				utils.setDialogText(R.id.addBookView,bookAddDialog,22);
 				utils.setDialogText(R.id.bookNameView,bookAddDialog,22);
 				utils.setDialogText(R.id.bookDescView,bookAddDialog,22);
@@ -66,15 +72,26 @@ public class CookbookViewActivity extends Activity{
 						// TODO Auto-generated method stub
 						sharedpreferences =  getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 					    cookbookBean book = new cookbookBean();
-						book.setName(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
-						book.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog));
-						Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
-					    book.setPrivacy(spinner.getSelectedItem().toString());
-					    book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
-					    cookbookModel cbmodel = new cookbookModel(getApplicationContext());
-					    cbmodel.insertBook(book, false);
-					    
-					    bookAddDialog.dismiss();
+					    if(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog).equals(""))
+					    {
+					    	errorView.setText("Please enter the name");
+					    }
+					    else if(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog).equals(""))
+					    {
+					    	errorView.setText("Please enter the description");
+					    }
+					    else
+					    {
+							book.setName(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
+							book.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog));
+							Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
+						    book.setPrivacy(spinner.getSelectedItem().toString());
+						    book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
+						    cookbookModel cbmodel = new cookbookModel(getApplicationContext());
+						    cbmodel.insertBook(book, false);
+						    
+						    bookAddDialog.dismiss();
+					    }
 					}});
 				
 				bookAddDialog.show();
