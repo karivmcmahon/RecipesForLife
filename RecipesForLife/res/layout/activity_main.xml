@@ -5,9 +5,18 @@
      >
 
     <Button
+        android:id="@+id/cookbookButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Cookbook" />
+    
+    <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+         android:layout_below="@+id/cookbookButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:text="Add" />
