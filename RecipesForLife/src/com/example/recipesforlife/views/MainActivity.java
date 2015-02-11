@@ -30,10 +30,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.TimePickerFragment;
+import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.util;
 
@@ -202,14 +204,19 @@ public class MainActivity extends Activity  {
 	 */
 	public void setUpInitialRecipeAddDialog()
 	{
+		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		recipeAddDialog = utils.createDialog(MainActivity.this , R.layout.recipe1dialog);
 		utils.setDialogText(R.id.recipeAddView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeBookView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
-		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);		
+		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);	
+		cookbookModel cbmodel = new cookbookModel(getApplicationContext());
+		ArrayList<cookbookBean> cbList = cbmodel.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 		List<String> spinnerArray =  new ArrayList<String>();
-		spinnerArray.add("item1");
-		spinnerArray.add("item2");
+		for(int i = 0; i < cbList.size(); i++)
+		{
+			spinnerArray.add(cbList.get(i).getName());
+		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 		    MainActivity.this, R.layout.item, spinnerArray);
 

@@ -175,18 +175,19 @@ public class recipeModel extends baseDataSource {
 	    {
 	    	 values.put("uniqueid", generateUUID(recipe.getAddedBy(), "Recipe"));
 	    }
-	    database.beginTransaction();
+	  /**  database.beginTransaction();
         try
-        {
+        {**/
         	recipeID = database.insertOrThrow("Recipe", null, values);
         	insertIngredient(server, ingredList, recipe.getAddedBy());
         	insertPrep(prepList, server, recipe.getAddedBy());
-        	database.setTransactionSuccessful();
-        	database.endTransaction(); 
-        }catch(SQLException e)
+        	insertCookbookRecipe(recipe.getRecipeBook(),recipe.getAddedBy());
+        //	database.setTransactionSuccessful();
+        //	database.endTransaction(); 
+        /**}catch(SQLException e)
         {
         	database.endTransaction();
-        }
+        }**/
     	close();
     	
     	
@@ -232,6 +233,20 @@ public class recipeModel extends baseDataSource {
         preptorecipevalues.put("updateTime", utils.getLastUpdated()); 
         preptorecipevalues.put("changeTime", "2015-01-01 12:00:00.000");
         database.insertOrThrow("PrepRecipe", null, preptorecipevalues);
+        
+	}
+	
+	public void insertCookbookRecipe(String name, String addedBy)
+	{
+		
+        ContentValues value = new ContentValues();
+        cookbookModel model = new cookbookModel(context);
+        int id = model.selectCookbooksID(name, addedBy);
+        value.put("Recipeid", recipeID);
+        value.put("Cookbookid", id);
+        value.put("updateTime", utils.getLastUpdated()); 
+        value.put("changeTime", "2015-01-01 12:00:00.000");
+        database.insertOrThrow("CookbookRecipe", null, value);
         
 	}
 	

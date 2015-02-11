@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -23,6 +27,10 @@ public class CookbookViewActivity extends Activity{
 	
 	util utils;
 	Dialog bookAddDialog;
+	public static final String MyPREFERENCES = "MyPrefs" ;
+	public static final String emailk = "emailKey"; 
+	SharedPreferences sharedpreferences;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -56,10 +64,16 @@ public class CookbookViewActivity extends Activity{
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						Log.v("TEXT ", " " + utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
-						Log.v("TEXT ", " " + utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog));
+						sharedpreferences =  getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+					    cookbookBean book = new cookbookBean();
+						book.setName(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
+						book.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog));
 						Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
-					    Log.v("SPINNA ", " " + spinner.getSelectedItem().toString());
+					    book.setPrivacy(spinner.getSelectedItem().toString());
+					    book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
+					    cookbookModel cbmodel = new cookbookModel(getApplicationContext());
+					    cbmodel.insertBook(book, false);
+					    
 					    bookAddDialog.dismiss();
 					}});
 				
