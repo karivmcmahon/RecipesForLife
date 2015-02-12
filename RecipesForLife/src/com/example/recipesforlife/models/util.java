@@ -272,15 +272,20 @@ public class util {
 		 sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 			syncModel sync = new syncModel(context);
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
+			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
 			try {
 			    sync.getJSONFromServer();
 			    Editor editor = sharedpreferences.edit();
 		        editor.putString("Account Date", getLastUpdated());
 		        editor.commit();
-				syncRecipe.getJSONFromServer();
+				
+		        syncCookbook.getJSONFromServer();
+		        
+		        syncRecipe.getJSONFromServer();
 		        editor.putString("Date", getLastUpdated());
 		        editor.commit();
+		        
 		        updates.getJSONFromServer();
 		        editor.putString("Change", getLastUpdated());
 		        editor.commit();
@@ -288,9 +293,13 @@ public class util {
 		        sync.getAndCreateAccountJSON();
 		        editor.putString("Account Date Server", getLastUpdated());
 		        editor.commit();
-				syncRecipe.getAndCreateJSON();
+		       
+		    //    syncCookbook.getAndCreateJSON();
+		        
+		        syncRecipe.getAndCreateJSON();
 				editor.putString("Date Server", getLastUpdated());
 		        editor.commit();
+		        
 		        updates.getAndCreateJSON();
 		        editor.putString("Change Server", getLastUpdated());
 		        editor.commit();

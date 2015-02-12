@@ -93,9 +93,13 @@ public class SignUpSignInActivity extends Activity {
 	        sharedpreferences.edit();
 			editor3.putString("Account Date Server", "2015-01-01 12:00:00");
 			editor3.commit();
-			editor3.putString("Change", "2015-02-08 12:00:00");
+			editor3.putString("Change", "2015-01-01 12:00:00");
 			editor3.commit();
-			editor3.putString("Change Server", "2015-02-08 12:00:00");
+			editor3.putString("Change Server", "2015-01-01 12:00:00");
+			editor3.commit();
+			editor3.putString("Cookbook", "2015-02-12 10:00:00");
+			editor3.commit();
+			editor3.putString("Cookbook Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			buildDatabase();
 			utils.sync();

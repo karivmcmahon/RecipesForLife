@@ -6,6 +6,21 @@ public class cookbookBean {
 	String privacy;
 	String creator;
 	String uniqueid;
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	public String getChangeTime() {
+		return changeTime;
+	}
+	public void setChangeTime(String changeTime) {
+		this.changeTime = changeTime;
+	}
+	String updateTime;
+	String changeTime;
+	
 	public String getName() {
 		return name;
 	}

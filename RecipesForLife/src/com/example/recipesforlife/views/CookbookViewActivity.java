@@ -72,9 +72,15 @@ public class CookbookViewActivity extends Activity{
 						// TODO Auto-generated method stub
 						sharedpreferences =  getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 					    cookbookBean book = new cookbookBean();
+					    cookbookModel model = new cookbookModel(getApplicationContext());
+					    int id = model.selectCookbooksID(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog), sharedpreferences.getString(emailk, "DEFAULT"));
 					    if(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog).equals(""))
 					    {
 					    	errorView.setText("Please enter the name");
+					    }
+					    else if(id != 0)
+					    {
+					    	errorView.setText("You already have a cookbook with that name");
 					    }
 					    else if(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog).equals(""))
 					    {

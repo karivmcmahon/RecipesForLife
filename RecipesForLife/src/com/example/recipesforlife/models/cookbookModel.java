@@ -126,6 +126,8 @@ public class cookbookModel extends baseDataSource {
         cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
         cb.setPrivacy(cursor.getString(getIndex("privacyOption",cursor)));
         cb.setCreator(cursor.getString(getIndex("creator",cursor)));
+        cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
+        cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
         return cb;
     }
 	
