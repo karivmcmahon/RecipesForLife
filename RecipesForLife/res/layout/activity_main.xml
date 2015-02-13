@@ -5,9 +5,18 @@
      >
 
      <Button
+        android:id="@+id/cookbookContributerListButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="CB Contributer List" />
+     
+     <Button
         android:id="@+id/cookbookListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+         android:layout_below="@+id/cookbookContributerListButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:text="Cookbook List" />
