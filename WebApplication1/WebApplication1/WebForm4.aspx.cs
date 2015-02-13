@@ -99,6 +99,14 @@ namespace WebApplication1
                            
                             
                         }
+						
+				    SqlCommand select4 = new SqlCommand("SELECT uniqueid FROM Cookbook INNER JOIN CookbookRecipe ON Cookbook.id=CookbookRecipe.Cookbookid WHERE CookbookRecipe.Recipeid=@id", conn);
+                    select4.Parameters.AddWithValue("@id", recipe.id);
+                    var reader4 = select4.ExecuteReader();
+					while(reader4.Read())
+					{
+						recipe.cookingid = (string)reader["uniqueid"];
+					}
                       
 
                       
@@ -133,6 +141,7 @@ namespace WebApplication1
         public string addedBy { get; set; }
         public Int32 id { get; set; }
 		 public string uniqueid { get; set; }
+		 public string cookingid { get; set; }
         public List<Preperation> Preperation { get; set; }
         public List<Ingredient> Ingredient { get; set; }
         //  public List<Ingredient> Ingredient { get; set; }

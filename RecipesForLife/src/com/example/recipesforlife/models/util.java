@@ -280,29 +280,33 @@ public class util {
 		        editor.putString("Account Date", getLastUpdated());
 		        editor.commit();
 				
-		        syncCookbook.getJSONFromServer();
-		        
-		        syncRecipe.getJSONFromServer();
-		        editor.putString("Date", getLastUpdated());
+		       syncCookbook.getJSONFromServer();
+		        editor.putString("Cookbook", getLastUpdated());
 		        editor.commit();
 		        
-		        updates.getJSONFromServer();
+		       syncRecipe.getJSONFromServer();
+		       editor.putString("Date", getLastUpdated());
+		        editor.commit();
+		        
+		     /**   updates.getJSONFromServer();
 		        editor.putString("Change", getLastUpdated());
-		        editor.commit();
+		        editor.commit(); **/
 				
 		        sync.getAndCreateAccountJSON();
 		        editor.putString("Account Date Server", getLastUpdated());
 		        editor.commit();
-		       
-		    //    syncCookbook.getAndCreateJSON();
 		        
+		       syncCookbook.getAndCreateJSON();
+		        editor.putString("Cookbook Server", getLastUpdated());
+		        editor.commit();
+		 	        
 		        syncRecipe.getAndCreateJSON();
 				editor.putString("Date Server", getLastUpdated());
 		        editor.commit();
-		        
-		        updates.getAndCreateJSON();
+		            
+		    /**    updates.getAndCreateJSON();
 		        editor.putString("Change Server", getLastUpdated());
-		        editor.commit();
+		        editor.commit(); **/
 				
 				
 				 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));

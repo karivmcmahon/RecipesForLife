@@ -22,6 +22,7 @@ namespace WebApplication1
                  for(int i = 0; i < recipe.Count(); i++)
                  {
                      SqlConnection connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					 SqlConnection connn2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
                      SqlCommand insert = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid)", connn);
                      insert.Parameters.AddWithValue("@name", recipe[i].name);
                      insert.Parameters.AddWithValue("@description", recipe[i].description);
@@ -34,6 +35,7 @@ namespace WebApplication1
 					 insert.Parameters.AddWithValue("@uniqueid", recipe[i].uniqueid);
 
                     connn.Open();
+					connn2.Open();
                      try
                      {
                          
@@ -188,8 +190,40 @@ namespace WebApplication1
                                  Response.Write("Error ");
                                  Response.Write(ex);
                              }
+							 }
+							 
+							 Response.Write("HI");
+							 SqlCommand select2 = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
+							select2.Parameters.AddWithValue("@uniqueid", recipe[i].cookbookid);
+							var reader = select2.ExecuteReader();
+							 Response.Write("HI");
+							while(reader.Read())
+							{
+							 Response.Write("HI");
+							  Int32 id = (Int32)reader["id"];
+							   Response.Write("ID  " + id);
+							  SqlCommand insert8 = new SqlCommand("INSERT INTO CookbookRecipe (Recipeid, Cookbookid, changeTime, updateTime) VALUES(@recipeid, @cookbookid, @changeTime, @updateTime)", connn);
+							  insert8.Parameters.AddWithValue("@recipeid", recipeId);
+							  insert8.Parameters.AddWithValue("@cookbookid", id);
+							  insert8.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+							 insert8.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+							  try
+                                         {
+											 Response.Write("Execute  " + id);
+                                             SqlDataReader rdrs = insert8.ExecuteReader();
+                                             rdrs.Close();
+
+                                         }
+                                         catch (Exception ex)
+                                         {
+
+                                             Response.Write("Error ");
+                                             Response.Write(ex);
+                                         }
+							}
+							
                              
-                         }
+                         
 
                         
                          
@@ -201,7 +235,10 @@ namespace WebApplication1
                          Response.Write("Error ");
                          Response.Write(ex);
                      }
+					 
+					 
                      connn.Close();
+					 connn2.Close();
 
                        
                      
@@ -225,6 +262,7 @@ public class Recipe
     public string updateTime { get; set;  }
 	public string changeTime { get; set;  }
     public string uniqueid { get; set;  }
+	public string cookbookid {get; set; }
     public List<Preperation> Preperation { get; set; }
     public List<Ingredient> Ingredient { get; set; }
 }

@@ -56,9 +56,11 @@ public class cookbookModel extends baseDataSource {
         	database.insertOrThrow("Cookbook", null, values);
         	database.setTransactionSuccessful();
         	database.endTransaction(); 
+        	close();
         }catch(SQLException e)
         {
         	database.endTransaction();
+        	close();
         } 
     	close();
     	
@@ -87,8 +89,8 @@ public class cookbookModel extends baseDataSource {
 	{
 		int id = 0;
 	  open();
-        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=? AND name=?", new String[] { user , name });
-        if (cursor != null && cursor.getCount() > 0) {
+		 Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=? AND name=?", new String[] { user , name });
+      if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 id = cursor.getInt(getIndex("id",cursor));
@@ -96,9 +98,45 @@ public class cookbookModel extends baseDataSource {
                 
             }
         }
+        cursor.close(); 
+        close();
+        return id;	
+	}
+	
+	public String selectCookbooksUniqueID(int recipeid)
+	{
+	 String id = "";
+	  open();
+        Cursor cursor = database.rawQuery("SELECT uniqueid FROM Cookbook INNER JOIN CookbookRecipe WHERE CookbookRecipe.Recipeid=? AND  Cookbook.id=CookbookRecipe.Cookbookid", new String[] { Integer.toString(recipeid) });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                id = cursor.getString(getIndex("uniqueid",cursor));
+                
+                
+            }
+        }
         cursor.close();
         close();
         return id;	
+	}
+	
+	public String selectCookbooksNameByID(String uniqueid)
+	{
+	 String name = "";
+	  open();
+        Cursor cursor = database.rawQuery("SELECT name FROM Cookbook WHERE uniqueid=?", new String[] { uniqueid });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                name = cursor.getString(getIndex("uniqueid",cursor));
+                
+                
+            }
+        }
+        cursor.close();
+        close();
+        return name;	
 	}
 	
 	public ArrayList<String> selectRecipesByCookbook(String name, String user)

@@ -18,6 +18,13 @@ public class recipeBean {
 	String changeTime;
 	String uniqueid;
 	ArrayList<String> ingredIdList;
+	String cookbookId;
+	public String getCookbookId() {
+		return cookbookId;
+	}
+	public void setCookbookId(String cookbookId) {
+		this.cookbookId = cookbookId;
+	}
 	public ArrayList<String> getIngredIdList() {
 		return ingredIdList;
 	}

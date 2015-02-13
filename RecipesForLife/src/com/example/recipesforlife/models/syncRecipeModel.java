@@ -78,6 +78,7 @@ public class syncRecipeModel extends baseDataSource {
         rb.setServes(cursor.getString(getIndex("serves", cursor)));
         rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
         rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
+       
         return rb;
     }
 	
@@ -91,12 +92,12 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 	    ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
-	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND Recipeid = ? ", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ? ", new String[] {   Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
                 int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(detsId) });
+                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE  id = ?", new String[] {  Integer.toString(detsId) });
                 if (cursor2 != null && cursor2.getCount() > 0) {
                     for (int x = 0; x < cursor2.getCount(); x++) {
                         cursor2.moveToPosition(x);
@@ -121,7 +122,7 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		String name = null;
-	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ? ", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"), Integer.toString(id) });
+	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  id = ? ", new String[] {   Integer.toString(id) });
 	    if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -218,6 +219,9 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			recipe.put("changeTime", recipeList.get(i).getChangeTime());
 			recipe.put("uniqueid", recipeList.get(i).getUniqueid());
+			cookbookModel model = new cookbookModel(context);
+			String id = model.selectCookbooksUniqueID(recipeList.get(i).getId());
+			recipe.put("cookbookid", id);
 			
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray();
@@ -274,6 +278,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.accumulate("Ingredient", newObj);			
 			jsonArray.put(recipe);			
 		} 
+		Log.v("WHAT ", "WHAT " + jsonArray);
 	sendJSONToServer(jsonArray);
 	}
 	
@@ -328,6 +333,10 @@ public class syncRecipeModel extends baseDataSource {
                 recipe.setPrep(json.getString("prepTime"));
                 recipe.setAddedBy(json.getString("addedBy"));
                 recipe.setUniqueid(json.getString("uniqueid"));
+                
+                cookbookModel cbmodel = new cookbookModel(context);
+                String name = cbmodel.selectCookbooksNameByID(json.getString("cookingid"));
+                recipe.setRecipeBook(name);
                 
                 ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
                 JSONArray ingredArray = (JSONArray) json.get("Ingredient");
