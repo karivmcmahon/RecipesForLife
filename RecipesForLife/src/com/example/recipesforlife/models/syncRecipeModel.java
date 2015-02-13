@@ -336,6 +336,7 @@ public class syncRecipeModel extends baseDataSource {
                 
                 cookbookModel cbmodel = new cookbookModel(context);
                 String name = cbmodel.selectCookbooksNameByID(json.getString("cookingid"));
+                Log.v("Book name ", "Book name " + name);
                 recipe.setRecipeBook(name);
                 
                 ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();

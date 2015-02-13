@@ -129,7 +129,7 @@ public class cookbookModel extends baseDataSource {
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
-                name = cursor.getString(getIndex("uniqueid",cursor));
+                name = cursor.getString(getIndex("name",cursor));
                 
                 
             }

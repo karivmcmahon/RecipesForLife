@@ -105,7 +105,7 @@ namespace WebApplication1
                     var reader4 = select4.ExecuteReader();
 					while(reader4.Read())
 					{
-						recipe.cookingid = (string)reader["uniqueid"];
+						recipe.cookingid = (string)reader4["uniqueid"];
 					}
                       
 

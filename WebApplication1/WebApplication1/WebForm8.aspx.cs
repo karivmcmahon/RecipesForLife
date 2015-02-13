@@ -17,7 +17,7 @@ namespace WebApplication1
             if (jsonInput != null)
             {
 				JavaScriptSerializer js = new JavaScriptSerializer();
-                var time = js.Deserialize<List<Date>>(jsonInput);
+                var time = js.Deserialize<List<Date2>>(jsonInput);
 				string lastUpdated = time[0].updateTime;
 				SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 				SqlCommand select = new SqlCommand(" SELECT * FROM Cookbook WHERE updateTime > @lastUpdated", con);
@@ -44,7 +44,7 @@ namespace WebApplication1
     }
 }
 
-public class Date
+public class Date2
 {
         public string updateTime { get; set; }
  }
