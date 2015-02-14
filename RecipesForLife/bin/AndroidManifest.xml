@@ -65,6 +65,13 @@
         </activity>
         
        <activity
+            android:name="com.example.recipesforlife.views.CookbookListActivity"
+            android:label="@string/app_name" 
+             android:windowSoftInputMode="stateHidden|stateAlwaysHidden">
+           
+        </activity>
+        
+       <activity
             android:name="com.example.recipesforlife.views.CookbookContribListViewActivity"
             android:label="@string/app_name" 
              android:windowSoftInputMode="stateHidden|stateAlwaysHidden">

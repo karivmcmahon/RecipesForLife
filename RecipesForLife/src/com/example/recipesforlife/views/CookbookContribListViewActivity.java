@@ -3,21 +3,29 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.cookbookModel;
+import com.example.recipesforlife.models.util;
 
 public class CookbookContribListViewActivity extends Activity {
 	
@@ -25,6 +33,9 @@ public class CookbookContribListViewActivity extends Activity {
 
 	private SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs";
+	util utils;
+	cookbookModel model;
+	ArrayList<cookbookBean> cookbookList;
 
 	public static final String emailk = "emailKey";
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +44,13 @@ public class CookbookContribListViewActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
 		
+		utils = new util(getApplicationContext(), CookbookContribListViewActivity.this);
 		listView = (ListView) findViewById(R.id.list);
 		  
-		 cookbookModel model = new cookbookModel(getApplicationContext());
-		 ArrayList<cookbookBean> cookbookList = new ArrayList<cookbookBean>();
+		  model = new cookbookModel(getApplicationContext());
+		 cookbookList = new ArrayList<cookbookBean>();
 		 SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		 cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+		 cookbookList = model.selectCookbooksByCreator(sharedpreferences.getString(emailk, ""));
 		 ArrayList<String> values = new ArrayList<String>();
 		 for(int i = 0; i < cookbookList.size(); i++)
 		 {
@@ -59,7 +71,59 @@ public class CookbookContribListViewActivity extends Activity {
 				//Intent i = new Intent(CookbookListActivity.this, RecipeListViewActivity.class);
 				 // ListView Clicked item index
                int itemPosition     = position;
-               
+               final String  itemValue    = (String) listView.getItemAtPosition(position);
+               Dialog contribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributersdialog);
+               utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
+               ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
+               addButton.setOnTouchListener(new OnTouchListener(){
+
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					// TODO Auto-generated method stub
+					if (arg1.getAction() == MotionEvent.ACTION_DOWN) {
+					  final Dialog addContribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributeradddialog);
+		              utils.setDialogText(R.id.contributersView, addContribDialog, 22);
+		              utils.setDialogText(R.id.emailContributerView, addContribDialog, 22);
+		              Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
+		              addContribButton.setOnTouchListener(new OnTouchListener()
+		              {
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							if (event.getAction() == MotionEvent.ACTION_DOWN) {
+							// TODO Auto-generated method stub
+							String uniqueid = "";
+							int id = 0;
+							Log.v("s", "s " + utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
+							accountModel am = new accountModel(getApplicationContext());
+							boolean exists = am.checkEmail( utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
+							 for(int i = 0; i < cookbookList.size(); i++)
+							 {
+								 if(itemValue.equals(cookbookList.get(i).getName()))
+								 {
+									 uniqueid = cookbookList.get(i).getUniqueid();
+								 }
+							 }
+							id = model.selectCookbooksIDByUnique(uniqueid);
+							Log.v("s", "s " + exists);
+							Log.v("s", "s " + uniqueid);
+							Log.v("s", "s " + id);
+							model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
+							addContribDialog.dismiss();
+							}
+							return false;
+							
+						}
+		            	  
+		              });
+		              addContribDialog.show();
+					Log.v("CLICK BUTTON", "CLICK BUTTON");
+					
+					
+					}
+					return false;
+				}});
+               contribDialog.show();
                // ListView Clicked item value
            //    String  itemValue    = (String) listView.getItemAtPosition(position);
 			//	i.putExtra("name", itemValue);

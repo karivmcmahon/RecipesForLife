@@ -40,7 +40,6 @@ public class cookbookModel extends baseDataSource {
 	    values.put("changeTime", "2015-01-01 12:00:00.000"); 
 	    values.put("creator", book.getCreator()); 
 	    values.put("privacyOption", book.getPrivacy()); 
-	    values.put("contributerid", 1);
 	    values.put("description", book.getDescription());
 	    if(server == true)
 	    {
@@ -67,11 +66,56 @@ public class cookbookModel extends baseDataSource {
     	
 	}
 	
+	public void insertContributers(String email, int cookbookid)
+	{
+		
+		open();
+	    ContentValues values = new ContentValues();
+	    values.put("cookbookid", cookbookid); 
+	    values.put("updateTime", utils.getLastUpdated()); 
+	    values.put("changeTime", "2015-01-01 12:00:00.000"); 
+	    values.put("accountid", email); 
+	    values.put("progress", "added"); 
+	    database.beginTransaction();
+        try
+        { 
+        	database.insertOrThrow("Contributers", null, values);
+        	database.setTransactionSuccessful();
+        	database.endTransaction(); 
+        	close();
+        }catch(SQLException e)
+        {
+        	database.endTransaction();
+        	close();
+        } 
+    	close();
+    	
+    	
+	}
+	
 	public ArrayList<cookbookBean> selectCookbooksByUser(String user)
 	{
 		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
 	    open();
-        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=?", new String[] { user });
+        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook INNER JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE creator=? OR Contributers.accountid=? ", new String[] { user, user });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                cbList.add(cursorToCookbook(cursor));
+                
+                
+            }
+        }
+        cursor.close();
+        close();
+        return cbList;	
+	}
+	
+	public ArrayList<cookbookBean> selectCookbooksByCreator(String user)
+	{
+		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
+	    open();
+        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook   WHERE creator=?", new String[] { user });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -90,6 +134,24 @@ public class cookbookModel extends baseDataSource {
 		int id = 0;
 	  open();
 		 Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=? AND name=?", new String[] { user , name });
+      if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                id = cursor.getInt(getIndex("id",cursor));
+                
+                
+            }
+        }
+        cursor.close(); 
+        close();
+        return id;	
+	}
+	
+	public int selectCookbooksIDByUnique(String uniqueid)
+	{
+		int id = 0;
+	  open();
+		 Cursor cursor = database.rawQuery("SELECT id FROM Cookbook WHERE uniqueid=?", new String[] { uniqueid});
       if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
