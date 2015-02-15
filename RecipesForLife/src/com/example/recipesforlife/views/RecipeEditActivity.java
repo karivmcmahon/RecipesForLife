@@ -278,7 +278,7 @@ public class RecipeEditActivity extends Activity {
 		    ingredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			recipe = model.selectRecipe2(intent.getStringExtra("name"), sharedpreferences.getString(emailk, "") );
+			recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr"));
 			prepList = model.selectPreperation(recipe.getId());
 			ingredList = model.selectIngredients(recipe.getId());
 			
@@ -693,10 +693,6 @@ public class RecipeEditActivity extends Activity {
 						{
 							errorView.setText("Please input text into all the textboxes");
 						}
-						else if(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog).equals(""))
-						{
-							errorView.setText("Please input text into all the textboxes");
-						}
 						else
 						{
 							b += 4;
@@ -711,6 +707,7 @@ public class RecipeEditActivity extends Activity {
 							if(b == (ingredList.size() * 4))
 							{
 								//set ingred list to new modified ingred list
+								 dismissed = true;
 								 ingredList = modifiedIngredList;
 								 ingredDialog.dismiss();
 							}

@@ -19,6 +19,8 @@
            android:layout_gravity="center_vertical|center_horizontal"
            android:text="Manage Contributers" />
             
+          
+            
              <ImageButton
 		    android:id="@+id/contributerAddButton"
 	    	android:background="@drawable/plus32"
@@ -27,6 +29,18 @@
 	    	android:layout_height="40dp" 
 	    />
        </LinearLayout>
+       
+         <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal" >
+          <ListView
+              android:id="@+id/list"
+              android:layout_height="wrap_content"
+              android:layout_width="match_parent">
+         </ListView>
+         </LinearLayout>
     
 
 </RelativeLayout>

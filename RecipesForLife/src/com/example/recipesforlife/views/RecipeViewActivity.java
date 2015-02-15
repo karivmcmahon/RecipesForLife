@@ -13,6 +13,7 @@ import com.example.recipesforlife.models.util;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 import android.app.Activity;
@@ -77,7 +78,8 @@ public class RecipeViewActivity extends Activity {
 			ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
 			Intent intent = getIntent();
 			SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			recipe = model.selectRecipe2(intent.getStringExtra("name"), sharedpreferences.getString(emailk, "") );
+			 Log.v("uniqid", "uniqid rs " + intent.getStringExtra("uniqueidr"));
+			recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr") );
 			prepList = model.selectPreperation(recipe.getId());
 			ingredList = model.selectIngredients(recipe.getId());
 			

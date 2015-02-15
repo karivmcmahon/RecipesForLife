@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.recipesforlife.R;
@@ -72,9 +74,28 @@ public class CookbookContribListViewActivity extends Activity {
 				 // ListView Clicked item index
                int itemPosition     = position;
                final String  itemValue    = (String) listView.getItemAtPosition(position);
+               String uniqueid = "";
+               for(int i = 0; i < cookbookList.size(); i++)
+               {
+      			 if(itemValue.equals(cookbookList.get(i).getName()))
+      			 {
+      				 uniqueid = cookbookList.get(i).getUniqueid();
+      			 }
+      		 	}
+               
+	     		 
                Dialog contribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributersdialog);
                utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
                ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
+             
+               ListView listView2 = (ListView) contribDialog.findViewById(R.id.list);
+               ArrayList<String> contribs = model.selectCookbookContributers(uniqueid);
+	            
+	     	  ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(),
+	     	              android.R.layout.simple_list_item_1, android.R.id.text1, contribs);
+	     	    
+	     	  listView2.setAdapter(adapter2); 
+               
                addButton.setOnTouchListener(new OnTouchListener(){
 
 				@Override
@@ -82,8 +103,14 @@ public class CookbookContribListViewActivity extends Activity {
 					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) {
 					  final Dialog addContribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributeradddialog);
-		              utils.setDialogText(R.id.contributersView, addContribDialog, 22);
+					//Getting data
+						final TextView errorView = (TextView) addContribDialog.findViewById(R.id.errorView);
+						utils.setDialogText(R.id.errorView,addContribDialog,16);
+						errorView.setTextColor(Color.parseColor("#F70521"));
+					  
+					  utils.setDialogText(R.id.contributersView, addContribDialog, 22);
 		              utils.setDialogText(R.id.emailContributerView, addContribDialog, 22);
+		             
 		              Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
 		              addContribButton.setOnTouchListener(new OnTouchListener()
 		              {
@@ -97,19 +124,30 @@ public class CookbookContribListViewActivity extends Activity {
 							Log.v("s", "s " + utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
 							accountModel am = new accountModel(getApplicationContext());
 							boolean exists = am.checkEmail( utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
-							 for(int i = 0; i < cookbookList.size(); i++)
-							 {
-								 if(itemValue.equals(cookbookList.get(i).getName()))
+							if (exists == false)
+							{
+								errorView.setText("The user entered does not exist");
+							}
+							else if( utils.getTextFromDialog(R.id.emailEditText, addContribDialog).equals(""))
+							{
+								errorView.setText("Please enter a user");
+							}
+							else
+							{
+								for(int i = 0; i < cookbookList.size(); i++)
 								 {
-									 uniqueid = cookbookList.get(i).getUniqueid();
+									 if(itemValue.equals(cookbookList.get(i).getName()))
+									 {
+										 uniqueid = cookbookList.get(i).getUniqueid();
+									 }
 								 }
-							 }
-							id = model.selectCookbooksIDByUnique(uniqueid);
-							Log.v("s", "s " + exists);
-							Log.v("s", "s " + uniqueid);
-							Log.v("s", "s " + id);
-							model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
-							addContribDialog.dismiss();
+								id = model.selectCookbooksIDByUnique(uniqueid);
+								Log.v("s", "s " + exists);
+								Log.v("s", "s " + uniqueid);
+								Log.v("s", "s " + id);
+								model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
+								addContribDialog.dismiss();
+							}
 							}
 							return false;
 							

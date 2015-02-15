@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="CB Contributer List" />
+        android:text="Manage Contribs" />
      
      <Button
         android:id="@+id/cookbookListButton"
@@ -19,7 +19,7 @@
          android:layout_below="@+id/cookbookContributerListButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Cookbook List" />
+        android:text="View Cookbook List" />
      
     <Button
         android:id="@+id/cookbookButton"
@@ -28,7 +28,7 @@
          android:layout_below="@+id/cookbookListButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Cookbook" />
+        android:text="Add A Cookbook" />
     
     <Button
         android:id="@+id/addButton"
@@ -37,7 +37,7 @@
          android:layout_below="@+id/cookbookButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Add" />
+        android:text="Add A Recipe" />
     
      <Button
         android:id="@+id/viewButton"
@@ -46,16 +46,9 @@
         android:layout_below="@+id/addButton"
          android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Edit recipe" />
+        android:text="Edit recipe list" />
      
-      <Button
-        android:id="@+id/viewListButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewButton"
-         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:text="Recipe list view" />
+      
 
     <Button
         android:id="@+id/logOffButton"

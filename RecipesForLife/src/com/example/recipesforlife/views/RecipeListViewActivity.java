@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +30,8 @@ public class RecipeListViewActivity extends Activity {
 
 	public static final String emailk = "emailKey";
 	ListView listView;
+	String type = "";
+	ArrayList<recipeBean> recipeList;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,14 +41,21 @@ public class RecipeListViewActivity extends Activity {
 		  listView = (ListView) findViewById(R.id.list);
 		  
 		 cookbookModel model = new cookbookModel(getApplicationContext());
-		 ArrayList<String> recipeList = new ArrayList<String>();
+		 recipeList = new ArrayList<recipeBean>();
 		 SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		 Intent intent = getIntent();
-		 recipeList = model.selectRecipesByCookbook(intent.getStringExtra("name"),sharedpreferences.getString(emailk, ""));
-		 
+		 Log.v("type", "type" + intent.getStringExtra("type"));
+		 Log.v("uniqid", "uniqid" + intent.getStringExtra("uniqueid"));
+		 type = intent.getStringExtra("type");
+		 recipeList = model.selectRecipesByCookbook(intent.getStringExtra("uniqueid"));
+		 ArrayList<String> recipenames = new ArrayList<String>();
+		 for(int a = 0; a < recipeList.size(); a++)
+			{
+				recipenames.add(recipeList.get(a).getName());
+			}
 		
 		 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-	              android.R.layout.simple_list_item_1, android.R.id.text1, recipeList);
+	              android.R.layout.simple_list_item_1, android.R.id.text1, recipenames);
 	    
 		 listView.setAdapter(adapter); 
 		 
@@ -54,13 +64,29 @@ public class RecipeListViewActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
+				Intent i = null;
+				
 				// TODO Auto-generated method stub
-				Intent i = new Intent(RecipeListViewActivity.this, RecipeViewActivity.class);
+				if(type.equals("view"))
+				{
+				  i = new Intent(RecipeListViewActivity.this, RecipeViewActivity.class);
+				}
+				else if(type.equals("edit"))
+				{
+					i = new Intent(RecipeListViewActivity.this, RecipeEditActivity.class);
+				}
 				 // ListView Clicked item index
                 int itemPosition     = position;
                 
                 // ListView Clicked item value
                 String  itemValue    = (String) listView.getItemAtPosition(position);
+                for(int a = 0; a < recipeList.size(); a++)
+				{
+					if(itemValue.equals(recipeList.get(a).getName()))
+					{
+						i.putExtra("uniqueidr", recipeList.get(a).getUniqueid());
+					}
+				}
 				i.putExtra("name", itemValue);
 			    startActivity(i);
 				

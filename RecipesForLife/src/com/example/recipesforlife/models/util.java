@@ -274,7 +274,7 @@ public class util {
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
-			try {
+		/**	try {
 			    sync.getJSONFromServer();
 			    Editor editor = sharedpreferences.edit();
 		        editor.putString("Account Date", getLastUpdated());
@@ -288,9 +288,9 @@ public class util {
 		       editor.putString("Date", getLastUpdated());
 		        editor.commit();
 		        
-		     /**   updates.getJSONFromServer();
+		        updates.getJSONFromServer();
 		        editor.putString("Change", getLastUpdated());
-		        editor.commit(); **/
+		        editor.commit(); 
 				
 		        sync.getAndCreateAccountJSON();
 		        editor.putString("Account Date Server", getLastUpdated());
@@ -304,9 +304,9 @@ public class util {
 				editor.putString("Date Server", getLastUpdated());
 		        editor.commit();
 		            
-		    /**    updates.getAndCreateJSON();
+		      updates.getAndCreateJSON();
 		        editor.putString("Change Server", getLastUpdated());
-		        editor.commit(); **/
+		        editor.commit(); 
 				
 				
 				 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
@@ -325,7 +325,7 @@ public class util {
 				e.printStackTrace();
 				Toast.makeText(context, 
 		        	    "App sync failed", Toast.LENGTH_LONG).show();
-			}
+			} **/
 		}
 } 
 	

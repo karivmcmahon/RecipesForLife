@@ -127,7 +127,8 @@ public class MainActivity extends Activity  {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				 Intent i = new Intent(MainActivity.this, RecipeEditListViewActivity.class);
+				 Intent i = new Intent(MainActivity.this, CookbookListActivity.class);
+				 i.putExtra("type", "edit");
 			      startActivity(i);
 			}
 			
@@ -154,24 +155,15 @@ public class MainActivity extends Activity  {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Intent i = new Intent(MainActivity.this, CookbookListActivity.class);
+				 i.putExtra("type", "view");
 			      startActivity(i);
+			     
 				
 			}
 			
 		});
 		
-		Button viewListButton = (Button) findViewById(R.id.viewListButton);
-		viewListButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Intent i = new Intent(MainActivity.this, RecipeListViewActivity.class);
-			      startActivity(i);
-				
-			}
-			
-		});
+		
 		Button addButton = (Button) findViewById(R.id.addButton);
 		addButton.setOnClickListener(new OnClickListener()
 		{

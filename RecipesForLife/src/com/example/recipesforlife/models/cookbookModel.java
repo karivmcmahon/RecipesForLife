@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.util.Log;
 
 public class cookbookModel extends baseDataSource {
 	
@@ -93,11 +94,31 @@ public class cookbookModel extends baseDataSource {
     	
 	}
 	
+	public ArrayList<String> selectCookbookContributers(String uniqueid)
+	{
+		
+		ArrayList<String> names = new ArrayList<String>();
+	    open();
+        Cursor cursor = database.rawQuery("SELECT * FROM  Contributers  INNER JOIN Cookbook ON Contributers.cookbookid=Cookbook.id WHERE Cookbook.uniqueid=? ", new String[] { uniqueid });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                names.add(cursor.getString(getIndex("accountid",cursor)));
+                
+                
+            }
+        }
+        cursor.close();
+        close();
+        return names;	
+	}
+	
 	public ArrayList<cookbookBean> selectCookbooksByUser(String user)
 	{
+		Log.v("nameeeeeee", "nameeeeeee" + user);
 		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
 	    open();
-        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook INNER JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE creator=? OR Contributers.accountid=? ", new String[] { user, user });
+        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE creator=? OR Contributers.accountid=? GROUP BY uniqueid ", new String[] { user, user });
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -113,6 +134,7 @@ public class cookbookModel extends baseDataSource {
 	
 	public ArrayList<cookbookBean> selectCookbooksByCreator(String user)
 	{
+		
 		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
 	    open();
         Cursor cursor = database.rawQuery("SELECT * FROM Cookbook   WHERE creator=?", new String[] { user });
@@ -201,15 +223,15 @@ public class cookbookModel extends baseDataSource {
         return name;	
 	}
 	
-	public ArrayList<String> selectRecipesByCookbook(String name, String user)
+	public ArrayList<recipeBean> selectRecipesByCookbook(String uniqueid)
 	{
 		open();
-		ArrayList<String> names = new ArrayList<String>();
-		Cursor cursor = database.rawQuery("SELECT *, Recipe.name AS recipename FROM Recipe INNER JOIN CookbookRecipe INNER JOIN Cookbook ON CookbookRecipe.Recipeid=Recipe.id WHERE Cookbook.name = ? AND Cookbook.creator = ?", new String[] { name, user });
+		ArrayList<recipeBean> names = new ArrayList<recipeBean>();
+		Cursor cursor = database.rawQuery("SELECT *, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN CookbookRecipe INNER JOIN Cookbook ON CookbookRecipe.Recipeid=Recipe.id WHERE Cookbook.uniqueid = ?", new String[] { uniqueid });
 		  if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
-	                names.add(cursor.getString(getIndex("recipename",cursor)));
+	                names.add(cursorToRecipe(cursor));
 	                
 	                
 	            }
@@ -221,6 +243,7 @@ public class cookbookModel extends baseDataSource {
 	
 	public cookbookBean cursorToCookbook(Cursor cursor) {
         cookbookBean cb = new cookbookBean();
+        Log.v("nameeeeeee", "nameeeeeee" + cursor.getString(getIndex("name",cursor)));
         cb.setName(cursor.getString(getIndex("name",cursor)));
         cb.setDescription(cursor.getString(getIndex("description",cursor)));
         cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
@@ -229,6 +252,14 @@ public class cookbookModel extends baseDataSource {
         cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
         cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
         return cb;
+    }
+	
+	public recipeBean cursorToRecipe(Cursor cursor) {
+        recipeBean rb = new recipeBean();
+        Log.v("nameeeeeee", "nameeeeeee" + cursor.getString(getIndex("name",cursor)));
+        rb.setName(cursor.getString(getIndex("recipename",cursor)));   
+        rb.setUniqueid(cursor.getString(getIndex("rid", cursor)));
+        return rb;
     }
 	
 	 /**

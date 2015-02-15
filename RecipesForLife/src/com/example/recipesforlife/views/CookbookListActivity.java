@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,8 @@ public class CookbookListActivity extends Activity {
 
 	private SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs";
+	 ArrayList<cookbookBean> cookbookList;
+	 String type = "";
 
 	public static final String emailk = "emailKey";
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +37,19 @@ public class CookbookListActivity extends Activity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
-		
+		Intent intent = getIntent();
+		 Log.v("type", "type" + intent.getStringExtra("type"));
+		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
 		  
 		 cookbookModel model = new cookbookModel(getApplicationContext());
-		 ArrayList<cookbookBean> cookbookList = new ArrayList<cookbookBean>();
+		 cookbookList = new ArrayList<cookbookBean>();
 		 SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		 cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 		 ArrayList<String> values = new ArrayList<String>();
 		 for(int i = 0; i < cookbookList.size(); i++)
 		 {
+			 Log.v("Booook", "Booooook" + cookbookList.get(i).getName());
 			 values.add(cookbookList.get(i).getName());
 		 }
 		
@@ -64,7 +70,18 @@ public class CookbookListActivity extends Activity {
                
                // ListView Clicked item value
                String  itemValue    = (String) listView.getItemAtPosition(position);
-				i.putExtra("name", itemValue);
+               String uniqueid = "";
+               for(int a = 0; a < cookbookList.size(); a++)
+      		 {
+      			 if(itemValue.equals(cookbookList.get(a).getName()))
+      			{
+      				 uniqueid = cookbookList.get(a).getUniqueid();
+      				 Log.v("uniqid", "uniqid " + uniqueid);
+      			 }
+      		 }
+				i.putExtra("uniqueid", uniqueid);
+				 Log.v("uniqid", "uniqid " + uniqueid);
+				 i.putExtra("type", type);
 			    startActivity(i);
 				
 			}

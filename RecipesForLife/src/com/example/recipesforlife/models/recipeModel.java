@@ -57,7 +57,7 @@ public class recipeModel extends baseDataSource {
 		recipeUpdateVals.put("cookingTime", newRecipe.getCooking());
 		recipeUpdateVals.put("serves", newRecipe.getServes());
 		recipeUpdateVals.put("changeTime", utils.getLastUpdated());
-		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=? AND addedBy=?", new String[] {newRecipe.getUniqueid(), sharedpreferences.getString(emailk, "DEFAULT")});
+		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] {newRecipe.getUniqueid()});
         if (cursor != null && cursor.getCount() > 0) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
@@ -65,11 +65,11 @@ public class recipeModel extends baseDataSource {
             }
         
         cursor.close();
-        String[] args = new String[]{newRecipe.getUniqueid(), sharedpreferences.getString(emailk, "DEFAULT")};
+        String[] args = new String[]{newRecipe.getUniqueid()};
         database.beginTransaction();
         try
         {
-        	database.update("Recipe", recipeUpdateVals, "uniqueid=? AND addedBy=?", args);
+        	database.update("Recipe", recipeUpdateVals, "uniqueid=?", args);
     		updateRecipePrep(prepList);
     		updateRecipeIngredient(ingredList);
         	database.setTransactionSuccessful();
@@ -426,11 +426,11 @@ public class recipeModel extends baseDataSource {
 	 * @param x
 	 * @return id 
 	 */
-	public recipeBean selectRecipe2(String name, String user)
+	public recipeBean selectRecipe2(String uniqueid)
 	{		
 		    recipeBean rb = new recipeBean();
 		    open();
-	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE name=? and addedBy=?", new String[] { name, user });
+	        Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE uniqueid=?", new String[] { uniqueid });
 	        if (cursor != null && cursor.getCount() > 0) {
 	            for (int i = 0; i < cursor.getCount(); i++) {
 	                cursor.moveToPosition(i);
