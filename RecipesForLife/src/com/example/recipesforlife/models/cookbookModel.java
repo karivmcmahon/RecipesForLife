@@ -67,6 +67,32 @@ public class cookbookModel extends baseDataSource {
     	
 	}
 	
+	public void updateBook(cookbookBean cookbook)
+	{
+		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		open();
+		ContentValues updateVals = new ContentValues();
+		updateVals.put("name", cookbook.getName());
+		updateVals.put("description", cookbook.getDescription());
+		updateVals.put("privacyOption", cookbook.getPrivacy());
+		updateVals.put("changeTime", utils.getLastUpdated());	
+        String[] args = new String[]{cookbook.getUniqueid()};
+        database.beginTransaction();
+        try
+        {
+        	database.update("Cookbook", updateVals, "uniqueid=?", args);
+        	database.setTransactionSuccessful();
+        	database.endTransaction(); 
+        }
+        catch(SQLException e)
+        {
+        	database.endTransaction();
+        }
+    	close();
+        
+        }
+	
+	
 	public void insertContributers(String email, int cookbookid)
 	{
 		

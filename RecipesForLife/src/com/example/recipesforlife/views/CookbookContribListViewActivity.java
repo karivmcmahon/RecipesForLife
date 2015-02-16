@@ -194,6 +194,7 @@ public class CookbookContribListViewActivity extends Activity {
 	               List<String> spinnerArray =  new ArrayList<String>();
 	               spinnerArray.add("public");
 				    spinnerArray.add("private");
+				    final String uid = uniqueid;
 				    ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(
 						    CookbookContribListViewActivity.this, R.layout.item, spinnerArray);
 
@@ -207,10 +208,12 @@ public class CookbookContribListViewActivity extends Activity {
 							@Override
 							public void onClick(View arg0) {
 								// TODO Auto-generated method stub
-								String name = utils.getTextFromDialog(R.id.bookNameEditText, editDialog);
-								String desc = utils.getTextFromDialog(R.id.bookDescEditText, editDialog);
-								String value = spinner.getSelectedItem().toString();
-								Log.v("n ", "N " + name + desc + value);
+								cookbookBean cb = new cookbookBean();
+								cb.setName(utils.getTextFromDialog(R.id.bookNameEditText, editDialog));
+								cb.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, editDialog));
+								cb.setPrivacy(spinner.getSelectedItem().toString());
+								cb.setUniqueid(uid);
+								model.updateBook(cb);
 								editDialog.dismiss();
 								
 							}});
