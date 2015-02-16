@@ -4,10 +4,18 @@
     android:layout_height="match_parent"
      >
 
+    <Button
+        android:id="@+id/cookbookEditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Edit Cookbook List" />
      <Button
         android:id="@+id/cookbookContributerListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+          android:layout_below="@+id/cookbookEditButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:text="Manage Contribs" />

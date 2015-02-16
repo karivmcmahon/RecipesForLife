@@ -39,6 +39,9 @@ public class CookbookContribListViewActivity extends Activity {
 	cookbookModel model;
 	ArrayList<cookbookBean> cookbookList;
 	Activity activity;
+	 CustomContribListAdapter adapter2;
+	 ArrayList<String> contribs;
+	 String type="";
 
 	public static final String emailk = "emailKey";
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class CookbookContribListViewActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
 		activity = CookbookContribListViewActivity.this;
+	    Intent intent = getIntent();
+	    type = intent.getStringExtra("type");
 		utils = new util(getApplicationContext(), CookbookContribListViewActivity.this);
 		listView = (ListView) findViewById(R.id.list);
 		  
@@ -85,16 +90,17 @@ public class CookbookContribListViewActivity extends Activity {
       			 }
       		 	}
                
-	     		 
+	     	if(type.equals("manage"))
+	     	{
                Dialog contribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributersdialog);
                utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
                ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
              
                ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
-               ArrayList<String> contribs = model.selectCookbookContributers(uniqueid);
+                contribs = model.selectCookbookContributers(uniqueid);
 	            
-               CustomContribListAdapter adapter2 = new
-            	        CustomContribListAdapter(activity, contribs, getApplicationContext());
+               adapter2 = new
+            	        CustomContribListAdapter(activity, contribs, getApplicationContext(), uniqueid);
 	     	    
 	     	  listView2.setAdapter(adapter2); 
                
@@ -148,6 +154,11 @@ public class CookbookContribListViewActivity extends Activity {
 								Log.v("s", "s " + uniqueid);
 								Log.v("s", "s " + id);
 								model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
+								
+								adapter2.clear();
+							   contribs = model.selectCookbookContributers(uniqueid);
+							   adapter2.addAll(contribs);
+								adapter2.notifyDataSetChanged();
 								addContribDialog.dismiss();
 							}
 							}
@@ -164,10 +175,17 @@ public class CookbookContribListViewActivity extends Activity {
 					return false;
 				}});
                contribDialog.show();
-               // ListView Clicked item value
-           //    String  itemValue    = (String) listView.getItemAtPosition(position);
-			//	i.putExtra("name", itemValue);
-			 //   startActivity(i);
+	     	}
+	     	else if(type.equals("edit"))
+	     	{
+	     		  Dialog editDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.cookbookeditdialog);
+	               utils.setDialogText(R.id.editBookView, editDialog, 22);
+	               utils.setDialogText(R.id.bookNameView, editDialog, 22);
+	               utils.setDialogText(R.id.bookDescView, editDialog, 22);
+	               utils.setDialogText(R.id.privacyView, editDialog, 22);
+	               utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
+	               editDialog.show();
+	     	}
 				
 			}
 		 });

@@ -94,6 +94,18 @@ public class cookbookModel extends baseDataSource {
     	
 	}
 	
+	public void  deleteContributers(int id, String user)
+	{
+		
+		
+	    open();
+        database.delete("Contributers","cookbookid=? AND accountid=?", new String[] { Integer.toString(id), user }); 
+        Log.v("done", "done");
+        close();
+        
+	}
+	
+	
 	public ArrayList<String> selectCookbookContributers(String uniqueid)
 	{
 		

@@ -3,6 +3,7 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
 import android.app.Activity;
@@ -21,15 +22,17 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 	private final Activity activity;
 	private final ArrayList<String> users;
 	Context context;
+	String cookbookuid;
 
 	util utils;
 	
-	public CustomContribListAdapter(Activity activity , ArrayList<String> users, Context context)
+	public CustomContribListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid)
 	{
 		super(context, R.layout.contriblistsingle, users);
 		this.activity = activity;
 		this.context = context;
 		this.users = users;
+		this.cookbookuid = cookbookuid;
 		utils = new util(this.context, activity);
 		
 	}
@@ -49,6 +52,12 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 				{
 					Log.v("Usaa clicked ", "Usaaa clicked " + users.get(position));
+					cookbookModel model = new cookbookModel(context);
+					int id = model.selectCookbooksIDByUnique(cookbookuid);
+					Log.v("Usaa clicked ", "Usaaa clicked " + id);
+					model.deleteContributers(id, users.get(position));
+					users.remove(position);
+					notifyDataSetChanged();
 				}
 				return false;
 			}

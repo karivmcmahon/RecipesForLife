@@ -284,7 +284,7 @@ public class util {
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
-		/**	try {
+			try {
 			    sync.getJSONFromServer();
 			    Editor editor = sharedpreferences.edit();
 		        editor.putString("Account Date", getLastUpdated());
@@ -335,7 +335,7 @@ public class util {
 				e.printStackTrace();
 				Toast.makeText(context, 
 		        	    "App sync failed", Toast.LENGTH_LONG).show();
-			} **/
+			} 
 		}
 } 
 	

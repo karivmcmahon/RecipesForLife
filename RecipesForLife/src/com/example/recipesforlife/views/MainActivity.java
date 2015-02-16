@@ -107,6 +107,19 @@ public class MainActivity extends Activity  {
 		ingredBeanList = new ArrayList<ingredientBean>();
 		prepBeanList = new ArrayList<preperationBean>();
 		
+		Button cbEditButton = (Button) findViewById(R.id.cookbookEditButton);
+		cbEditButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 Intent i = new Intent(MainActivity.this, CookbookContribListViewActivity.class);
+				 i.putExtra("type", "edit");
+			      startActivity(i);
+			}
+			
+			
+		});
 		
 		Button contributerButton = (Button) findViewById(R.id.cookbookContributerListButton);
 		contributerButton.setOnClickListener(new OnClickListener(){
@@ -115,6 +128,7 @@ public class MainActivity extends Activity  {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				 Intent i = new Intent(MainActivity.this, CookbookContribListViewActivity.class);
+					i.putExtra("type", "manage");
 			      startActivity(i);
 			}
 			
