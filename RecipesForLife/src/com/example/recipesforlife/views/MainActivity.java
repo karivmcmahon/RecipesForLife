@@ -5,7 +5,6 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,16 +13,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,28 +31,30 @@ import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.TimePickerFragment;
+import com.example.recipesforlife.models.PostTask;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.PostTask;
 import com.example.recipesforlife.models.util;
 
 public class MainActivity extends Activity  {
 	
 	public static final String MyPREFERENCES = "MyPrefs";
-	private SharedPreferences sharedpreferences;
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
 	util utils;
 	Typeface typeFace;
 	ArrayList<ingredientBean> ingredBeanList;
 	ArrayList<preperationBean> prepBeanList;
-	Dialog recipeAddDialog , recipeAddDialog2, recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
+	Dialog recipeAddDialog;
+	static Dialog recipeAddDialog2;
+	Dialog recipeIngredDialog;
+	Dialog recipeAddStepDialog;
+	Dialog addRecipeDialog3;
 	Button nextButton, nextButton2, addIngredButton, addRecipeButton;
 	String name, desc,recipeBook, serves, prep, cooking;
 
 	    // Handles message from time dialog 1 - preptime
-	    Handler mHandler = new Handler(){
+	   static Handler mHandler = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
 	            //Bundle retrieves data
@@ -79,7 +76,7 @@ public class MainActivity extends Activity  {
 	    };
 	    
 	    //Handles message from time dialog 2
-	    Handler mHandler2 = new Handler(){
+	    static Handler mHandler2 = new Handler(){
 	        @Override
 	        public void handleMessage(Message m){
 	        	 //Bundle retrieves data
@@ -115,7 +112,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				 Intent i = new Intent(MainActivity.this, CookbookContribListViewActivity.class);
 				 i.putExtra("type", "edit");
 			      startActivity(i);
@@ -129,7 +125,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				 Intent i = new Intent(MainActivity.this, CookbookContribListViewActivity.class);
 					i.putExtra("type", "manage");
 			      startActivity(i);
@@ -143,7 +138,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				 Intent i = new Intent(MainActivity.this, CookbookListActivity.class);
 				 i.putExtra("type", "edit");
 			      startActivity(i);
@@ -157,7 +151,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				Intent i = new Intent(MainActivity.this, CookbookViewActivity.class);
 			      startActivity(i);
 				
@@ -170,7 +163,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				Intent i = new Intent(MainActivity.this, CookbookListActivity.class);
 				 i.putExtra("type", "view");
 			      startActivity(i);
@@ -187,7 +179,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 				
 				//Set up dialog style
@@ -197,8 +188,6 @@ public class MainActivity extends Activity  {
 
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						
 						//Get data from the dialog
 					    getInitialRecipeAddDialogData();
 					}
@@ -219,7 +208,6 @@ public class MainActivity extends Activity  {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				  SharedPreferences sharedpreferences = getSharedPreferences
 					      (SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 					      Editor editor = sharedpreferences.edit();
@@ -329,7 +317,6 @@ public class MainActivity extends Activity  {
 
 						@Override
 						public void onClick(View v) {
-							// TODO Auto-generated method stub
 							//Get ingredient info
 							getIngredient();
 						}});
@@ -342,7 +329,6 @@ public class MainActivity extends Activity  {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 				    //Set up style
 					setUpStepAddDialog();
 					//Once add is pressed
@@ -351,7 +337,6 @@ public class MainActivity extends Activity  {
 
 						@Override
 						public void onClick(View arg0) {
-							// TODO Auto-generated method stub
 							//Get info
 							getRecipeStep();
 						}});
@@ -364,8 +349,6 @@ public class MainActivity extends Activity  {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
 					//Get second data and send to the server
 					getSecondDialogData();
 					
@@ -390,7 +373,7 @@ public class MainActivity extends Activity  {
 		utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
-		Button addIngredButton = utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
+		utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
 				
 		//Spinner set up with varying measurement amounts
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -428,7 +411,7 @@ public class MainActivity extends Activity  {
 			utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
 			utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 			utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
-			Button addStepButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
+			utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
 			recipeAddStepDialog.show();
 	}
 	
@@ -486,7 +469,6 @@ public class MainActivity extends Activity  {
 	
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					getThirdDialogData();
 					
 				}
@@ -530,12 +512,12 @@ public class MainActivity extends Activity  {
 	 */
 	public void getThirdDialogData()
 	{	
-		String image = utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3);
-		String cusine =  utils.getTextFromDialog(R.id.recipeCusineEditText, addRecipeDialog3);
-		String dietary =  utils.getTextFromDialog(R.id.recipeDietaryEditText, addRecipeDialog3);
-		String tips =  utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
+	    utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3);
+		utils.getTextFromDialog(R.id.recipeCusineEditText, addRecipeDialog3);
+		utils.getTextFromDialog(R.id.recipeDietaryEditText, addRecipeDialog3);
+		utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
-		String difficulty = spinner.getSelectedItem().toString();	
+		spinner.getSelectedItem().toString();	
 	}
 	
 	/**
@@ -643,7 +625,7 @@ public class MainActivity extends Activity  {
 	   protected void onResume() {
 		   super.onResume();
 		   ////
-	       new PostTask(utils).doInBackground(null);
+	       new PostTask(utils).doInBackground("");
 	    		 
 	      
 	   }

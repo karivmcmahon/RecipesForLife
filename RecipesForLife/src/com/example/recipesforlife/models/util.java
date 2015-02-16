@@ -7,9 +7,6 @@ import java.util.Date;
 
 import org.json.JSONException;
 
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.views.SignUpSignInActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -23,15 +20,17 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipesforlife.views.SignUpSignInActivity;
+
 public class util  {
-	
+
 	Context context;
 	Typeface typeFace;
 	Activity activity;
@@ -60,41 +59,42 @@ public class util  {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Convert date to string
 	 * @param date
 	 * @return string with date
 	 */
+	@SuppressLint("SimpleDateFormat")
 	public String dateToString(Date date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentDate = formatter.format(date);
 		return currentDate;
 	}
-	
+
 	public String getLastUpdated2()
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar		
-        cal.setTime(new Date()); // sets calendar time/date
-        cal.add(Calendar.SECOND, -3);
-        Date today = cal.getTime();
-        
-        String lastUpdated = dateToString(today);
-        return lastUpdated;
+		cal.setTime(new Date()); // sets calendar time/date
+		cal.add(Calendar.SECOND, -3);
+		Date today = cal.getTime();
+
+		String lastUpdated = dateToString(today);
+		return lastUpdated;
 	}
-	
+
 	/**
 	 * Get current date
 	 */
 	private String getLastUpdated()
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        String lastUpdated = dateToString(today);
-        return lastUpdated;
+		cal.setTime(new Date()); // sets calendar time/date
+		Date today = cal.getTime();
+		String lastUpdated = dateToString(today);
+		return lastUpdated;
 	}
-	
+
 	/**
 	 * Set custom text for the dialog
 	 * @param resource
@@ -110,7 +110,7 @@ public class util  {
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
-	
+
 	public void setRowText(int resource, View rowview, int fontSize)
 	{
 		//Style for activity
@@ -120,7 +120,7 @@ public class util  {
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
-	
+
 	/**
 	 * Set custom text for the dialog
 	 * @param resource
@@ -134,7 +134,7 @@ public class util  {
 		EditText view = (EditText)	 dialog.findViewById(resource);
 		view.setText(text);
 	}
-	
+
 	/**
 	 * Set custom text
 	 * @param resource
@@ -147,7 +147,7 @@ public class util  {
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
-	
+
 	/**
 	 * Set custom text
 	 * @param resource
@@ -157,9 +157,9 @@ public class util  {
 	{
 		TextView view = (TextView) activity.findViewById(resource);
 		view.setText(text);
-		
+
 	}
-	
+
 	/**
 	 * Get text
 	 * @param resource
@@ -171,14 +171,14 @@ public class util  {
 		String text = edit.getText().toString();
 		return text;
 	}
-	
+
 	public String getTextView(int resource )
 	{
 		TextView view = (TextView) activity.findViewById(resource);
 		String text = view.getText().toString();
 		return text;
 	}
-	
+
 	/**
 	 * Get text from Dialog
 	 * @param resource
@@ -190,7 +190,7 @@ public class util  {
 		String text = edit.getText().toString();
 		return text;
 	}
-	
+
 	/**
 	 * Set custom text
 	 * @param resource
@@ -203,7 +203,7 @@ public class util  {
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#F3216C"));
 	}
-	
+
 	public void setTextBlack(int resource,int fontSize)
 	{
 		TextView view = (TextView) activity.findViewById(resource);
@@ -211,7 +211,7 @@ public class util  {
 		view.setTextSize(fontSize);
 		//view.setTextColor(Color.parseColor("#F3216C"));
 	}
-	
+
 	public void setTextBlackItalic(int resource,int fontSize)
 	{
 		TextView view = (TextView) activity.findViewById(resource);
@@ -220,7 +220,7 @@ public class util  {
 		view.setTypeface(typeFace, Typeface.ITALIC);
 		//view.setTextColor(Color.parseColor("#F3216C"));
 	}
-	
+
 	/**
 	 * Set custom text for button
 	 * @param resource
@@ -233,7 +233,7 @@ public class util  {
 		button.setTextSize(fontSize);
 		button.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
-	
+
 	public Button setButtonTextDialog(int resource, int fontSize, Dialog dialog)
 	{
 		Button  button = (Button) dialog.findViewById(resource);
@@ -242,7 +242,7 @@ public class util  {
 		button.setTextColor(Color.parseColor("#FFFFFFFF"));
 		return button;
 	}
-	
+
 	public void setTimePickerFrag(Dialog dialog, int res, final Handler handler)
 	{
 		EditText editText2 = (EditText) dialog.findViewById(res);
@@ -254,91 +254,91 @@ public class util  {
 				// TODO Auto-generated method stub
 				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
 				{
-					 // Instantiating TimePickerDialogFragment 
-	                TimePickerFragment timePicker = new TimePickerFragment(handler);
-	 
-	               
-	                // Getting fragment manger for this activity 
-	                android.app.FragmentManager fm = activity.getFragmentManager();
-	 
-	                // Starting a fragment transaction 
-	                android.app.FragmentTransaction ft = fm.beginTransaction();
-	 
-	                // Adding the fragment object to the fragment transaction 
-	                ft.add(timePicker, "time_picker");
-	 
-	                // Opening the TimePicker fragment 
-	                ft.commit();
+					// Instantiating TimePickerDialogFragment 
+					TimePickerFragment timePicker = new TimePickerFragment(handler);
+
+
+					// Getting fragment manger for this activity 
+					android.app.FragmentManager fm = activity.getFragmentManager();
+
+					// Starting a fragment transaction 
+					android.app.FragmentTransaction ft = fm.beginTransaction();
+
+					// Adding the fragment object to the fragment transaction 
+					ft.add(timePicker, "time_picker");
+
+					// Opening the TimePicker fragment 
+					ft.commit();
 
 				}
 				return false;
 			}});
 	}
-	
+
 	public void sync()
 	{
-	 if(checkInternetConnection(context))
+		if(checkInternetConnection(context))
 		{
-		 sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+			sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 			syncModel sync = new syncModel(context);
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
 			try {
-			    sync.getJSONFromServer();
-			    Editor editor = sharedpreferences.edit();
-		        editor.putString("Account Date", getLastUpdated());
-		        editor.commit();
-				
-		       syncCookbook.getJSONFromServer();
-		        editor.putString("Cookbook", getLastUpdated());
-		        editor.commit();
-		        
-		       syncRecipe.getJSONFromServer();
-		       editor.putString("Date", getLastUpdated());
-		        editor.commit();
-		        
-		        updates.getJSONFromServer();
-		        editor.putString("Change", getLastUpdated());
-		        editor.commit(); 
-				
-		        sync.getAndCreateAccountJSON();
-		        editor.putString("Account Date Server", getLastUpdated());
-		        editor.commit();
-		        
-		       syncCookbook.getAndCreateJSON();
-		        editor.putString("Cookbook Server", getLastUpdated());
-		        editor.commit();
-		 	        
-		        syncRecipe.getAndCreateJSON();
+				sync.getJSONFromServer();
+				Editor editor = sharedpreferences.edit();
+				editor.putString("Account Date", getLastUpdated());
+				editor.commit();
+
+				syncCookbook.getJSONFromServer();
+				editor.putString("Cookbook", getLastUpdated());
+				editor.commit();
+
+				syncRecipe.getJSONFromServer();
+				editor.putString("Date", getLastUpdated());
+				editor.commit();
+
+				updates.getJSONFromServer();
+				editor.putString("Change", getLastUpdated());
+				editor.commit(); 
+
+				sync.getAndCreateAccountJSON();
+				editor.putString("Account Date Server", getLastUpdated());
+				editor.commit();
+
+				syncCookbook.getAndCreateJSON();
+				editor.putString("Cookbook Server", getLastUpdated());
+				editor.commit();
+
+				syncRecipe.getAndCreateJSON();
 				editor.putString("Date Server", getLastUpdated());
-		        editor.commit();
-		            
-		      updates.getAndCreateJSON();
-		        editor.putString("Change Server", getLastUpdated());
-		        editor.commit(); 
-				
-				
-				 Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-				 Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Date Server", "DEFAULT"));
-				
-				
-		        Toast.makeText(context, 
-		        	    "App synced", Toast.LENGTH_LONG).show();
+				editor.commit();
+
+				updates.getAndCreateJSON();
+				editor.putString("Change Server", getLastUpdated());
+				editor.commit(); 
+
+
+				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
+				Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Date Server", "DEFAULT"));
+
+
+				Toast.makeText(context, 
+						"App synced", Toast.LENGTH_LONG).show();
 			} catch (JSONException e) {
 				e.printStackTrace();
 				Toast.makeText(context, 
-		        	    "App sync failed", Toast.LENGTH_LONG).show();
-				
+						"App sync failed", Toast.LENGTH_LONG).show();
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				Toast.makeText(context, 
-		        	    "App sync failed", Toast.LENGTH_LONG).show();
+						"App sync failed", Toast.LENGTH_LONG).show();
 			} 
 		}
-} 
-	
+	} 
+
 	public Dialog createDialog(Activity activity, int resource)
 	{
 		final Dialog dialog = new Dialog(activity);
@@ -349,6 +349,6 @@ public class util  {
 		return dialog;
 	}
 
-	
+
 
 }

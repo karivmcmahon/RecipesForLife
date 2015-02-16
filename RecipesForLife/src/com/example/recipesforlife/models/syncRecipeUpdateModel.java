@@ -15,28 +15,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.views.SignUpSignInActivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.recipesforlife.controllers.ingredientBean;
+import com.example.recipesforlife.controllers.preperationBean;
+import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.views.SignUpSignInActivity;
+
 public class syncRecipeUpdateModel  extends baseDataSource {
 
-Context context;
-	
-	
+	Context context;
+
+
 	public syncRecipeUpdateModel(Context context) {
 		super(context);
 		this.context = context;
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	/**
 	 * Gets recipe to send to server based on the last changed date
 	 * @return ArrayList<recipeBean> recipeList
@@ -45,39 +45,39 @@ Context context;
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-	    ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
-	    Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
-        if (cursor != null && cursor.getCount() > 0) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition(i);
-                recipeList.add(cursorToRecipe(cursor));
-            }
-        }
-        cursor.close();
-        close();
-        return recipeList;
+		ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
+		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				recipeList.add(cursorToRecipe(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return recipeList;
 	}
-	
+
 	/**
 	 * Sets the recipe data from the database to recipebean
 	 * @param cursor
 	 * @return recipeBean
 	 */
 	public recipeBean cursorToRecipe(Cursor cursor) {
-        recipeBean rb = new recipeBean();
-        rb.setId(cursor.getInt(getIndex("id",cursor)));       
-        rb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
-        rb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
-        rb.setName(cursor.getString(getIndex("name", cursor)));
-        rb.setDesc(cursor.getString(getIndex("description",cursor)));
-        rb.setPrep(cursor.getString(getIndex("prepTime", cursor)));
-        rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
-        rb.setServes(cursor.getString(getIndex("serves", cursor)));
-        rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
-        rb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
-        return rb;
-    }
-	
+		recipeBean rb = new recipeBean();
+		rb.setId(cursor.getInt(getIndex("id",cursor)));       
+		rb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
+		rb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
+		rb.setName(cursor.getString(getIndex("name", cursor)));
+		rb.setDesc(cursor.getString(getIndex("description",cursor)));
+		rb.setPrep(cursor.getString(getIndex("prepTime", cursor)));
+		rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
+		rb.setServes(cursor.getString(getIndex("serves", cursor)));
+		rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
+		rb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
+		return rb;
+	}
+
 	/**
 	 * Get ingredients for recipes based on recipe id w
 	 * @param id
@@ -85,29 +85,28 @@ Context context;
 	 */
 	public ArrayList<ingredientBean> getIngred(int id)
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-	    ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
-	    Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ? ", new String[] {  Integer.toString(id) });
-	    if (cursor != null && cursor.getCount() > 0) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition(i);
-                int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails  WHERE id = ?", new String[] {   Integer.toString(detsId) });
-                if (cursor2 != null && cursor2.getCount() > 0) {
-                    for (int x = 0; x < cursor2.getCount(); x++) {
-                        cursor2.moveToPosition(x);
-                        ingredientList.add(cursorToIngredientDetails(cursor2));
-                    }
-                }
-                cursor2.close();
-            }
-        }
-        cursor.close();
-       close();
-        return ingredientList;
+		ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
+		Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ? ", new String[] {  Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
+				Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails  WHERE id = ?", new String[] {   Integer.toString(detsId) });
+				if (cursor2 != null && cursor2.getCount() > 0) {
+					for (int x = 0; x < cursor2.getCount(); x++) {
+						cursor2.moveToPosition(x);
+						ingredientList.add(cursorToIngredientDetails(cursor2));
+					}
+				}
+				cursor2.close();
+			}
+		}
+		cursor.close();
+		close();
+		return ingredientList;
 	}
-	
+
 	/**
 	 * Retrieves name of ingredient based on id then returns name
 	 * @param id
@@ -115,22 +114,21 @@ Context context;
 	 */
 	public String getIngredName(int id)
 	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		String name = null;
-	    Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  id = ? ", new String[] {  Integer.toString(id) });
-	    if (cursor != null && cursor.getCount() > 0) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition(i);
-                 name = cursor.getString(getIndex("name", cursor));
-               
-            }
-        }
-        cursor.close();
-        close();
-        return name;
+		Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  id = ? ", new String[] {  Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				name = cursor.getString(getIndex("name", cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return name;
 	}
-	
+
 	/**
 	 * Sets the ingredient data from the database to ingredientbean
 	 * @param cursor
@@ -146,7 +144,7 @@ Context context;
 		ib.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		return ib;
 	}
-	
+
 	/**
 	 * Gets preperation information from recipe
 	 * @param id
@@ -155,27 +153,27 @@ Context context;
 	public ArrayList<preperationBean> getPrep(int id)
 	{
 		open();
-	    ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-	    Cursor cursor = database.rawQuery("SELECT Preperationid FROM  PrepRecipe WHERE recipeId = ?", new String[] {   Integer.toString(id) });
-        if (cursor != null && cursor.getCount() > 0) {
-            for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition(i);
-                int prepid = cursor.getInt(getIndex("Preperationid", cursor));
-                Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE  id = ?", new String[] {  Integer.toString(prepid) });
-                if (cursor2 != null && cursor2.getCount() > 0) {
-                    for (int x = 0; x < cursor2.getCount(); x++) {
-                        cursor2.moveToPosition(x);
-                        prepList.add(cursorToPreperation(cursor2));
-                    }
-                }
-                cursor2.close();
-            }   
-        }
-        cursor.close();
-        close();
-        return prepList;
+		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+		Cursor cursor = database.rawQuery("SELECT Preperationid FROM  PrepRecipe WHERE recipeId = ?", new String[] {   Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				int prepid = cursor.getInt(getIndex("Preperationid", cursor));
+				Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE  id = ?", new String[] {  Integer.toString(prepid) });
+				if (cursor2 != null && cursor2.getCount() > 0) {
+					for (int x = 0; x < cursor2.getCount(); x++) {
+						cursor2.moveToPosition(x);
+						prepList.add(cursorToPreperation(cursor2));
+					}
+				}
+				cursor2.close();
+			}   
+		}
+		cursor.close();
+		close();
+		return prepList;
 	}
-	
+
 	/**
 	 * Set preperation bean data based on database
 	 * @param cursor
@@ -189,7 +187,7 @@ Context context;
 		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		return pb;
 	}
-	
+
 	/**
 	 * Builds a json with all the recipe data to send to the server
 	 * @throws JSONException
@@ -199,7 +197,7 @@ Context context;
 	{
 		ArrayList<recipeBean> recipeList = getRecipe();
 		JSONArray jsonArray = new JSONArray();
-	
+
 		for(int i = 0; i < recipeList.size(); i++)
 		{
 			JSONObject recipe = new JSONObject();		
@@ -212,7 +210,7 @@ Context context;
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			recipe.put("changeTime", recipeList.get(i).getChangeTime());
 			recipe.put("uniqueid", recipeList.get(i).getUniqueid());
-			
+
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray();
 			JSONArray prepNumArray = new JSONArray();
@@ -223,20 +221,20 @@ Context context;
 				Log.v("x ", "QWERTY " + prepList.get(x).getPreperation().toString());
 				prepNumArray.put(Integer.toString(prepList.get(x).getPrepNum()));
 				prepIdArray.put(prepList.get(x).getUniqueid().toString());
-		    }
-						
+			}
+
 			JSONObject newObj = new JSONObject();			
 			newObj.put("prep", prepStepArray);
 			recipe.put("Preperation", newObj);
-		    newObj = new JSONObject();	
+			newObj = new JSONObject();	
 			newObj.put("prepNums", prepNumArray);
 			recipe.accumulate("Preperation", newObj );
 			newObj = new JSONObject();
 			newObj.put("uniqueid", prepIdArray);
 			recipe.accumulate("Preperation", newObj );
-			
+
 			ArrayList<ingredientBean> ingredList = getIngred(recipeList.get(i).getId());
-			
+
 			JSONArray ingredarray = new JSONArray();
 			JSONArray valuearray = new JSONArray();
 			JSONArray amountarray = new JSONArray();
@@ -251,7 +249,7 @@ Context context;
 				String name = getIngredName(ingredList.get(y).getIngredId());
 				ingredarray.put(name);
 			}
-					
+
 			newObj.put("Ingredients", ingredarray);
 			recipe.put("Ingredient", newObj);
 			newObj = new JSONObject();
@@ -271,7 +269,7 @@ Context context;
 		sendJSONToServer(jsonArray);
 		Log.v("UPDATE JSON", "UPDATE JSON " + jsonArray);
 	}
-	
+
 	/**
 	 * Sends json to the server
 	 * @param jsonArray
@@ -281,16 +279,16 @@ Context context;
 	{
 		String str = "";
 		HttpResponse response = null;
-        HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx");      	   	
+		HttpClient myClient = new DefaultHttpClient();
+		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx");      	   	
 		try 
 		{
-		  HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		  HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
-			 
-			
+
+
 			try 
 			{
 				response = myClient.execute(myConnection);
@@ -306,13 +304,13 @@ Context context;
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-			 Toast.makeText(context, 
-		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
-			 throw e;
+			Toast.makeText(context, 
+					"Connection to server failed", Toast.LENGTH_LONG).show();
+			throw e;
 		}
-	
+
 	}
-	
+
 	/**
 	 * Gets the json with it's sync info from the server
 	 * @throws JSONException
@@ -328,8 +326,8 @@ Context context;
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
-        HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx");      	   	
+		HttpClient myClient = new DefaultHttpClient();
+		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx");      	   	
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
@@ -341,7 +339,7 @@ Context context;
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
-				
+
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -350,74 +348,74 @@ Context context;
 			} 
 			JSONObject jObject = new JSONObject(str);
 			JSONArray jArray = (JSONArray) jObject.get("Recipe");
-			
+
 			for(int i = 0; i < jArray.length(); i++)
 			{
-				
-				
+
+
 				json = jArray.getJSONObject(i);
-                recipeBean recipe = new recipeBean();
-                recipe.setName( json.getString("name"));
-                recipe.setDesc(json.getString("description"));
-                recipe.setServes(json.getString("serves"));
-                recipe.setCooking(json.getString("cookingTime"));
-                recipe.setPrep(json.getString("prepTime"));
-                recipe.setAddedBy(json.getString("addedBy"));
-                recipe.setUniqueid(json.getString("uniqueid"));
-                
-                ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
-                JSONArray ingredArray = (JSONArray) json.get("Ingredient");
-                for(int a = 0; a < ingredArray.length(); a++)
-                {
-                	JSONObject ingredObject = ingredArray.getJSONObject(a);
-                	JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
-                	JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
-                	JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
-                	JSONArray valueArray = (JSONArray) ingredObject.get("Value");
-                	JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
-                	for(int b = 0; b < ingredsArray.length(); b++)
-                	{
-                		ingredientBean ingredBean = new ingredientBean();
-                		ingredBean.setName(ingredsArray.get(b).toString());
-                		ingredBean.setNote(notesArray.get(b).toString());
-                		ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
-                		ingredBean.setValue(valueArray.get(b).toString());
-                		ingredBean.setUniqueid(ingredIdArray.get(b).toString());
-                		ingredBeanList.add(ingredBean);
-                	}
-                }
-               
-                JSONArray preperationArray = (JSONArray) json.get("Preperation");
-                ArrayList<preperationBean> prepBeanList = new ArrayList<preperationBean>();
-                for(int c = 0; c < preperationArray.length(); c++)
-                {
-                	 JSONObject prepObject =  preperationArray.getJSONObject(c);
-                	JSONArray prepArray = (JSONArray) prepObject.get("prep");
-                	JSONArray numArray = (JSONArray) prepObject.get("prepNums");
-                	JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
-                	for(int d = 0; d < prepArray.length(); d++)
-                	{
-                		preperationBean prepBean = new preperationBean();
-                		prepBean.setPreperation(prepArray.get(d).toString());
-                		prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
-                		prepBean.setUniqueid(idArray.get(d).toString());
-                		prepBeanList.add(prepBean);
-                	}
-                }
-                recipeModel model = new recipeModel(context);
-                model.updateRecipe(recipe,  prepBeanList, ingredBeanList);
-                
+				recipeBean recipe = new recipeBean();
+				recipe.setName( json.getString("name"));
+				recipe.setDesc(json.getString("description"));
+				recipe.setServes(json.getString("serves"));
+				recipe.setCooking(json.getString("cookingTime"));
+				recipe.setPrep(json.getString("prepTime"));
+				recipe.setAddedBy(json.getString("addedBy"));
+				recipe.setUniqueid(json.getString("uniqueid"));
+
+				ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
+				JSONArray ingredArray = (JSONArray) json.get("Ingredient");
+				for(int a = 0; a < ingredArray.length(); a++)
+				{
+					JSONObject ingredObject = ingredArray.getJSONObject(a);
+					JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
+					JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
+					JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
+					JSONArray valueArray = (JSONArray) ingredObject.get("Value");
+					JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
+					for(int b = 0; b < ingredsArray.length(); b++)
+					{
+						ingredientBean ingredBean = new ingredientBean();
+						ingredBean.setName(ingredsArray.get(b).toString());
+						ingredBean.setNote(notesArray.get(b).toString());
+						ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
+						ingredBean.setValue(valueArray.get(b).toString());
+						ingredBean.setUniqueid(ingredIdArray.get(b).toString());
+						ingredBeanList.add(ingredBean);
+					}
+				}
+
+				JSONArray preperationArray = (JSONArray) json.get("Preperation");
+				ArrayList<preperationBean> prepBeanList = new ArrayList<preperationBean>();
+				for(int c = 0; c < preperationArray.length(); c++)
+				{
+					JSONObject prepObject =  preperationArray.getJSONObject(c);
+					JSONArray prepArray = (JSONArray) prepObject.get("prep");
+					JSONArray numArray = (JSONArray) prepObject.get("prepNums");
+					JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
+					for(int d = 0; d < prepArray.length(); d++)
+					{
+						preperationBean prepBean = new preperationBean();
+						prepBean.setPreperation(prepArray.get(d).toString());
+						prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
+						prepBean.setUniqueid(idArray.get(d).toString());
+						prepBeanList.add(prepBean);
+					}
+				}
+				recipeModel model = new recipeModel(context);
+				model.updateRecipe(recipe,  prepBeanList, ingredBeanList);
+
 			}
-	
-                    
-                    
+
+
+
 		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-			 Toast.makeText(context, 
-		        	    "Connection to server failed", Toast.LENGTH_LONG).show();
-			 throw e;
+			Toast.makeText(context, 
+					"Connection to server failed", Toast.LENGTH_LONG).show();
+			throw e;
 		}
 	}
 }

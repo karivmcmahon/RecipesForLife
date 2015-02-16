@@ -1,50 +1,15 @@
 package com.example.recipesforlife.models;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-
-
-
-
-
-
-
-
-
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
-
-
-
-
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.controllers.userBean;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.recipesforlife.controllers.accountBean;
+import com.example.recipesforlife.controllers.userBean;
 
 /**
  * Class handles database details relating to the users account
@@ -60,7 +25,7 @@ public class accountModel extends baseDataSource
 	Context context;
 	syncModel sync;
 	utility utils;
-	
+
 	public accountModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor st
@@ -75,72 +40,72 @@ public class accountModel extends baseDataSource
 	 */
 	public void insertAccount(accountBean account, userBean user) 
 	{
-			open();
-            database.beginTransaction();
-            try
-            {
-            	insertUserData(account, user);
-            	database.setTransactionSuccessful();
-            	database.endTransaction(); 
-            	Log.v("suc", "suc");
-            }catch(SQLException e)
-            {
-            	database.endTransaction();
-            	Log.v("Trans fail", "Trans fail");
-            }
-		    close();
+		open();
+		database.beginTransaction();
+		try
+		{
+			insertUserData(account, user);
+			database.setTransactionSuccessful();
+			database.endTransaction(); 
+			Log.v("suc", "suc");
+		}catch(SQLException e)
+		{
+			database.endTransaction();
+			Log.v("Trans fail", "Trans fail");
+		}
+		close();
 	} 
-	
+
 	public ArrayList<accountBean> selectAccount(String email, String password)
 	{
 		open();
 		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
-	        Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password  });
-	        if (cursor != null && cursor.getCount() > 0) {
-	            for (int i = 0; i < cursor.getCount(); i++) {
-	                cursor.moveToPosition(i);
-	                accountList.add(sync.cursorToAccount(cursor));
-	            }
-	        }
-	        cursor.close();
-	        close();
-	        return accountList;
+		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password  });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				accountList.add(sync.cursorToAccount(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return accountList;
 	}
-	
+
 	public ArrayList<userBean> selectUser(int id)
 	{
 		open();
-		 ArrayList<userBean> userList = new ArrayList<userBean>();
-	        Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE id=?", new String[] { Integer.toString(id) });
-	        if (cursor != null && cursor.getCount() > 0) {
-	            for (int i = 0; i < cursor.getCount(); i++) {
-	                cursor.moveToPosition(i);
-	                userList.add(sync.cursorToUser(cursor));
-	            }
-	        }
-	        cursor.close();
-	        close();
-	        return userList;
+		ArrayList<userBean> userList = new ArrayList<userBean>();
+		Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE id=?", new String[] { Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				userList.add(sync.cursorToUser(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return userList;
 	}
-	
+
 	/**
 	 * Sets info from db to the controller
 	 * @param cursor
 	 * @return userBean
 	 */
-	 public userBean cursorToUser(Cursor cursor) {
-	        userBean ub = new userBean();
-	        ub.setId(cursor.getInt(getIndex("id",cursor)));       
-	        ub.setName(cursor.getString(getIndex("name", cursor)));
-	        ub.setBio(cursor.getString(getIndex("bio", cursor)));
-	        ub.setCity(cursor.getString(getIndex("city", cursor)));
-	        ub.setCountry(cursor.getString(getIndex("country", cursor)));
-	        ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
-	        return ub;
-	    }
-	
+	public userBean cursorToUser(Cursor cursor) {
+		userBean ub = new userBean();
+		ub.setId(cursor.getInt(getIndex("id",cursor)));       
+		ub.setName(cursor.getString(getIndex("name", cursor)));
+		ub.setBio(cursor.getString(getIndex("bio", cursor)));
+		ub.setCity(cursor.getString(getIndex("city", cursor)));
+		ub.setCountry(cursor.getString(getIndex("country", cursor)));
+		ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
+		return ub;
+	}
 
-	
+
+
 	/**
 	 * Check if details provided are an account
 	 * @param email
@@ -162,7 +127,7 @@ public class accountModel extends baseDataSource
 			return false;
 		} 	
 	}
-	
+
 	/**
 	 * Checks if email is already in use
 	 * @param email
@@ -184,25 +149,25 @@ public class accountModel extends baseDataSource
 			return false;
 		} 	
 	}
-	
+
 	/**
 	 * Insert user info into the user sqlite table
 	 * @param accountInfo
 	 */
 	public void insertUserData(accountBean account, userBean user)
 	{
-		 //User values
-	    values = new ContentValues();
-	    values.put("name", user.getName()); 
-	    values.put("updateTime", utils.getLastUpdated()); 
-	    values.put("country", user.getCountry()); 
-	    values.put("bio", user.getBio()); 
-	    values.put("city", user.getCity()); 
-	    values.put("cookingInterest", user.getCookingInterest());     	 
-    	id = database.insertOrThrow("Users", null, values);
-    	insertAccountData(account, id);
+		//User values
+		values = new ContentValues();
+		values.put("name", user.getName()); 
+		values.put("updateTime", utils.getLastUpdated()); 
+		values.put("country", user.getCountry()); 
+		values.put("bio", user.getBio()); 
+		values.put("city", user.getCity()); 
+		values.put("cookingInterest", user.getCookingInterest());     	 
+		id = database.insertOrThrow("Users", null, values);
+		insertAccountData(account, id);
 	}
-	
+
 	/**
 	 * Insert account info into account sqlite table
 	 * @param accountInfo
@@ -211,15 +176,15 @@ public class accountModel extends baseDataSource
 	public void insertAccountData(accountBean account, long id)
 	{
 		//Account values
-	    accountValues = new ContentValues();
-	    accountValues.put("id", (int)id);
-	    accountValues.put("email", account.getEmail());
-	    accountValues.put("updateTime", utils.getLastUpdated());
-	    accountValues.put("password", account.getPassword());
-	    database.insertOrThrow("Account", null, accountValues);
+		accountValues = new ContentValues();
+		accountValues.put("id", (int)id);
+		accountValues.put("email", account.getEmail());
+		accountValues.put("updateTime", utils.getLastUpdated());
+		accountValues.put("password", account.getPassword());
+		database.insertOrThrow("Account", null, accountValues);
 	}
-	
 
-	
+
+
 
 }

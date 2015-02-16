@@ -1,21 +1,6 @@
 package com.example.recipesforlife.models;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.util.Log;
-
-import com.example.recipesforlife.controllers.userBean;
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.views.MainActivity;
-import com.example.recipesforlife.views.SignUpSignInActivity;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -28,6 +13,15 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.util.Log;
+
+import com.example.recipesforlife.controllers.accountBean;
+import com.example.recipesforlife.controllers.userBean;
+import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
  * This class syncs the sever and phone databases
@@ -51,20 +45,20 @@ public class syncModel extends baseDataSource
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-		 ArrayList<userBean> userList = new ArrayList<userBean>();
-		 Cursor cursor;
-		 cursor = database.rawQuery("SELECT * FROM Users WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT")   });
-	        if (cursor != null && cursor.getCount() > 0) {
-	            for (int i = 0; i < cursor.getCount(); i++) {
-	                cursor.moveToPosition(i);
-	                userList.add(cursorToUser(cursor));
-	            }
-	        }
-	     cursor.close();
-	     close();
-	     return userList;
+		ArrayList<userBean> userList = new ArrayList<userBean>();
+		Cursor cursor;
+		cursor = database.rawQuery("SELECT * FROM Users WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT")   });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				userList.add(cursorToUser(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return userList;
 	}
-	
+
 	/**
 	 * Gets the accounts that have been added after last sync datetime
 	 * @return the list of accounts
@@ -72,63 +66,63 @@ public class syncModel extends baseDataSource
 	public ArrayList<accountBean> getAccount()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-	///	Log.v("Date server ", "Date server " + sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"));
+		///	Log.v("Date server ", "Date server " + sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"));
 		open();
-		 ArrayList<accountBean> accountList = new ArrayList<accountBean>();
-	        Cursor cursor;
-	        cursor = database.rawQuery("SELECT * FROM Account WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) ", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT") });        
-	        if (cursor != null && cursor.getCount() > 0) {
-	            for (int i = 0; i < cursor.getCount(); i++) {
-	                cursor.moveToPosition(i);
-	                accountList.add(cursorToAccount(cursor));
-	            }
-	        }
-	        cursor.close();
-	        close();
-	        return accountList;
+		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
+		Cursor cursor;
+		cursor = database.rawQuery("SELECT * FROM Account WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) ", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT") });        
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				accountList.add(cursorToAccount(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return accountList;
 	}
-	
+
 	/**
 	 * Sets info from db to the controller
 	 * @param cursor
 	 * @return accountBean
 	 */
 	public accountBean cursorToAccount(Cursor cursor) {
-	        accountBean ab = new accountBean();
-	        ab.setId(cursor.getInt(getIndex("id",cursor)));       
-	        ab.setEmail(cursor.getString(getIndex("email", cursor)));
-	        ab.setPassword(cursor.getString(getIndex("password", cursor)));
-	        ab.setUpdateTime(cursor.getString(getIndex("updateTime",cursor)));
-	        return ab;
-	    }
-	 
+		accountBean ab = new accountBean();
+		ab.setId(cursor.getInt(getIndex("id",cursor)));       
+		ab.setEmail(cursor.getString(getIndex("email", cursor)));
+		ab.setPassword(cursor.getString(getIndex("password", cursor)));
+		ab.setUpdateTime(cursor.getString(getIndex("updateTime",cursor)));
+		return ab;
+	}
+
 	/**
 	 * Sets info from db to the controller
 	 * @param cursor
 	 * @return userBean
 	 */
-	 public userBean cursorToUser(Cursor cursor) {
-	        userBean ub = new userBean();
-	        ub.setId(cursor.getInt(getIndex("id",cursor)));       
-	        ub.setName(cursor.getString(getIndex("name", cursor)));
-	        ub.setBio(cursor.getString(getIndex("bio", cursor)));
-	        ub.setCity(cursor.getString(getIndex("city", cursor)));
-	        ub.setCountry(cursor.getString(getIndex("country", cursor)));
-	        ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
-	        return ub;
-	    }
-	
-	 /**
-	  * Create a json with the recently added account info to send to server
-	  * @throws JSONException
+	public userBean cursorToUser(Cursor cursor) {
+		userBean ub = new userBean();
+		ub.setId(cursor.getInt(getIndex("id",cursor)));       
+		ub.setName(cursor.getString(getIndex("name", cursor)));
+		ub.setBio(cursor.getString(getIndex("bio", cursor)));
+		ub.setCity(cursor.getString(getIndex("city", cursor)));
+		ub.setCountry(cursor.getString(getIndex("country", cursor)));
+		ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
+		return ub;
+	}
+
+	/**
+	 * Create a json with the recently added account info to send to server
+	 * @throws JSONException
 	 * @throws IOException 
-	  */
+	 */
 	public void getAndCreateAccountJSON() throws JSONException, IOException
 	{
 		ArrayList<userBean> userList = getUsers();
 		ArrayList<accountBean> accountList = getAccount();
 		JSONArray jsonArray = new JSONArray();
-		
+
 		for(int i = 0; i < userList.size(); i++)
 		{
 			JSONObject account = new JSONObject();
@@ -142,9 +136,9 @@ public class syncModel extends baseDataSource
 			account.put("updateTime", accountList.get(i).getUpdateTime());
 			jsonArray.put(account);			
 		} 
-	sendJSONToServer(jsonArray);
+		sendJSONToServer(jsonArray);
 	}
-	
+
 	/**
 	 * Sends the json with account info to the server
 	 * @param jsonArray
@@ -154,12 +148,12 @@ public class syncModel extends baseDataSource
 	{
 		String str = "";
 		HttpResponse response = null;
-        HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
+		HttpClient myClient = new DefaultHttpClient();
+		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
 		try 
 		{
-		 HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		    HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -167,7 +161,7 @@ public class syncModel extends baseDataSource
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
-				
+
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -180,9 +174,9 @@ public class syncModel extends baseDataSource
 			e.printStackTrace();
 			throw e;
 		}
-	
+
 	}
-	
+
 	/**
 	 * Gets the json with it's sync info from the server
 	 * @throws JSONException
@@ -198,51 +192,51 @@ public class syncModel extends baseDataSource
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
-        HttpClient myClient = new DefaultHttpClient();
-        HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
-       HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-       HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
-       
-        try 
+		HttpClient myClient = new DefaultHttpClient();
+		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
+		HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
+		HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+
+		try 
 		{
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
-			
+
 			try 
 			{
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
-				
+
 			} 
 			catch (ClientProtocolException e) 
 			{							
 				e.printStackTrace();
 				throw e;
 			} 
-			
+
 			JSONArray jArray = new JSONArray(str);
-            if (jArray.length() != 0) 
-            {
-                json = jArray.getJSONObject(0);
-                for (int i = 0; i < jArray.length(); i++) 
-                {
-                	accountBean account = new accountBean();
-                	userBean user = new userBean();
-                    json = jArray.getJSONObject(i);
-                    account.setEmail(json.getString("email"));
-                    account.setPassword(json.getString("password"));
-                    user.setName(json.getString("name"));
-                    user.setBio(json.getString("bio"));
-                    user.setCity(json.getString("city"));
-                    user.setCookingInterest(json.getString("cookingInterest"));
-                    user.setCountry(json.getString("country"));
-        			accountModel accountmodel = new accountModel(context);
-        			accountmodel.insertAccount(account, user);
-                }
-            }
-                    
-                    
+			if (jArray.length() != 0) 
+			{
+				json = jArray.getJSONObject(0);
+				for (int i = 0; i < jArray.length(); i++) 
+				{
+					accountBean account = new accountBean();
+					userBean user = new userBean();
+					json = jArray.getJSONObject(i);
+					account.setEmail(json.getString("email"));
+					account.setPassword(json.getString("password"));
+					user.setName(json.getString("name"));
+					user.setBio(json.getString("bio"));
+					user.setCity(json.getString("city"));
+					user.setCookingInterest(json.getString("cookingInterest"));
+					user.setCountry(json.getString("country"));
+					accountModel accountmodel = new accountModel(context);
+					accountmodel.insertAccount(account, user);
+				}
+			}
+
+
 		}
 		catch (IOException e) 
 		{
@@ -250,8 +244,8 @@ public class syncModel extends baseDataSource
 			throw e;
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 }

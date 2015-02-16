@@ -2,23 +2,7 @@ package com.example.recipesforlife.views;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import org.json.JSONException;
-
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.PostTask;
-import com.example.recipesforlife.models.accountModel;
-import com.example.recipesforlife.models.databaseConnection;
-import com.example.recipesforlife.models.syncModel;
-import com.example.recipesforlife.models.syncRecipeModel;
-import com.example.recipesforlife.models.util;
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.controllers.userBean;
-
-
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -37,11 +21,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.accountBean;
+import com.example.recipesforlife.controllers.userBean;
+import com.example.recipesforlife.models.PostTask;
+import com.example.recipesforlife.models.accountModel;
+import com.example.recipesforlife.models.databaseConnection;
+import com.example.recipesforlife.models.util;
 
 /**
  * Class that handles the sign in/sign up page that is showed initially
@@ -70,7 +59,7 @@ public class SignUpSignInActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
+		.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		counter = 0;
 		setContentView(R.layout.signupsigninactivity);
@@ -85,13 +74,13 @@ public class SignUpSignInActivity extends Activity {
 			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();
-	        editor2.putString("Date", "2015-01-01 12:00:00");
-	        editor2.commit();
+			editor2.putString("Date", "2015-01-01 12:00:00");
+			editor2.commit();
 			Editor editor3 = sharedpreferences.edit();
 			editor3.putString("Date Server", "2015-01-01 12:00:00");
 			editor3.commit();
-	        editor2.putString("Account Date", "2015-01-01 12:00:00");
-	        editor2.commit();
+			editor2.putString("Account Date", "2015-01-01 12:00:00");
+			editor2.commit();
 			editor3.putString("Account Date Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			editor3.putString("Change", "2015-01-01 12:00:00");
@@ -103,9 +92,9 @@ public class SignUpSignInActivity extends Activity {
 			editor3.putString("Cookbook Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			buildDatabase();
-			  new PostTask(utils).doInBackground(null);
+			new PostTask(utils).doInBackground("");
 		} else {
-			  new PostTask(utils).doInBackground(null);
+			new PostTask(utils).doInBackground("");
 		}
 		// Style for activity
 		typeFace = Typeface.createFromAsset(getAssets(), "fonts/elsie.ttf");
@@ -138,7 +127,7 @@ public class SignUpSignInActivity extends Activity {
 					account = new ArrayList<String>();
 					// Creates a custom dialog
 					final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.signupcustomdialog);
-				
+
 					// Set dialogs style
 					utils.setDialogText(R.id.nameView, dialog, 22);
 					utils.setDialogText(R.id.emailView, dialog, 22);
@@ -174,13 +163,13 @@ public class SignUpSignInActivity extends Activity {
 								// Set button click
 								Button nextDialogButton = utils.setButtonTextDialog(R.id.signUpButton, 22, nextDialog);
 								nextDialogButton
-										.setOnClickListener(new OnClickListener() {
-											@Override
-											public void onClick(View v) {
-												getSecondDialogInfo(nextDialog);
-											}
+								.setOnClickListener(new OnClickListener() {
+									@Override
+									public void onClick(View v) {
+										getSecondDialogInfo(nextDialog);
+									}
 
-										});
+								});
 								nextDialog.show();
 							}
 						}
@@ -255,7 +244,7 @@ public class SignUpSignInActivity extends Activity {
 			startActivity(i);
 		} else {
 			final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.textviewdialog);
-			
+
 			// Set dialogs style
 			utils.setDialogText(R.id.textView, dialog, 18);
 			TextView txtView = (TextView) dialog.findViewById(R.id.textView);
@@ -281,15 +270,15 @@ public class SignUpSignInActivity extends Activity {
 	 * @param dialog
 	 */
 	public boolean getInitialDialogInfo(Dialog dialog) {
-		
+
 		TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView, dialog, 16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
-	   
+
 		email = utils.getTextFromDialog(R.id.emailEdit, dialog);
 		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
 		name = utils.getTextFromDialog(R.id.nameEdit, dialog);
-		
+
 		Context t = getApplicationContext();
 		accountModel accountmodel = new accountModel(t);
 		if (accountmodel.checkEmail(email) == true) {
@@ -320,12 +309,12 @@ public class SignUpSignInActivity extends Activity {
 		TextView errorView = (TextView) nextDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView, nextDialog, 16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
-	
+
 		city =utils.getTextFromDialog(R.id.cityEdit, nextDialog);
 		country = utils.getTextFromDialog(R.id.countryEdit, nextDialog);
 		bio = utils.getTextFromDialog(R.id.bioEditText, nextDialog);
 		interest = utils.getTextFromDialog(R.id.interestEditText, nextDialog);
-		
+
 		if (country.equals("")) {
 			errorView.setText("Please enter a country \n");
 		} else {
