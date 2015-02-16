@@ -111,6 +111,16 @@ public class util {
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
 	
+	public void setRowText(int resource, View rowview, int fontSize)
+	{
+		//Style for activity
+		//typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
+		TextView view = (TextView)	 rowview.findViewById(resource);
+		view.setTypeface(typeFace);
+		view.setTextSize(fontSize);
+		view.setTextColor(Color.parseColor("#FFFFFFFF"));
+	}
+	
 	/**
 	 * Set custom text for the dialog
 	 * @param resource

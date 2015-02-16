@@ -38,6 +38,7 @@ public class CookbookContribListViewActivity extends Activity {
 	util utils;
 	cookbookModel model;
 	ArrayList<cookbookBean> cookbookList;
+	Activity activity;
 
 	public static final String emailk = "emailKey";
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class CookbookContribListViewActivity extends Activity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
-		
+		activity = CookbookContribListViewActivity.this;
 		utils = new util(getApplicationContext(), CookbookContribListViewActivity.this);
 		listView = (ListView) findViewById(R.id.list);
 		  
@@ -54,6 +55,7 @@ public class CookbookContribListViewActivity extends Activity {
 		 SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		 cookbookList = model.selectCookbooksByCreator(sharedpreferences.getString(emailk, ""));
 		 ArrayList<String> values = new ArrayList<String>();
+		// values.add("");
 		 for(int i = 0; i < cookbookList.size(); i++)
 		 {
 			 values.add(cookbookList.get(i).getName());
@@ -88,11 +90,11 @@ public class CookbookContribListViewActivity extends Activity {
                utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
                ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
              
-               ListView listView2 = (ListView) contribDialog.findViewById(R.id.list);
+               ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
                ArrayList<String> contribs = model.selectCookbookContributers(uniqueid);
 	            
-	     	  ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getApplicationContext(),
-	     	              android.R.layout.simple_list_item_1, android.R.id.text1, contribs);
+               CustomContribListAdapter adapter2 = new
+            	        CustomContribListAdapter(activity, contribs, getApplicationContext());
 	     	    
 	     	  listView2.setAdapter(adapter2); 
                
