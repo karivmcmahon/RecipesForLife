@@ -30,7 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class util {
+public class util implements Runnable {
 	
 	Context context;
 	Typeface typeFace;
@@ -347,6 +347,13 @@ public class util {
 		dialog.getWindow().setBackgroundDrawableResource(
 				android.R.color.transparent);
 		return dialog;
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+		sync();
+		
 	}
 	
 

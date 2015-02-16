@@ -14,10 +14,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +39,7 @@ import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.TimePickerFragment;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.recipeModel;
+import com.example.recipesforlife.models.PostTask;
 import com.example.recipesforlife.models.util;
 
 public class MainActivity extends Activity  {
@@ -639,7 +642,8 @@ public class MainActivity extends Activity  {
 	 @Override
 	   protected void onResume() {
 		   super.onResume();
-	       utils.sync();
+		   ////
+	       new PostTask(utils).doInBackground(null);
 	    		 
 	      
 	   }
@@ -648,3 +652,6 @@ public class MainActivity extends Activity  {
 	
 
 }
+
+
+	

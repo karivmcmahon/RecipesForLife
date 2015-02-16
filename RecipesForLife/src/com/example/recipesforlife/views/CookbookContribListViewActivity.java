@@ -1,6 +1,7 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,12 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -178,13 +181,41 @@ public class CookbookContribListViewActivity extends Activity {
 	     	}
 	     	else if(type.equals("edit"))
 	     	{
-	     		  Dialog editDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.cookbookeditdialog);
+	     		  final Dialog editDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.cookbookeditdialog);
 	               utils.setDialogText(R.id.editBookView, editDialog, 22);
 	               utils.setDialogText(R.id.bookNameView, editDialog, 22);
 	               utils.setDialogText(R.id.bookDescView, editDialog, 22);
 	               utils.setDialogText(R.id.privacyView, editDialog, 22);
-	               utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
-	               editDialog.show();
+	              Button btn = utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
+	               ArrayList<cookbookBean> cookbook = model.selectCookbook(uniqueid);
+	               utils.setDialogTextString(R.id.bookNameEditText, editDialog, cookbook.get(0).getName());
+	               utils.setDialogTextString(R.id.bookDescEditText, editDialog, cookbook.get(0).getDescription());
+	               final Spinner spinner = (Spinner) editDialog.findViewById(R.id.privacySpinner);
+	               List<String> spinnerArray =  new ArrayList<String>();
+	               spinnerArray.add("public");
+				    spinnerArray.add("private");
+				    ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(
+						    CookbookContribListViewActivity.this, R.layout.item, spinnerArray);
+
+						spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+						
+						spinner.setAdapter(spinneradapter);
+						spinner.setSelection(getIndex(spinner, cookbook.get(0).getPrivacy()));
+	             
+						btn.setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View arg0) {
+								// TODO Auto-generated method stub
+								String name = utils.getTextFromDialog(R.id.bookNameEditText, editDialog);
+								String desc = utils.getTextFromDialog(R.id.bookDescEditText, editDialog);
+								String value = spinner.getSelectedItem().toString();
+								Log.v("n ", "N " + name + desc + value);
+								editDialog.dismiss();
+								
+							}});
+						
+						editDialog.show();
 	     	}
 				
 			}
@@ -202,5 +233,19 @@ public class CookbookContribListViewActivity extends Activity {
 	   protected void onResume() {
 		   super.onResume();
 	 }
+	 
+	 private int getIndex(Spinner spinner, String myString)
+	 {
+		 int index = 0;	
+		  for (int i=0;i<spinner.getCount();i++)
+		  {
+		   if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString))
+		   {
+		    index = i;
+		    i=spinner.getCount();//will stop the loop, kind of break, by making condition false
+		   }
+		  }
+		  return index;
+	 } 
 
 }

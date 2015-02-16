@@ -9,6 +9,7 @@ import java.util.List;
 import org.json.JSONException;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.models.PostTask;
 import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
 import com.example.recipesforlife.models.syncModel;
@@ -16,6 +17,7 @@ import com.example.recipesforlife.models.syncRecipeModel;
 import com.example.recipesforlife.models.util;
 import com.example.recipesforlife.controllers.accountBean;
 import com.example.recipesforlife.controllers.userBean;
+
 
 
 import android.app.Activity;
@@ -90,22 +92,20 @@ public class SignUpSignInActivity extends Activity {
 			editor3.commit();
 	        editor2.putString("Account Date", "2015-01-01 12:00:00");
 	        editor2.commit();
-	        sharedpreferences.edit();
 			editor3.putString("Account Date Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			editor3.putString("Change", "2015-01-01 12:00:00");
 			editor3.commit();
 			editor3.putString("Change Server", "2015-01-01 12:00:00");
 			editor3.commit();
-			editor3.putString("Cookbook", "2015-02-12 10:00:00");
+			editor3.putString("Cookbook", "2015-01-01 12:00:00");
 			editor3.commit();
 			editor3.putString("Cookbook Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			buildDatabase();
-			utils.sync();
-
+			  new PostTask(utils).doInBackground(null);
 		} else {
-			utils.sync();
+			  new PostTask(utils).doInBackground(null);
 		}
 		// Style for activity
 		typeFace = Typeface.createFromAsset(getAssets(), "fonts/elsie.ttf");

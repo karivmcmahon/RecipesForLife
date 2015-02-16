@@ -163,6 +163,26 @@ public class cookbookModel extends baseDataSource {
         return cbList;	
 	}
 	
+	public ArrayList<cookbookBean> selectCookbook(String uniqueid)
+	{
+		
+		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
+	    open();
+        Cursor cursor = database.rawQuery("SELECT * FROM Cookbook   WHERE uniqueid=?", new String[] { uniqueid });
+        if (cursor != null && cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                cbList.add(cursorToCookbook(cursor));
+                
+                
+            }
+        }
+        cursor.close();
+        close();
+        return cbList;	
+	}
+	
+	
 	public int selectCookbooksID(String name, String user)
 	{
 		int id = 0;
