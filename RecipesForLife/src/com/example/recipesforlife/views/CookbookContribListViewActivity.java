@@ -182,7 +182,10 @@ public class CookbookContribListViewActivity extends Activity {
 	     	else if(type.equals("edit"))
 	     	{
 	     		  final Dialog editDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.cookbookeditdialog);
-	               utils.setDialogText(R.id.editBookView, editDialog, 22);
+	     		 final TextView errorView = (TextView) editDialog.findViewById(R.id.errorView);
+	     		utils.setDialogText(R.id.errorView,editDialog,16);
+	     		errorView.setTextColor(Color.parseColor("#F70521"));
+	     		  utils.setDialogText(R.id.editBookView, editDialog, 22);
 	               utils.setDialogText(R.id.bookNameView, editDialog, 22);
 	               utils.setDialogText(R.id.bookDescView, editDialog, 22);
 	               utils.setDialogText(R.id.privacyView, editDialog, 22);
@@ -209,12 +212,23 @@ public class CookbookContribListViewActivity extends Activity {
 							public void onClick(View arg0) {
 								// TODO Auto-generated method stub
 								cookbookBean cb = new cookbookBean();
+								if(utils.getTextFromDialog(R.id.bookNameEditText, editDialog).equals(""))
+								{
+									errorView.setText("Please enter a cookbook name");
+								}
+								else if(utils.getTextFromDialog(R.id.bookDescEditText, editDialog).equals(""))
+								{
+									errorView.setText("Please enter a description");
+								}
+								else
+								{
 								cb.setName(utils.getTextFromDialog(R.id.bookNameEditText, editDialog));
 								cb.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, editDialog));
 								cb.setPrivacy(spinner.getSelectedItem().toString());
 								cb.setUniqueid(uid);
 								model.updateBook(cb);
 								editDialog.dismiss();
+								}
 								
 							}});
 						
