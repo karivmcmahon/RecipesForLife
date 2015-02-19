@@ -38,12 +38,20 @@ public class syncCookbookModel extends baseDataSource {
 	 * Get cookbooks inserted within a certain time frame
 	 * @return
 	 */
-	public ArrayList<cookbookBean> getCookbook()
+	public ArrayList<cookbookBean> getCookbook(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
+		Cursor cursor;
 		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
-		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Cookbook Server", "DEFAULT"), sharedpreferences.getString("Cookbook", "DEFAULT")   });
+		if(update == true)
+		{
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Cookbook Update Server", "DEFAULT"), sharedpreferences.getString("Cookbook Update", "DEFAULT")   });
+		}
+		else
+		{
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Cookbook Server", "DEFAULT"), sharedpreferences.getString("Cookbook", "DEFAULT")   });
+		}
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -77,9 +85,9 @@ public class syncCookbookModel extends baseDataSource {
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
-	public void getAndCreateJSON() throws JSONException, IOException
+	public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	{
-		ArrayList<cookbookBean> bookList = getCookbook();
+		ArrayList<cookbookBean> bookList = getCookbook(update);
 		JSONArray jsonArray = new JSONArray();
 
 		for(int i = 0; i < bookList.size(); i++)
@@ -95,7 +103,7 @@ public class syncCookbookModel extends baseDataSource {
 			jsonArray.put(book);			
 		} 
 		Log.v("JSON", "JSON cb " + jsonArray); 
-		sendJSONToServer(jsonArray);
+		sendJSONToServer(jsonArray, update);
 	}
 
 	/**
@@ -103,12 +111,20 @@ public class syncCookbookModel extends baseDataSource {
 	 * @param jsonArray
 	 * @throws IOException
 	 */
-	public void sendJSONToServer(JSONArray jsonArray) throws IOException
+	public void sendJSONToServer(JSONArray jsonArray, boolean update ) throws IOException
 	{
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm7.aspx");      	   	
+		HttpPost myConnection = null;
+		if(update == true)
+		{
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm9.aspx");      	   	
+		}
+		else
+		{
+		 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm7.aspx");      	   	
+		}
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
@@ -144,18 +160,28 @@ public class syncCookbookModel extends baseDataSource {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void getJSONFromServer() throws JSONException, IOException
+	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		date.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT"));
+		HttpPost myConnection = null;
+		if(update == true)
+		{
+			date.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
+		    myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx");      	   	
+		}
+		else
+		{
+			date.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT"));
+		    myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx");      	   	
+		}
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx");      	   	
+		
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
@@ -189,7 +215,14 @@ public class syncCookbookModel extends baseDataSource {
 				book.setUniqueid(json.getString("uniqueid"));
 				book.setCreator(json.getString("creator"));
 				cookbookModel model = new cookbookModel(context);
-				model.insertBook(book, true);
+				if(update == true)
+				{
+					model.updateBook(book);
+				}
+				else
+				{
+					model.insertBook(book, true);
+				}
 
 			} 
 

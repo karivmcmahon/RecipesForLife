@@ -14,7 +14,7 @@ import android.util.Log;
 	   @Override
 	public String doInBackground(String... arg0 ) {
 	     
-	 
+	 Log.v("Run in bg", "Run in bg");
 	   
 	         utils.sync();
 	      

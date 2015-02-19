@@ -176,9 +176,11 @@ public class recipeModel extends baseDataSource {
 			insertCookbookRecipe(recipe.getRecipeBook(),recipe.getAddedBy());
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
+			close();    	
 		}catch(SQLException e)
 		{
 			database.endTransaction();
+			close();    	
 		} 
 		close();    	
 	}
@@ -235,8 +237,8 @@ public class recipeModel extends baseDataSource {
 	{
 
 		ContentValues value = new ContentValues();
-		cookbookModel model = new cookbookModel(context);
-		int id = model.selectCookbooksID(name, addedBy);
+		//cookbookModel model = new cookbookModel(context);
+		int id = selectCookbooksID(name, addedBy);
 		value.put("Recipeid", recipeID);
 		value.put("Cookbookid", id);
 		value.put("updateTime", utils.getLastUpdated()); 
@@ -567,6 +569,24 @@ public class recipeModel extends baseDataSource {
 		}
 		cursor.close();
 		return false;
+	}
+	
+	public int selectCookbooksID(String name, String user)
+	{
+		int id = 0;
+	//	open();
+		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=? AND name=?", new String[] { user , name });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				id = cursor.getInt(getIndex("id",cursor));
+
+
+			}
+		}
+		cursor.close(); 
+		//close();
+		return id;	
 	}
 
 }

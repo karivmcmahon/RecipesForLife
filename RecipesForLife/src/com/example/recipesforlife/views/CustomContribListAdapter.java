@@ -3,13 +3,16 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -62,11 +65,33 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 				// TODO Auto-generated method stub
 				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 				{
-					cookbookModel model = new cookbookModel(context);
-					int id = model.selectCookbooksIDByUnique(cookbookuid);
-					model.deleteContributers(id, users.get(position));
-					users.remove(position);
-					notifyDataSetChanged();
+					final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
+					utils.setDialogText(R.id.textView, dialog, 18);
+					TextView tv = (TextView) dialog.findViewById(R.id.textView);
+					tv.setText("Would you like to delete this user ?");
+					// Show dialog
+					dialog.show();
+					Button button = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+					button.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							cookbookModel model = new cookbookModel(context);
+							int id = model.selectCookbooksIDByUnique(cookbookuid);
+							model.deleteContributers(id, users.get(position));
+							users.remove(position);
+							notifyDataSetChanged();
+							dialog.dismiss();
+						}
+					});
+					Button button2 = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+					button2.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							dialog.dismiss();
+						}
+					});
 				}
 				return false;
 			}

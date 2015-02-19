@@ -277,7 +277,7 @@ public class util  {
 
 	public void sync()
 	{
-		if(checkInternetConnection(context))
+		if(checkInternetConnection(context) == true)
 		{
 			sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 			syncModel sync = new syncModel(context);
@@ -290,7 +290,7 @@ public class util  {
 				editor.putString("Account Date", getLastUpdated());
 				editor.commit();
 
-				syncCookbook.getJSONFromServer();
+				syncCookbook.getJSONFromServer(false);
 				editor.putString("Cookbook", getLastUpdated());
 				editor.commit();
 
@@ -301,12 +301,16 @@ public class util  {
 				updates.getJSONFromServer();
 				editor.putString("Change", getLastUpdated());
 				editor.commit(); 
+				
+			    syncCookbook.getJSONFromServer(true);
+				editor.putString("Cookbook Update", getLastUpdated());
+				editor.commit(); 
 
 				sync.getAndCreateAccountJSON();
 				editor.putString("Account Date Server", getLastUpdated());
 				editor.commit();
 
-				syncCookbook.getAndCreateJSON();
+				syncCookbook.getAndCreateJSON(false);
 				editor.putString("Cookbook Server", getLastUpdated());
 				editor.commit();
 
@@ -316,6 +320,10 @@ public class util  {
 
 				updates.getAndCreateJSON();
 				editor.putString("Change Server", getLastUpdated());
+				editor.commit(); 
+				
+				syncCookbook.getAndCreateJSON(true);
+				editor.putString("Cookbook Update Server", getLastUpdated());
 				editor.commit(); 
 
 

@@ -415,6 +415,25 @@ public class cookbookModel extends baseDataSource {
 		close();
 		return id;	
 	}
+	
+
+	public String selectCookbooksByRowID(int rowid)
+	{
+		String id = "";
+		open();
+		Cursor cursor = database.rawQuery("SELECT uniqueid FROM Cookbook WHERE id=?", new String[] { Integer.toString(rowid) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				id = cursor.getString(getIndex("uniqueid",cursor));
+
+
+			}
+		}
+		cursor.close(); 
+		close();
+		return id;	
+	}
 
 
 }
