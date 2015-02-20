@@ -197,6 +197,23 @@ public class cookbookModel extends baseDataSource {
 		close();
 		return names;	
 	}
+	
+	public boolean selectContributer(String email, int id)
+	{
+		boolean exists = false;
+		open();
+		Cursor cursor = database.rawQuery("SELECT * FROM  Contributers  WHERE cookbookid=? AND accountid=?", new String[] { Integer.toString(id) , email});
+		if (cursor != null && cursor.getCount() > 0) {
+		 exists = true;
+		}
+		else
+		{
+			exists = false;
+		}
+		cursor.close();
+		close();
+		return exists;
+	}
 
 	/**
 	 * Select cookbooks which belong to a user 
