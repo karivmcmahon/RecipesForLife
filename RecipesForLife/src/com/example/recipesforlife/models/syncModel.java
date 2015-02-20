@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.recipesforlife.controllers.accountBean;
 import com.example.recipesforlife.controllers.userBean;
@@ -241,6 +242,13 @@ public class syncModel extends baseDataSource
 		catch (IOException e) 
 		{
 			e.printStackTrace();
+			throw e;
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Toast.makeText(context, 
+					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 	}

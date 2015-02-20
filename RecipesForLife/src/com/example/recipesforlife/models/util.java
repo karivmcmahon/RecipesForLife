@@ -284,6 +284,7 @@ public class util  {
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
+			syncContributersModel syncContributer = new syncContributersModel(context);
 			try {
 				sync.getJSONFromServer();
 				Editor editor = sharedpreferences.edit();
@@ -297,6 +298,11 @@ public class util  {
 				syncRecipe.getJSONFromServer();
 				editor.putString("Date", getLastUpdated());
 				editor.commit();
+				
+				syncContributer.getJSONFromServer();
+				editor.putString("Contributers", getLastUpdated());
+				editor.commit();
+
 
 				updates.getJSONFromServer();
 				editor.putString("Change", getLastUpdated());
@@ -313,9 +319,14 @@ public class util  {
 				syncCookbook.getAndCreateJSON(false);
 				editor.putString("Cookbook Server", getLastUpdated());
 				editor.commit();
+			
 
 				syncRecipe.getAndCreateJSON();
 				editor.putString("Date Server", getLastUpdated());
+				editor.commit();
+				
+				syncContributer.getAndCreateJSON();
+				editor.putString("Contributers Server", getLastUpdated());
 				editor.commit();
 
 				updates.getAndCreateJSON();

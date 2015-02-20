@@ -95,6 +95,10 @@ public class SignUpSignInActivity extends Activity {
 			editor3.commit();
 			editor3.putString("Cookbook Update Server", "2015-01-01 12:00:00");
 			editor3.commit();
+			editor3.putString("Contributers", "2015-01-01 12:00:00");
+			editor3.commit();
+			editor3.putString("Contributers Server", "2015-01-01 12:00:00");
+			editor3.commit();
 			buildDatabase();
 			new PostTask(utils).doInBackground("");
 		} else {

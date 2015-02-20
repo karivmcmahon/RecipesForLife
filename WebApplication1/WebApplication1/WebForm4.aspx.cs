@@ -19,7 +19,7 @@ namespace WebApplication1
             if (jsonInput != null)
             {
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                var time = js.Deserialize<List<Date>>(jsonInput);
+                var time = js.Deserialize<List<RecipeDate>>(jsonInput);
                 string lastUpdated = time[0].updateTime;
                 SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
                 SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
@@ -126,7 +126,7 @@ namespace WebApplication1
         }
     }
 
-    public class Date
+    public class RecipeDate
     {
         public string updateTime { get; set; }
     }

@@ -387,6 +387,13 @@ public class syncRecipeModel extends baseDataSource {
 					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+			Toast.makeText(context, 
+					"Connection to server failed", Toast.LENGTH_LONG).show();
+			throw e;
+		}
 	}
 
 	/**
