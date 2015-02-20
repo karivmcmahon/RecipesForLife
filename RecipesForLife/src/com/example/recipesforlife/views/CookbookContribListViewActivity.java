@@ -164,8 +164,6 @@ public class CookbookContribListViewActivity extends Activity {
 									}
 									id = model.selectCookbooksIDByUnique(uniqueid);
 									boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
-
-									adapter2.clear();
 									if(contribExists == true)
 									{
 										model.updateContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, "added");
@@ -175,6 +173,7 @@ public class CookbookContribListViewActivity extends Activity {
 										model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 									}
 									contribs = model.selectCookbookContributers(uniqueid, "added");
+									adapter2.clear();
 									adapter2.addAll(contribs);
 									adapter2.notifyDataSetChanged();
 									addContribDialog.dismiss();
