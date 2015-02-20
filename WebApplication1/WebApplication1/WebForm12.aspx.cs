@@ -19,9 +19,19 @@ namespace WebApplication1
 				JavaScriptSerializer js = new JavaScriptSerializer();
                 var time = js.Deserialize<List<Date2>>(jsonInput);
 				string lastUpdated = time[0].updateTime;
+				string change = time[0].change;
 				
 				SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-				SqlCommand select = new SqlCommand(" SELECT * FROM Contributers WHERE updateTime > @lastUpdated", con);
+				SqlCommand select = null;
+				if(change == "true")
+				{
+					 select = new SqlCommand(" SELECT * FROM Contributers WHERE changeTime > @lastUpdated", con);
+				}
+				else
+				{
+				      select = new SqlCommand(" SELECT * FROM Contributers WHERE updateTime > @lastUpdated", con);
+				}
+				
                 select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 				con.Open();
 				
@@ -33,6 +43,7 @@ namespace WebApplication1
                 {
 					Contributer contrib = new Contributer();
 					contrib.email = (string)reader["usersId"];
+					contrib.progress = (string)reader["progress"];
 					
 					SqlCommand select2 = new SqlCommand(" SELECT uniqueid FROM Cookbook WHERE id=@id", con);
                     select2.Parameters.AddWithValue("@id", (Int32)reader["Cookbookid"]);
@@ -54,6 +65,7 @@ namespace WebApplication1
 public class Date2
 {
         public string updateTime { get; set; }
+		public string change { get; set; }
 }
 
  public class Contributers
@@ -67,4 +79,5 @@ public class Contributer
 {
 	public string bookid { get; set; }
 	public string email { get; set; }
+	public string progress {get; set; }
 }

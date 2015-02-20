@@ -283,9 +283,10 @@ public class util  {
 			syncModel sync = new syncModel(context);
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
-			syncRecipeUpdateModel updates= new syncRecipeUpdateModel(context);
 			syncContributersModel syncContributer = new syncContributersModel(context);
 			try {
+				
+				//Get json from server for inserts
 				sync.getJSONFromServer();
 				Editor editor = sharedpreferences.edit();
 				editor.putString("Account Date", getLastUpdated());
@@ -295,47 +296,60 @@ public class util  {
 				editor.putString("Cookbook", getLastUpdated());
 				editor.commit();
 
-				syncRecipe.getJSONFromServer();
+				syncRecipe.getJSONFromServer(false);
 				editor.putString("Date", getLastUpdated());
 				editor.commit();
 				
-				syncContributer.getJSONFromServer();
+				syncContributer.getJSONFromServer(false);
 				editor.putString("Contributers", getLastUpdated());
 				editor.commit();
+				
+				//Get json from server for updates
 
-
-				updates.getJSONFromServer();
+				syncRecipe.getJSONFromServer(true);
 				editor.putString("Change", getLastUpdated());
 				editor.commit(); 
 				
 			    syncCookbook.getJSONFromServer(true);
 				editor.putString("Cookbook Update", getLastUpdated());
 				editor.commit(); 
+				
+				syncContributer.getJSONFromServer(true);
+				editor.putString("Contributers Update", getLastUpdated());
+				editor.commit();
 
+				// Sending JSONS to server for inserts
+				
 				sync.getAndCreateAccountJSON();
 				editor.putString("Account Date Server", getLastUpdated());
 				editor.commit();
+
 
 				syncCookbook.getAndCreateJSON(false);
 				editor.putString("Cookbook Server", getLastUpdated());
 				editor.commit();
 			
 
-				syncRecipe.getAndCreateJSON();
+				syncRecipe.getAndCreateJSON(false);
 				editor.putString("Date Server", getLastUpdated());
 				editor.commit();
 				
-				syncContributer.getAndCreateJSON();
+				syncContributer.getAndCreateJSON(false);
 				editor.putString("Contributers Server", getLastUpdated());
 				editor.commit();
 
-				updates.getAndCreateJSON();
+				// Sending  JSON's to server for changes
+				syncRecipe.getAndCreateJSON(true);
 				editor.putString("Change Server", getLastUpdated());
 				editor.commit(); 
 				
 				syncCookbook.getAndCreateJSON(true);
 				editor.putString("Cookbook Update Server", getLastUpdated());
-				editor.commit(); 
+				editor.commit();
+				
+				syncContributer.getAndCreateJSON(true);
+				editor.putString("Contributers Update Server", getLastUpdated());
+				editor.commit();
 
 
 				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));

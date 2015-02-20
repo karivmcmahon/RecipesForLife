@@ -40,13 +40,21 @@ public class syncRecipeModel extends baseDataSource {
 	 * Gets recipe to send to server based on date they were added using shared preferecnes
 	 * @return ArrayList<recipeBean> recipeList
 	 */
-	public ArrayList<recipeBean> getRecipe()
+	public ArrayList<recipeBean> getRecipe(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
-		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
-		if (cursor != null && cursor.getCount() > 0) {
+		Cursor cursor = null;
+		if(update == true)
+		{
+		  cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
+		}
+		else
+		{
+			cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
+		}
+		 if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				recipeList.add(cursorToRecipe(cursor));
@@ -155,12 +163,12 @@ public class syncRecipeModel extends baseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-		Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND recipeId = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(id) });
+		Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE recipeId = ?", new String[] {   Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				int prepid = cursor.getInt(getIndex("Preperationid", cursor));
-				Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) AND id = ?", new String[] {  sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT") , Integer.toString(prepid) });
+				Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE  id = ?", new String[] {  Integer.toString(prepid) });
 				if (cursor2 != null && cursor2.getCount() > 0) {
 					for (int x = 0; x < cursor2.getCount(); x++) {
 						cursor2.moveToPosition(x);
@@ -196,9 +204,9 @@ public class syncRecipeModel extends baseDataSource {
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
-	public void getAndCreateJSON() throws JSONException, IOException
+	public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	{
-		ArrayList<recipeBean> recipeList = getRecipe();
+		ArrayList<recipeBean> recipeList = getRecipe(update);
 		JSONArray jsonArray = new JSONArray();
 
 		for(int i = 0; i < recipeList.size(); i++)
@@ -273,7 +281,7 @@ public class syncRecipeModel extends baseDataSource {
 			jsonArray.put(recipe);			
 		} 
 		Log.v("WHAT ", "WHAT " + jsonArray);
-		sendJSONToServer(jsonArray);
+		sendJSONToServer(jsonArray, update);
 	}
 
 	/**
@@ -281,18 +289,27 @@ public class syncRecipeModel extends baseDataSource {
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
-	public void getJSONFromServer() throws JSONException, IOException
+	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");      	   	
+		HttpPost myConnection = null;
+		if(update == true)
+		{
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx");   
+			date.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
+		}
+		else
+		{
+	    	myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");  
+	    	date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
+		}
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
@@ -373,7 +390,14 @@ public class syncRecipeModel extends baseDataSource {
 					}
 				}
 				recipeModel model = new recipeModel(context);
-				model.insertRecipe(recipe, true, ingredBeanList, prepBeanList);
+				if(update == true)
+				{
+					model.updateRecipe(recipe, prepBeanList, ingredBeanList);
+				}
+				else
+				{
+					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList);
+				}
 
 			}
 
@@ -401,12 +425,20 @@ public class syncRecipeModel extends baseDataSource {
 	 * @param jsonArray
 	 * @throws IOException 
 	 */
-	public void sendJSONToServer(JSONArray jsonArray) throws IOException
+	public void sendJSONToServer(JSONArray jsonArray, boolean update) throws IOException
 	{
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");      	   	
+		HttpPost myConnection = null;
+		if(update == true)
+		{
+			 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx"); 
+		}
+		else
+		{
+			 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");
+		}
 		try 
 		{
 			//	HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);

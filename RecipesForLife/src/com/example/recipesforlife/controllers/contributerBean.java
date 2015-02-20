@@ -4,6 +4,13 @@ public class contributerBean {
 	String account;
 	String bookUniqId;
 	String updateTime;
+	String progress;
+	public String getProgress() {
+		return progress;
+	}
+	public void setProgress(String progress) {
+		this.progress = progress;
+	}
 	public String getUpdateTime() {
 		return updateTime;
 	}

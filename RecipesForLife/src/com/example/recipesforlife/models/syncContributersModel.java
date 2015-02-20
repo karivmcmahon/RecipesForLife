@@ -37,19 +37,29 @@ public class syncContributersModel extends baseDataSource {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ArrayList<contributerBean> getContribs()
+	public ArrayList<contributerBean> getContribs(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		ArrayList<contributerBean> contribList = new ArrayList<contributerBean>();
-		Cursor cursor = database.rawQuery("SELECT * FROM Contributers WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Contributers Server", "DEFAULT"), sharedpreferences.getString("Contributers", "DEFAULT")   });
+		Cursor cursor = null;
+		if(update == true)
+		{
+			cursor = database.rawQuery("SELECT * FROM Contributers WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Contributers Update Server", "DEFAULT"), sharedpreferences.getString("Contributers Update", "DEFAULT")   });
+		}
+		else
+		{
+			cursor = database.rawQuery("SELECT * FROM Contributers WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Contributers Server", "DEFAULT"), sharedpreferences.getString("Contributers", "DEFAULT")   });
+		}
+		
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				String account = cursor.getString(getIndex("accountid",cursor));
 				int cookbookid = cursor.getInt(getIndex("cookbookid",cursor));
-				String update = cursor.getString(getIndex("updateTime", cursor));
+				String updates = cursor.getString(getIndex("updateTime", cursor));
 				String change = cursor.getString(getIndex("changeTime", cursor));
+				String progress = cursor.getString(getIndex("progress", cursor));
 				
 				cookbookModel bookmodel = new cookbookModel(context);
 				String uid = bookmodel.selectCookbooksByRowID(cookbookid);
@@ -57,7 +67,8 @@ public class syncContributersModel extends baseDataSource {
 				contrib.setAccount(account);
 				contrib.setBookUniqId(uid);
 				contrib.setChangeTime(change);
-				contrib.setUpdateTime(update);
+				contrib.setUpdateTime(updates);
+				contrib.setProgress(progress);
 				contribList.add(contrib);
 				
 			}
@@ -68,9 +79,9 @@ public class syncContributersModel extends baseDataSource {
 	} 
 	
 	
-	 public void getAndCreateJSON() throws JSONException, IOException
+	 public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	 {
-		ArrayList<contributerBean> contribs = getContribs();
+		ArrayList<contributerBean> contribs = getContribs(update);
 		JSONArray jsonArray = new JSONArray();
 
 		for(int i = 0; i < contribs.size(); i++)
@@ -80,20 +91,27 @@ public class syncContributersModel extends baseDataSource {
 			contrib.put("bookid", contribs.get(i).getBookUniqId());
 			contrib.put("updateTime", contribs.get(i).getUpdateTime());
 			contrib.put("changeTime", contribs.get(i).getChangeTime());
+			contrib.put("progress", contribs.get(i).getProgress());
 			jsonArray.put(contrib);			
 		} 
 		Log.v("JSON", "JSON contribs " + jsonArray); 
-		sendJSONToServer(jsonArray);
+		sendJSONToServer(jsonArray, update);
 	} 
 	
-	public void sendJSONToServer(JSONArray jsonArray ) throws IOException
+	public void sendJSONToServer(JSONArray jsonArray, boolean update ) throws IOException
 	{
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
 		HttpPost myConnection = null;
-		
-		 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");      	   	
+		if(update == true)
+		{
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm13.aspx");   
+		}
+		else
+		{
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");   
+		}
 		
 		try 
 		{
@@ -125,19 +143,30 @@ public class syncContributersModel extends baseDataSource {
 
 	}
 	
-	public void getJSONFromServer() throws JSONException, IOException
+	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		date.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
+		if(update == true)
+		{
+			date.put("updateTime", sharedpreferences.getString("Contributers Update", "DEFAULT"));
+			date.put("change", "true");
+		}
+		else
+		{
+			date.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
+			date.put("change", "false");
+		}
 		
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx");      	   	
+		HttpPost myConnection = null;
+		myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx"); 
+		
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
@@ -166,9 +195,18 @@ public class syncContributersModel extends baseDataSource {
 				json = jArray.getJSONObject(i);
 				String uniqid  = json.getString("bookid");
 				String email = json.getString("email");
+				String progress = json.getString("progress");
 				cookbookModel model = new cookbookModel(context);
 				int id = model.selectCookbooksIDByUnique(uniqid);
-			    model.insertContributers(email, id);
+				if(update == true)
+				{
+					Log.v("up contrib", "up contrib");
+					model.updateContributers(email, id, progress);
+				}
+				else
+				{
+					model.insertContributers(email, id);
+				}
 				
 
 			} 

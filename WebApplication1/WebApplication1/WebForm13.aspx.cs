@@ -9,15 +9,15 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
-    public partial class WebForm11 : System.Web.UI.Page
+    public partial class WebForm13 : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
             if (jsonInput != null)
             {
-                 JavaScriptSerializer js = new JavaScriptSerializer();
-                 var contribs = js.Deserialize<List<Contributer>>(jsonInput);
+				JavaScriptSerializer js = new JavaScriptSerializer();
+                var contribs = js.Deserialize<List<Contributer>>(jsonInput);
 				 for (int i = 0; i < contribs.Count(); i++)
                  {
 					 int id = 0;
@@ -38,10 +38,9 @@ namespace WebApplication1
 							 }
 						 }
 						 rdr.Close();
-						SqlCommand insert = new SqlCommand("INSERT INTO Contributers(Cookbookid,usersId,updateTime,changeTime, progress) VALUES(@bookid, @usersid, @updateTime, @changeTime, @progress)", connn);
+						SqlCommand insert = new SqlCommand("UPDATE Contributers SET progress=@progress, changeTime=@changeTime WHERE Cookbookid=@bookid AND usersId=@usersid", connn);
 						insert.Parameters.AddWithValue("@bookid", id);
 						insert.Parameters.AddWithValue("@usersid", contribs[i].email);
-						insert.Parameters.AddWithValue("@updateTime", contribs[i].updateTime);
 						insert.Parameters.AddWithValue("@changeTime", contribs[i].changeTime);
 						insert.Parameters.AddWithValue("@progress", contribs[i].progress);
 						try
@@ -65,10 +64,8 @@ namespace WebApplication1
 					 }
 					 connn.Close();
 				 }
-			}
-		
-		
-		}
+			 }
+        }
     }
 }
 

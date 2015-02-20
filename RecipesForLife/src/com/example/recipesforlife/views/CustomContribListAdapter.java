@@ -78,10 +78,10 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 						public void onClick(View arg0) {
 							cookbookModel model = new cookbookModel(context);
 							int id = model.selectCookbooksIDByUnique(cookbookuid);
-							model.deleteContributers(id, users.get(position));
+							model.updateContributers( users.get(position), id, "deleted");
 							users.remove(position);
 							notifyDataSetChanged();
-							dialog.dismiss();
+							dialog.dismiss(); 
 						}
 					});
 					Button button2 = utils.setButtonTextDialog(R.id.noButton, 22, dialog);

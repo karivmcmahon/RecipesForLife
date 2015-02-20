@@ -109,7 +109,7 @@ public class CookbookContribListViewActivity extends Activity {
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
 
 		ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
-		contribs = model.selectCookbookContributers(cbuniqueid);
+		contribs = model.selectCookbookContributers(cbuniqueid, "added");
 
 		adapter2 = new
 				CustomContribListAdapter(activity, contribs, getApplicationContext(), cbuniqueid);
@@ -166,7 +166,7 @@ public class CookbookContribListViewActivity extends Activity {
 									model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 
 									adapter2.clear();
-									contribs = model.selectCookbookContributers(uniqueid);
+									contribs = model.selectCookbookContributers(uniqueid, "added");
 									adapter2.addAll(contribs);
 									adapter2.notifyDataSetChanged();
 									addContribDialog.dismiss();

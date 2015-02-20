@@ -130,30 +130,61 @@ public class cookbookModel extends baseDataSource {
 
 
 	}
+	
+	/**
+	 * Insert contributers into the database where we know the contributers name and cookbook id
+	 * @param email
+	 * @param cookbookid
+	 */
+	public void updateContributers(String email, int cookbookid, String progress)
+	{
+
+		open();
+		ContentValues values = new ContentValues();
+		values.put("cookbookid", cookbookid); 
+		values.put("changeTime", utils.getLastUpdated()); 
+		values.put("accountid", email); 
+		values.put("progress", progress); 
+		database.beginTransaction();
+		try
+		{ 
+			database.update("Contributers", values, "cookbookid=? AND accountid=?", new String[] { Integer.toString(cookbookid), email });
+			database.setTransactionSuccessful();
+			database.endTransaction(); 
+			close();
+		}catch(SQLException e)
+		{
+			database.endTransaction();
+			close();
+		} 
+		close();
+
+
+	}
 
 	/**
 	 * Delete contributers from the database based on cookbook id and account id 
 	 * @param id
 	 * @param user
 	 */
-	public void  deleteContributers(int id, String user)
+/**	public void  deleteContributers(int id, String user)
 	{		
 		open();
 		database.delete("Contributers","cookbookid=? AND accountid=?", new String[] { Integer.toString(id), user }); 
 		close();        
-	}
+	} **/
 
 	/**
 	 * Select contributers for a specific cookbook
 	 * @param uniqueid
 	 * @return ArrayList<String> of contributers emails
 	 */
-	public ArrayList<String> selectCookbookContributers(String uniqueid)
+	public ArrayList<String> selectCookbookContributers(String uniqueid, String progress)
 	{
 
 		ArrayList<String> names = new ArrayList<String>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM  Contributers  INNER JOIN Cookbook ON Contributers.cookbookid=Cookbook.id WHERE Cookbook.uniqueid=? ", new String[] { uniqueid });
+		Cursor cursor = database.rawQuery("SELECT * FROM  Contributers  INNER JOIN Cookbook ON Contributers.cookbookid=Cookbook.id WHERE Cookbook.uniqueid=? AND Contributers.progress=? ", new String[] { uniqueid, progress });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

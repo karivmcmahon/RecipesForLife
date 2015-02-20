@@ -65,6 +65,8 @@
     <Content Include="WebForm10.aspx" />
     <Content Include="WebForm11.aspx" />
     <Content Include="WebForm12.aspx" />
+    <Content Include="WebForm13.aspx" />
+    <Content Include="WebForm14.aspx" />
     <Content Include="WebForm2.aspx" />
     <Content Include="WebForm4.aspx" />
     <Content Include="WebForm5.aspx" />
@@ -115,6 +117,20 @@
     </Compile>
     <Compile Include="WebForm12.aspx.designer.cs">
       <DependentUpon>WebForm12.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm13.aspx.cs">
+      <DependentUpon>WebForm13.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm13.aspx.designer.cs">
+      <DependentUpon>WebForm13.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm14.aspx.cs">
+      <DependentUpon>WebForm14.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm14.aspx.designer.cs">
+      <DependentUpon>WebForm14.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebForm2.aspx.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
