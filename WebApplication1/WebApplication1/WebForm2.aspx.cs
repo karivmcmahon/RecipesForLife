@@ -12,37 +12,37 @@ namespace WebApplication1
 {
     public partial class WebForm2 : System.Web.UI.Page
     {
+	
+		string jsonInput = "";
+		List<Date> dates = new List<Date>();
         protected void Page_Load(object sender, EventArgs e)
         {
-            Response.Clear();
-            string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
+            jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
             if (jsonInput != null)
             {
 
                 //Serializing a json
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                /**  Employee emp = new Employee();
-                  emp.Name = "a";
-                  emp.age = 12;
-                  string json = js.Serialize(emp); **/
-
-                var p2 = js.Deserialize<List<Date>>(jsonInput);
-                string lastUpdated = p2[0].updateTime;
-                SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-                SqlConnection con2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-                SqlCommand select = new SqlCommand(" SELECT * FROM Account WHERE updateTime > @lastUpdated", con);
-                SqlCommand select2 = new SqlCommand(" SELECT * FROM Users WHERE updateTime > @lastUpdated", con2);
-                select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
-                select2.Parameters.AddWithValue("@lastUpdated", lastUpdated);
-                con.Open();
+                dates = js.Deserialize<List<Date>>(jsonInput);
+                string lastUpdated = dates[0].updateTime;
+               
+			   SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+               SqlConnection con2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+               
+				SqlCommand selectAccount = new SqlCommand(" SELECT * FROM Account WHERE updateTime > @lastUpdated", con);
+                SqlCommand selectUsers = new SqlCommand(" SELECT * FROM Users WHERE updateTime > @lastUpdated", con2);
+                selectAccount.Parameters.AddWithValue("@lastUpdated", lastUpdated);
+                selectUsers.Parameters.AddWithValue("@lastUpdated", lastUpdated);
+               
+			   con.Open();
                 con2.Open();
-                var reader = select.ExecuteReader();
+                var reader = selectAccount.ExecuteReader();
                 
                 var list = new List<Acc>();
                 var list2 = new List<User>();
                 
                 int count = reader.FieldCount;
-                var reader2 = select2.ExecuteReader();
+                var reader2 = selectUsers.ExecuteReader();
                 while (reader.Read())
                 {
                     Acc account = new Acc();
@@ -79,7 +79,7 @@ namespace WebApplication1
                     fulllist.Add(account);
 
                 }
-                    con2.Close();
+                con2.Close();
                 con.Close();
                
                 string json = js.Serialize(fulllist);
