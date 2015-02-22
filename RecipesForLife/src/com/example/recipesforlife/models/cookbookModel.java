@@ -358,7 +358,7 @@ public class cookbookModel extends baseDataSource {
 	{
 		open();
 		ArrayList<recipeBean> names = new ArrayList<recipeBean>();
-		Cursor cursor = database.rawQuery("SELECT *, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN CookbookRecipe INNER JOIN Cookbook ON CookbookRecipe.Recipeid=Recipe.id WHERE Cookbook.uniqueid = ?", new String[] { uniqueid });
+		Cursor cursor = database.rawQuery("SELECT *, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id ", new String[] { uniqueid });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
