@@ -319,7 +319,7 @@ public class util  {
 	/**
 	 * Code to sync the databases
 	 */
-	public void sync()
+	public String sync()
 	{
 		if(checkInternetConnection(context) == true)
 		{
@@ -398,22 +398,26 @@ public class util  {
 
 				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Date Server", "DEFAULT"));
+				return "success";
 
-
-				Toast.makeText(context, 
-						"App synced", Toast.LENGTH_LONG).show();
+				/*Toast.makeText(context, 
+						"App synced", Toast.LENGTH_LONG).show();*/
 			} catch (JSONException e) {
 				e.printStackTrace();
-				Toast.makeText(context, 
-						"App sync failed", Toast.LENGTH_LONG).show();
+				return "fail";
+				/*Toast.makeText(context, 
+						"App sync failed", Toast.LENGTH_LONG).show();*/
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Toast.makeText(context, 
-						"App sync failed", Toast.LENGTH_LONG).show();
+				return "fail";
+				/*Toast.makeText(context, 
+						"App sync failed", Toast.LENGTH_LONG).show();*/
 			} 
 		}
+		return "fail";
+		
 	} 
 
 	/**

@@ -54,6 +54,7 @@ public class SignUpSignInActivity extends Activity {
 	util utils;
 	int counter;
 	SharedPreferences sharedpreferences;
+	Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class SignUpSignInActivity extends Activity {
 		utils = new util(getApplicationContext(), this);
 		accountBean = new accountBean();
 		userBean = new userBean();
+		context = getApplicationContext();
 		// Get shared pref
 		sharedpreferences = getSharedPreferences(MyPREFERENCES,
 				Context.MODE_PRIVATE);
@@ -105,9 +107,9 @@ public class SignUpSignInActivity extends Activity {
 			editor3.putString("Contributers Update Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			buildDatabase();
-			new PostTask(utils).doInBackground("");
+			new PostTask(utils, context).execute();
 		} else {
-			new PostTask(utils).doInBackground("");
+			new PostTask(utils, context).execute();
 		}
 		// Style for activity
 		typeFace = Typeface.createFromAsset(getAssets(), "fonts/elsie.ttf");
