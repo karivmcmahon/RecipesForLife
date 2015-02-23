@@ -46,7 +46,6 @@ public class accountTestCase extends AndroidTestCase  {
 		super.setUp();
 	     context 
 	        = new RenamingDelegatingContext(getContext(), "test_");
-		dbConnection = new databaseConnection(context);
 		accountmodel = new accountModel(context);
 	    copyDataBase();
 		
@@ -56,7 +55,7 @@ public class accountTestCase extends AndroidTestCase  {
 	{
 	    //Open your local db as the input stream
 	    AssetManager mg = context.getAssets();
-	    InputStream myInput = mg.open("databases/mockdv");
+	    InputStream myInput = mg.open("databases/mockdv.sqlite");
 	
 	    // Path to the just created empty db
 	    String outFileName = accountmodel.dbHelper.getWritableDatabase().getPath().toString();
@@ -79,8 +78,7 @@ public class accountTestCase extends AndroidTestCase  {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		accountmodel.close();
-		accountmodel = null;
+	
 	}
 	
 	

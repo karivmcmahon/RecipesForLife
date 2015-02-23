@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import org.json.JSONException;
 
@@ -13,6 +14,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -381,6 +383,8 @@ public class util  {
 				android.R.color.transparent);
 		return dialog;
 	}
+	
+	
 
 
 

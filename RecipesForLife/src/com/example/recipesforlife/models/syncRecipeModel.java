@@ -295,7 +295,6 @@ public class syncRecipeModel extends baseDataSource {
 		JSONObject date = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
@@ -310,6 +309,7 @@ public class syncRecipeModel extends baseDataSource {
 	    	myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");  
 	    	date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
+		jsonArray.put(date);
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
@@ -346,7 +346,12 @@ public class syncRecipeModel extends baseDataSource {
 				recipe.setUniqueid(json.getString("uniqueid"));
 
 				cookbookModel cbmodel = new cookbookModel(context);
-				String name = cbmodel.selectCookbooksNameByID(json.getString("cookingid"));
+				String cookingid = "";
+				//if(json.has("cookingid"))
+				//{
+				cookingid = json.optString("cookingid");
+				//}
+				String name = cbmodel.selectCookbooksNameByID(cookingid);
 				Log.v("Book name ", "Book name " + name);
 				recipe.setRecipeBook(name);
 

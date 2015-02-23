@@ -18,6 +18,7 @@ public class cookbookModel extends baseDataSource {
 
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
+	recipeModel recipemodel;
 	SharedPreferences sharedpreferences;
 	Context context;
 	utility utils;
@@ -27,6 +28,7 @@ public class cookbookModel extends baseDataSource {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		utils = new utility();
+		recipemodel = new recipeModel(context);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class cookbookModel extends baseDataSource {
 		}
 		else
 		{
-			values.put("uniqueid", generateUUID(book.getCreator(), "Cookbook"));
+			values.put("uniqueid", utils.generateUUID(book.getCreator(), "Cookbook", database));
 		}
 		database.beginTransaction();
 		try
@@ -379,7 +381,6 @@ public class cookbookModel extends baseDataSource {
 	 */
 	public cookbookBean cursorToCookbook(Cursor cursor) {
 		cookbookBean cb = new cookbookBean();
-		Log.v("nameeeeeee", "nameeeeeee" + cursor.getString(getIndex("name",cursor)));
 		cb.setName(cursor.getString(getIndex("name",cursor)));
 		cb.setDescription(cursor.getString(getIndex("description",cursor)));
 		cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
@@ -402,43 +403,7 @@ public class cookbookModel extends baseDataSource {
 		return rb;
 	}
 
-	/**
-	 * Generates UUID then adds the name and type of table - to create a more detailed unique id
-	 * @param addedBy
-	 * @param table
-	 * @return
-	 */
-	public String generateUUID(String addedBy, String table ) {
-		//   final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		final String uuid = UUID.randomUUID().toString();
-		String uniqueid = addedBy + table + uuid;
-		boolean exists = selectUUID(table, uniqueid);
-		if(exists == true)
-		{
-			selectUUID(table, uniqueid);
-		}
-		return uniqueid;
-	}
 
-	/**
-	 * Checks if unique id exists - if so create another one
-	 * @param table
-	 * @param uuid
-	 * @return
-	 */
-	public boolean selectUUID(String table, String uuid )
-	{		
-		Cursor cursor = database.rawQuery("SELECT uniqueid FROM " + table + " WHERE uniqueid=?", new String[] { uuid});
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				return true;
-
-			}
-		}
-		cursor.close();
-		return false;
-	}
 
 	/**
 	 * Select cookbooks id based on creator and name of the book

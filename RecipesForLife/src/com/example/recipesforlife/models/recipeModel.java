@@ -165,7 +165,7 @@ public class recipeModel extends baseDataSource {
 		}
 		else
 		{
-			values.put("uniqueid", generateUUID(recipe.getAddedBy(), "Recipe"));
+			values.put("uniqueid", utils.generateUUID(recipe.getAddedBy(), "Recipe", database));
 		}
 		database.beginTransaction();
 		try
@@ -203,7 +203,7 @@ public class recipeModel extends baseDataSource {
 			}
 			else
 			{
-				prepvalues.put("uniqueid", generateUUID(addedBy, "Preperation"));
+				prepvalues.put("uniqueid", utils.generateUUID(addedBy, "Preperation", database));
 			}
 			prepvalues.put("updateTime", utils.getLastUpdated()); 
 			prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
@@ -295,7 +295,7 @@ public class recipeModel extends baseDataSource {
 		}
 		else
 		{
-			ingredDetailsValues.put("uniqueid", generateUUID(addedBy, "IngredientDetails"));
+			ingredDetailsValues.put("uniqueid", utils.generateUUID(addedBy, "IngredientDetails", database));
 		}
 		ingredDetsID = database.insertOrThrow("IngredientDetails", null, ingredDetailsValues);
 
@@ -533,43 +533,7 @@ public class recipeModel extends baseDataSource {
 		return pb;
 	}
 
-	/**
-	 * Generates UUID then adds the name and type of table - to create a more detailed unique id
-	 * @param addedBy
-	 * @param table
-	 * @return
-	 */
-	public String generateUUID(String addedBy, String table ) {
-		//   final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		final String uuid = UUID.randomUUID().toString();
-		String uniqueid = addedBy + table + uuid;
-		boolean exists = selectUUID(table, uniqueid);
-		if(exists == true)
-		{
-			selectUUID(table, uniqueid);
-		}
-		return uniqueid;
-	}
-
-	/**
-	 * Checks if unique id exists - if so create another one
-	 * @param table
-	 * @param uuid
-	 * @return
-	 */
-	public boolean selectUUID(String table, String uuid )
-	{		
-		Cursor cursor = database.rawQuery("SELECT uniqueid FROM " + table + " WHERE uniqueid=?", new String[] { uuid});
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				return true;
-
-			}
-		}
-		cursor.close();
-		return false;
-	}
+	
 	
 	public int selectCookbooksID(String name, String user)
 	{

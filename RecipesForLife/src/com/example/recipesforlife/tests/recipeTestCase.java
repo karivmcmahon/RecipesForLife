@@ -46,7 +46,7 @@ public class recipeTestCase extends AndroidTestCase{
 	{
 	    //Open your local db as the input stream
 	    AssetManager mg = context.getAssets();
-	    InputStream myInput = mg.open("databases/mockdv");
+	    InputStream myInput = mg.open("databases/mockdv.sqlite");
 	
 	    // Path to the just created empty db
 	    String outFileName = recipemodel.dbHelper.getWritableDatabase().getPath().toString();
@@ -70,7 +70,7 @@ public class recipeTestCase extends AndroidTestCase{
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-	//	dbConnection.close();
+		//dbConnection.close();
 		
 	}
 	
@@ -88,6 +88,7 @@ public void testInsertRecipe()
 		recipe.setPrep("1:00");
 		recipe.setCooking("1:00");
 		recipe.setAddedBy("addison");
+		recipe.setRecipeBook("book1");
 		ingredientBean ingred = new ingredientBean();
 		ingred.setName("stock");
 		ingred.setAmount(1);
@@ -103,9 +104,9 @@ public void testInsertRecipe()
 		 
 		recipemodel.insertRecipe(recipe, false, ingredList, prepList);
 		
-	/**	recipeBean recipeSelect = new recipeBean();
-		recipeSelect = recipemodel.selectRecipe2("Chicken Soup","addison");
-		Assert.assertEquals(recipeSelect.getName(), "Chicken Soup");**/
+	   
+		boolean exists = recipemodel.selectRecipe("Chicken Soup","addison");
+		Assert.assertEquals(true, exists);
 		
 		
 	} 
@@ -119,17 +120,11 @@ public void editRecipe()
 	recipe.setName("pizza");
 	recipe.setDesc("good food");
 	recipe.setUniqueid("doeRecipe");
-	recipe.setAddedBy("doe");
-
-
-	
-	
-	 
-	recipemodel.updateRecipe(recipe, prepList, ingredList);
-	
-/**	recipeBean recipeSelect = new recipeBean();
-	recipeSelect = recipemodel.selectRecipe2("pizza","doe");
-	Assert.assertEquals(recipeSelect.getName(), "good food");**/
+	recipe.setAddedBy("doe"); 
+	recipemodel.updateRecipe(recipe, prepList, ingredList);	
+	recipeBean recipeSelect = new recipeBean();
+	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
+	Assert.assertEquals(recipeSelect.getDesc(), "good food");
 	
 	
 } 
