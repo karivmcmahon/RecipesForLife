@@ -9,6 +9,9 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+	/**
+	Class creates JSON of cookbooks to be sent to app based on certain date
+	**/
 	public partial class WebForm8 : System.Web.UI.Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
@@ -46,13 +49,13 @@ namespace WebApplication1
 		{
 			public string updateTime { get; set; }
 		}
-
+		//Stores list of cookbooks
 		public class Cookbooks
 		{
 			public List<Cookbook> Cookbook { get; set;} 
 
 		}
-
+		//Stores a cookbook
 		public class Cookbook
 		{
 			public string name { get; set; }

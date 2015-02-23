@@ -9,6 +9,9 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+	/**
+	Class creates JSON to send to app with recipes needing updated based on date
+	**/
 	public partial class WebForm6 : System.Web.UI.Page
 	{
 		JavaScriptSerializer js = new JavaScriptSerializer();
@@ -26,6 +29,7 @@ namespace WebApplication1
 			}
 		}
 		
+		//Selects recipe needing updated
 		public void selectRecipe()
 		{
 			SqlCommand select = new SqlCommand(" SELECT * FROM Recipe WHERE changeTime > @lastUpdated", connection);
@@ -58,6 +62,7 @@ namespace WebApplication1
 			Response.Write(json);
 		}
 		
+		//Selects related preperation to recipe
 		public void selectPrep(Recipe recipe, List<Preperation> preprecipe)
 		{		
 			SqlCommand selectprep = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection);
@@ -78,6 +83,7 @@ namespace WebApplication1
 			}
 		}
 		
+		//selects related ingredients to recipe
 		public void selectIngred(Recipe recipe, List<Ingredient> ingredrecipe)
 		{
 			SqlCommand selectingred = new SqlCommand("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = @recipe;", connection);
@@ -100,11 +106,13 @@ namespace WebApplication1
 			}
 		}
 		
+		//Stores date sent to webpage
 		public class Date
 		{
 			public string changeTime { get; set; }
 		}
 
+		//Class to create recipe json
 		public class Recipe
 		{
 			public string name { get; set; }
@@ -119,13 +127,13 @@ namespace WebApplication1
 			public List<Ingredient> Ingredient { get; set; }
 			//  public List<Ingredient> Ingredient { get; set; }
 		}
-		
+		//Creates list of recipes - json array
 		public class Recipes
 		{
 			public List<Recipe> Recipe { get; set;} 
 
 		}
-
+		//Class to store preperation dets
 		public class Preperation
 		{
 			public List<String> prep { get; set; }
@@ -133,7 +141,7 @@ namespace WebApplication1
 			public List<String> uniqueid { get; set; }
 			
 		}
-		
+		//Class to store ingredient dets
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }

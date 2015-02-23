@@ -9,6 +9,9 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+	/**
+	Creates JSON of cookbooks to be updated after a certain date to send to app
+	**/
 	public partial class WebForm10 : System.Web.UI.Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
@@ -28,6 +31,7 @@ namespace WebApplication1
 				var reader = selectCookbook.ExecuteReader();
 				while (reader.Read())
 				{
+					//Creates cookbook based on info from server
 					Cookbook cookbook = new Cookbook();
 					cookbook.name = (string)reader["name"];
 					cookbook.description = (string)reader["description"];
@@ -37,6 +41,7 @@ namespace WebApplication1
 					cookbooks.Cookbook.Add(cookbook);
 				} 
 				connection.Close();
+				//Serializes cookbooks and sends to app
 				string json = js.Serialize(cookbooks);
 				Response.Write(json);
 			}
@@ -46,13 +51,15 @@ namespace WebApplication1
 		{
 			public string changeTime { get; set; }
 		}
-
+	
+		//Creates list of cookbooks 
 		public class Cookbooks
 		{
 			public List<Cookbook> Cookbook { get; set;} 
 
 		}
 
+		//Stores cookbook info for json
 		public class Cookbook
 		{
 			public string name { get; set; }

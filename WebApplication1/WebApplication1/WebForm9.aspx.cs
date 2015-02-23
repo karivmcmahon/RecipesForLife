@@ -10,6 +10,9 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+	/**
+	Class that updates cookbooks based on  JSON sent from app
+	**/
 	public partial class WebForm9 : System.Web.UI.Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
@@ -46,6 +49,7 @@ namespace WebApplication1
 			}
 		}
 		
+		//Stores cookbook info
 		public class Cookbook
 		{
 			public string name { get; set; }

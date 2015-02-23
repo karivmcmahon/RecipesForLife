@@ -10,6 +10,10 @@ using System.Configuration;
 
 namespace WebApplication1
 {
+	/**
+	* Sends a JSON of account information from database after a specific date
+	*
+	**/
     public partial class WebForm2 : System.Web.UI.Page
     {
 	
@@ -21,37 +25,39 @@ namespace WebApplication1
             if (jsonInput != null)
             {
 
-                //Serializing a json
+                //deserializing a json
                 JavaScriptSerializer js = new JavaScriptSerializer();
                 dates = js.Deserialize<List<Date>>(jsonInput);
+				//Gets last updated time
                 string lastUpdated = dates[0].updateTime;
                
 			   SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
                SqlConnection con2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
                
+			    // Querys to get account and user info from database
 				SqlCommand selectAccount = new SqlCommand(" SELECT * FROM Account WHERE updateTime > @lastUpdated", con);
                 SqlCommand selectUsers = new SqlCommand(" SELECT * FROM Users WHERE updateTime > @lastUpdated", con2);
                 selectAccount.Parameters.AddWithValue("@lastUpdated", lastUpdated);
                 selectUsers.Parameters.AddWithValue("@lastUpdated", lastUpdated);
                
-			   con.Open();
+			    //opens connections
+			    con.Open();
                 con2.Open();
                 var reader = selectAccount.ExecuteReader();
                 
                 var list = new List<Acc>();
                 var list2 = new List<User>();
-                
-                int count = reader.FieldCount;
                 var reader2 = selectUsers.ExecuteReader();
                 while (reader.Read())
                 {
+					//Get info from account table
                     Acc account = new Acc();
                     account.email = (string)reader["email"];
                     account.password = (string)reader["password"];
                     
                     while (reader2.Read())
                     {
-
+                        //Get info from user table
                         User user = new User();
                         user.name = (string)reader2["name"];
                         user.bio = (string)reader2["bio"];
@@ -65,6 +71,8 @@ namespace WebApplication1
                     list.Add(account);
                  
                 }
+				
+				//Builds list of account info
                 var fulllist = new List<Account>();
                 for (int i = 0; i < list.Count; i++ )
                 {
@@ -81,7 +89,7 @@ namespace WebApplication1
                 }
                 con2.Close();
                 con.Close();
-               
+                //Serialize json to send to device
                 string json = js.Serialize(fulllist);
 				list.Clear();
                 Response.Write(json);
@@ -90,10 +98,17 @@ namespace WebApplication1
         }
     }
 
+	/**
+	* Class which holds date info from json
+	**/
     public class Date
     {
         public string updateTime { get; set; }
     }
+	/**
+	* Class that holds Account info to send to app
+	*
+	**/
     public class Account
     {
         public int id { get; set; }

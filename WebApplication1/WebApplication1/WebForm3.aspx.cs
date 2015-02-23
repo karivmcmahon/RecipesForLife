@@ -10,6 +10,9 @@ using System.Configuration;
 
 namespace WebApplication1
 {
+	/**
+	Class handles recipe JSON from app
+	**/
 	public partial class WebForm3 : System.Web.UI.Page
 	{
 		
@@ -24,6 +27,7 @@ namespace WebApplication1
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
+				//Deserializes JSON into recipe
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				recipe = js.Deserialize<List<Recipe>>(jsonInput);
 				for(int i = 0; i < recipe.Count(); i++)
@@ -36,10 +40,12 @@ namespace WebApplication1
 		}
 		
 		
-		
+		/**
+		Inserts recipe into database
+		**/
 		public void insertRecipe(int i)
 		{
-		    connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+			connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			SqlCommand insertRecipe = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid)", connn);
 			insertRecipe.Parameters.AddWithValue("@name", recipe[i].name);
@@ -69,7 +75,9 @@ namespace WebApplication1
 			connn2.Close();		
 		}
 		
-		
+		/**
+		inserts prep details into database
+		**/
 		public void insertPrep(int i)
 		{
 			for (int y = 0; y < recipe[i].Preperation[0].prep.Count(); y++)
@@ -109,6 +117,9 @@ namespace WebApplication1
 			}
 		}
 		
+		/**
+		Inserts ingredient details into database
+		**/
 		public void insertIngredient(int i)
 		{
 			for (int a = 0; a < recipe[i].Ingredient[0].Ingredients.Count(); a++)
@@ -220,7 +231,9 @@ namespace WebApplication1
 		}
 		
 		
-		
+		/**
+		Inserts cookbook details for recipe into database
+		**/
 		public void insertCookbook(int i)
 		{
 			SqlCommand selectCookbookId = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
@@ -251,39 +264,46 @@ namespace WebApplication1
 			}
 		}
 		
-		
+		/**
+		Class stores recipe details to send to json
+		**/
 		public class Recipe
-{
-	public string name { get; set; }
-	public string description { get; set; }
-	public string serves { get; set; }
-	public string prepTime { get; set; }
-	public string cookingTime { get; set; }
-	public string addedBy { get; set; }
-	public string updateTime { get; set;  }
-	public string changeTime { get; set;  }
-	public string uniqueid { get; set;  }
-	public string cookbookid {get; set; }
-	public List<Preperation> Preperation { get; set; }
-	public List<Ingredient> Ingredient { get; set; }
-}
+		{
+			public string name { get; set; }
+			public string description { get; set; }
+			public string serves { get; set; }
+			public string prepTime { get; set; }
+			public string cookingTime { get; set; }
+			public string addedBy { get; set; }
+			public string updateTime { get; set;  }
+			public string changeTime { get; set;  }
+			public string uniqueid { get; set;  }
+			public string cookbookid {get; set; }
+			public List<Preperation> Preperation { get; set; }
+			public List<Ingredient> Ingredient { get; set; }
+		}
 
-public class Preperation
-{
-	public  List<String> prep { get; set; }
-	public List<String> prepNums { get; set; }
-	public List<String> uniqueid { get; set;  }
-	//  public int prepNums { get; set; }
-}
+		/**
+		Class stores prep details to send to json
+		**/
+		public class Preperation
+		{
+			public  List<String> prep { get; set; }
+			public List<String> prepNums { get; set; }
+			public List<String> uniqueid { get; set;  }
+		}
 
-public class Ingredient
-{
-	public List<String> Ingredients { get; set; }
-	public List<String> Value { get; set; }
-	public List<String> Amount { get; set; }
-	public List<String> Notes { get; set; }
-	public List<String> uniqueid {get;set;}
-}
+		/**
+		Class stores ingredient details to send to json
+		**/
+		public class Ingredient
+		{
+			public List<String> Ingredients { get; set; }
+			public List<String> Value { get; set; }
+			public List<String> Amount { get; set; }
+			public List<String> Notes { get; set; }
+			public List<String> uniqueid {get;set;}
+		}
 	}
 	
 	

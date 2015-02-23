@@ -9,6 +9,10 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+
+	/**
+	Class creates a JSON of contributers based on certain date to send to app
+	**/
 	public partial class WebForm12 : System.Web.UI.Page
 	{
 		string lastUpdated = "";
@@ -31,6 +35,7 @@ namespace WebApplication1
 			}
 		}
 		
+		//Select contributers
 		public void selectContribs()
 		{
 			if(change == "true")
@@ -57,10 +62,12 @@ namespace WebApplication1
 				
 			}
 			con.Close();
+			//Creates json of contributers
 			string json = js.Serialize(contributers);
 			Response.Write(json);
 		}
 		
+		//Selects cookbook contributer is associated with's uniqueid
 		public void selectContribBook(SqlDataReader reader, Contributer contrib, List<Contributer> contribs)
 		{
 			SqlCommand select2 = new SqlCommand(" SELECT uniqueid FROM Cookbook WHERE id=@id", con);

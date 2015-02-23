@@ -10,6 +10,9 @@ using System.Configuration;
 
 namespace WebApplication1
 {
+	/**
+	* Sends recipe JSON to app based on date
+	**/
 	public partial class WebForm4 : System.Web.UI.Page
 	{
 		int recipeID = 0;
@@ -25,6 +28,7 @@ namespace WebApplication1
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
+				//Gets last update
 				var time = js.Deserialize<List<RecipeDate>>(jsonInput);
 				lastUpdated = time[0].updateTime;
 				connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
@@ -33,6 +37,9 @@ namespace WebApplication1
 
 		}
 		
+		/**
+		* Select recipe info from database
+		**/
 		public void selectRecipe()
 		{
 			SqlCommand selectrecipe = new SqlCommand(" SELECT * FROM Recipe WHERE updateTime > @lastUpdated", connection1);
@@ -66,6 +73,9 @@ namespace WebApplication1
 			Response.Write(json);
 		}
 		
+		/**
+		* Select prep info from database
+		**/
 		public void selectPrep(List<Preperation> recipeprep, Recipe recipe)
 		{
 			SqlCommand selectPreperation = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection1);
@@ -84,6 +94,9 @@ namespace WebApplication1
 			}
 		}
 		
+		/**
+		* Select ingredient info from database
+		**/
 		public void selectIngredient(List<Ingredient> recipeingred, Recipe recipe)
 		{
 			SqlCommand selectIngred = new SqlCommand("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = @recipe;", connection1);
@@ -106,6 +119,9 @@ namespace WebApplication1
 			}
 		}
 		
+		/**
+		* Select cookbook recipe info from database
+		**/
 		public void selectBook(Recipe recipe)
 		{
 			SqlCommand selectCookbook = new SqlCommand("SELECT uniqueid FROM Cookbook INNER JOIN CookbookRecipe ON Cookbook.id=CookbookRecipe.Cookbookid WHERE CookbookRecipe.Recipeid=@id", connection1);
@@ -123,6 +139,9 @@ namespace WebApplication1
 			public string updateTime { get; set; }
 		}
 
+		/**
+		* Class used to create JSON
+		**/
 		public class Recipe
 		{
 			public string name { get; set; }
@@ -136,15 +155,16 @@ namespace WebApplication1
 			public string cookingid { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
-			//  public List<Ingredient> Ingredient { get; set; }
 		}
 
+		//List of recipes - creates a json array
 		public class Recipes
 		{
 			public List<Recipe> Recipe { get; set;} 
 
 		}
 
+		//Stores recipe prep details
 		public class Preperation
 		{
 			public List<String> prep { get; set; }
@@ -153,6 +173,7 @@ namespace WebApplication1
 			
 		}
 
+		//Stores recipe ingred details
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }

@@ -9,6 +9,9 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+	/**
+	* Class retrieves JSON of cookbooks to be inserted into database
+	**/
 	public partial class WebForm7 : System.Web.UI.Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
@@ -45,6 +48,7 @@ namespace WebApplication1
 			}
 		}
 		
+		//Stores json cookbook
 		public class Cookbook
 		{
 			public string name { get; set; }

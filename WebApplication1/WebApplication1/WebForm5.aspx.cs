@@ -9,6 +9,9 @@ using System.Data.SqlClient;
 
 namespace WebApplication1
 {
+	/**
+	Class gets JSON to update recipes from app in the database
+	**/
 	public partial class WebForm5 : System.Web.UI.Page
 	{
 		SqlConnection connection = null;
@@ -28,7 +31,7 @@ namespace WebApplication1
 				}
 			}
 		}
-		
+		//Update recipe in database based on json
 		public void updateRecipe(int i)
 		{
 			connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
@@ -48,11 +51,7 @@ namespace WebApplication1
 				SqlDataReader recipeReader= updateRecipe.ExecuteReader();
 				recipeReader.Close();
 				updatePrep(i);
-				updateIngred(i);
-				
-				
-				
-				
+				updateIngred(i);		
 			}
 			catch (Exception ex)
 			{
@@ -63,6 +62,7 @@ namespace WebApplication1
 			connection.Close();
 		}
 		
+		//Updates recipe prep info
 		public void updatePrep(int i)
 		{
 			for (int y = 0; y < recipe[i].Preperation[0].prep.Count(); y++)
@@ -78,7 +78,7 @@ namespace WebApplication1
 			}			  
 		}
 		
-		
+		//Updates recipe ingred details
 		public void updateIngred(int i)
 		{
 			for (int a = 0; a < recipe[i].Ingredient[0].Ingredients.Count(); a++)
@@ -94,6 +94,7 @@ namespace WebApplication1
 			}
 		}
 		
+		//Updates ingredient details
 		public void updateIngredDetails(int i,int  a)
 		{
 			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
@@ -117,6 +118,7 @@ namespace WebApplication1
 					}
 		}
 		
+		//Inserts ingredient if updated ingredient does not exist
 		public void insertIngred(int i , int a)
 		{
 			SqlCommand insertIngredient = new SqlCommand(" INSERT INTO Ingredient(name, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime, @changeTime)", connection);
@@ -139,6 +141,7 @@ namespace WebApplication1
 				}
 		}
 		
+		//Checks if ingredient exists by fetching id from database
 		public void selectIngredId(int i, int a)
 		{
 			SqlCommand selectIngId = new SqlCommand(" SELECT id FROM Ingredient WHERE name=@name", connection);
@@ -166,6 +169,7 @@ namespace WebApplication1
 				}
 		}
 		
+		//Stores JSON as recipe
 		public class Recipe
 		{
 			public string name { get; set; }
@@ -180,6 +184,7 @@ namespace WebApplication1
 			public List<Ingredient> Ingredient { get; set; }
 		}
 
+		//Stores prep details for recipe
 		public class Preperation
 		{
 			public  List<String> prep { get; set; }
@@ -188,6 +193,7 @@ namespace WebApplication1
 			//  public int prepNums { get; set; }
 		}
 
+		//Stores ingred details for recipe
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }
