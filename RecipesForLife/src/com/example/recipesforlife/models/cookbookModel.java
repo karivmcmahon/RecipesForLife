@@ -14,6 +14,11 @@ import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+/**
+ * Class handles database details relating to cookbooks
+ * @author Kari
+ *
+ */
 public class cookbookModel extends baseDataSource {
 
 	public static final String MyPREFERENCES = "MyPrefs" ;

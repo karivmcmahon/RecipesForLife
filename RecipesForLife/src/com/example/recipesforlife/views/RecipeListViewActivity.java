@@ -19,6 +19,11 @@ import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * Class to show a list of recipes belonging to a specific cookbook
+ * @author Kari
+ *
+ */
 public class RecipeListViewActivity extends Activity {
 	util utils;	
 	ListView listView;

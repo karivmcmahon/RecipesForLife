@@ -32,6 +32,11 @@ import android.widget.Toast;
 
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+/**
+ * Utility class handling common methods for multiple classes
+ * @author Kari
+ *
+ */
 public class util  {
 
 	Context context;

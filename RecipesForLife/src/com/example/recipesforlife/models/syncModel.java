@@ -25,7 +25,7 @@ import com.example.recipesforlife.controllers.userBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
- * This class syncs the sever and phone databases
+ * This class syncs the sever and phone databases for account JSON
  * @author Kari
  *
  */
@@ -153,8 +153,8 @@ public class syncModel extends baseDataSource
 		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -195,8 +195,8 @@ public class syncModel extends baseDataSource
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
 		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
-		HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-		HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+		HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+		HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 
 		try 
 		{
@@ -247,8 +247,6 @@ public class syncModel extends baseDataSource
 		catch(JSONException e)
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 	}

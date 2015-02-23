@@ -26,6 +26,11 @@ import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+/**
+ * Gets and create recipe JSON to send to and from server
+ * @author Kari
+ *
+ */
 public class syncRecipeModel extends baseDataSource {
 	Context context;
 
@@ -310,8 +315,8 @@ public class syncRecipeModel extends baseDataSource {
 		jsonArray.put(date);
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -409,15 +414,11 @@ public class syncRecipeModel extends baseDataSource {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 		catch(JSONException e)
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 	}
@@ -443,8 +444,8 @@ public class syncRecipeModel extends baseDataSource {
 		}
 		try 
 		{
-			//	HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			//	 HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 
@@ -464,8 +465,6 @@ public class syncRecipeModel extends baseDataSource {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 

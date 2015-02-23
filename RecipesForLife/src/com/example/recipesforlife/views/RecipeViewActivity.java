@@ -18,6 +18,12 @@ import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.util;
 
+
+/**
+ * Class to show recipe view 
+ * @author Kari
+ *
+ */
 public class RecipeViewActivity extends Activity {
 	util utils;
 

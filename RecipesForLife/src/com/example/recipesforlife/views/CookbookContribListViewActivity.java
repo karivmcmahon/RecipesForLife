@@ -32,6 +32,11 @@ import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * Class to display the view of a list of contributers as well as the ability to add a contributer
+ * @author Kari
+ *
+ */
 public class CookbookContribListViewActivity extends Activity {
 
 	ListView listView;

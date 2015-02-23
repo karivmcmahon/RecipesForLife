@@ -23,6 +23,11 @@ import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * Class for view to add a cookbook
+ * @author Kari
+ *
+ */
 public class CookbookViewActivity extends Activity{
 
 	util utils;

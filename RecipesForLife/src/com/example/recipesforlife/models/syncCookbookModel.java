@@ -23,7 +23,11 @@ import android.widget.Toast;
 import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
-
+/**
+ * Gets and sends cookbook JSON to and from server
+ * @author Kari
+ *
+ */
 public class syncCookbookModel extends baseDataSource {
 	Context context;
 
@@ -127,8 +131,8 @@ public class syncCookbookModel extends baseDataSource {
 		}
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 
@@ -148,8 +152,6 @@ public class syncCookbookModel extends baseDataSource {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 
@@ -184,8 +186,8 @@ public class syncCookbookModel extends baseDataSource {
 		
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 2000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
 			try 
@@ -232,15 +234,11 @@ public class syncCookbookModel extends baseDataSource {
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 		catch(JSONException e)
 		{
 			e.printStackTrace();
-			Toast.makeText(context, 
-					"Connection to server failed", Toast.LENGTH_LONG).show();
 			throw e;
 		}
 	}

@@ -19,6 +19,11 @@ import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.models.cookbookModel;
 
+/**
+ * Class to display a list of cookbooks involving the users
+ * @author Kari
+ *
+ */
 public class CookbookListActivity extends Activity {
 
 	ListView listView;

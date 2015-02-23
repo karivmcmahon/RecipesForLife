@@ -14,6 +14,11 @@ import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+/**
+ * Class handles recipe details relating to recipes
+ * @author Kari
+ *
+ */
 public class recipeModel extends baseDataSource {
 
 	Context context;

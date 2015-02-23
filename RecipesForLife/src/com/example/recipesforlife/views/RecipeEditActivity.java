@@ -36,6 +36,11 @@ import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * Class to show edit view for recipes
+ * @author Kari
+ *
+ */
 public class RecipeEditActivity extends Activity {
 
 	util utils;

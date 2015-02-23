@@ -19,6 +19,11 @@ import com.example.recipesforlife.controllers.recipeBean;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+/**
+ * Test cases for cookbook and contributers related database code
+ * @author Kari
+ *
+ */
 public class cookbookTestCase  extends AndroidTestCase {
 
 	Resources resources;

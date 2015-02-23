@@ -20,6 +20,11 @@ import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * List adapter for contributers
+ * @author Kari
+ *
+ */
 public class CustomContribListAdapter extends ArrayAdapter<String>{
 	private final Activity activity;
 	private final ArrayList<String> users;

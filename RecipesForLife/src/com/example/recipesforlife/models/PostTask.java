@@ -9,6 +9,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * AsyncTask code enables sync code to be done in the background
+ * @author Kari
+ *
+ */
 public class PostTask extends AsyncTask<String, Integer, String> {
 
 	util utils;

@@ -9,6 +9,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Utility class handling common methods for multiple classes
+ * @author Kari
+ *
+ */
 public class utility  {
 	
 	public utility()

@@ -34,6 +34,11 @@ import android.util.Log;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+/**
+ * Test cases for account related database code
+ * @author Kari
+ *
+ */
 public class accountTestCase extends AndroidTestCase  {
 	syncModel sync;
 	accountModel accountmodel;

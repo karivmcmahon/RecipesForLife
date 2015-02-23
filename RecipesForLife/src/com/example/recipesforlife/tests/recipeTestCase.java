@@ -24,6 +24,11 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+/**
+ * Test case for recipe related database code
+ * @author Kari
+ *
+ */
 public class recipeTestCase extends AndroidTestCase{
 	recipeModel recipemodel;
 	SignUpSignInActivity activity;

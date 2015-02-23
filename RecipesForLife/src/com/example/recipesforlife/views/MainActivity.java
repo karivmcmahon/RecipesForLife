@@ -36,6 +36,11 @@ import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * Class handles the main activity stuff - recipe add dialogs
+ * @author Kari
+ *
+ */
 public class MainActivity extends Activity  {
 	
 	public static final String MyPREFERENCES = "MyPrefs";
