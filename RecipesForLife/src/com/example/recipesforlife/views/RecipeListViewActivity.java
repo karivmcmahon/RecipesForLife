@@ -23,7 +23,10 @@ public class RecipeListViewActivity extends Activity {
 	util utils;	
 	ListView listView;
 	String type = "";
+	String uniqueid = "";
 	ArrayList<recipeBean> recipeList;
+	cookbookModel model;
+	ArrayAdapter<String> adapter;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,22 +35,23 @@ public class RecipeListViewActivity extends Activity {
 		setContentView(R.layout.listview);
 		listView = (ListView) findViewById(R.id.list);
 
-		cookbookModel model = new cookbookModel(getApplicationContext());
+		model = new cookbookModel(getApplicationContext());
 		recipeList = new ArrayList<recipeBean>();
 		Intent intent = getIntent();
 		Log.v("type", "type" + intent.getStringExtra("type"));
 		Log.v("uniqid", "uniqid" + intent.getStringExtra("uniqueid"));
+		uniqueid = intent.getStringExtra("uniqueid");
 		type = intent.getStringExtra("type");
+		
+		//Gets recipe list and set to adapter
 		recipeList = model.selectRecipesByCookbook(intent.getStringExtra("uniqueid"));
 		ArrayList<String> recipenames = new ArrayList<String>();
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			recipenames.add(recipeList.get(a).getName());
 		}
-
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1, recipenames);
-
 		listView.setAdapter(adapter); 
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -56,8 +60,7 @@ public class RecipeListViewActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				Intent i = null;
-
-				// TODO Auto-generated method stub
+				//Depending on the type requested by user it will goto different activity
 				if(type.equals("view"))
 				{
 					i = new Intent(RecipeListViewActivity.this, RecipeViewActivity.class);
@@ -95,6 +98,17 @@ public class RecipeListViewActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		//Updates list on resume
+		recipeList = model.selectRecipesByCookbook(uniqueid);
+		ArrayList<String> recipenames = new ArrayList<String>();
+		for(int a = 0; a < recipeList.size(); a++)
+		{
+			recipenames.add(recipeList.get(a).getName());
+		}
+		adapter.clear();
+		adapter.addAll(recipenames);
+		adapter.notifyDataSetChanged();
+		
 	}
 
 }

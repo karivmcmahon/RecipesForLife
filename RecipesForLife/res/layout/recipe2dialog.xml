@@ -40,7 +40,7 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:inputType="textMultiLine"
-	         android:hint="Press plus to add an ingredient"
+	         android:hint="Press plus button on right hand side to add an ingredient"
 	         android:focusable="false"
 	         />
 	       
@@ -50,8 +50,9 @@
 	    	android:layout_toRightOf="@+id/recipeIngredsEditText"  
 	   	  	android:layout_below="@+id/recipeAddView2"
 	     	android:layout_marginTop="22dp"
-	    	android:layout_width="40dp" 
-	    	android:layout_height="40dp" 
+	    	android:layout_width="50dp" 
+	    	android:layout_height="50dp" 
+	    	android:layout_gravity="center_vertical|center_horizontal"
 	    />
        </LinearLayout>
        
@@ -79,7 +80,7 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:inputType="textMultiLine"
-	         android:hint="Press plus to add a step"
+	         android:hint="Press plus button on right hand side to add a step"
 	          android:focusable="false"
 	         />
 	       
@@ -89,15 +90,18 @@
 	    	android:layout_toRightOf="@+id/recipeStepsEditText"  
 	   	  	android:layout_below="@+id/recipeIngredsView"
 	     	android:layout_marginTop="22dp"
-	    	android:layout_width="40dp" 
-	    	android:layout_height="40dp" 
+	    	android:layout_width="50dp" 
+	    	android:layout_height="50dp" 
+	    	android:layout_gravity="center_vertical|center_horizontal"
 	   		 />
        </LinearLayout>
        
         <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:descendantFocusability="beforeDescendants"
+		android:focusableInTouchMode="true" >
 	      <TextView
 	           android:id="@+id/recipeServesView"
 	           android:layout_width="wrap_content"

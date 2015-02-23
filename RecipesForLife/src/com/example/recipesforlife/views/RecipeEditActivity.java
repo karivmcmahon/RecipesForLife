@@ -107,6 +107,7 @@ public class RecipeEditActivity extends Activity {
 		setStyle();
 		setTextForLayout();
 
+		//Set up the various edit buttons for the page
 		ImageView titleButton = (ImageView) findViewById(R.id.recipeTitleEditImage);
 		titleButton.setOnTouchListener(new OnTouchListener() {
 
@@ -209,9 +210,9 @@ public class RecipeEditActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
+		//Reminds user to save before leaving page
 		final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.savedialog);
 		utils.setDialogText(R.id.textView, dialog, 18);
-
 		// Show dialog
 		dialog.show();
 		Button button = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
@@ -392,6 +393,7 @@ public class RecipeEditActivity extends Activity {
 
 	/**
 	 * Creates a dialog on the fly based on preperation details for database
+	 * Note - Had to be created programmatically as we dont know the exact amount of prep steps for each recipe
 	 */
 	public void getAndCreatePrepDialog()
 	{
@@ -535,6 +537,7 @@ public class RecipeEditActivity extends Activity {
 
 	/**
 	 * Creates a dialog for ingredients on the fly based on information from the database
+	 * Note - I had to write this programmatically as we dont know the amount of ingredients for a recipe
 	 */
 	@SuppressLint("NewApi")
 	public void getAndCreateIngredDialog()
@@ -633,7 +636,7 @@ public class RecipeEditActivity extends Activity {
 			amountEdit.setText(Integer.toString(ingredList.get(i).getAmount()));
 			ingredEdit.setText(ingredList.get(i).getName());
 			noteEdit.setText(ingredList.get(i).getNote());
-			sItems.setSelection(getIndex(sItems, ingredList.get(i).getValue()));
+			sItems.setSelection(utils.getIndex(sItems, ingredList.get(i).getValue()));
 			utils.setDialogText(viewid, ingredDialog, 22);
 		}
 		Button okButton = new Button(RecipeEditActivity.this);
@@ -740,24 +743,6 @@ public class RecipeEditActivity extends Activity {
 		}  
 		return id++;  
 	}
-	/**
-	 * Get index for spinner - found online http://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position
-	 * @param spinner
-	 * @param myString
-	 * @return
-	 */
-	private int getIndex(Spinner spinner, String myString)
-	{
-		int index = 0;	
-		for (int i=0;i<spinner.getCount();i++)
-		{
-			if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString))
-			{
-				index = i;
-				i=spinner.getCount();//will stop the loop, kind of break, by making condition false
-			}
-		}
-		return index;
-	} 
+	 
 
 }

@@ -352,7 +352,7 @@ public class recipeModel extends baseDataSource {
 	/**
 	 * Select ingredient by name and if it doesn't exist insert it and return id
 	 * @param name
-	 * @return
+	 * @return ingredientid
 	 */
 	public long selectIngredientByName(String name)
 	{

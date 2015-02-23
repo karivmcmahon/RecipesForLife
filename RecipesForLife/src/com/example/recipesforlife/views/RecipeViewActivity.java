@@ -48,6 +48,9 @@ public class RecipeViewActivity extends Activity {
 		super.onResume();
 	}
 
+	/**
+	 * Sets style for the recipe view
+	 */
 	public void setStyle()
 	{
 		utils.setTextPink(R.id.recipeTitle, 26);
@@ -64,6 +67,9 @@ public class RecipeViewActivity extends Activity {
 		utils.setTextBlack(R.id.methodList, 22);	
 	}
 
+	/**
+	 * Sets text for the recipe page
+	 */
 	public void setTextForLayout()
 	{
 		recipeModel model = new recipeModel(getApplicationContext());

@@ -62,39 +62,41 @@ public class CookbookContribListViewActivity extends Activity {
 		model = new cookbookModel(getApplicationContext());
 		cookbookList = new ArrayList<cookbookBean>();
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		
+		//Get cookbook name values and attach them to an listview adapter
 		cookbookList = model.selectCookbooksByCreator(sharedpreferences.getString(emailk, ""));
 		ArrayList<String> values = new ArrayList<String>();
-
-		//Set up cookbook list
 		for(int i = 0; i < cookbookList.size(); i++)
 		{
 			values.add(cookbookList.get(i).getName());
 		}	
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1, values);	    
-		listView.setAdapter(adapter); 		 
+		listView.setAdapter(adapter); 	
+		//When items clicked
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
-				
-				final String  itemValue    = (String) listView.getItemAtPosition(position);
+				//Get selected cookbooks uniqueid
+				final String  itemValue = (String) listView.getItemAtPosition(position);
 				for(int i = 0; i < cookbookList.size(); i++)
 				{
 					if(itemValue.equals(cookbookList.get(i).getName()))
 					{
-						//Get selected cookbooks unique id
 						cbuniqueid = cookbookList.get(i).getUniqueid();
 					}
 				}
 
 				if(type.equals("manage"))
 				{
+					//Displays dialog to manage contributers
 					manageDialog(itemValue);
 				}
 				else if(type.equals("edit"))
 				{
+					//Displays dialog to edit cookbook
 					editDialog(itemValue);
 				}
 
@@ -102,25 +104,28 @@ public class CookbookContribListViewActivity extends Activity {
 		});
 	}
 
+	/**
+	 * Displays a list of contributers and enables the user to add a contributer
+	 * @param itemValue
+	 */
 	public void manageDialog(final String itemValue)
 	{
 		Dialog contribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributersdialog);
 		utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
 
+		//Show list of contributers
 		ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
 		contribs = model.selectCookbookContributers(cbuniqueid, "added");
-
 		adapter2 = new
 				CustomContribListAdapter(activity, contribs, getApplicationContext(), cbuniqueid);
-
 		listView2.setAdapter(adapter2); 
 
+		//Display dialog to add a contributer
 		addButton.setOnTouchListener(new OnTouchListener(){
 
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
 				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 				{
 					final Dialog addContribDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.contributeradddialog);
@@ -128,10 +133,9 @@ public class CookbookContribListViewActivity extends Activity {
 					final TextView errorView = (TextView) addContribDialog.findViewById(R.id.errorView);
 					utils.setDialogText(R.id.errorView,addContribDialog,16);
 					errorView.setTextColor(Color.parseColor("#F70521"));
-
 					utils.setDialogText(R.id.contributersView, addContribDialog, 22);
 					utils.setDialogText(R.id.emailContributerView, addContribDialog, 22);
-
+					//When user has choosen to add someone
 					Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
 					addContribButton.setOnTouchListener(new OnTouchListener()
 					{
@@ -139,12 +143,11 @@ public class CookbookContribListViewActivity extends Activity {
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
-								// TODO Auto-generated method stub
 								String uniqueid = "";
 								int id = 0;
-								Log.v("s", "s " + utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
 								accountModel am = new accountModel(getApplicationContext());
 								boolean exists = am.checkEmail( utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
+								//Check for any errors
 								if (exists == false)
 								{
 									errorView.setText("The user entered does not exist");
@@ -163,6 +166,7 @@ public class CookbookContribListViewActivity extends Activity {
 										}
 									}
 									id = model.selectCookbooksIDByUnique(uniqueid);
+									//If it exists either update or insert contributer
 									boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 									if(contribExists == true)
 									{
@@ -172,6 +176,7 @@ public class CookbookContribListViewActivity extends Activity {
 									{
 										model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 									}
+									//Updates contributer list
 									contribs = model.selectCookbookContributers(uniqueid, "added");
 									adapter2.clear();
 									adapter2.addAll(contribs);
@@ -195,10 +200,15 @@ public class CookbookContribListViewActivity extends Activity {
 	}
 
 
+	/**
+	 * Displays a dialog to edit a cookbook
+	 * @param itemValue
+	 */
 	public void editDialog(String itemValue)
 	{
 		final Dialog editDialog = utils.createDialog(CookbookContribListViewActivity.this, R.layout.cookbookeditdialog);
 		final TextView errorView = (TextView) editDialog.findViewById(R.id.errorView);
+		//Set texts
 		utils.setDialogText(R.id.errorView,editDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
 		utils.setDialogText(R.id.editBookView, editDialog, 22);
@@ -209,6 +219,8 @@ public class CookbookContribListViewActivity extends Activity {
 		ArrayList<cookbookBean> cookbook = model.selectCookbook(cbuniqueid);
 		utils.setDialogTextString(R.id.bookNameEditText, editDialog, cookbook.get(0).getName());
 		utils.setDialogTextString(R.id.bookDescEditText, editDialog, cookbook.get(0).getDescription());
+		
+		//Fill adapter
 		final Spinner spinner = (Spinner) editDialog.findViewById(R.id.privacySpinner);
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("public");
@@ -216,18 +228,16 @@ public class CookbookContribListViewActivity extends Activity {
 		final String uid = cbuniqueid;
 		ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(
 				CookbookContribListViewActivity.this, R.layout.item, spinnerArray);
-
 		spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
 		spinner.setAdapter(spinneradapter);
-		spinner.setSelection(getIndex(spinner, cookbook.get(0).getPrivacy()));
+		spinner.setSelection(utils.getIndex(spinner, cookbook.get(0).getPrivacy()));
 
 		btn.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				cookbookBean cb = new cookbookBean();
+				//Error checking
 				if(utils.getTextFromDialog(R.id.bookNameEditText, editDialog).equals(""))
 				{
 					errorView.setText("Please enter a cookbook name");
@@ -238,6 +248,7 @@ public class CookbookContribListViewActivity extends Activity {
 				}
 				else
 				{
+					//Update cookbook
 					cb.setName(utils.getTextFromDialog(R.id.bookNameEditText, editDialog));
 					cb.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, editDialog));
 					cb.setPrivacy(spinner.getSelectedItem().toString());
@@ -261,20 +272,9 @@ public class CookbookContribListViewActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 	}
 
-	private int getIndex(Spinner spinner, String myString)
-	{
-		int index = 0;	
-		for (int i=0;i<spinner.getCount();i++)
-		{
-			if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString))
-			{
-				index = i;
-				i=spinner.getCount();//will stop the loop, kind of break, by making condition false
-			}
-		}
-		return index;
-	} 
+
 
 }

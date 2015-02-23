@@ -70,7 +70,8 @@ public class SignUpSignInActivity extends Activity {
 		sharedpreferences = getSharedPreferences(MyPREFERENCES,
 				Context.MODE_PRIVATE);
 		if (sharedpreferences.getBoolean("firstTime", false) == false) {
-			Editor editor = sharedpreferences.edit();
+			//Shared preferences for app sync
+			Editor editor = sharedpreferences.edit();	
 			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();

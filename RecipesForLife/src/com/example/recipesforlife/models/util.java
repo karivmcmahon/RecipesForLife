@@ -26,6 +26,7 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +75,10 @@ public class util  {
 		return currentDate;
 	}
 
+	/**
+	 * Get current data minus 3 seconds
+	 * @return
+	 */
 	public String getLastUpdated2()
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar		
@@ -113,6 +118,12 @@ public class util  {
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
 
+	/**
+	 * Set text for a row in a listview
+	 * @param resource
+	 * @param rowview
+	 * @param fontSize
+	 */
 	public void setRowText(int resource, View rowview, int fontSize)
 	{
 		//Style for activity
@@ -163,7 +174,7 @@ public class util  {
 	}
 
 	/**
-	 * Get text
+	 * Get text from edit text
 	 * @param resource
 	 * @param fontSize
 	 */
@@ -174,6 +185,11 @@ public class util  {
 		return text;
 	}
 
+	/**
+	 * 
+	 * @param resource
+	 * @return
+	 */
 	public String getTextView(int resource )
 	{
 		TextView view = (TextView) activity.findViewById(resource);
@@ -206,6 +222,11 @@ public class util  {
 		view.setTextColor(Color.parseColor("#F3216C"));
 	}
 
+	/**
+	 * Set text to black
+	 * @param resource
+	 * @param fontSize
+	 */
 	public void setTextBlack(int resource,int fontSize)
 	{
 		TextView view = (TextView) activity.findViewById(resource);
@@ -214,6 +235,11 @@ public class util  {
 		//view.setTextColor(Color.parseColor("#F3216C"));
 	}
 
+	/**
+	 * Set text to black and italic
+	 * @param resource
+	 * @param fontSize
+	 */
 	public void setTextBlackItalic(int resource,int fontSize)
 	{
 		TextView view = (TextView) activity.findViewById(resource);
@@ -236,6 +262,13 @@ public class util  {
 		button.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
 
+	/**
+	 * Set button text for a dialog
+	 * @param resource
+	 * @param fontSize
+	 * @param dialog
+	 * @return Button
+	 */
 	public Button setButtonTextDialog(int resource, int fontSize, Dialog dialog)
 	{
 		Button  button = (Button) dialog.findViewById(resource);
@@ -245,6 +278,12 @@ public class util  {
 		return button;
 	}
 
+	/**
+	 * Set up the time picker
+	 * @param dialog
+	 * @param res
+	 * @param handler
+	 */
 	public void setTimePickerFrag(Dialog dialog, int res, final Handler handler)
 	{
 		EditText editText2 = (EditText) dialog.findViewById(res);
@@ -277,6 +316,9 @@ public class util  {
 			}});
 	}
 
+	/**
+	 * Code to sync the databases
+	 */
 	public void sync()
 	{
 		if(checkInternetConnection(context) == true)
@@ -374,6 +416,12 @@ public class util  {
 		}
 	} 
 
+	/**
+	 * Creates a dialog
+	 * @param activity
+	 * @param resource
+	 * @return Dialog
+	 */
 	public Dialog createDialog(Activity activity, int resource)
 	{
 		final Dialog dialog = new Dialog(activity);
@@ -384,6 +432,26 @@ public class util  {
 		return dialog;
 	}
 	
+	
+	/**
+	 * Gets spinner index  - found online http://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position
+	 * @param spinner
+	 * @param myString
+	 * @return
+	 */
+	public int getIndex(Spinner spinner, String myString)
+	{
+		int index = 0;	
+		for (int i=0;i<spinner.getCount();i++)
+		{
+			if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString))
+			{
+				index = i;
+				i=spinner.getCount();//will stop the loop, kind of break, by making condition false
+			}
+		}
+		return index;
+	} 
 	
 
 

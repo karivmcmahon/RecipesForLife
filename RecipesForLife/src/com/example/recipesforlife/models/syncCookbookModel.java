@@ -36,7 +36,7 @@ public class syncCookbookModel extends baseDataSource {
 
 	/**
 	 * Get cookbooks inserted within a certain time frame
-	 * @return
+	 * @return list of cookbook's
 	 */
 	public ArrayList<cookbookBean> getCookbook(boolean update)
 	{
@@ -156,7 +156,7 @@ public class syncCookbookModel extends baseDataSource {
 	}
 
 	/**
-	 * Gets and decodes json from server
+	 * Gets and decodes json from server and insert or update cookbook
 	 * @throws JSONException
 	 * @throws IOException
 	 */

@@ -71,8 +71,10 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 					tv.setText("Would you like to delete this user ?");
 					// Show dialog
 					dialog.show();
-					Button button = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
-					button.setOnClickListener(new OnClickListener() {
+					
+					//Deletes users and dismiss dialog
+					Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+					yesButton.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View arg0) {
@@ -84,8 +86,10 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 							dialog.dismiss(); 
 						}
 					});
-					Button button2 = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
-					button2.setOnClickListener(new OnClickListener() {
+					
+					//If user selects no - dismiss dialog
+					Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+					noButton.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View arg0) {

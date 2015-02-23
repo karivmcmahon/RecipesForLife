@@ -56,6 +56,12 @@ public class accountModel extends baseDataSource
 		close();
 	} 
 
+	/**
+	 * Select account information where email and password matches
+	 * @param email
+	 * @param password
+	 * @return A list of accounts
+	 */
 	public ArrayList<accountBean> selectAccount(String email, String password)
 	{
 		open();
@@ -72,6 +78,11 @@ public class accountModel extends baseDataSource
 		return accountList;
 	}
 
+	/**
+	 * Select users where the id matches
+	 * @param id
+	 * @return A list of users
+	 */
 	public ArrayList<userBean> selectUser(int id)
 	{
 		open();

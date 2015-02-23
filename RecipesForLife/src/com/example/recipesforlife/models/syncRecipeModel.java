@@ -232,7 +232,6 @@ public class syncRecipeModel extends baseDataSource {
 			for(int x = 0; x < prepList.size(); x++)
 			{
 				prepStepArray.put(prepList.get(x).getPreperation().toString());
-				Log.v("x ", "QWERTY " + prepList.get(x).getPreperation().toString());
 				prepNumArray.put(Integer.toString(prepList.get(x).getPrepNum()));
 				prepIdArray.put(prepList.get(x).getUniqueid().toString());
 			}
@@ -280,7 +279,6 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.accumulate("Ingredient", newObj);			
 			jsonArray.put(recipe);			
 		} 
-		Log.v("WHAT ", "WHAT " + jsonArray);
 		sendJSONToServer(jsonArray, update);
 	}
 
@@ -352,7 +350,6 @@ public class syncRecipeModel extends baseDataSource {
 				cookingid = json.optString("cookingid");
 				//}
 				String name = cbmodel.selectCookbooksNameByID(cookingid);
-				Log.v("Book name ", "Book name " + name);
 				recipe.setRecipeBook(name);
 
 				ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();

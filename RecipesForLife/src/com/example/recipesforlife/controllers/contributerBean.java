@@ -1,10 +1,17 @@
 package com.example.recipesforlife.controllers;
 
+/**
+ * Controller for contributor
+ * @author Kari
+ *
+ */
 public class contributerBean {
 	String account;
 	String bookUniqId;
 	String updateTime;
 	String progress;
+	String changeTime;
+	
 	public String getProgress() {
 		return progress;
 	}
@@ -23,7 +30,6 @@ public class contributerBean {
 	public void setChangeTime(String changeTime) {
 		this.changeTime = changeTime;
 	}
-	String changeTime;
 	
 	public String getAccount() {
 		return account;

@@ -141,7 +141,7 @@ public class syncModel extends baseDataSource
 	}
 
 	/**
-	 * Sends the json with account info to the server
+	 * Sends the json with account info to the server 
 	 * @param jsonArray
 	 * @throws IOException 
 	 */

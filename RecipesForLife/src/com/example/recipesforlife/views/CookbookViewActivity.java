@@ -49,12 +49,15 @@ public class CookbookViewActivity extends Activity{
 				//Creates add cookbook dialog
 				bookAddDialog = utils.createDialog(CookbookViewActivity.this , R.layout.addcookbookdialog);
 				final TextView errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
+				//Fills information into text view
 				utils.setDialogText(R.id.errorView,bookAddDialog,16);
 				errorView.setTextColor(Color.parseColor("#F70521"));
-				utils.setDialogText(R.id.addBookView,bookAddDialog,22);
+			    utils.setDialogText(R.id.addBookView,bookAddDialog,22);
 				utils.setDialogText(R.id.bookNameView,bookAddDialog,22);
 				utils.setDialogText(R.id.bookDescView,bookAddDialog,22);
 				utils.setDialogText(R.id.privacyView,bookAddDialog,22);
+				
+				//Fill spinner
 				List<String> spinnerArray =  new ArrayList<String>();
 				spinnerArray.add("public");
 				spinnerArray.add("private");
@@ -76,6 +79,7 @@ public class CookbookViewActivity extends Activity{
 						cookbookBean book = new cookbookBean();
 						cookbookModel model = new cookbookModel(getApplicationContext());
 						int id = model.selectCookbooksID(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog), sharedpreferences.getString(emailk, "DEFAULT"));
+						//Check for errors
 						if(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog).equals(""))
 						{
 							errorView.setText("Please enter the name");
@@ -90,6 +94,7 @@ public class CookbookViewActivity extends Activity{
 						}
 						else
 						{
+							//Insert cookbook
 							book.setName(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
 							book.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog));
 							Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
@@ -97,7 +102,6 @@ public class CookbookViewActivity extends Activity{
 							book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
 							cookbookModel cbmodel = new cookbookModel(getApplicationContext());
 							cbmodel.insertBook(book, false);
-
 							bookAddDialog.dismiss();
 						}
 					}});

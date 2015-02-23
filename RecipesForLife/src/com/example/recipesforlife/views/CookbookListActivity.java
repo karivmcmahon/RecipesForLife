@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +28,7 @@ public class CookbookListActivity extends Activity {
 
 	public static final String emailk = "emailKey";
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
@@ -41,6 +41,7 @@ public class CookbookListActivity extends Activity {
 		//Gets list of cookbooks and displays them
 		cookbookList = new ArrayList<cookbookBean>();
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		//Fill list adapter with cookbook names
 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 		ArrayList<String> values = new ArrayList<String>();
 		for(int i = 0; i < cookbookList.size(); i++)
@@ -50,7 +51,6 @@ public class CookbookListActivity extends Activity {
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
 		listView.setAdapter(adapter); 
 
 		//When item clicked move to next activity
@@ -58,11 +58,10 @@ public class CookbookListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
-				// TODO Auto-generated method stub
 				Intent i = new Intent(CookbookListActivity.this, RecipeListViewActivity.class);
 				
 
-				// ListView Clicked item value
+				// ListView Clicked item value - gets matching uniqueid
 				String  itemValue    = (String) listView.getItemAtPosition(position);
 				String uniqueid = "";
 				for(int a = 0; a < cookbookList.size(); a++)
@@ -70,7 +69,6 @@ public class CookbookListActivity extends Activity {
 					if(itemValue.equals(cookbookList.get(a).getName()))
 					{
 						uniqueid = cookbookList.get(a).getUniqueid();
-						Log.v("uniqid", "uniqid " + uniqueid);
 					}
 				}
 				i.putExtra("uniqueid", uniqueid);

@@ -200,6 +200,12 @@ public class cookbookModel extends baseDataSource {
 		return names;	
 	}
 	
+	/**
+	 * Check if contributer exists where email and cookbookid matches
+	 * @param email
+	 * @param id
+	 * @return boolean - whether contrib exists
+	 */
 	public boolean selectContributer(String email, int id)
 	{
 		boolean exists = false;
@@ -354,7 +360,7 @@ public class cookbookModel extends baseDataSource {
 	/**
 	 * Selecting a list of recipes based on a cookbook's id
 	 * @param uniqueid
-	 * @return
+	 * @return List of recipes
 	 */
 	public ArrayList<recipeBean> selectRecipesByCookbook(String uniqueid)
 	{
@@ -394,7 +400,7 @@ public class cookbookModel extends baseDataSource {
 	/** 
 	 * Creating a recipebean based on cursor
 	 * @param cursor
-	 * @return
+	 * @return recipeBean - recipe info
 	 */
 	public recipeBean cursorToRecipe(Cursor cursor) {
 		recipeBean rb = new recipeBean();
@@ -409,7 +415,7 @@ public class cookbookModel extends baseDataSource {
 	 * Select cookbooks id based on creator and name of the book
 	 * @param name
 	 * @param user
-	 * @return
+	 * @return int - the id
 	 */
 	public int selectCookbooksID(String name, String user)
 	{
@@ -429,7 +435,11 @@ public class cookbookModel extends baseDataSource {
 		return id;	
 	}
 	
-
+	/**
+	 * Select uniqueid for a cookbook where the cookbook is at a rowid
+	 * @param rowid
+	 * @return String
+	 */
 	public String selectCookbooksByRowID(int rowid)
 	{
 		String id = "";

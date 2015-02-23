@@ -34,9 +34,13 @@ public class syncContributersModel extends baseDataSource {
 	public syncContributersModel(Context context) {
 		super(context);
 		this.context = context;
-		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Gets contributers within a specific date range
+	 * @param update
+	 * @return List of contributers
+	 */
 	public ArrayList<contributerBean> getContribs(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -78,7 +82,12 @@ public class syncContributersModel extends baseDataSource {
 		return contribList;
 	} 
 	
-	
+	/**
+	 * Create a json of the contributers information
+	 * @param update
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	 public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	 {
 		ArrayList<contributerBean> contribs = getContribs(update);
@@ -94,10 +103,15 @@ public class syncContributersModel extends baseDataSource {
 			contrib.put("progress", contribs.get(i).getProgress());
 			jsonArray.put(contrib);			
 		} 
-		Log.v("JSON", "JSON contribs " + jsonArray); 
 		sendJSONToServer(jsonArray, update);
 	} 
 	
+	 /**
+	  * Send json to the server
+	  * @param jsonArray
+	  * @param update
+	  * @throws IOException
+	  */
 	public void sendJSONToServer(JSONArray jsonArray, boolean update ) throws IOException
 	{
 		String str = "";
@@ -143,6 +157,12 @@ public class syncContributersModel extends baseDataSource {
 
 	}
 	
+	/**
+	 * Get contributer json from server and either insert or update the contributer
+	 * @param update
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -200,7 +220,6 @@ public class syncContributersModel extends baseDataSource {
 				int id = model.selectCookbooksIDByUnique(uniqid);
 				if(update == true)
 				{
-					Log.v("up contrib", "up contrib");
 					model.updateContributers(email, id, progress);
 				}
 				else
