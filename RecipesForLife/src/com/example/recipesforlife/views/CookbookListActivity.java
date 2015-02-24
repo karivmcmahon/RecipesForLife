@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Menu;
@@ -38,6 +40,12 @@ public class CookbookListActivity extends Activity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
+		
+	/**	Resources res = getResources();
+	    BitmapDrawable background = (BitmapDrawable) res.getDrawable(R.drawable.background);
+	    background.setTileModeY(Shader.TileMode.REPEAT);
+	    (new View(this)).setBackgroundResource(R.drawable.background); **/
+	    
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);

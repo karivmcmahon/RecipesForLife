@@ -51,45 +51,14 @@ public class RecipeListViewActivity extends Activity {
 		//Gets recipe list and set to adapter
 		recipeList = model.selectRecipesByCookbook(intent.getStringExtra("uniqueid"));
 		ArrayList<String> recipenames = new ArrayList<String>();
+		ArrayList<String> recipeids = new ArrayList<String>();
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			recipenames.add(recipeList.get(a).getName());
+			recipeids.add(recipeList.get(a).getUniqueid());
 		}
-		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, android.R.id.text1, recipenames);
+		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids);
 		listView.setAdapter(adapter); 
-
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
-				Intent i = null;
-				//Depending on the type requested by user it will goto different activity
-				if(type.equals("view"))
-				{
-					i = new Intent(RecipeListViewActivity.this, RecipeViewActivity.class);
-				}
-				else if(type.equals("edit"))
-				{
-					i = new Intent(RecipeListViewActivity.this, RecipeEditActivity.class);
-				}
-			
-
-				// ListView Clicked item value
-				String  itemValue    = (String) listView.getItemAtPosition(position);
-				for(int a = 0; a < recipeList.size(); a++)
-				{
-					if(itemValue.equals(recipeList.get(a).getName()))
-					{
-						i.putExtra("uniqueidr", recipeList.get(a).getUniqueid());
-					}
-				}
-				i.putExtra("name", itemValue);
-				startActivity(i);
-
-			}
-		});
 
 	}
 

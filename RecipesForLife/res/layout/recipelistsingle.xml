@@ -29,15 +29,7 @@
         android:layout_marginBottom="15dp"
          android:layout_toRightOf="@+id/myImageView" />
     
-     <ImageView
-        android:id="@+id/userView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/user58"
-        android:scaleType="fitXY"
-        android:layout_below="@+id/editView" 
-         android:layout_toRightOf="@+id/myImageView"
-         android:layout_marginBottom="15dp" />
+
     
     
     <ImageView
@@ -46,7 +38,7 @@
         android:layout_height="30dp"
         android:src="@drawable/delete81"
         android:scaleType="fitXY"
-         android:layout_below="@+id/userView" 
+         android:layout_below="@+id/editView" 
        android:layout_toRightOf="@+id/myImageView" 
        android:layout_marginBottom="15dp"
        />
