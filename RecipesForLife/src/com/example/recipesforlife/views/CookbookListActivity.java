@@ -49,17 +49,18 @@ public class CookbookListActivity extends Activity {
 		//Fill list adapter with cookbook names
 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> ids = new ArrayList<String>();
 		for(int i = 0; i < cookbookList.size(); i++)
 		{
 			values.add(cookbookList.get(i).getName());
+			ids.add(cookbookList.get(i).getUniqueid());
 		}
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, android.R.id.text1, values);
+		CustomCookbookListAdapter adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);
 		listView.setAdapter(adapter); 
-
+		
 		//When item clicked move to next activity
-		listView.setOnItemClickListener(new OnItemClickListener() {
+		/**listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
@@ -81,7 +82,7 @@ public class CookbookListActivity extends Activity {
 				startActivity(i);
 
 			}
-		});
+		}); **/
 	}
 
 	@Override
