@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
 
     android:gravity="center_horizontal"
-    android:paddingTop="10dp"
+    android:paddingTop="40dp"
     android:paddingBottom="30dp"
-     android:background="@drawable/shelf"
+     android:background="@drawable/shelf3"
    
     >
     

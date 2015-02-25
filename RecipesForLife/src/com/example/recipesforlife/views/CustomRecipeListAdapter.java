@@ -48,6 +48,12 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		Log.v("size", "size " + recipenames.size());
+		if(recipenames.get(position).toString().equals(""))
+		{
+			rowView= inflater.inflate(R.layout.emptyrow, null, true);
+		}
+		else
+		{
 
 		 rowView= inflater.inflate(R.layout.recipelistsingle, null, true);
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
@@ -86,7 +92,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 			}
 			
 		});
-		
+		}
 		return rowView;		
 	}
 

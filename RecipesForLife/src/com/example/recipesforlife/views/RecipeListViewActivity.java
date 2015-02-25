@@ -39,6 +39,8 @@ public class RecipeListViewActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview2);
 		listView = (ListView) findViewById(R.id.list);
+		utils = new util(getApplicationContext(), this);
+		utils.setText(R.id.textView, 28);
 
 		model = new cookbookModel(getApplicationContext());
 		recipeList = new ArrayList<recipeBean>();
@@ -89,6 +91,17 @@ public class RecipeListViewActivity extends Activity {
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			recipenames.add(recipeList.get(a).getName());
+		}
+		if(recipeList.size() < 6)
+		{
+			int num = 6 - recipeList.size();
+			for(int i = 0; i < num; i++)
+			{
+				
+				recipenames.add("");
+			
+				Log.v("add","add");
+			}
 		}
 	
 		adapter.clear();
