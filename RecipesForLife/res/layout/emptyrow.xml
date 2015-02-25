@@ -1,0 +1,20 @@
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="center_horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="30dp"
+     android:background="@drawable/shelf"
+   
+    >
+    
+<ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+         android:layout_marginBottom="30dp"
+ />
+</RelativeLayout>

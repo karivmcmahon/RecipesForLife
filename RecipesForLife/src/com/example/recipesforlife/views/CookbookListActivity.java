@@ -2,24 +2,29 @@ package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.models.cookbookModel;
+import com.example.recipesforlife.models.util;
 
 /**
  * Class to display a list of cookbooks involving the users
@@ -32,8 +37,10 @@ public class CookbookListActivity extends Activity {
 	public static final String MyPREFERENCES = "MyPrefs";
 	ArrayList<cookbookBean> cookbookList;
 	String type = "";
+	util utils;
 
 	public static final String emailk = "emailKey";
+	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
@@ -41,11 +48,16 @@ public class CookbookListActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
 		
-	/**	Resources res = getResources();
-	    BitmapDrawable background = (BitmapDrawable) res.getDrawable(R.drawable.background);
+		utils = new util(getApplicationContext(), this);
+		
+		/**LinearLayout layout =(LinearLayout)findViewById(R.id.ll);
+		Resources res = getResources();
+	    BitmapDrawable background = (BitmapDrawable) res.getDrawable(R.drawable.s);
 	    background.setTileModeY(Shader.TileMode.REPEAT);
-	    (new View(this)).setBackgroundResource(R.drawable.background); **/
-	    
+	    background.setGravity(Gravity.CENTER);
+	   
+	    layout.setBackground(background); **/
+	    utils.setText(R.id.textView, 28);
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
@@ -62,6 +74,16 @@ public class CookbookListActivity extends Activity {
 		{
 			values.add(cookbookList.get(i).getName());
 			ids.add(cookbookList.get(i).getUniqueid());
+		}
+		
+		if(cookbookList.size() < 6)
+		{
+			int num = 6 - cookbookList.size();
+			for(int a = 0; a < num; a++)
+			{
+				values.add("");
+				ids.add("");
+			}
 		}
 
 		CustomCookbookListAdapter adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);

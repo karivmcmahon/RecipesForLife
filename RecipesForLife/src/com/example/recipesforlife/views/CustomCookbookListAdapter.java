@@ -66,7 +66,15 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
-		View rowView= inflater.inflate(R.layout.cookbooklistsingle, null, true);
+		View rowView = null;
+		if(booknames.get(position).toString().equals(""))
+		{
+			rowView= inflater.inflate(R.layout.emptyrow, null, true);
+		}
+		else
+		{
+			rowView= inflater.inflate(R.layout.cookbooklistsingle, null, true);
+		
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
 		txtTitle.setText(booknames.get(position));
 		utils.setRowText(R.id.myImageViewText, rowView, 22);		
@@ -184,6 +192,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 				}
 				return false;
 			}});
+		}
 		return rowView;
 	}
 	

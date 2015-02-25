@@ -37,7 +37,7 @@ public class RecipeListViewActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.listview);
+		setContentView(R.layout.listview2);
 		listView = (ListView) findViewById(R.id.list);
 
 		model = new cookbookModel(getApplicationContext());
@@ -56,6 +56,17 @@ public class RecipeListViewActivity extends Activity {
 		{
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
+		}
+		if(recipeList.size() < 6)
+		{
+			int num = 6 - recipeList.size();
+			for(int i = 0; i < num; i++)
+			{
+				
+				recipenames.add("");
+				recipeids.add("");
+				Log.v("add","add");
+			}
 		}
 		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids);
 		listView.setAdapter(adapter); 
@@ -79,6 +90,7 @@ public class RecipeListViewActivity extends Activity {
 		{
 			recipenames.add(recipeList.get(a).getName());
 		}
+	
 		adapter.clear();
 		adapter.addAll(recipenames);
 		adapter.notifyDataSetChanged();

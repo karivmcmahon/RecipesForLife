@@ -8,6 +8,7 @@ import com.example.recipesforlife.models.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		this.activity = activity;
 		this.context = context;
 		this.recipenames = recipenames;
+		Log.v("size", " " + recipenames.size());
 		this.recipeids = recipeids;
 		utils = new util(this.context, activity);
 
@@ -44,7 +46,10 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
-		View rowView= inflater.inflate(R.layout.recipelistsingle, null, true);
+		View rowView = null;
+		Log.v("size", "size " + recipenames.size());
+
+		 rowView= inflater.inflate(R.layout.recipelistsingle, null, true);
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
 		txtTitle.setText(recipenames.get(position));
 		utils.setRowText(R.id.myImageViewText, rowView, 22);
@@ -81,6 +86,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 			}
 			
 		});
+		
 		return rowView;		
 	}
 
