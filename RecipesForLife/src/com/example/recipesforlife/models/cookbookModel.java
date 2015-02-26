@@ -41,7 +41,7 @@ public class cookbookModel extends baseDataSource {
 	 * @param book
 	 * @param server
 	 */
-	public void insertBook(cookbookBean book, boolean server)
+	public String insertBook(cookbookBean book, boolean server)
 	{
 
 		open();
@@ -52,13 +52,17 @@ public class cookbookModel extends baseDataSource {
 		values.put("creator", book.getCreator()); 
 		values.put("privacyOption", book.getPrivacy()); 
 		values.put("description", book.getDescription());
+		String uid = "";
 		if(server == true)
 		{
+			
 			values.put("uniqueid", book.getUniqueid());
+			uid = book.getUniqueid();
 		}
 		else
 		{
-			values.put("uniqueid", utils.generateUUID(book.getCreator(), "Cookbook", database));
+			uid = utils.generateUUID(book.getCreator(), "Cookbook", database);
+			values.put("uniqueid", uid);
 		}
 		database.beginTransaction();
 		try
@@ -73,7 +77,7 @@ public class cookbookModel extends baseDataSource {
 			close();
 		} 
 		close();
-
+		return uid;
 
 	}
 

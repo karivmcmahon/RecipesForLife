@@ -1,9 +1,11 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.widget.LinearLayout.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -28,11 +31,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -66,8 +73,11 @@ public class CookbookListActivity extends ActionBarActivity {
 	public static final String pass = "passwordKey"; 
 	String type = "";
 	util utils;
+	CustomCookbookListAdapter adapter;
+	ArrayList<String> values;
+	ArrayList<String> ids;
 	
-	 private String[] mPlanetTitles;
+	 private ArrayList<String> mPlanetTitles;
 	    private DrawerLayout mDrawerLayout;
 	    private ListView mDrawerList;
 	    private CharSequence mTitle;
@@ -85,15 +95,18 @@ public class CookbookListActivity extends ActionBarActivity {
 		getSupportActionBar().setTitle("My Cookbooks");
 		//centerActionBarTitle();
 
-	
+		 mPlanetTitles = new ArrayList<String>();
 		 
-        mPlanetTitles = new String[]{"Home", "Settings", "Profile", "Log Off"};
+        mPlanetTitles.add("Home");
+        mPlanetTitles.add("Settings");
+        mPlanetTitles.add("Proffile");
+        mPlanetTitles.add("Log Off");
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
  
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setAdapter(new CustomNavArrayAdapter(getApplicationContext(),
+                R.layout.drawer_list_item, mPlanetTitles, CookbookListActivity.this));
        
  
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -137,8 +150,8 @@ public class CookbookListActivity extends ActionBarActivity {
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Fill list adapter with cookbook names
 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-		ArrayList<String> values = new ArrayList<String>();
-		ArrayList<String> ids = new ArrayList<String>();
+		values = new ArrayList<String>();
+		ids = new ArrayList<String>();
 		for(int i = 0; i < cookbookList.size(); i++)
 		{
 			values.add(cookbookList.get(i).getName());
@@ -155,13 +168,18 @@ public class CookbookListActivity extends ActionBarActivity {
 			}
 		}
 
-		CustomCookbookListAdapter adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);
+		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);
 		listView.setAdapter(adapter); 
 		
 		
 	}
 
-
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
 
 	@Override
 	protected void onResume() {
@@ -189,10 +207,17 @@ public class CookbookListActivity extends ActionBarActivity {
 	        if (mDrawerToggle.onOptionsItemSelected(item)) {
 	            return true;
 	        }
-	        
-	        // Handle your other action bar items...
+	        switch (item.getItemId()) {
+	      
+	        case R.id.action_bookadd:
+	            Log.v("add click", "add click");
+	            addDialog();
+	            return true;
+	        default:
+	          
 	 
 	        return super.onOptionsItemSelected(item);
+	        }
 	    }
 	 
 	    /**
@@ -266,6 +291,73 @@ public class CookbookListActivity extends ActionBarActivity {
 	          //  titleTextView.setGravity(Gravity.CENTER);
 	        }
 	    }
+	
+	public void addDialog()
+	{
+		final Dialog bookAddDialog = utils.createDialog(CookbookListActivity.this , R.layout.addcookbookdialog);
+		final TextView errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
+		//Fills information into text view
+		utils.setDialogText(R.id.errorView,bookAddDialog,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
+	    utils.setDialogText(R.id.addBookView,bookAddDialog,22);
+		utils.setDialogText(R.id.bookNameView,bookAddDialog,22);
+		utils.setDialogText(R.id.bookDescView,bookAddDialog,22);
+		utils.setDialogText(R.id.privacyView,bookAddDialog,22);
+		
+		//Fill spinner
+		List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("public");
+		spinnerArray.add("private");
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				CookbookListActivity.this, R.layout.item, spinnerArray);
+
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner sItems = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
+		sItems.setAdapter(adapter);
+
+		//Clicks to add the data
+		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, bookAddDialog);
+		addButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// Retrieves data and inserts into database
+				SharedPreferences sharedpreferences =  getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+				cookbookBean book = new cookbookBean();
+				cookbookModel model = new cookbookModel(getApplicationContext());
+				int id = model.selectCookbooksID(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog), sharedpreferences.getString(emailk, "DEFAULT"));
+				//Check for errors
+				if(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog).equals(""))
+				{
+					errorView.setText("Please enter the name");
+				}
+				else if(id != 0)
+				{
+					errorView.setText("You already have a cookbook with that name");
+				}
+				else if(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog).equals(""))
+				{
+					errorView.setText("Please enter the description");
+				}
+				else
+				{
+					//Insert cookbook
+					book.setName(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
+					book.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, bookAddDialog));
+					Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
+					book.setPrivacy(spinner.getSelectedItem().toString());
+					book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
+					cookbookModel cbmodel = new cookbookModel(getApplicationContext());
+					String uniqueid = cbmodel.insertBook(book, false);
+					values.add(book.getName());
+					ids.add(uniqueid);
+				   adapter.notifyDataSetChanged(); 
+					bookAddDialog.dismiss();
+				}
+			}});
+
+		bookAddDialog.show();
+	}
 
 
 
