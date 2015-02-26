@@ -6,12 +6,7 @@
     android:background="@drawable/s4"
       >
     
-    <TextView
-           android:id="@+id/textView"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_gravity="center_vertical|center_horizontal"
-           android:text="My Cookbooks" />
+ 
  
          <ListView
               android:id="@+id/list"

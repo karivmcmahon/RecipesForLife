@@ -11,5 +11,25 @@
          
     </style>
     
+     <!-- the theme applied to the application or activity -->
+    <style name="CustomActionBarTheme"
+           parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/fadedbar3</item>
+         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+         <item name="android:icon">@android:color/transparent</item> 
+    </style>
+    
+     <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText"
+           parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
    
 </resources>

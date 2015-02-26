@@ -3,16 +3,22 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.widget.LinearLayout.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
@@ -48,16 +55,14 @@ public class CookbookListActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
 		
+		getActionBar().setTitle("My Cookbooks");
+		centerActionBarTitle();
+
+	
+		
 		utils = new util(getApplicationContext(), this);
 		
-		/**LinearLayout layout =(LinearLayout)findViewById(R.id.ll);
-		Resources res = getResources();
-	    BitmapDrawable background = (BitmapDrawable) res.getDrawable(R.drawable.s);
-	    background.setTileModeY(Shader.TileMode.REPEAT);
-	    background.setGravity(Gravity.CENTER);
-	   
-	    layout.setBackground(background); **/
-	    utils.setText(R.id.textView, 28);
+
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
@@ -126,5 +131,43 @@ public class CookbookListActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 	}
+	
+	
+
+
+	private void centerActionBarTitle()
+	    {
+
+	        int titleId = 0;
+	        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+	        {
+	            titleId = getResources().getIdentifier("action_bar_title", "id", "android");
+	        }
+	        else
+	        {
+	            // This is the id is from your app's generated R class when ActionBarActivity is used 
+	            // for SupportActionBar
+	         //   titleId = R.id.ac
+	        }
+
+	        // Final check for non-zero invalid id
+	        if (titleId > 0)
+	        {
+	            TextView titleTextView = (TextView) findViewById(titleId);
+
+	            DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+	            // Fetch layout parameters of titleTextView (LinearLayout.LayoutParams : Info from HierarchyViewer)
+	            LinearLayout.LayoutParams txvPars = (LayoutParams) titleTextView.getLayoutParams();
+	            txvPars.gravity = Gravity.CENTER_HORIZONTAL;
+	            txvPars.width = metrics.widthPixels;
+	            titleTextView.setLayoutParams(txvPars);
+	            Typeface typeFace=Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/elsie.ttf");
+	            titleTextView.setTypeface(typeFace);
+	            titleTextView.setTextSize(28);
+	            titleTextView.setText("My Cookbooks");
+	            titleTextView.setGravity(Gravity.CENTER);
+	        }
+	    }
 
 }
