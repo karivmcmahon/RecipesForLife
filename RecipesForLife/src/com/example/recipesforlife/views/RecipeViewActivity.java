@@ -13,6 +13,8 @@ import android.os.StrictMode;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,7 +57,13 @@ public class RecipeViewActivity extends ActionBarActivity {
 		setTextForLayout();
 		nav = new NavigationDrawerCreation(this, recipeName );
 		nav.createDrawer();
-
+		SpannableString s = new SpannableString(recipeName);
+		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
+		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
+		// Update the action bar title with the TypefaceSpan instance
+				android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+				actionBar.setTitle(s);
 
 
 	}

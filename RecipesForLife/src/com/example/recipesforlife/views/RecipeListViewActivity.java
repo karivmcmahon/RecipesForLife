@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -123,8 +125,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		prepBeanList = new ArrayList<preperationBean>();
 	
 		
-		nav = new NavigationDrawerCreation(this, "My Recipes");
-		nav.createDrawer();
+		
 
 		model = new cookbookModel(getApplicationContext());
 		recipeList = new ArrayList<recipeBean>();
@@ -133,6 +134,17 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		Log.v("uniqid", "uniqid" + intent.getStringExtra("uniqueid"));
 		uniqueid = intent.getStringExtra("uniqueid");
 		type = intent.getStringExtra("type");
+		String bookname = intent.getStringExtra("bookname");
+		
+		nav = new NavigationDrawerCreation(this, "My Recipes");
+		nav.createDrawer();
+		SpannableString s = new SpannableString("My Recipes in " + bookname);
+		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
+		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
+		// Update the action bar title with the TypefaceSpan instance
+				android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+				actionBar.setTitle(s);
 		
 		//Gets recipe list and set to adapter
 		recipeList = model.selectRecipesByCookbook(intent.getStringExtra("uniqueid"));

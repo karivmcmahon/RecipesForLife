@@ -16,6 +16,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -117,10 +119,18 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipe = new recipeBean();
 		setStyle();
 		setTextForLayout();
+		String recipename = utils.getTextView(R.id.recipeTitle);
 		
 		
 		nav = new NavigationDrawerCreation(this, "Edit Recipe Name");
 		nav.createDrawer();
+		SpannableString s = new SpannableString("Edit " + recipename);
+		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
+		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		
+		// Update the action bar title with the TypefaceSpan instance
+				android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+				actionBar.setTitle(s);
 
 		//Set up the various edit buttons for the page
 		ImageView titleButton = (ImageView) findViewById(R.id.recipeTitleEditImage);

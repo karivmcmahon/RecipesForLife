@@ -27,6 +27,7 @@ import com.example.recipesforlife.controllers.cookbookBean;
 public class NavigationDrawerCreation   {
 	
 	 private ArrayList<String> navBarTitles;
+	 private ArrayList<Integer> imageids;
 	    private DrawerLayout drawerLayout;
 	    private ListView drawerList;
 	    private ActionBarDrawerToggle drawerToggle;
@@ -50,17 +51,22 @@ public class NavigationDrawerCreation   {
 		//centerActionBarTitle();
 
 		 navBarTitles = new ArrayList<String>();
-		 
+		imageids = new ArrayList<Integer>();
+		
         navBarTitles.add("Home");
+        imageids.add(R.drawable.home168);
         navBarTitles.add("Settings");
+        imageids.add(R.drawable.settings21);
         navBarTitles.add("Proffile");
+        imageids.add(R.drawable.user58);
         navBarTitles.add("Log Off");
+        imageids.add(R.drawable.power18);
         drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
         drawerList = (ListView) activity.findViewById(R.id.left_drawer);
  
         // Set the adapter for the list view
         drawerList.setAdapter(new CustomNavArrayAdapter(activity.getApplicationContext(),
-                R.layout.drawer_list_item, navBarTitles, activity));
+                R.layout.drawer_list_item, navBarTitles, activity, imageids));
        
  
         drawerToggle = new ActionBarDrawerToggle(

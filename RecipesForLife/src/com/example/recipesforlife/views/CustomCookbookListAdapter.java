@@ -188,6 +188,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 					
 					i.putExtra("uniqueid", bookids.get(position));
 					i.putExtra("type", "view");
+					i.putExtra("bookname", booknames.get(position));
 					activity.startActivity(i);
 				}
 				return false;

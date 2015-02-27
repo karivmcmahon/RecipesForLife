@@ -24,7 +24,8 @@ import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -58,6 +59,7 @@ import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.models.PostTask;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
@@ -91,7 +93,13 @@ public class CookbookListActivity extends ActionBarActivity {
 		setContentView(R.layout.listview);
 		nav = new NavigationDrawerCreation(this, "My Cookbooks");
 		nav.createDrawer();
-		
+		SpannableString s = new SpannableString("My Cookbooks");
+		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
+		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+		// Update the action bar title with the TypefaceSpan instance
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle(s);
 		
 		utils = new util(getApplicationContext(), this);
 		
@@ -137,10 +145,14 @@ public class CookbookListActivity extends ActionBarActivity {
 		return true;
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
+	 @Override
+	   protected void onResume() {
+		   super.onResume();
+		   
+		   new PostTask(utils, getApplicationContext()).execute();
+	    		 
+	      
+	   }
 	
 	 @Override
 	    protected void onPostCreate(Bundle savedInstanceState) {

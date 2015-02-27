@@ -217,7 +217,7 @@ public class SignUpSignInActivity extends Activity {
 			if (sharedpreferences.contains(pass)) {
 
 				Intent i = new Intent(SignUpSignInActivity.this,
-						MainActivity.class);
+						CookbookListActivity.class);
 				startActivity(i);
 			}
 		}
@@ -255,7 +255,7 @@ public class SignUpSignInActivity extends Activity {
 			editor.putString(pass, password);
 			editor.commit();
 			// Start activity
-			Intent i = new Intent(SignUpSignInActivity.this, MainActivity.class);
+			Intent i = new Intent(SignUpSignInActivity.this, CookbookListActivity.class);
 			startActivity(i);
 		} else {
 			final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.textviewdialog);
