@@ -150,7 +150,7 @@ public class recipeModel extends baseDataSource {
 	 * Inserts recipeBean data into database
 	 * @param recipe
 	 */
-	public void insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList)
+	public String insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -164,13 +164,16 @@ public class recipeModel extends baseDataSource {
 		values.put("totalTime", "4:00:00");    
 		values.put("serves", recipe.getServes()); 
 		values.put("addedBy", recipe.getAddedBy()); 
+		String uniqueid = "";
 		if(server == true)
 		{
-			values.put("uniqueid", recipe.getUniqueid());
+			uniqueid = recipe.getUniqueid();
+			values.put("uniqueid", uniqueid);
 		}
 		else
 		{
-			values.put("uniqueid", utils.generateUUID(recipe.getAddedBy(), "Recipe", database));
+			uniqueid = utils.generateUUID(recipe.getAddedBy(), "Recipe", database);
+			values.put("uniqueid", uniqueid);
 		}
 		database.beginTransaction();
 		try
@@ -187,7 +190,8 @@ public class recipeModel extends baseDataSource {
 			database.endTransaction();
 			close();    	
 		} 
-		close();    	
+		close(); 
+		return uniqueid;
 	}
 
 	/**

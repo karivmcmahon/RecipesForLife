@@ -9,18 +9,23 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +46,7 @@ import com.example.recipesforlife.models.util;
  * @author Kari
  *
  */
-public class RecipeEditActivity extends Activity {
+public class RecipeEditActivity extends ActionBarActivity {
 
 	util utils;
 	recipeBean recipe;
@@ -55,6 +60,7 @@ public class RecipeEditActivity extends Activity {
 	ArrayList<ingredientBean> ingredList, modifiedIngredList;
 	ArrayList<Integer> prepNumEditIds, prepEditIds, amountEditIds, valueEditIds, ingredEditIds, noteEditIds;
 	int id = 1;
+	NavigationDrawerCreation nav;
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -111,6 +117,10 @@ public class RecipeEditActivity extends Activity {
 		recipe = new recipeBean();
 		setStyle();
 		setTextForLayout();
+		
+		
+		nav = new NavigationDrawerCreation(this, "Edit Recipe Name");
+		nav.createDrawer();
 
 		//Set up the various edit buttons for the page
 		ImageView titleButton = (ImageView) findViewById(R.id.recipeTitleEditImage);
@@ -200,12 +210,43 @@ public class RecipeEditActivity extends Activity {
 	}
 
 	@Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+       nav.syncState();
+    }
+ 
+  @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        nav.config(newConfig);
+    }
+ 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	Log.v("Click c", "Click c");
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch even
+    	boolean result = nav.drawerToggle(item);
+ 
+        switch (item.getItemId()) {
+      
+        case R.id.action_bookadd:
+            result = true;
+        default:
+          result = false;
+        }
+ 
+        return result;
+       
+    }
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();

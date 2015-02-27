@@ -4,12 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.ingredientBean;
@@ -24,10 +33,17 @@ import com.example.recipesforlife.models.util;
  * @author Kari
  *
  */
-public class RecipeViewActivity extends Activity {
+public class RecipeViewActivity extends ActionBarActivity {
 	util utils;
+	NavigationDrawerCreation nav;
+	int counter = 0;
+	int fullScreenCounter = 0;
+	private ShareActionProvider mShareActionProvider;
+	String recipeName = "";
+	int recipeFont = 22;
+	int recipeFontHeader = 26;
 
-	
+
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,15 +53,112 @@ public class RecipeViewActivity extends Activity {
 		utils = new util(getApplicationContext(), this);
 		setStyle();
 		setTextForLayout();
+		nav = new NavigationDrawerCreation(this, recipeName );
+		nav.createDrawer();
 
 
 
 	}
 
 	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		nav.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		nav.config(newConfig);
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.v("Click id", "Click id " +  item.getItemId());
+		Log.v("Click id", "Click id s" +   R.id.action_fontdown);
+		// Pass the event to ActionBarDrawerToggle, if it returns
+		// true, then it has handled the app icon touch even
+		nav.drawerToggle(item);
+
+		if(item.getItemId() ==  R.id.action_fontdown)
+		{
+			recipeFont--;
+			recipeFontHeader--;
+			//	setStyle();
+			Log.v("Up recipe font", "Down " +recipeFont);
+			Log.v("Up recipe font", "Down H " +recipeFont);
+			 
+		}
+		if(item.getItemId() ==  R.id.action_fontup)
+		{
+			recipeFont++;
+			recipeFontHeader++;
+			Log.v("Up recipe font", "Up " +recipeFont);
+			Log.v("Up recipe font", "Up  H " +recipeFontHeader);
+			
+		}
+		if(item.getItemId() ==  R.id.action_fullScreen)
+		{
+			fullScreenCounter++;
+			if(fullScreenCounter == 1)
+			{
+				getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				Toast.makeText(getApplicationContext(), 
+						"Full screen on", Toast.LENGTH_LONG).show();
+			}
+			if(fullScreenCounter == 2)
+			{
+				getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				Toast.makeText(getApplicationContext(), 
+						"Full screen off", Toast.LENGTH_LONG).show();
+				fullScreenCounter = 0;
+			}
+
+		}
+		if(item.getItemId() == R.id.action_screenOn)
+		{
+			counter++;
+			if(counter == 1)
+			{
+				getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				Toast.makeText(getApplicationContext(), 
+						"Screen sleep off", Toast.LENGTH_LONG).show();
+			}
+			if(counter == 2)
+			{
+				getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				Toast.makeText(getApplicationContext(), 
+						"Screen sleep back on", Toast.LENGTH_LONG).show();
+				counter = 0;
+			}
+		}
+		setStyle(); 
+		return super.onOptionsItemSelected(item);
+
+	}
+
+	
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		 getMenuInflater().inflate(R.menu.recipe, menu);
+	        MenuItem item = menu.findItem(R.id.action_share);
+	        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+	        Log.v("NOT NULL", "NOT NULL");
+	        if(mShareActionProvider != null)
+	        {
+	        	Log.v("NOT NULL", "NOT NULL");
+	        	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+	    		sharingIntent.setType("text/plain");
+	    		String shareBody = "Check out my recipe for " + recipeName +  " on the android app Recipes For Life" ;
+	    		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+	    		  mShareActionProvider.setShareIntent(sharingIntent);
+	        }
+	      
+	        
 		return true;
 	}
 
@@ -59,18 +172,18 @@ public class RecipeViewActivity extends Activity {
 	 */
 	public void setStyle()
 	{
-		utils.setTextPink(R.id.recipeTitle, 26);
-		utils.setTextBlackItalic(R.id.recipeDesc, 22);
-		utils.setTextPink(R.id.serves, 22);
-		utils.setTextBlack(R.id.servesVal, 20);
-		utils.setTextPink(R.id.prepTime, 20);
-		utils.setTextPink(R.id.cookingTime, 20);
-		utils.setTextBlack(R.id.prepTimeVal, 20);
-		utils.setTextBlack(R.id.cookingTimeVal, 20);
-		utils.setTextPink(R.id.ingredientTitle, 26);
-		utils.setTextPink(R.id.methodTitle, 26);
-		utils.setTextBlack(R.id.ingredientList, 22);
-		utils.setTextBlack(R.id.methodList, 22);	
+		utils.setTextPink(R.id.recipeTitle, recipeFontHeader);
+		utils.setTextBlackItalic(R.id.recipeDesc, recipeFont);
+		utils.setTextPink(R.id.serves, recipeFont);
+		utils.setTextBlack(R.id.servesVal, recipeFont);
+		utils.setTextPink(R.id.prepTime, recipeFont);
+		utils.setTextPink(R.id.cookingTime, recipeFont);
+		utils.setTextBlack(R.id.prepTimeVal, recipeFont);
+		utils.setTextBlack(R.id.cookingTimeVal, recipeFont);
+		utils.setTextPink(R.id.ingredientTitle, recipeFontHeader);
+		utils.setTextPink(R.id.methodTitle, recipeFontHeader);
+		utils.setTextBlack(R.id.ingredientList, recipeFont);
+		utils.setTextBlack(R.id.methodList, recipeFont);	
 	}
 
 	/**
@@ -103,6 +216,7 @@ public class RecipeViewActivity extends Activity {
 		{
 			ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue() + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
 		}			
+		recipeName =  recipe.getName();
 		utils.setTextString(R.id.recipeTitle, recipe.getName());
 		utils.setTextString(R.id.recipeDesc, recipe.getDesc());
 		utils.setTextString(R.id.servesVal, recipe.getServes());

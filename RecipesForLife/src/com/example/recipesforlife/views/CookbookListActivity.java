@@ -24,6 +24,7 @@ import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -77,11 +78,8 @@ public class CookbookListActivity extends ActionBarActivity {
 	ArrayList<String> values;
 	ArrayList<String> ids;
 	
-	 private ArrayList<String> mPlanetTitles;
-	    private DrawerLayout mDrawerLayout;
-	    private ListView mDrawerList;
-	    private CharSequence mTitle;
-	    private ActionBarDrawerToggle mDrawerToggle;
+
+	    NavigationDrawerCreation nav;
 
 	public static final String emailk = "emailKey";
 	@SuppressLint("NewApi")
@@ -91,51 +89,9 @@ public class CookbookListActivity extends ActionBarActivity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
+		nav = new NavigationDrawerCreation(this, "My Cookbooks");
+		nav.createDrawer();
 		
-		getSupportActionBar().setTitle("My Cookbooks");
-		//centerActionBarTitle();
-
-		 mPlanetTitles = new ArrayList<String>();
-		 
-        mPlanetTitles.add("Home");
-        mPlanetTitles.add("Settings");
-        mPlanetTitles.add("Proffile");
-        mPlanetTitles.add("Log Off");
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
- 
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new CustomNavArrayAdapter(getApplicationContext(),
-                R.layout.drawer_list_item, mPlanetTitles, CookbookListActivity.this));
-       
- 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.menu,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
-                ) {
- 
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle("My Cookbooks");
-            }
- 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle("My Cookbooks");
-                mDrawerList.bringToFront();
-                mDrawerLayout.requestLayout();
-            }
-        };
- 
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
- 
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-     //  getSupportActionBar().setHomeButtonEnabled(true);
-       mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		
 		utils = new util(getApplicationContext(), this);
 		
@@ -190,72 +146,38 @@ public class CookbookListActivity extends ActionBarActivity {
 	    protected void onPostCreate(Bundle savedInstanceState) {
 	        super.onPostCreate(savedInstanceState);
 	        // Sync the toggle state after onRestoreInstanceState has occurred.
-	        mDrawerToggle.syncState();
+	       nav.syncState();
 	    }
 	 
 	  @Override
 	    public void onConfigurationChanged(Configuration newConfig) {
 	        super.onConfigurationChanged(newConfig);
-	        mDrawerToggle.onConfigurationChanged(newConfig);
+	        nav.config(newConfig);
 	    }
 	 
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	    	Log.v("Click c", "Click c");
 	        // Pass the event to ActionBarDrawerToggle, if it returns
-	        // true, then it has handled the app icon touch event
-	        if (mDrawerToggle.onOptionsItemSelected(item)) {
-	            return true;
-	        }
+	        // true, then it has handled the app icon touch even
+	    	boolean result = nav.drawerToggle(item);
+	 
 	        switch (item.getItemId()) {
 	      
 	        case R.id.action_bookadd:
 	            Log.v("add click", "add click");
 	            addDialog();
-	            return true;
+	            result = true;
 	        default:
-	          
-	 
-	        return super.onOptionsItemSelected(item);
+	          result = false;
 	        }
+	 
+	        return result;
+	       
 	    }
 	 
-	    /**
-	     * Swaps fragments in the main content view
-	     */
-	  
-	 
-	    @Override
-	    public void setTitle(CharSequence title) {
-	        mTitle = title;
-	        getSupportActionBar().setTitle(mTitle);
-	    }
-	    
-	    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-	        @Override
-	        public void onItemClick(AdapterView parent, View view, int position, long id) {
-	        	if(position == 0)
-	        	{
-	        		Intent i = new Intent(CookbookListActivity.this, CookbookListActivity.class);
-	        		startActivity(i);
-	        	}
-	        	else if(position == 3)
-	        	{
-	        		  SharedPreferences sharedpreferences = getSharedPreferences
-						      (SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-						      Editor editor = sharedpreferences.edit();
-						     editor.remove(emailk);
-						     editor.remove(pass);
-						     // editor.clear();
-						      editor.commit();
-						      Intent i = new Intent(CookbookListActivity.this, SignUpSignInActivity.class);
-						     startActivity(i);
-	        	}
-	            Toast.makeText(CookbookListActivity.this, ((TextView)view).getText(), Toast.LENGTH_LONG).show();
-	            mDrawerLayout.closeDrawer(mDrawerList);
-	 
-	        }
-	    }
+	   
+	   
 	 
 	   
 
@@ -349,8 +271,8 @@ public class CookbookListActivity extends ActionBarActivity {
 					book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
 					cookbookModel cbmodel = new cookbookModel(getApplicationContext());
 					String uniqueid = cbmodel.insertBook(book, false);
-					values.add(book.getName());
-					ids.add(uniqueid);
+					values.add(0, book.getName());
+					ids.add(0, uniqueid);
 				   adapter.notifyDataSetChanged(); 
 					bookAddDialog.dismiss();
 				}

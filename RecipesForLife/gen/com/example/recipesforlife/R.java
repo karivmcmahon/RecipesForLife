@@ -1647,28 +1647,33 @@ containing a value of this type.
         public static final int fadedbar2=0x7f02003c;
         public static final int fadedbar3=0x7f02003d;
         public static final int fadedbar4=0x7f02003e;
-        public static final int grad1=0x7f02003f;
-        public static final int grad2=0x7f020040;
-        public static final int grad3=0x7f020041;
-        public static final int ic_launcher=0x7f020042;
-        public static final int images=0x7f020043;
-        public static final int menu=0x7f020044;
-        public static final int pen29=0x7f020045;
-        public static final int penpink=0x7f020046;
-        public static final int plus2=0x7f020047;
-        public static final int plus32=0x7f020048;
-        public static final int s=0x7f020049;
-        public static final int s2=0x7f02004a;
-        public static final int s3=0x7f02004b;
-        public static final int s4=0x7f02004c;
-        public static final int search=0x7f02004d;
-        public static final int shape=0x7f02004e;
-        public static final int shape2=0x7f02004f;
-        public static final int shape3=0x7f020050;
-        public static final int shape4=0x7f020051;
-        public static final int shelf=0x7f020052;
-        public static final int shelf3=0x7f020053;
-        public static final int user58=0x7f020054;
+        public static final int font_down=0x7f02003f;
+        public static final int font_up=0x7f020040;
+        public static final int fullscreen=0x7f020041;
+        public static final int grad1=0x7f020042;
+        public static final int grad2=0x7f020043;
+        public static final int grad3=0x7f020044;
+        public static final int ic_launcher=0x7f020045;
+        public static final int images=0x7f020046;
+        public static final int menu=0x7f020047;
+        public static final int pen29=0x7f020048;
+        public static final int penpink=0x7f020049;
+        public static final int plus2=0x7f02004a;
+        public static final int plus32=0x7f02004b;
+        public static final int s=0x7f02004c;
+        public static final int s2=0x7f02004d;
+        public static final int s3=0x7f02004e;
+        public static final int s4=0x7f02004f;
+        public static final int screenon=0x7f020050;
+        public static final int search=0x7f020051;
+        public static final int shape=0x7f020052;
+        public static final int shape2=0x7f020053;
+        public static final int shape3=0x7f020054;
+        public static final int shape4=0x7f020055;
+        public static final int share=0x7f020056;
+        public static final int shelf=0x7f020057;
+        public static final int shelf3=0x7f020058;
+        public static final int user58=0x7f020059;
     }
     public static final class id {
         public static final int action_bar=0x7f050031;
@@ -1680,12 +1685,17 @@ containing a value of this type.
         public static final int action_bar_title=0x7f05001e;
         public static final int action_bookadd=0x7f0500d2;
         public static final int action_context_bar=0x7f050032;
+        public static final int action_fontdown=0x7f0500d5;
+        public static final int action_fontup=0x7f0500d4;
+        public static final int action_fullScreen=0x7f0500d7;
         public static final int action_menu_divider=0x7f05001a;
         public static final int action_menu_presenter=0x7f05001b;
         public static final int action_mode_bar=0x7f05002e;
         public static final int action_mode_bar_stub=0x7f05002d;
         public static final int action_mode_close_button=0x7f050020;
+        public static final int action_screenOn=0x7f0500d8;
         public static final int action_search=0x7f0500d3;
+        public static final int action_share=0x7f0500d6;
         public static final int activity_chooser_view_content=0x7f050021;
         public static final int addBookView=0x7f050046;
         public static final int addButton=0x7f050043;
@@ -1970,6 +1980,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0c0000;
+        public static final int recipe=0x7f0c0001;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -2028,13 +2039,18 @@ containing a value of this type.
         /**  Content description for the Toolbar icon used to collapse an expanded action mode. [CHAR LIMIT=NONE] 
          */
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
-        public static final int action_bookadd=0x7f0a0013;
-        public static final int action_search=0x7f0a0012;
+        public static final int action_bookadd=0x7f0a0018;
+        public static final int action_fontdown=0x7f0a0013;
+        public static final int action_fontup=0x7f0a0012;
+        public static final int action_fullScreen=0x7f0a0017;
+        public static final int action_screenOn=0x7f0a0016;
+        public static final int action_search=0x7f0a0014;
         public static final int action_settings=0x7f0a0011;
+        public static final int action_share=0x7f0a0015;
         public static final int app_name=0x7f0a0010;
-        public static final int drawer_close=0x7f0a0016;
-        public static final int drawer_open=0x7f0a0015;
-        public static final int hello_world=0x7f0a0014;
+        public static final int drawer_close=0x7f0a001b;
+        public static final int drawer_open=0x7f0a001a;
+        public static final int hello_world=0x7f0a0019;
     }
     public static final class style {
         /** 
