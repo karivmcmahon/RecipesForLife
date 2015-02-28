@@ -20,6 +20,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/**
+ * Displays dialog to create a cookbook
+ * @author Kari
+ *
+ */
 public class AddCookbookView extends CookbookListActivity {
 
 	ActionBarActivity activity;
@@ -40,6 +45,9 @@ public class AddCookbookView extends CookbookListActivity {
 		utils = new util(context, activity);
 	}
 
+	/**
+	 * Creates an add a cookbook dialog
+	 */
 	public void addCookbook()
 	{
 		bookAddDialog = utils.createDialog(activity , R.layout.addcookbookdialog);
@@ -67,6 +75,9 @@ public class AddCookbookView extends CookbookListActivity {
 		
 	}
 
+	/**
+	 * Sets up the dialog style
+	 */
 	public void setStyle()
 	{
 		utils.setDialogText(R.id.errorView,bookAddDialog,16);
@@ -78,6 +89,9 @@ public class AddCookbookView extends CookbookListActivity {
 	}
 
 
+	/**
+	 * Fills the spinner in the dialog
+	 */
 	public void fillSpinner()
 	{
 		//Fill spinner
@@ -92,6 +106,9 @@ public class AddCookbookView extends CookbookListActivity {
 		sItems.setAdapter(adapter);
 	}
 	
+	/**
+	 * Checks for any errors and if none adds the cookbook to database
+	 */
 	public void addBook()
 	{
 		// Retrieves data and inserts into database

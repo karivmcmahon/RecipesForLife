@@ -47,31 +47,31 @@ public class CookbookListActivity extends ActionBarActivity {
 	public static CustomCookbookListAdapter adapter;
 	public static ArrayList<String> values;
 	public static  ArrayList<String> ids;
-	
 
-	    NavigationDrawerCreation nav;
+
+	NavigationDrawerCreation nav;
 
 	public static final String emailk = "emailKey";
 	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
+		
+		//Sets up nav bar
 		nav = new NavigationDrawerCreation(this, "My Cookbooks");
 		nav.createDrawer();
 		SpannableString s = new SpannableString("My Cookbooks");
 		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
-		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
-		
-		utils = new util(getApplicationContext(), this);
-		
 
+		utils = new util(getApplicationContext(), this);
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
@@ -89,7 +89,7 @@ public class CookbookListActivity extends ActionBarActivity {
 			values.add(cookbookList.get(i).getName());
 			ids.add(cookbookList.get(i).getUniqueid());
 		}
-		
+
 		if(cookbookList.size() < 6)
 		{
 			int num = 6 - cookbookList.size();
@@ -102,8 +102,8 @@ public class CookbookListActivity extends ActionBarActivity {
 
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);
 		listView.setAdapter(adapter); 
-		
-		
+
+
 	}
 
 	@Override
@@ -113,56 +113,59 @@ public class CookbookListActivity extends ActionBarActivity {
 		return true;
 	}
 
-	 @Override
-	   protected void onResume() {
-		   super.onResume();
-		   
-		   new PostTask(utils, getApplicationContext()).execute();
-	    		 
-	      
-	   }
-	
-	 @Override
-	    protected void onPostCreate(Bundle savedInstanceState) {
-	        super.onPostCreate(savedInstanceState);
-	        // Sync the toggle state after onRestoreInstanceState has occurred.
-	       nav.syncState();
-	    }
-	 
-	  @Override
-	    public void onConfigurationChanged(Configuration newConfig) {
-	        super.onConfigurationChanged(newConfig);
-	        nav.config(newConfig);
-	    }
-	 
-	    @Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
-	        // Pass the event to ActionBarDrawerToggle, if it returns
-	        // true, then it has handled the app icon touch even
-	    	boolean result = nav.drawerToggle(item);
-	 
-	        switch (item.getItemId()) {
-	      
-	        case R.id.action_bookadd:
-	        	AddCookbookView add = new AddCookbookView(getApplicationContext(), this);
-	        	add.addCookbook();
-	        default:
-	          result = false;
-	        }
-	 
-	        return result;
-	       
-	    }
-	 
-	   
-	   
-	 
-	   
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		new PostTask(utils, getApplicationContext()).execute();
+
+
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		nav.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		nav.config(newConfig);
+	}
+
+	/**
+	 * Handles action bar clicks
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		//handles nav drawer clicks
+		boolean result = nav.drawerToggle(item);
+
+		switch (item.getItemId()) {
+
+		//If the user presses add button - show add cookbook
+		case R.id.action_bookadd:
+			AddCookbookView add = new AddCookbookView(getApplicationContext(), this);
+			add.addCookbook();
+		default:
+			result = false;
+		}
+
+		return result;
+
+	}
 
 
 
 
 
-   }
+
+
+
+
+
+}
 
 

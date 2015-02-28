@@ -390,10 +390,11 @@ public class recipeModel extends baseDataSource {
 	 * @param x
 	 * @return id 
 	 */
-	public boolean selectRecipe(String name, String user)
+	public boolean selectRecipe(String name, String uniqueid)
 	{		
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE name=? and addedBy=?", new String[] { name, user });
+		
+		Cursor cursor = database.rawQuery("SELECT  Recipe.name AS recipename FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id AND Recipe.name = ?", new String[] { uniqueid, name });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

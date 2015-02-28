@@ -20,6 +20,11 @@ import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
+/**
+ * Displays the edit cookbook dialog
+ * @author Kari
+ *
+ */
 public class EditCookbookView  {
 
 	Context context;
@@ -45,6 +50,9 @@ public class EditCookbookView  {
 		utils = new util(context, activity);
 	}
 
+	/**
+	 * Sets up the edit book dialog and enables user to edit the cookbook
+	 */
 	public void editBook()
 	{
 		editDialog = utils.createDialog(activity, R.layout.cookbookeditdialog);
@@ -67,6 +75,9 @@ public class EditCookbookView  {
 		editDialog.show();
 	}
 
+	/**
+	 * Sets the dialog styles
+	 */
 	public void setStyle()
 	{
 		//Set texts
@@ -78,6 +89,9 @@ public class EditCookbookView  {
 		utils.setDialogText(R.id.privacyView, editDialog, 22);
 	}
 
+	/**
+	 * Fills the dialog spinner
+	 */
 	public void fillSpinner()
 	{
 		//Fill adapter
@@ -93,12 +107,18 @@ public class EditCookbookView  {
 		spinner.setSelection(utils.getIndex(spinner, cookbook.get(0).getPrivacy()));
 	}
 
+	/**
+	 * Sets the text in the edit text dialog box
+	 */
 	public void setText()
 	{
 		utils.setDialogTextString(R.id.bookNameEditText, editDialog, cookbook.get(0).getName());
 		utils.setDialogTextString(R.id.bookDescEditText, editDialog, cookbook.get(0).getDescription());
 	}
 
+	/**
+	 * Checks for any errors and edits the cookbook in the database
+	 */
 	public void edit()
 	{
 		cookbookBean cb = new cookbookBean();
