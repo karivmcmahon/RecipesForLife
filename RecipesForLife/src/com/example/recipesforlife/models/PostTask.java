@@ -1,6 +1,6 @@
 package com.example.recipesforlife.models;
 
-import com.example.recipesforlife.views.MainActivity;
+
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import android.content.Context;

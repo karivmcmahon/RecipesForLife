@@ -10,7 +10,7 @@ import android.text.style.MetricAffectingSpan;
 /**
  * Style a {@link Spannable} with a custom {@link Typeface}.
  * 
- * @author Tristan Waddington
+ * @author Tristan Waddington - Found here http://stackoverflow.com/questions/8607707/how-to-set-a-custom-font-in-the-actionbar-title
  */
 public class TypefaceSpan extends MetricAffectingSpan {
       /** An <code>LruCache</code> for previously loaded typefaces. */

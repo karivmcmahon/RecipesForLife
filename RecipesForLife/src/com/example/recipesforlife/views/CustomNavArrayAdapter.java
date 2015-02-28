@@ -1,10 +1,6 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.models.util;
 
 public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 	

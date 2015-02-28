@@ -3,25 +3,18 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.models.accountModel;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -30,10 +23,16 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.models.accountModel;
+import com.example.recipesforlife.models.cookbookModel;
+import com.example.recipesforlife.models.util;
+
 public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	private final Activity activity;
-	private ArrayList<String> booknames;
-	private ArrayList<String> bookids;
+	public ArrayList<String> booknames;
+	public static ArrayList<String> bookids;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
@@ -87,74 +86,8 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 				// TODO Auto-generated method stub
 				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 				{
-					final Dialog editDialog = utils.createDialog(activity, R.layout.cookbookeditdialog);
-					final TextView errorView = (TextView) editDialog.findViewById(R.id.errorView);
-					final cookbookModel model = new cookbookModel(context);
-					//Set texts
-					utils.setDialogText(R.id.errorView,editDialog,16);
-					errorView.setTextColor(Color.parseColor("#F70521"));
-					utils.setDialogText(R.id.editBookView, editDialog, 22);
-					utils.setDialogText(R.id.bookNameView, editDialog, 22);
-					utils.setDialogText(R.id.bookDescView, editDialog, 22);
-					utils.setDialogText(R.id.privacyView, editDialog, 22);
-					Button btn = utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
-					ArrayList<cookbookBean> cookbook = model.selectCookbook(bookids.get(position));
-					utils.setDialogTextString(R.id.bookNameEditText, editDialog, cookbook.get(0).getName());
-					utils.setDialogTextString(R.id.bookDescEditText, editDialog, cookbook.get(0).getDescription());
-					
-					//Fill adapter
-					final Spinner spinner = (Spinner) editDialog.findViewById(R.id.privacySpinner);
-					List<String> spinnerArray =  new ArrayList<String>();
-					spinnerArray.add("public");
-					spinnerArray.add("private");
-					final String uid = bookids.get(position);
-					ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(
-							activity, R.layout.item, spinnerArray);
-					spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spinner.setAdapter(spinneradapter);
-					spinner.setSelection(utils.getIndex(spinner, cookbook.get(0).getPrivacy()));
-
-					btn.setOnClickListener(new OnClickListener(){
-
-						@Override
-						public void onClick(View arg0) {
-							cookbookBean cb = new cookbookBean();
-							//Error checking
-							if(utils.getTextFromDialog(R.id.bookNameEditText, editDialog).equals(""))
-							{
-								errorView.setText("Please enter a cookbook name");
-							}
-							else if(utils.getTextFromDialog(R.id.bookDescEditText, editDialog).equals(""))
-							{
-								errorView.setText("Please enter a description");
-							}
-							else
-							{
-								//Update cookbook
-								cb.setName(utils.getTextFromDialog(R.id.bookNameEditText, editDialog));
-								cb.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, editDialog));
-								cb.setPrivacy(spinner.getSelectedItem().toString());
-								cb.setUniqueid(uid);
-								model.updateBook(cb);
-								
-								SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-								ArrayList<cookbookBean >cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-								ArrayList<String> values = new ArrayList<String>();
-								ArrayList<String> ids = new ArrayList<String>();
-								for(int i = 0; i < cookbookList.size(); i++)
-								{
-									values.add(cookbookList.get(i).getName());
-									ids.add(cookbookList.get(i).getUniqueid());
-								}
-								booknames = values;
-								bookids = ids;
-								notifyDataSetChanged();
-								editDialog.dismiss();
-							}
-
-						}});
-
-					editDialog.show();
+					EditCookbookView edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
+					edit.editBook();
 				}
 				return false;
 			}});
