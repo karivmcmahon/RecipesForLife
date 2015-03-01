@@ -59,7 +59,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
-		
+
 		//Sets up nav bar
 		nav = new NavigationDrawerCreation(this, "My Cookbooks");
 		nav.createDrawer();
@@ -89,7 +89,7 @@ public class CookbookListActivity extends ActionBarActivity {
 			values.add(cookbookList.get(i).getName());
 			ids.add(cookbookList.get(i).getUniqueid());
 		}
-
+		//If the list is under 6 then create empty rows to fill the layout of the app
 		if(cookbookList.size() < 6)
 		{
 			int num = 6 - cookbookList.size();
@@ -99,7 +99,6 @@ public class CookbookListActivity extends ActionBarActivity {
 				ids.add("");
 			}
 		}
-
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);
 		listView.setAdapter(adapter); 
 
@@ -116,7 +115,7 @@ public class CookbookListActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		//Sync for apps to be done in background on resume
 		new PostTask(utils, getApplicationContext()).execute();
 
 

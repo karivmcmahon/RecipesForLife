@@ -14,6 +14,11 @@ import android.widget.TextView;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.util;
 
+/*
+ * This class is used to handle the listview in the navigation  drawer
+ * @author Kari
+ *
+ */
 public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 	
 	private final Activity activity;
@@ -42,7 +47,9 @@ public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = inflater.inflate(R.layout.drawer_list_item, null, true);
 		TextView title = (TextView) rowView.findViewById(R.id.textView);
+		//page name set
 		title.setText(names.get(position));
+		//icons relating to page
 		ImageView imageView =(ImageView) rowView.findViewById(R.id.myImageView);
 		imageView.setImageResource(ids.get(position));
 		utils.setRowText(R.id.textView, rowView, 28);

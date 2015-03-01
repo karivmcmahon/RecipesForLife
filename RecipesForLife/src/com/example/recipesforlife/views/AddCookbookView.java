@@ -53,26 +53,24 @@ public class AddCookbookView extends CookbookListActivity {
 		bookAddDialog = utils.createDialog(activity , R.layout.addcookbookdialog);
 		errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
 		bookDetails = new ArrayList<String>();
-		//Fills information into text view
+		//sets up the dialog style
 		setStyle();
-        fillSpinner();
+		//fills the spinner
+		fillSpinner();
 
 
 		//Clicks to add the data
 		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, bookAddDialog);
 		addButton.setOnClickListener(new OnClickListener(){
-
 			@Override
 			public void onClick(View v) {
+				//once book is added then add the details to list and notify the change
 				addBook();
 				CookbookListActivity.values.add(bookDetails.get(0));
 				CookbookListActivity.ids.add(bookDetails.get(1));
 				CookbookListActivity.adapter.notifyDataSetChanged();		
 			}});
-	
-
-		bookAddDialog.show();
-		
+		bookAddDialog.show();	
 	}
 
 	/**
@@ -100,12 +98,11 @@ public class AddCookbookView extends CookbookListActivity {
 		spinnerArray.add("private");
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.item, spinnerArray);
-
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
 		sItems.setAdapter(adapter);
 	}
-	
+
 	/**
 	 * Checks for any errors and if none adds the cookbook to database
 	 */
@@ -143,7 +140,7 @@ public class AddCookbookView extends CookbookListActivity {
 			bookDetails.add(uniqueid);
 			bookAddDialog.dismiss();
 		}
-}
+	}
 }
 
 

@@ -21,7 +21,7 @@ import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.util;
 
 /**
- * List adapter for contributers
+ * List adapter for contributers as well as the ability to add and remove contributers
  * @author Kari
  *
  */
@@ -67,6 +67,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 		ImageButton imageView = (ImageButton) rowView.findViewById(R.id.img);
 		if(isCreator == false)
 		{
+			//If the person is not the creator then do not display the option to delete
 			imageView.setVisibility(View.INVISIBLE);
 		}
 		else
@@ -115,6 +116,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 				}
 			});
 		}
+		//Sets the users name in the row
 		txtTitle.setText(users.get(position));
 		return rowView;
 	}

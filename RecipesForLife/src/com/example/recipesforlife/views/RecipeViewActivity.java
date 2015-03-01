@@ -84,29 +84,21 @@ public class RecipeViewActivity extends ActionBarActivity {
 	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.v("Click id", "Click id " +  item.getItemId());
-		Log.v("Click id", "Click id s" +   R.id.action_fontdown);
-		// Pass the event to ActionBarDrawerToggle, if it returns
-		// true, then it has handled the app icon touch even
+		
 		nav.drawerToggle(item);
 
+		//These choices increae or decrease font size
 		if(item.getItemId() ==  R.id.action_fontdown)
 		{
 			recipeFont--;
-			recipeFontHeader--;
-			//	setStyle();
-			Log.v("Up recipe font", "Down " +recipeFont);
-			Log.v("Up recipe font", "Down H " +recipeFont);
-			 
+			recipeFontHeader--;		 
 		}
 		if(item.getItemId() ==  R.id.action_fontup)
 		{
 			recipeFont++;
-			recipeFontHeader++;
-			Log.v("Up recipe font", "Up " +recipeFont);
-			Log.v("Up recipe font", "Up  H " +recipeFontHeader);
-			
+			recipeFontHeader++;		
 		}
+		//if full screen icon selected then switch the full screen on or off
 		if(item.getItemId() ==  R.id.action_fullScreen)
 		{
 			fullScreenCounter++;
@@ -125,6 +117,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 			}
 
 		}
+		//switches screen sleep on and off based on selection
 		if(item.getItemId() == R.id.action_screenOn)
 		{
 			counter++;
@@ -154,11 +147,10 @@ public class RecipeViewActivity extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		 getMenuInflater().inflate(R.menu.recipe, menu);
 	        MenuItem item = menu.findItem(R.id.action_share);
+	        //Creates a share recipe link when the share button on the action bar selected
 	        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	        Log.v("NOT NULL", "NOT NULL");
 	        if(mShareActionProvider != null)
 	        {
-	        	Log.v("NOT NULL", "NOT NULL");
 	        	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
 	    		sharingIntent.setType("text/plain");
 	    		String shareBody = "Check out my recipe for " + recipeName +  " on the android app Recipes For Life" ;

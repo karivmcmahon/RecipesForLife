@@ -97,6 +97,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
 		}
+		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
 		{
 			int num = 6 - recipeList.size();

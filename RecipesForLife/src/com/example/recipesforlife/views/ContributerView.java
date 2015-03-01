@@ -67,6 +67,7 @@ public class ContributerView {
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
 		if(isCreator == false)
 		{
+			//If the user is not creator then do not enable them to add a contributor
 			addButton.setVisibility(View.INVISIBLE);
 		}
 		else
@@ -169,6 +170,7 @@ public class ContributerView {
 		contribDialog = utils.createDialog(activity, R.layout.contributersdialog);
 		utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
 		TextView tvTitle = (TextView) contribDialog.findViewById(R.id.contributerTitle);
+		//Depending on whether the user is the creator or not show a different title
 		if(isCreator == false)
 		{
 			tvTitle.setText("View Contributors");

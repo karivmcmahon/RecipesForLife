@@ -18,6 +18,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * This class contains a list of recipes relating to a cookbook
+ * @author Kari
+ *
+ */
 public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	private final Activity activity;
 	private ArrayList<String> recipenames;
@@ -33,7 +38,6 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		this.activity = activity;
 		this.context = context;
 		this.recipenames = recipenames;
-		Log.v("size", " " + recipenames.size());
 		this.recipeids = recipeids;
 		utils = new util(this.context, activity);
 
@@ -48,6 +52,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		Log.v("size", "size " + recipenames.size());
+		//Shows empty row for layout reasons or a recipe based on the string
 		if(recipenames.get(position).toString().equals(""))
 		{
 			rowView= inflater.inflate(R.layout.emptyrow, null, true);
@@ -59,6 +64,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
 		txtTitle.setText(recipenames.get(position));
 		utils.setRowText(R.id.myImageViewText, rowView, 22);
+		//If recipe selected view the recipe
 		ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
 		recipeImage.setOnTouchListener(new OnTouchListener() {
 
@@ -76,6 +82,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 			}
 			
 		});
+		//If edit button selected, then take the user to edit recipe page
 		ImageView editRecipeImage = (ImageView) rowView.findViewById(R.id.editView);
 		editRecipeImage.setOnTouchListener(new OnTouchListener() {
 

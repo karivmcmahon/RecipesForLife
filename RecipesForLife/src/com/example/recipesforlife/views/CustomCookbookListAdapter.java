@@ -37,7 +37,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
 	util utils;
-	 CustomContribListAdapter adapter2;
+	CustomContribListAdapter adapter2;
 
 	/** 
 	 * Gets list data
@@ -56,8 +56,8 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 		utils = new util(this.context, activity);
 
 	}
-	
-	
+
+
 	@Override
 	/**
 	 * Adapts list data 
@@ -66,6 +66,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+		//Depending on if the bookname is empty or not display an empty row or a cookbook row
 		if(booknames.get(position).toString().equals(""))
 		{
 			rowView= inflater.inflate(R.layout.emptyrow, null, true);
@@ -73,64 +74,61 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 		else
 		{
 			rowView= inflater.inflate(R.layout.cookbooklistsingle, null, true);
-		
-		TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
-		txtTitle.setText(booknames.get(position));
-		utils.setRowText(R.id.myImageViewText, rowView, 22);		
-		
-		ImageView editButton = (ImageView) rowView.findViewById(R.id.editView);
-		editButton.setOnTouchListener(new OnTouchListener(){
 
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-					EditCookbookView edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
-					edit.editBook();
-				}
-				return false;
-			}});
-		
-		
-		
-		ImageView contribButton = (ImageView) rowView.findViewById(R.id.userView);
-		contribButton.setOnTouchListener(new OnTouchListener(){
+			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
+			txtTitle.setText(booknames.get(position));
+			utils.setRowText(R.id.myImageViewText, rowView, 22);		
 
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-					ContributerView contrib = new ContributerView(context, activity, CustomCookbookListAdapter.this, position);
-					contrib.manageContribs();
-				}
-				return false;
-			}});
-		
-		ImageView bookButton = (ImageView) rowView.findViewById(R.id.myImageView);
-		bookButton.setOnTouchListener(new OnTouchListener(){
+			//Show edit cookbook dialog
+			ImageView editButton = (ImageView) rowView.findViewById(R.id.editView);
+			editButton.setOnTouchListener(new OnTouchListener(){
 
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-					Intent i = new Intent(activity, RecipeListViewActivity.class);
-					
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					// TODO Auto-generated method stub
+					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+						EditCookbookView edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
+						edit.editBook();
+					}
+					return false;
+				}});
 
-					
-					i.putExtra("uniqueid", bookids.get(position));
-					i.putExtra("type", "view");
-					i.putExtra("bookname", booknames.get(position));
-					activity.startActivity(i);
-				}
-				return false;
-			}});
+
+			//Show contributors dialog
+			ImageView contribButton = (ImageView) rowView.findViewById(R.id.userView);
+			contribButton.setOnTouchListener(new OnTouchListener(){
+
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					// TODO Auto-generated method stub
+					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+						ContributerView contrib = new ContributerView(context, activity, CustomCookbookListAdapter.this, position);
+						contrib.manageContribs();
+					}
+					return false;
+				}});
+
+			//Show a list of recipes based on the cookbook selected
+			ImageView bookButton = (ImageView) rowView.findViewById(R.id.myImageView);
+			bookButton.setOnTouchListener(new OnTouchListener(){
+
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					// TODO Auto-generated method stub
+					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+						Intent i = new Intent(activity, RecipeListViewActivity.class);
+						//intents used on getting the recipes		
+						i.putExtra("uniqueid", bookids.get(position));
+						i.putExtra("type", "view");
+						i.putExtra("bookname", booknames.get(position));
+						activity.startActivity(i);
+					}
+					return false;
+				}});
 		}
 		return rowView;
 	}
-	
-	
-
 }

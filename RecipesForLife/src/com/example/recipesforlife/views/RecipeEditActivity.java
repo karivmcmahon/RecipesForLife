@@ -144,6 +144,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				return false;
 			}});
 
+		//If edit serves icon selected display the serve dialog
 		ImageView servesButton = (ImageView) findViewById(R.id.servesEditImage);
 		servesButton.setOnTouchListener(new OnTouchListener() {
 
@@ -155,6 +156,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				return false;
 			}});
 
+		//If edit time icon  selected display the times dialog
 		ImageView timeButton = (ImageView) findViewById(R.id.timeEditImage);
 		timeButton.setOnTouchListener(new OnTouchListener(){
 
@@ -167,6 +169,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				return false;
 			}});
 
+		//If edit prep icon selected display the prep dialog
 		ImageView prepButton = (ImageView) findViewById(R.id.methodEditImage);
 		prepButton.setOnTouchListener(new OnTouchListener(){
 
@@ -178,7 +181,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				return false;
 			}});
 
-
+		//If edit ingred icon selected display the ingred dialog
 		ImageView ingredButton = (ImageView) findViewById(R.id.ingredEditImage);
 		ingredButton.setOnTouchListener(new OnTouchListener(){
 
@@ -190,6 +193,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				return false;
 			}});
 
+		//If the save button selected - save the recipes
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		utils.setButtonText(R.id.saveButton, 22);
 		saveButton.setOnTouchListener(new OnTouchListener(){
@@ -232,13 +236,12 @@ public class RecipeEditActivity extends ActionBarActivity {
         nav.config(newConfig);
     }
  
+  	/**
+  	 * Handles action bar selections
+  	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	Log.v("Click c", "Click c");
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch even
     	boolean result = nav.drawerToggle(item);
- 
         switch (item.getItemId()) {
       
         case R.id.action_bookadd:
@@ -264,6 +267,9 @@ public class RecipeEditActivity extends ActionBarActivity {
 	}
 
 
+	/**
+	 * Handles on back pressed , checks whether the user wants to save recipe before going back
+	 */
 	@Override
 	public void onBackPressed() {
 		//Reminds user to save before leaving page
