@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.example.recipesforlife.models.util;
  *
  */
 public class ContributerView {
-	
+
 	Context context;
 	Activity activity;
 	util utils;
@@ -37,7 +38,8 @@ public class ContributerView {
 	TextView errorView;
 	cookbookModel model;
 	Dialog contribDialog;
-	
+	boolean isCreator = false;
+
 	public ContributerView(Context context, Activity activity, CustomCookbookListAdapter adapter, int position)
 	{
 		this.context = context;
@@ -45,55 +47,66 @@ public class ContributerView {
 		ccadapter = adapter;
 		this.position = position;
 		utils = new util(context, activity);
-		 model = new cookbookModel(context);
+		model = new cookbookModel(context);
 	}
-	
+
 	/**
 	 * Handles the contributer dialog
 	 */
 	public void manageContribs()
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		//Fill list adapter with cookbook names
+		String creator = model.creatorForCookbook(ccadapter.bookids.get(position));
+		if(creator.equals(sharedpreferences.getString(emailk, "")))
+		{
+			isCreator = true;
+		}
 		//Sets up the dialog to show a list of contributers
 		setContribView();
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
-		
+		if(isCreator == false)
+		{
+			addButton.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
 
-		//Display dialog to add a contributer if selected to add a contributer
-		addButton.setOnTouchListener(new OnTouchListener(){
+			//Display dialog to add a contributer if selected to add a contributer
+			addButton.setOnTouchListener(new OnTouchListener(){
 
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-					//Set up the add contributer dialog
-					addContribDialogViewCreate();
-					//If they press add
-					Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
-					addContribButton.setOnTouchListener(new OnTouchListener()
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						
-						@Override
-						public boolean onTouch(View v, MotionEvent event) {
-							if (event.getAction() == MotionEvent.ACTION_DOWN) 
-							{
-								//Add a contributer to database
-								addContributer();
+						//Set up the add contributer dialog
+						addContribDialogViewCreate();
+						//If they press add
+						Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
+						addContribButton.setOnTouchListener(new OnTouchListener()
+						{
+
+							@Override
+							public boolean onTouch(View v, MotionEvent event) {
+								if (event.getAction() == MotionEvent.ACTION_DOWN) 
+								{
+									//Add a contributer to database
+									addContributer();
+								}
+								return false;
+
 							}
-							return false;
 
-						}
+						});
 
-					});
-					addContribDialog.show();
-
-
-
-				}
-				return false;
-			}});
+						addContribDialog.show();
+					}
+					return false;
+				}});
+		}
 		contribDialog.show();
 	}
-	
+
 	/**
 	 * Sets up the add a contrib dialog
 	 */
@@ -107,7 +120,7 @@ public class ContributerView {
 		utils.setDialogText(R.id.contributersView, addContribDialog, 22);
 		utils.setDialogText(R.id.emailContributerView, addContribDialog, 22);
 	}
-	
+
 	/**
 	 * Adds a contributer to the database if no errors
 	 */
@@ -127,7 +140,7 @@ public class ContributerView {
 		}
 		else
 		{
-			
+
 			id = model.selectCookbooksIDByUnique(ccadapter.bookids.get(position));
 			//If it exists either update or insert contributer
 			boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
@@ -147,20 +160,29 @@ public class ContributerView {
 			addContribDialog.dismiss();
 		}
 	}
-	
+
 	/**
 	 * Set up the initial contributer view dialog
 	 */
 	public void setContribView()
 	{
-	    contribDialog = utils.createDialog(activity, R.layout.contributersdialog);
+		contribDialog = utils.createDialog(activity, R.layout.contributersdialog);
 		utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
+		TextView tvTitle = (TextView) contribDialog.findViewById(R.id.contributerTitle);
+		if(isCreator == false)
+		{
+			tvTitle.setText("View Contributors");
+		}
+		else
+		{
+			tvTitle.setText("Manage Contributors");
+		}
 		ArrayList<String> contribs = new ArrayList<String>();
 		//Show list of contributers
 		ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
-	    contribs = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");
-		 ccadapter.adapter2 = new
-				CustomContribListAdapter(activity, contribs, context, ccadapter.bookids.get(position));
+		contribs = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");
+		ccadapter.adapter2 = new
+				CustomContribListAdapter(activity, contribs, context, ccadapter.bookids.get(position), isCreator);
 		listView2.setAdapter(ccadapter.adapter2); 
 	}
 

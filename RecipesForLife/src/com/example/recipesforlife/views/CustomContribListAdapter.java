@@ -30,6 +30,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 	private final ArrayList<String> users;
 	Context context;
 	String cookbookuid;
+	boolean isCreator;
 	util utils;
 
 	/** 
@@ -39,13 +40,14 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 	 * @param context
 	 * @param cookbookuid
 	 */
-	public CustomContribListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid)
+	public CustomContribListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid, boolean isCreator)
 	{
 		super(context, R.layout.contriblistsingle, users);
 		this.activity = activity;
 		this.context = context;
 		this.users = users;
 		this.cookbookuid = cookbookuid;
+		this.isCreator = isCreator;
 		utils = new util(this.context, activity);
 
 	}
@@ -63,49 +65,56 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 
 		//If dustbin clicked - delete contributer from database
 		ImageButton imageView = (ImageButton) rowView.findViewById(R.id.img);
-		imageView.setOnTouchListener(new OnTouchListener(){
-
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
-				if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-					final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
-					utils.setDialogText(R.id.textView, dialog, 18);
-					TextView tv = (TextView) dialog.findViewById(R.id.textView);
-					tv.setText("Would you like to delete this user ?");
-					// Show dialog
-					dialog.show();
-					
-					//Deletes users and dismiss dialog
-					Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
-					yesButton.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View arg0) {
-							cookbookModel model = new cookbookModel(context);
-							int id = model.selectCookbooksIDByUnique(cookbookuid);
-							model.updateContributers( users.get(position), id, "deleted");
-							users.remove(position);
-							notifyDataSetChanged();
-							dialog.dismiss(); 
-						}
-					});
-					
-					//If user selects no - dismiss dialog
-					Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
-					noButton.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View arg0) {
-							dialog.dismiss();
-						}
-					});
+		if(isCreator == false)
+		{
+			imageView.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			imageView.setOnTouchListener(new OnTouchListener(){
+	
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					// TODO Auto-generated method stub
+					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+						final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
+						utils.setDialogText(R.id.textView, dialog, 18);
+						TextView tv = (TextView) dialog.findViewById(R.id.textView);
+						tv.setText("Would you like to delete this user ?");
+						// Show dialog
+						dialog.show();
+						
+						//Deletes users and dismiss dialog
+						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+						yesButton.setOnClickListener(new OnClickListener() {
+	
+							@Override
+							public void onClick(View arg0) {
+								cookbookModel model = new cookbookModel(context);
+								int id = model.selectCookbooksIDByUnique(cookbookuid);
+								model.updateContributers( users.get(position), id, "deleted");
+								users.remove(position);
+								notifyDataSetChanged();
+								dialog.dismiss(); 
+							}
+						});
+						
+						//If user selects no - dismiss dialog
+						Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+						noButton.setOnClickListener(new OnClickListener() {
+	
+							@Override
+							public void onClick(View arg0) {
+								dialog.dismiss();
+							}
+						});
+					}		
+				
+					return false;
 				}
-				return false;
-			}
-
-		});
+			});
+		}
 		txtTitle.setText(users.get(position));
 		return rowView;
 	}

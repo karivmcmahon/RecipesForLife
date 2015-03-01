@@ -275,6 +275,28 @@ public class cookbookModel extends baseDataSource {
 		close();
 		return cbList;	
 	}
+	
+	/**
+	 * Select cookbooks where the user is a crearoe
+	 * @param user
+	 * @return ArrayList<cookbookBean> - List of cookbooks
+	 */
+	public String creatorForCookbook(String uniqueid)
+	{
+
+		String creator = "";
+		open();
+		Cursor cursor = database.rawQuery("SELECT creator FROM Cookbook WHERE uniqueid=?", new String[] { uniqueid });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				creator = cursor.getString(getIndex("creator", cursor));        
+			}
+		}
+		cursor.close();
+		close();
+		return creator;	
+	}
 
 	/**
 	 * Select cookbooks by uniqueid
