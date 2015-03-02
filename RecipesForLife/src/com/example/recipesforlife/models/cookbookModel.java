@@ -47,7 +47,7 @@ public class cookbookModel extends baseDataSource {
 		open();
 		ContentValues values = new ContentValues();
 		values.put("name", book.getName()); 
-		values.put("updateTime", utils.getLastUpdated()); 
+		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000"); 
 		values.put("creator", book.getCreator()); 
 		values.put("privacyOption", book.getPrivacy()); 
@@ -93,7 +93,7 @@ public class cookbookModel extends baseDataSource {
 		updateVals.put("name", cookbook.getName());
 		updateVals.put("description", cookbook.getDescription());
 		updateVals.put("privacyOption", cookbook.getPrivacy());
-		updateVals.put("changeTime", utils.getLastUpdated());	
+		updateVals.put("changeTime", utils.getLastUpdated(false));	
 		String[] args = new String[]{cookbook.getUniqueid()};
 		database.beginTransaction();
 		try
@@ -121,7 +121,7 @@ public class cookbookModel extends baseDataSource {
 		open();
 		ContentValues values = new ContentValues();
 		values.put("cookbookid", cookbookid); 
-		values.put("updateTime", utils.getLastUpdated()); 
+		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000"); 
 		values.put("accountid", email); 
 		values.put("progress", "added"); 
@@ -153,7 +153,7 @@ public class cookbookModel extends baseDataSource {
 		open();
 		ContentValues values = new ContentValues();
 		values.put("cookbookid", cookbookid); 
-		values.put("changeTime", utils.getLastUpdated()); 
+		values.put("changeTime", utils.getLastUpdated(false)); 
 		values.put("accountid", email); 
 		values.put("progress", progress); 
 		database.beginTransaction();

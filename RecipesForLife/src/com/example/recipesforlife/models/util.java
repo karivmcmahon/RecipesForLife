@@ -74,36 +74,27 @@ public class util  {
 	 * @return string with date
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public String dateToString(Date date) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public String dateToString(Date date, boolean inappstring) {
+		SimpleDateFormat formatter;
+		
+		
+			formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		
 		String currentDate = formatter.format(date);
 		return currentDate;
 	}
 
-	/**
-	 * Get current data minus 3 seconds
-	 * @return
-	 */
-	public String getLastUpdated2()
-	{
-		Calendar cal = Calendar.getInstance(); // creates calendar		
-		cal.setTime(new Date()); // sets calendar time/date
-		cal.add(Calendar.SECOND, -3);
-		Date today = cal.getTime();
 
-		String lastUpdated = dateToString(today);
-		return lastUpdated;
-	}
 
 	/**
 	 * Get current date
 	 */
-	private String getLastUpdated()
+	private String getLastUpdated(boolean appstring)
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar
 		cal.setTime(new Date()); // sets calendar time/date
 		Date today = cal.getTime();
-		String lastUpdated = dateToString(today);
+		String lastUpdated = dateToString(today, appstring);
 		return lastUpdated;
 	}
 
@@ -338,71 +329,71 @@ public class util  {
 				//Get json from server for inserts
 				sync.getJSONFromServer();
 				Editor editor = sharedpreferences.edit();
-				editor.putString("Account Date", getLastUpdated());
+				editor.putString("Account Date", getLastUpdated(true));
 				editor.commit();
 
 				syncCookbook.getJSONFromServer(false);
-				editor.putString("Cookbook", getLastUpdated());
+				editor.putString("Cookbook", getLastUpdated(true));
 				editor.commit();
 
 				syncRecipe.getJSONFromServer(false);
-				editor.putString("Date", getLastUpdated());
+				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
 				
 				syncContributer.getJSONFromServer(false);
-				editor.putString("Contributers", getLastUpdated());
+				editor.putString("Contributers", getLastUpdated(true));
 				editor.commit();
 				
 				//Get json from server for updates
 
 				syncRecipe.getJSONFromServer(true);
-				editor.putString("Change", getLastUpdated());
+				editor.putString("Change", getLastUpdated(true));
 				editor.commit(); 
 				
 			    syncCookbook.getJSONFromServer(true);
-				editor.putString("Cookbook Update", getLastUpdated());
+				editor.putString("Cookbook Update", getLastUpdated(true));
 				editor.commit(); 
 				
 				syncContributer.getJSONFromServer(true);
-				editor.putString("Contributers Update", getLastUpdated());
+				editor.putString("Contributers Update", getLastUpdated(true));
 				editor.commit();
 
 				// Sending JSONS to server for inserts
 				
 				sync.getAndCreateAccountJSON();
-				editor.putString("Account Date Server", getLastUpdated());
+				editor.putString("Account Date Server", getLastUpdated(true));
 				editor.commit();
 
 
 				syncCookbook.getAndCreateJSON(false);
-				editor.putString("Cookbook Server", getLastUpdated());
+				editor.putString("Cookbook Server", getLastUpdated(true));
 				editor.commit();
 			
 
 				syncRecipe.getAndCreateJSON(false);
-				editor.putString("Date Server", getLastUpdated());
+				editor.putString("Date Server", getLastUpdated(true));
 				editor.commit();
 				
 				syncContributer.getAndCreateJSON(false);
-				editor.putString("Contributers Server", getLastUpdated());
+				editor.putString("Contributers Server", getLastUpdated(true));
 				editor.commit();
 
 				// Sending  JSON's to server for changes
 				syncRecipe.getAndCreateJSON(true);
-				editor.putString("Change Server", getLastUpdated());
+				editor.putString("Change Server", getLastUpdated(true));
 				editor.commit(); 
 				
 				syncCookbook.getAndCreateJSON(true);
-				editor.putString("Cookbook Update Server", getLastUpdated());
+				editor.putString("Cookbook Update Server", getLastUpdated(true));
 				editor.commit();
 				
 				syncContributer.getAndCreateJSON(true);
-				editor.putString("Contributers Update Server", getLastUpdated());
+				editor.putString("Contributers Update Server", getLastUpdated(true));
 				editor.commit();
 
 
-				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-				Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Date Server", "DEFAULT"));
+				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Cookbook", "DEFAULT"));
+				Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Cookbook Server", "DEFAULT"));
 				return "success";
 
 				/*Toast.makeText(context, 

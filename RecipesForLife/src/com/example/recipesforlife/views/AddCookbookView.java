@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -66,8 +67,10 @@ public class AddCookbookView extends CookbookListActivity {
 			public void onClick(View v) {
 				//once book is added then add the details to list and notify the change
 				addBook();
-				CookbookListActivity.values.add(bookDetails.get(0));
-				CookbookListActivity.ids.add(bookDetails.get(1));
+				
+				CookbookListActivity.values.add(0, bookDetails.get(0));
+				CookbookListActivity.ids.add(0, bookDetails.get(1));
+				Log.v("cookbook size ", "cookbook size " + CookbookListActivity.values.size());
 				CookbookListActivity.adapter.notifyDataSetChanged();		
 			}});
 		bookAddDialog.show();	

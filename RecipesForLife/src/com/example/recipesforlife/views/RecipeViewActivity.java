@@ -1,5 +1,6 @@
 package com.example.recipesforlife.views;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,6 +9,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.view.MenuItemCompat;
@@ -19,10 +22,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -195,11 +200,20 @@ public class RecipeViewActivity extends ActionBarActivity {
 		recipeBean recipe = new recipeBean();
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
+		imageBean imgBean = new imageBean();
 		Intent intent = getIntent();
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr") );
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
-
+		imgBean = model.selectImages(recipe.getId());
+		Log.v("ibean" , "ibean " + imgBean.getImage());
+		
+		ImageView img = (ImageView) findViewById(R.id.foodImage);
+		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
+		task.execute();
+		
+		
+		
 		TextView instructions = (TextView) findViewById(R.id.methodList);
 		Collections.sort(prepList, new Comparator<preperationBean>() {
 			@Override 

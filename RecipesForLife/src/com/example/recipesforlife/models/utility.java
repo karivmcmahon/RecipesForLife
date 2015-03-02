@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,37 +24,36 @@ public class utility  {
 	}
 	
 	/**
+	/**
 	 * Convert date to string
 	 * @param date
 	 * @return string with date
 	 */
-	public String dateToString(Date date) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	@SuppressLint("SimpleDateFormat")
+	public String dateToString(Date date, boolean inappstring) {
+		SimpleDateFormat formatter;
+	
+			formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		
 		String currentDate = formatter.format(date);
 		return currentDate;
 	}
-	
+
+
+
 	/**
 	 * Get current date
 	 */
-	public String getLastUpdated()
+	public String getLastUpdated(boolean appstring)
 	{
 		Calendar cal = Calendar.getInstance(); // creates calendar
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        String lastUpdated = dateToString(today);
-        return lastUpdated;
+		cal.setTime(new Date()); // sets calendar time/date
+		Date today = cal.getTime();
+		String lastUpdated = dateToString(today, appstring);
+		return lastUpdated;
 	}
 	
-	public String getLastUpdated2()
-	{
-		Calendar cal = Calendar.getInstance(); // creates calendar
-		cal.add(Calendar.SECOND, 30);
-        cal.setTime(new Date()); // sets calendar time/date
-        Date today = cal.getTime();
-        String lastUpdated = dateToString(today);
-        return lastUpdated;
-	}
+	
 	
 	/**
 	 * Generates UUID then adds the name and type of table - to create a more detailed unique id

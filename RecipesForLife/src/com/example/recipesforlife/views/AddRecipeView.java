@@ -411,11 +411,11 @@ public class AddRecipeView extends RecipeListViewActivity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) 
 				{
 				// TODO Auto-generated method stub
-				Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-				//pickIntent.setType("image/*");
-				//pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+				Intent pickIntent = new Intent();
+				pickIntent.setType("image/*");
+				pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-				/**	Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 				String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
 				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
@@ -423,9 +423,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 				(
 				  Intent.EXTRA_INITIAL_INTENTS, 
 				  new Intent[] { takePhotoIntent }
-				); **/
+				); 
 
-				activity.startActivityForResult(pickIntent, SELECT_PHOTO);
+				activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
 				Log.v("img nme", "img nme " + imageName);
 				utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
 				}
@@ -595,15 +595,15 @@ public class AddRecipeView extends RecipeListViewActivity {
 			            imageName = f.getName();
 			            Log.v("img nme", "img nme " + imageName);
 			            utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
-			         /**   ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			          ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			            byte[] byteArray = stream.toByteArray(); **/
-			            int bytes = yourSelectedImage.getRowBytes() * yourSelectedImage.getHeight();
+			            byte[] byteArray = stream.toByteArray(); 
+			        //    int bytes = yourSelectedImage.getRowBytes() * yourSelectedImage.getHeight();
 			        
-			          ByteBuffer buffer = ByteBuffer.allocate(bytes); 
-			          yourSelectedImage.copyPixelsToBuffer(buffer); 
+			         // ByteBuffer buffer = ByteBuffer.allocate(bytes); 
+			         // yourSelectedImage.copyPixelsToBuffer(buffer); 
 
-			          array = buffer.array(); 
+			          array = byteArray;
 			          Log.v("arr", "arr " + array);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

@@ -170,7 +170,7 @@ public class accountModel extends baseDataSource
 		//User values
 		values = new ContentValues();
 		values.put("name", user.getName()); 
-		values.put("updateTime", utils.getLastUpdated()); 
+		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("country", user.getCountry()); 
 		values.put("bio", user.getBio()); 
 		values.put("city", user.getCity()); 
@@ -190,7 +190,7 @@ public class accountModel extends baseDataSource
 		accountValues = new ContentValues();
 		accountValues.put("id", (int)id);
 		accountValues.put("email", account.getEmail());
-		accountValues.put("updateTime", utils.getLastUpdated());
+		accountValues.put("updateTime", utils.getLastUpdated(false));
 		accountValues.put("password", account.getPassword());
 		database.insertOrThrow("Account", null, accountValues);
 	}

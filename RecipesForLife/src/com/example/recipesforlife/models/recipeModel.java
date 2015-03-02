@@ -56,7 +56,7 @@ public class recipeModel extends baseDataSource {
 		recipeUpdateVals.put("prepTime", newRecipe.getPrep());
 		recipeUpdateVals.put("cookingTime", newRecipe.getCooking());
 		recipeUpdateVals.put("serves", newRecipe.getServes());
-		recipeUpdateVals.put("changeTime", utils.getLastUpdated());
+		recipeUpdateVals.put("changeTime", utils.getLastUpdated(false));
 		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] {newRecipe.getUniqueid()});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -103,7 +103,7 @@ public class recipeModel extends baseDataSource {
 					{               	
 						prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
 						prepUpdateVals.put("instructionNum", prepList.get(i).getPrepNum());
-						prepUpdateVals.put("changeTime", utils.getLastUpdated());
+						prepUpdateVals.put("changeTime", utils.getLastUpdated(false));
 						String[] args = new String[]{prepid};
 						database.update("Preperation", prepUpdateVals, "uniqueid=?", args);				
 
@@ -136,7 +136,7 @@ public class recipeModel extends baseDataSource {
 						ingredVals.put("amount", ingredBeanList.get(i).getAmount() );
 						ingredVals.put("value", ingredBeanList.get(i).getValue());
 						ingredVals.put("note", ingredBeanList.get(i).getNote());
-						ingredVals.put("changeTime", utils.getLastUpdated());
+						ingredVals.put("changeTime", utils.getLastUpdated(false));
 						ingredVals.put("ingredientId", id);
 						String[] args = new String[]{detsId};
 						database.update("IngredientDetails", ingredVals, "uniqueid=?", args);
@@ -158,7 +158,7 @@ public class recipeModel extends baseDataSource {
 		open();
 		values = new ContentValues();
 		values.put("name", recipe.getName()); 
-		values.put("updateTime", utils.getLastUpdated()); 
+		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000");
 		values.put("description", recipe.getDesc()); 
 		values.put("prepTime", recipe.getPrep()); 
@@ -218,7 +218,7 @@ public class recipeModel extends baseDataSource {
 			{
 				prepvalues.put("uniqueid", utils.generateUUID(addedBy, "Preperation", database));
 			}
-			prepvalues.put("updateTime", utils.getLastUpdated()); 
+			prepvalues.put("updateTime", utils.getLastUpdated(false)); 
 			prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
 			prepID = database.insertOrThrow("Preperation", null, prepvalues);
 			insertPrepToRecipe(server);
@@ -231,12 +231,23 @@ public class recipeModel extends baseDataSource {
 		ContentValues imagevalues = new ContentValues();
 		Log.v("Immmmmmm", "Immmmmmm" +img.getImage());
 		imagevalues.put("image", img.getImage() );
-		imagevalues.put("updateTime", utils.getLastUpdated()); 
+		imagevalues.put("updateTime", utils.getLastUpdated(false)); 
 		imagevalues.put("changeTime", "2015-01-01 12:00:00.000");
 		long imageID = database.insertOrThrow("Images", null, imagevalues);
-				
-	}
+		insertImageLink(imageID);	
+	};
 
+	public void insertImageLink(long imageid)
+	{
+		ContentValues imagevalues = new ContentValues();
+		
+		imagevalues.put("imageid", imageid );
+		imagevalues.put("Recipeid", recipeID);
+		imagevalues.put("updateTime", utils.getLastUpdated(false)); 
+		imagevalues.put("changeTime", "2015-01-01 12:00:00.000");
+		database.insertOrThrow("RecipeImages", null, imagevalues);
+				
+	} 
 	/**
 	 * Insert prep id and recipe ids into PrepRecipe in the database
 	 */
@@ -246,7 +257,7 @@ public class recipeModel extends baseDataSource {
 		preptorecipevalues = new ContentValues();
 		preptorecipevalues.put("recipeId", recipeID);
 		preptorecipevalues.put("Preperationid", prepID);
-		preptorecipevalues.put("updateTime", utils.getLastUpdated()); 
+		preptorecipevalues.put("updateTime", utils.getLastUpdated(false)); 
 		preptorecipevalues.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("PrepRecipe", null, preptorecipevalues);
 
@@ -265,7 +276,7 @@ public class recipeModel extends baseDataSource {
 		int id = selectCookbooksID(name, addedBy);
 		value.put("Recipeid", recipeID);
 		value.put("Cookbookid", id);
-		value.put("updateTime", utils.getLastUpdated()); 
+		value.put("updateTime", utils.getLastUpdated(false)); 
 		value.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("CookbookRecipe", null, value);
 
@@ -284,7 +295,7 @@ public class recipeModel extends baseDataSource {
 			if(id == 0)
 			{
 				ingredValues.put("name", ingredList.get(i).getName());
-				ingredValues.put("updateTime", utils.getLastUpdated()); 
+				ingredValues.put("updateTime", utils.getLastUpdated(false)); 
 				ingredValues.put("changeTime", "2015-01-01 12:00:00.000");
 				ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
 			}
@@ -311,7 +322,7 @@ public class recipeModel extends baseDataSource {
 		ingredDetailsValues.put("amount", ingredList.get(i).getAmount());
 		ingredDetailsValues.put("note", ingredList.get(i).getNote());
 		ingredDetailsValues.put("value", ingredList.get(i).getValue());
-		ingredDetailsValues.put("updateTime", utils.getLastUpdated()); 
+		ingredDetailsValues.put("updateTime", utils.getLastUpdated(false)); 
 		ingredDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
 		if(server == true)
 		{
@@ -333,7 +344,7 @@ public class recipeModel extends baseDataSource {
 		ingredToDetailsValues = new ContentValues();
 		ingredToDetailsValues.put("ingredientid",ingredID);
 		ingredToDetailsValues.put("IngredientDetailsid",ingredDetsID);
-		ingredToDetailsValues.put("updateTime", utils.getLastUpdated()); 
+		ingredToDetailsValues.put("updateTime", utils.getLastUpdated(false)); 
 		ingredToDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("IngredToIngredDetails", null, ingredToDetailsValues);
 	}
@@ -347,7 +358,7 @@ public class recipeModel extends baseDataSource {
 		ingredToRecipeValues = new ContentValues();
 		ingredToRecipeValues.put("Recipeid",recipeID);
 		ingredToRecipeValues.put("ingredientDetailsId", ingredDetsID);
-		ingredToRecipeValues.put("updateTime", utils.getLastUpdated());
+		ingredToRecipeValues.put("updateTime", utils.getLastUpdated(false));
 		ingredToRecipeValues.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("RecipeIngredient", null, ingredToRecipeValues);
 	}
@@ -392,7 +403,7 @@ public class recipeModel extends baseDataSource {
 		else
 		{			ContentValues ingredAddValues = new ContentValues();
 		ingredAddValues.put("name", name);
-		ingredAddValues.put("updateTime", utils.getLastUpdated()); 
+		ingredAddValues.put("updateTime", utils.getLastUpdated(false)); 
 		ingredAddValues.put("changeTime", "2015-01-01 12:00:00.000");
 		id = database.insertOrThrow("Ingredient", null, ingredAddValues);
 		}
@@ -507,6 +518,22 @@ public class recipeModel extends baseDataSource {
 		cursor.close();
 		close();
 		return prepList;
+	}
+	
+	public imageBean selectImages(int id)
+	{
+		imageBean img = new imageBean();
+		open();
+		Cursor cursor = database.rawQuery("SELECT image FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				img.setImage(cursor.getBlob(getIndex("image", cursor)));
+			}
+		}
+		cursor.close();
+		close();
+		return img;
 	}
 
 	/**
