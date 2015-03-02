@@ -1,18 +1,32 @@
 package com.example.recipesforlife.views;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +36,7 @@ import android.widget.TextView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -52,7 +67,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
 	String uniqueid = "";
-
+	private static final int SELECT_PHOTO = 100;
+	String imageName = "";
+	 byte[] array;
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -202,6 +219,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 			recipeAddDialog.dismiss();
 			//Set up second dialog
 			setUpSecondRecipeAddDialog();
+			//setUpThirdRecipeAddDialog();
 			//If ingredient plus button is pressed - show a dialog to add an ingredient
 			ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
 			ingredsPlusButton.setOnClickListener(new OnClickListener() {
@@ -254,7 +272,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 				}
 
 
-			});
+			}); 
 
 		}
 
@@ -355,7 +373,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		{
 			recipeAddDialog2.dismiss();
 			//insert data to database
-			sendDataToModel();
+			
 
 
 
@@ -371,7 +389,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 				}
 			});
-			addRecipeDialog3.show();
+			//addRecipeDialog3.show();
 		}
 	}
 	//		}
@@ -384,6 +402,36 @@ public class AddRecipeView extends RecipeListViewActivity {
 		addRecipeDialog3 = utils.createDialog(activity, R.layout.recipe3dialog);		
 		utils.setDialogText(R.id.recipeImagesView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.browseButton, addRecipeDialog3, 22);
+		
+		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, addRecipeDialog3);
+		browseButton.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) 
+				{
+				// TODO Auto-generated method stub
+				Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				//pickIntent.setType("image/*");
+				//pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+				/**	Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+				String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+				chooserIntent.putExtra
+				(
+				  Intent.EXTRA_INITIAL_INTENTS, 
+				  new Intent[] { takePhotoIntent }
+				); **/
+
+				activity.startActivityForResult(pickIntent, SELECT_PHOTO);
+				Log.v("img nme", "img nme " + imageName);
+				utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
+				}
+				return false;
+				
+			}});
 		utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.recipeCusineView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
@@ -403,6 +451,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		sItems.setAdapter(adapter);
+		addRecipeDialog3.show();
 	}
 
 	/**
@@ -416,6 +465,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		spinner.getSelectedItem().toString();	
+		sendDataToModel();
 	}
 
 	/**
@@ -513,12 +563,99 @@ public class AddRecipeView extends RecipeListViewActivity {
 		recipe.setPrep(prep);
 		recipe.setRecipeBook(recipeBook);
 		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
+		imageBean imgBean = new imageBean();
+		imgBean.setImage(array);
 		recipeModel model = new recipeModel(context);
-		String uid = model.insertRecipe(recipe, false, ingredBeanList, prepBeanList);
+		String uid = model.insertRecipe(recipe, false, ingredBeanList, prepBeanList, imgBean);
 		//Updates recipe list once inserted
 		RecipeListViewActivity.recipenames.add(0, name);
 		RecipeListViewActivity.recipeids.add(0, uid);
 		RecipeListViewActivity.adapter.notifyDataSetChanged(); 
 	}
 
+	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
+	{
+		Log.v("URI " , "URI ");
+		switch(requestCode) { 
+		case SELECT_PHOTO:
+			if(resultCode == RESULT_OK){  
+				Uri selectedImage = imageReturnedIntent.getData();
+				Log.v("URI " , "URI " + selectedImage);
+			/**	InputStream imageStream = null;
+				try {
+					imageStream = activity.getContentResolver().openInputStream(selectedImage);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} **/
+				try {
+					Bitmap yourSelectedImage = decodeUri(selectedImage);
+					 File f = new File(getRealPathFromURI(selectedImage));
+					 Log.v("img nme", "img nme " + f);
+			            imageName = f.getName();
+			            Log.v("img nme", "img nme " + imageName);
+			            utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
+			         /**   ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			            yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			            byte[] byteArray = stream.toByteArray(); **/
+			            int bytes = yourSelectedImage.getRowBytes() * yourSelectedImage.getHeight();
+			        
+			          ByteBuffer buffer = ByteBuffer.allocate(bytes); 
+			          yourSelectedImage.copyPixelsToBuffer(buffer); 
+
+			          array = buffer.array(); 
+			          Log.v("arr", "arr " + array);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+
+	}
+	
+	public String getRealPathFromURI(Uri uri) {
+	    String[] projection = { MediaStore.Images.Media.DATA };
+	    @SuppressWarnings("deprecation")
+	    Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
+	    int column_index = cursor
+	            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	    cursor.moveToFirst();
+	    return cursor.getString(column_index);
+	}
+	
+	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o);
+
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 140;
+
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp / 2 < REQUIRED_SIZE
+               || height_tmp / 2 < REQUIRED_SIZE) {
+                break;
+            }
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o2);
+
+    }
+
 }
+
+
+

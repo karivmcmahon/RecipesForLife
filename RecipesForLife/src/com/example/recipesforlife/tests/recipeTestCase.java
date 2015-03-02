@@ -107,7 +107,7 @@ public void testInsertRecipe()
 		
 		
 		 
-		recipemodel.insertRecipe(recipe, false, ingredList, prepList);
+		recipemodel.insertRecipe(recipe, false, ingredList, prepList, null);
 		
 	   
 		boolean exists = recipemodel.selectRecipe("Chicken Soup","addison");

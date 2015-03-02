@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -397,13 +398,16 @@ public class syncRecipeModel extends baseDataSource {
 					}
 				}
 				recipeModel model = new recipeModel(context);
+				imageBean img = new imageBean();
+				byte[] empty = new byte[0];
+				img.setImage(empty);
 				if(update == true)
 				{
 					model.updateRecipe(recipe, prepBeanList, ingredBeanList);
 				}
 				else
 				{
-					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList);
+					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, img);
 				}
 
 			}

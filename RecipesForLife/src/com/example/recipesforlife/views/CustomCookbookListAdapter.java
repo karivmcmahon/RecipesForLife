@@ -38,6 +38,8 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	Context context;
 	util utils;
 	CustomContribListAdapter adapter2;
+	boolean isCreator = false;
+	cookbookModel model;
 
 	/** 
 	 * Gets list data
@@ -54,6 +56,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 		this.booknames = booknames;
 		this.bookids = bookids;
 		utils = new util(this.context, activity);
+		model = new cookbookModel(context);
 
 	}
 
@@ -64,6 +67,13 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		//Fill list adapter with cookbook names
+		String creator = model.creatorForCookbook(bookids.get(position));
+		if(creator.equals(sharedpreferences.getString(emailk, "")))
+		{
+			isCreator = true;
+		}
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		//Depending on if the bookname is empty or not display an empty row or a cookbook row
@@ -81,6 +91,12 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 
 			//Show edit cookbook dialog
 			ImageView editButton = (ImageView) rowView.findViewById(R.id.editView);
+			if(isCreator == false)
+			{
+				editButton.setVisibility(View.INVISIBLE);
+			}
+			else
+			{
 			editButton.setOnTouchListener(new OnTouchListener(){
 
 				@Override
@@ -93,7 +109,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 					}
 					return false;
 				}});
-
+			}
 
 			//Show contributors dialog
 			ImageView contribButton = (ImageView) rowView.findViewById(R.id.userView);
@@ -128,6 +144,13 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 					}
 					return false;
 				}});
+			
+			//Show edit cookbook dialog
+			ImageView delButton = (ImageView) rowView.findViewById(R.id.delView);
+			if(isCreator == false)
+			{
+				delButton.setVisibility(View.INVISIBLE);
+			}
 		}
 		return rowView;
 	}

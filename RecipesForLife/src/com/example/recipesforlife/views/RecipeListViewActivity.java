@@ -1,5 +1,7 @@
 package com.example.recipesforlife.views;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,6 +65,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public static final String pass = "passwordKey"; 
 	public  static ArrayList<String> recipenames;
 	public static ArrayList<String> recipeids;
+	AddRecipeView add;
 
 
 
@@ -68,7 +74,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview2);
-		
+
 		//Setup
 		listView = (ListView) findViewById(R.id.list);
 		utils = new util(getApplicationContext(), this);
@@ -169,15 +175,22 @@ public class RecipeListViewActivity extends ActionBarActivity {
 
 		switch (item.getItemId()) 
 		{
-			//If add button selected on action bar then display add recipe dialog
-			case R.id.action_bookadd:
-				AddRecipeView add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid);
-				add.addRecipe();
-				result = true;
-			default:
-				result = false;
+		//If add button selected on action bar then display add recipe dialog
+		case R.id.action_bookadd:
+			add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid);
+			add.addRecipe();
+			result = true;
+		default:
+			result = false;
 		}
 		return result;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
+		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
+		add.resultRecieved(requestCode, resultCode, imageReturnedIntent);
+
 	}
 
 

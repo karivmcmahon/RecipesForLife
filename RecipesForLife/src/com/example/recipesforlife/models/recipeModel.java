@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.util.Log;
 
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -150,7 +152,7 @@ public class recipeModel extends baseDataSource {
 	 * Inserts recipeBean data into database
 	 * @param recipe
 	 */
-	public String insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList)
+	public String insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList, imageBean img)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -182,11 +184,13 @@ public class recipeModel extends baseDataSource {
 			insertIngredient(server, ingredList, recipe.getAddedBy());
 			insertPrep(prepList, server, recipe.getAddedBy());
 			insertCookbookRecipe(recipe.getRecipeBook(),recipe.getAddedBy());
+			insertImage(img);
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
 			close();    	
 		}catch(SQLException e)
 		{
+			e.printStackTrace();
 			database.endTransaction();
 			close();    	
 		} 
@@ -220,6 +224,17 @@ public class recipeModel extends baseDataSource {
 			insertPrepToRecipe(server);
 		}
 
+	}
+	
+	public void insertImage(imageBean img)
+	{
+		ContentValues imagevalues = new ContentValues();
+		Log.v("Immmmmmm", "Immmmmmm" +img.getImage());
+		imagevalues.put("image", img.getImage() );
+		imagevalues.put("updateTime", utils.getLastUpdated()); 
+		imagevalues.put("changeTime", "2015-01-01 12:00:00.000");
+		long imageID = database.insertOrThrow("Images", null, imagevalues);
+				
 	}
 
 	/**
