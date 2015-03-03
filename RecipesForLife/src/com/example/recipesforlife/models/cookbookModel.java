@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.util.Log;
 
 import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
@@ -397,7 +398,7 @@ public class cookbookModel extends baseDataSource {
 	{
 		open();
 		ArrayList<recipeBean> names = new ArrayList<recipeBean>();
-		Cursor cursor = database.rawQuery("SELECT *, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id ", new String[] { uniqueid });
+		Cursor cursor = database.rawQuery("SELECT Recipe.id AS recipeid, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id ", new String[] { uniqueid });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -435,12 +436,29 @@ public class cookbookModel extends baseDataSource {
 	 */
 	public recipeBean cursorToRecipe(Cursor cursor) {
 		recipeBean rb = new recipeBean();
+		int id = cursor.getInt(getIndex("recipeid",cursor));
 		rb.setName(cursor.getString(getIndex("recipename",cursor)));   
 		rb.setUniqueid(cursor.getString(getIndex("rid", cursor)));
+		rb.setImage(selectImage(id));
 		return rb;
 	}
 
 
+	public byte[] selectImage(int id)
+	{
+		imageBean img = new imageBean();
+		open();
+		Cursor cursor = database.rawQuery("SELECT image FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				img.setImage(cursor.getBlob(getIndex("image", cursor)));
+			}
+		}
+		cursor.close();
+		close();
+		return img.getImage();
+	}
 
 	/**
 	 * Select cookbooks id based on creator and name of the book

@@ -19,6 +19,13 @@ public class recipeBean {
 	String uniqueid;
 	ArrayList<String> ingredIdList;
 	String cookbookId;
+	byte image[];
+	public byte[] getImage() {
+		return image;
+	}
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 	public String getCookbookId() {
 		return cookbookId;
 	}

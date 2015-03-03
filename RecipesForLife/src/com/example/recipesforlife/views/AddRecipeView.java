@@ -466,6 +466,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		spinner.getSelectedItem().toString();	
 		sendDataToModel();
+		addRecipeDialog3.dismiss();
 	}
 
 	/**

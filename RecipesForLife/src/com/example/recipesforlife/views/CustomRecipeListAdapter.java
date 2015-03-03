@@ -1,5 +1,6 @@
 package com.example.recipesforlife.views;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 import com.example.recipesforlife.R;
@@ -8,6 +9,8 @@ import com.example.recipesforlife.models.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,18 +30,22 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	private final Activity activity;
 	private ArrayList<String> recipenames;
 	private ArrayList<String> recipeids;
+	private ArrayList<byte[]> recipeimages;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
 	util utils;
+	ImageLoader2 imgload;
 	
-	public CustomRecipeListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids)
+	public CustomRecipeListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages)
 	{
 		super(context, R.layout.recipelistsingle, recipenames);
 		this.activity = activity;
 		this.context = context;
 		this.recipenames = recipenames;
 		this.recipeids = recipeids;
+		this.recipeimages = recipeimages;
+		imgload = new ImageLoader2(context);
 		utils = new util(this.context, activity);
 
 	}
@@ -66,6 +73,8 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		utils.setRowText(R.id.myImageViewText, rowView, 22);
 		//If recipe selected view the recipe
 		ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
+
+		imgload.DisplayImage(recipeImage, recipeimages.get(position), recipeids.get(position));
 		recipeImage.setOnTouchListener(new OnTouchListener() {
 
 			@Override

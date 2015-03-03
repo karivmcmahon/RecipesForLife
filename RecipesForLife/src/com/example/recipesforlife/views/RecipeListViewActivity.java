@@ -65,6 +65,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public static final String pass = "passwordKey"; 
 	public  static ArrayList<String> recipenames;
 	public static ArrayList<String> recipeids;
+	public static ArrayList<byte[]> recipeimages;
 	AddRecipeView add;
 
 
@@ -98,10 +99,13 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		recipeList = model.selectRecipesByCookbook(intent.getStringExtra("uniqueid"));
 		recipenames = new ArrayList<String>();
 		recipeids = new ArrayList<String>();
+		recipeimages = new ArrayList<byte[]>();
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
+			recipeimages.add(recipeList.get(a).getImage());
+			Log.v("img", "img ri " + recipeList.get(a).getImage());
 		}
 		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
@@ -109,13 +113,14 @@ public class RecipeListViewActivity extends ActionBarActivity {
 			int num = 6 - recipeList.size();
 			for(int i = 0; i < num; i++)
 			{
-
+				byte[] arr = new byte[0];
 				recipenames.add("");
 				recipeids.add("");
+				recipeimages.add(arr);
 				Log.v("add","add");
 			}
 		}
-		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids);
+		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids, recipeimages);
 		listView.setAdapter(adapter); 
 
 	}
@@ -134,17 +139,22 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		recipeList = model.selectRecipesByCookbook(uniqueid);
 		recipenames.clear();
 		recipeids.clear();
+		recipeimages.clear();
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
+			recipeimages.add(recipeList.get(a).getImage());
 		}
 		if(recipeList.size() < 6)
 		{
 			int num = 6 - recipeList.size();
 			for(int i = 0; i < num; i++)
 			{
+				byte[] bytearr = new byte[0];
 				recipenames.add("");
+				recipeids.add("");
+				recipeimages.add(bytearr);
 			}
 		}
 		//Updates the list view
