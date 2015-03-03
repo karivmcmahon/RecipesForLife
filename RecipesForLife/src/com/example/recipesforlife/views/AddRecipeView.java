@@ -571,6 +571,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		//Updates recipe list once inserted
 		RecipeListViewActivity.recipenames.add(0, name);
 		RecipeListViewActivity.recipeids.add(0, uid);
+		RecipeListViewActivity.recipeimages.add(0, imgBean.getImage());
 		RecipeListViewActivity.adapter.notifyDataSetChanged(); 
 	}
 
