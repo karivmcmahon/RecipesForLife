@@ -65,6 +65,7 @@ namespace WebApplication1
 				insertPrep(i);	
 				insertIngredient(i);
 				insertCookbook(i);
+				insertImage(i);
 			}
 			catch(Exception e)
 			{
@@ -262,7 +263,51 @@ namespace WebApplication1
 					Response.Write(ex);
 				}
 			}
+			
 		}
+		
+		public void insertImage(int i)
+		{
+			SqlCommand insertimage = new SqlCommand(" INSERT INTO Images(image, updateTime, changeTime, uniqueid) OUTPUT INSERTED.imageid VALUES (@image, @updateTime, @changeTime, @uniqueid)", connn);
+			byte[] image  = null;
+			if(recipe[i].image != "")
+			{
+				image = Convert.FromBase64String(recipe[i].image);
+			}
+			insertimage.Parameters.AddWithValue("@image", image);
+			insertimage.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+			insertimage.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+			insertimage.Parameters.AddWithValue("@uniqueid", recipe[i].imageid);
+
+			try
+			{
+				Int32 imageid = (Int32)insertimage.ExecuteScalar();
+				SqlCommand insertimagelink = new SqlCommand(" INSERT INTO RecipeImages(Recipeid, imageid, updateTime, changeTime)  VALUES (@recipeid,@imageid, @updateTime, @changeTime)", connn);
+				insertimagelink.Parameters.AddWithValue("@recipeid", recipeId);
+				insertimagelink.Parameters.AddWithValue("@imageid", imageid);
+				insertimagelink.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+				insertimagelink.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+				
+				try
+				{
+					SqlDataReader rdr = insertimagelink.ExecuteReader();
+					rdr.Close();
+
+				}
+				catch (Exception ex)
+				{
+					Response.Write("Error ");
+					Response.Write(ex);
+				}
+			}
+			catch (Exception ex)
+			{
+				Response.Write("Error ");
+				Response.Write(ex);
+			}
+			
+		}
+		
 		
 		/**
 		Class stores recipe details to send to json
@@ -279,6 +324,8 @@ namespace WebApplication1
 			public string changeTime { get; set;  }
 			public string uniqueid { get; set;  }
 			public string cookbookid {get; set; }
+			public string image { get; set; }
+			public string imageid {get; set;}
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 		}

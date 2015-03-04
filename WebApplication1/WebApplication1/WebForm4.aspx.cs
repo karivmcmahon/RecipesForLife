@@ -65,7 +65,8 @@ namespace WebApplication1
 				recipe.serves = (Int32)recipeReader["serves"];
 				selectPrep(recipe.Preperation, recipe);
 				selectIngredient(recipe.Ingredient, recipe);
-				selectBook(recipe);				
+				selectBook(recipe);	
+				selectImage(recipe);
 				recipes.Recipe.Add(recipe); 
 			}		
 			connection1.Close();
@@ -134,6 +135,19 @@ namespace WebApplication1
 			}
 		}
 		
+		public void selectImage(Recipe recipe)
+		{
+			SqlCommand selectImage = new SqlCommand("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON Images.imageid=RecipeImages.imageid WHERE RecipeImages.Recipeid=@id", connection1);
+			selectImage.Parameters.AddWithValue("@id", recipeID);
+			var selectImageReader = selectImage.ExecuteReader();
+			while(selectImageReader.Read())
+			{
+				byte[] image = (byte[])selectImageReader["image"];
+				recipe.image = Convert.ToBase64String(image);
+				recipe.imageid = (string)selectImageReader["uniqueid"];
+			}
+		}
+		
 		public class RecipeDate
 		{
 			public string updateTime { get; set; }
@@ -153,8 +167,11 @@ namespace WebApplication1
 			public Int32 id { get; set; }
 			public string uniqueid { get; set; }
 			public string cookingid { get; set; }
+			public string image { get; set; }
+			public string imageid { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
+			
 		}
 
 		//List of recipes - creates a json array
