@@ -126,7 +126,7 @@ public void editRecipe()
 	recipe.setDesc("good food");
 	recipe.setUniqueid("doeRecipe");
 	recipe.setAddedBy("doe"); 
-	recipemodel.updateRecipe(recipe, prepList, ingredList);	
+	//recipemodel.updateRecipe(recipe, prepList, ingredList);	
 	recipeBean recipeSelect = new recipeBean();
 	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
 	Assert.assertEquals(recipeSelect.getDesc(), "good food");

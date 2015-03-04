@@ -46,7 +46,7 @@ public class recipeModel extends baseDataSource {
 	 * @param prepList
 	 * @param ingredList
 	 */
-	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList)
+	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList, imageBean image)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -72,6 +72,7 @@ public class recipeModel extends baseDataSource {
 				database.update("Recipe", recipeUpdateVals, "uniqueid=?", args);
 				updateRecipePrep(prepList);
 				updateRecipeIngredient(ingredList);
+				updateRecipeImage(image);
 				database.setTransactionSuccessful();
 				database.endTransaction(); 
 			}
@@ -114,6 +115,24 @@ public class recipeModel extends baseDataSource {
 		}
 		cursor.close();		
 	}
+
+
+	/**
+	 * Update recipe preperation details
+	 * @param prepList
+	 */
+	public void updateRecipeImage(imageBean img)
+	{
+		ContentValues imageUpdateVals = new ContentValues();
+		imageUpdateVals.put("image", img.getImage());
+		imageUpdateVals.put("changeTime", utils.getLastUpdated(false));
+		String[] args = new String[]{img.getUniqueid()};
+		database.update("Images", imageUpdateVals, "uniqueid=?", args);				
+
+	}
+
+
+
 
 
 	/**
@@ -225,7 +244,7 @@ public class recipeModel extends baseDataSource {
 		}
 
 	}
-	
+
 	public void insertImage(imageBean img, boolean server, String addedBy)
 	{
 		ContentValues imagevalues = new ContentValues();
@@ -251,13 +270,13 @@ public class recipeModel extends baseDataSource {
 	public void insertImageLink(long imageid)
 	{
 		ContentValues imagevalues = new ContentValues();
-		
+
 		imagevalues.put("imageid", imageid );
 		imagevalues.put("Recipeid", recipeID);
 		imagevalues.put("updateTime", utils.getLastUpdated(false)); 
 		imagevalues.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("RecipeImages", null, imagevalues);
-				
+
 	} 
 	/**
 	 * Insert prep id and recipe ids into PrepRecipe in the database
@@ -430,7 +449,7 @@ public class recipeModel extends baseDataSource {
 	public boolean selectRecipe(String name, String uniqueid)
 	{		
 		open();
-		
+
 		Cursor cursor = database.rawQuery("SELECT  Recipe.name AS recipename FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id AND Recipe.name = ?", new String[] { uniqueid, name });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -530,7 +549,7 @@ public class recipeModel extends baseDataSource {
 		close();
 		return prepList;
 	}
-	
+
 	public imageBean selectImages(int id)
 	{
 		imageBean img = new imageBean();
@@ -597,12 +616,12 @@ public class recipeModel extends baseDataSource {
 		return pb;
 	}
 
-	
-	
+
+
 	public int selectCookbooksID(String name, String user)
 	{
 		int id = 0;
-	//	open();
+		//	open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=? AND name=?", new String[] { user , name });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {

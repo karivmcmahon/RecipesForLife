@@ -1,5 +1,8 @@
 package com.example.recipesforlife.views;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,11 +13,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -37,6 +45,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -53,16 +62,18 @@ public class RecipeEditActivity extends ActionBarActivity {
 	util utils;
 	recipeBean recipe;
 	public static final String MyPREFERENCES = "MyPrefs";
-	Dialog titleDialog, servesDialog;
+	Dialog titleDialog, servesDialog, imageDialog;
 	static Dialog timeDialog;
 	Dialog prepDialog;
 	Dialog ingredDialog;
 	public static final String emailk = "emailKey";
 	ArrayList<preperationBean> prepList, modifiedPrepList;
 	ArrayList<ingredientBean> ingredList, modifiedIngredList;
+	imageBean imgBean;
 	ArrayList<Integer> prepNumEditIds, prepEditIds, amountEditIds, valueEditIds, ingredEditIds, noteEditIds;
 	int id = 1;
 	NavigationDrawerCreation nav;
+	private static final int SELECT_PHOTO = 100;
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -120,17 +131,17 @@ public class RecipeEditActivity extends ActionBarActivity {
 		setStyle();
 		setTextForLayout();
 		String recipename = utils.getTextView(R.id.recipeTitle);
-		
-		
+
+
 		nav = new NavigationDrawerCreation(this, "Edit Recipe Name");
 		nav.createDrawer();
 		SpannableString s = new SpannableString("Edit " + recipename);
 		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
-		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 		// Update the action bar title with the TypefaceSpan instance
-				android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-				actionBar.setTitle(s);
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle(s);
 
 		//Set up the various edit buttons for the page
 		ImageView titleButton = (ImageView) findViewById(R.id.recipeTitleEditImage);
@@ -140,6 +151,68 @@ public class RecipeEditActivity extends ActionBarActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					getTitleDialog();
+				}
+				return false;
+			}});
+
+		ImageView imageButton = (ImageView) findViewById(R.id.imageEditImage);
+		imageButton.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					imageDialog = utils.createDialog(RecipeEditActivity.this, R.layout.imagedialog);
+					final TextView errorView = (TextView) imageDialog.findViewById(R.id.errorView);
+					utils.setDialogText(R.id.errorView,imageDialog,16);
+					errorView.setTextColor(Color.parseColor("#F70521"));
+					utils.setDialogText(R.id.recipeEditImageView, imageDialog, 22);
+					utils.setDialogText(R.id.recipeImagesView, imageDialog, 22);
+
+					Button imageSaveButton = utils.setButtonTextDialog(R.id.saveImageButton, 22, imageDialog);
+					final Button browseButton = utils.setButtonTextDialog(R.id.bButton, 22, imageDialog);
+					browseButton.setOnTouchListener(new OnTouchListener(){
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							if (event.getAction() == MotionEvent.ACTION_DOWN) {
+								// TODO Auto-generated method stub
+								Intent pickIntent = new Intent();
+								pickIntent.setType("image/*");
+								pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+								Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+								String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+								Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+								chooserIntent.putExtra
+								(
+										Intent.EXTRA_INITIAL_INTENTS, 
+										new Intent[] { takePhotoIntent }
+										); 
+
+								startActivityForResult(chooserIntent, SELECT_PHOTO);
+							}
+							return false;
+						}});
+					imageSaveButton.setOnTouchListener(new OnTouchListener() {
+
+
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							if (event.getAction() == MotionEvent.ACTION_DOWN) {
+								// TODO Auto-generated method stub
+
+								imageDialog.dismiss();
+								ImageView img = (ImageView) findViewById(R.id.foodImage);
+								ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
+								task.execute();
+							}
+							return false;
+						}});
+
+
+					imageDialog.show();
+					return false;
 				}
 				return false;
 			}});
@@ -224,35 +297,35 @@ public class RecipeEditActivity extends ActionBarActivity {
 	}
 
 	@Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-       nav.syncState();
-    }
- 
-  @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        nav.config(newConfig);
-    }
- 
-  	/**
-  	 * Handles action bar selections
-  	 */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	boolean result = nav.drawerToggle(item);
-        switch (item.getItemId()) {
-      
-        case R.id.action_bookadd:
-            result = true;
-        default:
-          result = false;
-        }
- 
-        return result;
-       
-    }
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		nav.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		nav.config(newConfig);
+	}
+
+	/**
+	 * Handles action bar selections
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean result = nav.drawerToggle(item);
+		switch (item.getItemId()) {
+
+		case R.id.action_bookadd:
+			result = true;
+		default:
+			result = false;
+		}
+
+		return result;
+
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -329,6 +402,10 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr"));
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
+	   imgBean = model.selectImages(recipe.getId());
+		ImageView img = (ImageView) findViewById(R.id.foodImage);
+		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
+		task.execute();
 
 		//Orders instructions in order
 		TextView instructions = (TextView) findViewById(R.id.methodList);
@@ -789,7 +866,77 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
 		recipechange.setUniqueid(recipe.getUniqueid());
 		recipeModel rm = new recipeModel(getApplicationContext());
-		rm.updateRecipe(recipechange, prepList, ingredList );	
+		
+		rm.updateRecipe(recipechange, prepList, ingredList, imgBean );	
+
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
+	{
+		switch(requestCode) { 
+		case SELECT_PHOTO:
+			if(resultCode == RESULT_OK){  
+				Uri selectedImage = imageReturnedIntent.getData();
+				try {
+					Bitmap yourSelectedImage = decodeUri(selectedImage);
+					File f = new File(getRealPathFromURI(selectedImage));
+					String imageName = f.getName();
+
+					utils.setDialogTextString(R.id.recipeImagesEditText, imageDialog, imageName);
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					byte[] byteArray = stream.toByteArray(); 
+					
+					imgBean.setImage(byteArray);
+					
+					
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+
+	}
+
+	public String getRealPathFromURI(Uri uri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		@SuppressWarnings("deprecation")
+		Cursor cursor = managedQuery(uri, projection, null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
+	}
+
+	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+		// Decode image size
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+
+		// The new size we want to scale to
+		final int REQUIRED_SIZE = 140;
+
+		// Find the correct scale value. It should be the power of 2.
+		int width_tmp = o.outWidth, height_tmp = o.outHeight;
+		int scale = 1;
+		while (true) {
+			if (width_tmp / 2 < REQUIRED_SIZE
+					|| height_tmp / 2 < REQUIRED_SIZE) {
+				break;
+			}
+			width_tmp /= 2;
+			height_tmp /= 2;
+			scale *= 2;
+		}
+
+		// Decode with inSampleSize
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize = scale;
+		return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
 
 	}
 
@@ -805,6 +952,6 @@ public class RecipeEditActivity extends ActionBarActivity {
 		}  
 		return id++;  
 	}
-	 
+
 
 }

@@ -73,7 +73,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		utils.setRowText(R.id.myImageViewText, rowView, 22);
 		//If recipe selected view the recipe
 		ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
-
+		Log.v("on refresh", "On refresh");
 		imgload.DisplayImage(recipeImage, recipeimages.get(position), recipeids.get(position));
 		recipeImage.setOnTouchListener(new OnTouchListener() {
 
