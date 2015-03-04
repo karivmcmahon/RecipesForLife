@@ -184,7 +184,7 @@ public class recipeModel extends baseDataSource {
 			insertIngredient(server, ingredList, recipe.getAddedBy());
 			insertPrep(prepList, server, recipe.getAddedBy());
 			insertCookbookRecipe(recipe.getRecipeBook(),recipe.getAddedBy());
-			insertImage(img);
+			insertImage(img, server, recipe.getAddedBy());
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
 			close();    	
@@ -226,13 +226,24 @@ public class recipeModel extends baseDataSource {
 
 	}
 	
-	public void insertImage(imageBean img)
+	public void insertImage(imageBean img, boolean server, String addedBy)
 	{
 		ContentValues imagevalues = new ContentValues();
 		Log.v("Immmmmmm", "Immmmmmm" +img.getImage());
 		imagevalues.put("image", img.getImage() );
 		imagevalues.put("updateTime", utils.getLastUpdated(false)); 
 		imagevalues.put("changeTime", "2015-01-01 12:00:00.000");
+		String uniqueid = "";
+		if(server == true)
+		{
+			uniqueid = img.getUniqueid();
+			imagevalues.put("uniqueid", uniqueid);
+		}
+		else
+		{
+			uniqueid = utils.generateUUID(addedBy, "Images", database);
+			imagevalues.put("uniqueid", uniqueid);
+		}
 		long imageID = database.insertOrThrow("Images", null, imagevalues);
 		insertImageLink(imageID);	
 	};
@@ -524,11 +535,12 @@ public class recipeModel extends baseDataSource {
 	{
 		imageBean img = new imageBean();
 		open();
-		Cursor cursor = database.rawQuery("SELECT image FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
+		Cursor cursor = database.rawQuery("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				img.setImage(cursor.getBlob(getIndex("image", cursor)));
+				img.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
 			}
 		}
 		cursor.close();

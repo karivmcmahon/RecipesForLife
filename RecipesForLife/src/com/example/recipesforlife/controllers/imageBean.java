@@ -2,6 +2,15 @@ package com.example.recipesforlife.controllers;
 
 public class imageBean {
 	byte[] image;
+	String uniqueid;
+
+	public String getUniqueid() {
+		return uniqueid;
+	}
+
+	public void setUniqueid(String uniqueid) {
+		this.uniqueid = uniqueid;
+	}
 
 	public byte[] getImage() {
 		return image;

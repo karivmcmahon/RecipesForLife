@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,11 +35,13 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  */
 public class syncRecipeModel extends baseDataSource {
 	Context context;
+	recipeModel rm;
 
 
 	public syncRecipeModel(Context context) {
 		super(context);
 		this.context = context;
+		
 		// TODO Auto-generated constructor stub
 	}
 
@@ -214,7 +217,7 @@ public class syncRecipeModel extends baseDataSource {
 	{
 		ArrayList<recipeBean> recipeList = getRecipe(update);
 		JSONArray jsonArray = new JSONArray();
-
+		rm = new recipeModel(context);
 		for(int i = 0; i < recipeList.size(); i++)
 		{
 			JSONObject recipe = new JSONObject();		
@@ -230,6 +233,10 @@ public class syncRecipeModel extends baseDataSource {
 			cookbookModel model = new cookbookModel(context);
 			String id = model.selectCookbooksUniqueID(recipeList.get(i).getId());
 			recipe.put("cookbookid", id);
+			imageBean image = rm.selectImages(recipeList.get(i).getId());
+			String stringToStore = new String(Base64.encode(image.getImage(), Base64.DEFAULT));
+			recipe.put("image", stringToStore);
+			recipe.put("imageid", image.getUniqueid());
 
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray();
@@ -348,6 +355,9 @@ public class syncRecipeModel extends baseDataSource {
 				recipe.setPrep(json.getString("prepTime"));
 				recipe.setAddedBy(json.getString("addedBy"));
 				recipe.setUniqueid(json.getString("uniqueid"));
+				imageBean imgbean = new imageBean();
+				imgbean.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
+				imgbean.setUniqueid(json.getString("imageid"));
 
 				cookbookModel cbmodel = new cookbookModel(context);
 				String cookingid = "";
@@ -398,16 +408,14 @@ public class syncRecipeModel extends baseDataSource {
 					}
 				}
 				recipeModel model = new recipeModel(context);
-				imageBean img = new imageBean();
-				byte[] empty = new byte[0];
-				img.setImage(empty);
+				
 				if(update == true)
 				{
 					model.updateRecipe(recipe, prepBeanList, ingredBeanList);
 				}
 				else
 				{
-					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, img);
+					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, imgbean);
 				}
 
 			}
