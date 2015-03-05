@@ -39,6 +39,7 @@ import android.widget.TextView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -64,7 +65,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
 	public  static ArrayList<String> recipenames;
-	public static ArrayList<String> recipeids;
+	public static ArrayList<String> recipeids, recipeimagesid;
 	public static ArrayList<byte[]> recipeimages;
 	AddRecipeView add;
 
@@ -100,12 +101,13 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		recipenames = new ArrayList<String>();
 		recipeids = new ArrayList<String>();
 		recipeimages = new ArrayList<byte[]>();
+		
 		for(int a = 0; a < recipeList.size(); a++)
 		{
+			imageBean image = model.selectImage(recipeList.get(a).getId());
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
-			recipeimages.add(recipeList.get(a).getImage());
-			Log.v("img", "img ri " + recipeList.get(a).getImage());
+			recipeimages.add(image.getImage());
 		}
 		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
@@ -136,25 +138,29 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		//Updates list on resume
-		recipeList = model.selectRecipesByCookbook(uniqueid);
 		recipenames.clear();
 		recipeids.clear();
 		recipeimages.clear();
+		recipeList = model.selectRecipesByCookbook(uniqueid);
 		for(int a = 0; a < recipeList.size(); a++)
 		{
+			imageBean image = model.selectImage(recipeList.get(a).getId());
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
-			recipeimages.add(recipeList.get(a).getImage());
+			recipeimages.add(image.getImage());
+			
 		}
+		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
 		{
 			int num = 6 - recipeList.size();
 			for(int i = 0; i < num; i++)
 			{
-				byte[] bytearr = new byte[0];
+				byte[] arr = new byte[0];
 				recipenames.add("");
 				recipeids.add("");
-				recipeimages.add(bytearr);
+				recipeimages.add(arr);
+				Log.v("add","add");
 			}
 		}
 		//Updates the list view

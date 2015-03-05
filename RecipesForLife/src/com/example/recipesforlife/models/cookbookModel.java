@@ -436,28 +436,28 @@ public class cookbookModel extends baseDataSource {
 	 */
 	public recipeBean cursorToRecipe(Cursor cursor) {
 		recipeBean rb = new recipeBean();
-		int id = cursor.getInt(getIndex("recipeid",cursor));
+		rb.setId(cursor.getInt(getIndex("recipeid",cursor)));
 		rb.setName(cursor.getString(getIndex("recipename",cursor)));   
 		rb.setUniqueid(cursor.getString(getIndex("rid", cursor)));
-		rb.setImage(selectImage(id));
 		return rb;
 	}
 
 
-	public byte[] selectImage(int id)
+	public imageBean selectImage(int id)
 	{
 		imageBean img = new imageBean();
 		open();
-		Cursor cursor = database.rawQuery("SELECT image FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
+		Cursor cursor = database.rawQuery("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				img.setImage(cursor.getBlob(getIndex("image", cursor)));
+				img.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
 			}
 		}
 		cursor.close();
 		close();
-		return img.getImage();
+		return img;
 	}
 
 	/**

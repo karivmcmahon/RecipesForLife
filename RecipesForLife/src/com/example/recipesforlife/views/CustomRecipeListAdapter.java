@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,6 +46,8 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		this.recipenames = recipenames;
 		this.recipeids = recipeids;
 		this.recipeimages = recipeimages;
+
+
 		imgload = new ImageLoader2(context);
 		utils = new util(this.context, activity);
 
@@ -74,7 +77,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		//If recipe selected view the recipe
 		ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
 		Log.v("on refresh", "On refresh");
-		imgload.DisplayImage(recipeImage, recipeimages.get(position), recipeids.get(position));
+		imgload.DisplayImage(recipeImage, recipeimages.get(position), Base64.encodeToString(recipeimages.get(position), Base64.DEFAULT) + recipeids.get(position));
 		recipeImage.setOnTouchListener(new OnTouchListener() {
 
 			@Override

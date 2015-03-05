@@ -65,8 +65,8 @@ namespace WebApplication1
 				recipe.serves = (Int32)recipeReader["serves"];
 				selectPrep(recipe.Preperation, recipe);
 				selectIngredient(recipe.Ingredient, recipe);
-				selectBook(recipe);	
-				selectImage(recipe);
+				recipe = selectBook(recipe);	
+				recipe = selectImage(recipe);
 				recipes.Recipe.Add(recipe); 
 			}		
 			connection1.Close();
@@ -123,7 +123,7 @@ namespace WebApplication1
 		/**
 		* Select cookbook recipe info from database
 		**/
-		public void selectBook(Recipe recipe)
+		public Recipe selectBook(Recipe recipe)
 		{
 			SqlCommand selectCookbook = new SqlCommand("SELECT uniqueid FROM Cookbook INNER JOIN CookbookRecipe ON Cookbook.id=CookbookRecipe.Cookbookid WHERE CookbookRecipe.Recipeid=@id", connection1);
 			selectCookbook.Parameters.AddWithValue("@id", recipeID);
@@ -133,19 +133,23 @@ namespace WebApplication1
 			{
 				recipe.cookingid = (string)selectCookbookReader["uniqueid"];
 			}
+			return recipe;
 		}
 		
-		public void selectImage(Recipe recipe)
+		public Recipe selectImage(Recipe recipe)
 		{
 			SqlCommand selectImage = new SqlCommand("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON Images.imageid=RecipeImages.imageid WHERE RecipeImages.Recipeid=@id", connection1);
 			selectImage.Parameters.AddWithValue("@id", recipeID);
 			var selectImageReader = selectImage.ExecuteReader();
+			recipe.image = "";
+			recipe.imageid = "";
 			while(selectImageReader.Read())
 			{
 				byte[] image = (byte[])selectImageReader["image"];
 				recipe.image = Convert.ToBase64String(image);
 				recipe.imageid = (string)selectImageReader["uniqueid"];
 			}
+			return recipe;
 		}
 		
 		public class RecipeDate

@@ -356,8 +356,16 @@ public class syncRecipeModel extends baseDataSource {
 				recipe.setAddedBy(json.getString("addedBy"));
 				recipe.setUniqueid(json.getString("uniqueid"));
 				imageBean imgbean = new imageBean();
-				imgbean.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
-				imgbean.setUniqueid(json.getString("imageid"));
+				if(json.optString("image").equals(""))
+				{
+					byte[] emptyarr = new byte[0];
+					imgbean.setImage(emptyarr);
+				}
+				else
+				{
+				imgbean.setImage(Base64.decode(json.optString("image"), Base64.DEFAULT));
+				}
+				imgbean.setUniqueid(json.optString("imageid"));
 
 				cookbookModel cbmodel = new cookbookModel(context);
 				String cookingid = "";
