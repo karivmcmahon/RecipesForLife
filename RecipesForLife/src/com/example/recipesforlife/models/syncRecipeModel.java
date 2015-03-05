@@ -416,12 +416,10 @@ public class syncRecipeModel extends baseDataSource {
 					}
 				}
 				recipeModel model = new recipeModel(context);
-				imageBean img = new imageBean();
-				byte[] a = new byte[0];
-				img.setImage(a);
+	
 				if(update == true)
 				{
-					model.updateRecipe(recipe, prepBeanList, ingredBeanList, img);
+					model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean);
 				}
 				else
 				{

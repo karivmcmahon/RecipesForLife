@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Script.Serialization;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace WebApplication1
 {
@@ -52,6 +53,7 @@ namespace WebApplication1
 				recipeReader.Close();
 				updatePrep(i);
 				updateIngred(i);		
+				updateImage(i);
 			}
 			catch (Exception ex)
 			{
@@ -169,6 +171,26 @@ namespace WebApplication1
 				}
 		}
 		
+		//Updates recipe prep info
+		public void updateImage(int i)
+		{
+			
+				SqlCommand updateImage = new SqlCommand("UPDATE Images SET image=@image, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
+				byte[] image  = null;
+			if(recipe[i].image != "")
+			{
+				image = Convert.FromBase64String(recipe[i].image);
+			}
+		
+				updateImage.Parameters.AddWithValue("@image", image);
+				updateImage.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+				updateImage.Parameters.AddWithValue("@uniqueid", recipe[i].imageid);
+				
+				SqlDataReader rdrPrep = updateImage.ExecuteReader();
+				rdrPrep.Close();
+					  
+		}
+		
 		//Stores JSON as recipe
 		public class Recipe
 		{
@@ -180,6 +202,8 @@ namespace WebApplication1
 			public string updateTime { get; set; }
 			public string changeTime { get; set; }
 			public string uniqueid { get; set; }
+			public string image { get; set; }
+			public string imageid { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 		}
