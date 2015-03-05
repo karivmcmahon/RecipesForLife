@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
@@ -47,6 +48,9 @@ public class CookbookListActivity extends ActionBarActivity {
 	public static CustomCookbookListAdapter adapter;
 	public static ArrayList<String> values;
 	public static  ArrayList<String> ids;
+	public static ArrayList<byte[]> images;
+	AddCookbookView add;
+	private Handler mHandler = new Handler();
 
 
 	NavigationDrawerCreation nav;
@@ -84,10 +88,12 @@ public class CookbookListActivity extends ActionBarActivity {
 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 		values = new ArrayList<String>();
 		ids = new ArrayList<String>();
+		images = new ArrayList<byte[]>();
 		for(int i = 0; i < cookbookList.size(); i++)
 		{
 			values.add(cookbookList.get(i).getName());
 			ids.add(cookbookList.get(i).getUniqueid());
+			images.add(cookbookList.get(i).getImage());
 		}
 		//If the list is under 6 then create empty rows to fill the layout of the app
 		if(cookbookList.size() < 6)
@@ -95,11 +101,13 @@ public class CookbookListActivity extends ActionBarActivity {
 			int num = 6 - cookbookList.size();
 			for(int a = 0; a < num; a++)
 			{
+				byte[] emptyarr = new byte[0];
 				values.add("");
 				ids.add("");
+				images.add(emptyarr);
 			}
 		}
-		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids);
+		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
 
 
@@ -116,7 +124,12 @@ public class CookbookListActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		//Sync for apps to be done in background on resume
-		new PostTask(utils, getApplicationContext()).execute();
+		 mHandler.postDelayed(new Runnable() {
+	            public void run() {
+	            	new PostTask(utils, getApplicationContext()).execute();
+	            }
+	        }, 3000);
+		
 
 
 	}
@@ -146,13 +159,20 @@ public class CookbookListActivity extends ActionBarActivity {
 
 		//If the user presses add button - show add cookbook
 		case R.id.action_bookadd:
-			AddCookbookView add = new AddCookbookView(getApplicationContext(), this);
+			add = new AddCookbookView(getApplicationContext(), this);
 			add.addCookbook();
 		default:
 			result = false;
 		}
 
 		return result;
+
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
+		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
+		add.resultRecieved(requestCode, resultCode, imageReturnedIntent);
 
 	}
 

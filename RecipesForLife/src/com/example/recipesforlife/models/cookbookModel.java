@@ -53,6 +53,7 @@ public class cookbookModel extends baseDataSource {
 		values.put("creator", book.getCreator()); 
 		values.put("privacyOption", book.getPrivacy()); 
 		values.put("description", book.getDescription());
+		values.put("image", book.getImage());
 		String uid = "";
 		if(server == true)
 		{
@@ -426,6 +427,7 @@ public class cookbookModel extends baseDataSource {
 		cb.setCreator(cursor.getString(getIndex("creator",cursor)));
 		cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
+		cb.setImage(cursor.getBlob(getIndex("image", cursor)));
 		return cb;
 	}
 

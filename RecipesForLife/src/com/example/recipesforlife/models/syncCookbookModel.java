@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -81,6 +82,7 @@ public class syncCookbookModel extends baseDataSource {
 		cb.setCreator(cursor.getString(getIndex("creator",cursor)));
 		cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
+		cb.setImage(cursor.getBlob(getIndex("image", cursor)));
 		return cb;
 	}
 
@@ -104,6 +106,9 @@ public class syncCookbookModel extends baseDataSource {
 			book.put("changeTime", bookList.get(i).getChangeTime());
 			book.put("uniqueid", bookList.get(i).getUniqueid());	
 			book.put("privacyOption", bookList.get(i).getPrivacy());
+			//byte[] zero = new byte[0];
+			String image64 = new String(Base64.encode(bookList.get(i).getImage(), Base64.DEFAULT));
+			book.put("image", image64);
 			jsonArray.put(book);			
 		} 
 		Log.v("JSON", "JSON cb " + jsonArray); 
@@ -216,6 +221,7 @@ public class syncCookbookModel extends baseDataSource {
 				book.setPrivacy(json.getString("privacyOption"));
 				book.setUniqueid(json.getString("uniqueid"));
 				book.setCreator(json.getString("creator"));
+				book.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
 				cookbookModel model = new cookbookModel(context);
 				if(update == true)
 				{

@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +35,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	private final Activity activity;
 	public ArrayList<String> booknames;
 	public static ArrayList<String> bookids;
+	public static ArrayList<byte[]> bookimages;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
@@ -40,6 +43,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	CustomContribListAdapter adapter2;
 	boolean isCreator = false;
 	cookbookModel model;
+	ImageLoader2 imgload;
 
 	/** 
 	 * Gets list data
@@ -48,15 +52,17 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	 * @param context
 	 * @param cookbookuid
 	 */
-	public CustomCookbookListAdapter(Activity activity , ArrayList<String> booknames, Context context, ArrayList<String> bookids)
+	public CustomCookbookListAdapter(Activity activity , ArrayList<String> booknames, Context context, ArrayList<String> bookids, ArrayList<byte[]> bookimages)
 	{
 		super(context, R.layout.contriblistsingle, booknames);
 		this.activity = activity;
 		this.context = context;
 		this.booknames = booknames;
 		this.bookids = bookids;
+		this.bookimages = bookimages;
 		utils = new util(this.context, activity);
 		model = new cookbookModel(context);
+		imgload = new ImageLoader2(context);
 
 	}
 
@@ -128,6 +134,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 
 			//Show a list of recipes based on the cookbook selected
 			ImageView bookButton = (ImageView) rowView.findViewById(R.id.myImageView);
+			imgload.DisplayImage(bookButton, bookimages.get(position), Base64.encodeToString(bookimages.get(position), Base64.DEFAULT) + bookids.get(position));
 			bookButton.setOnTouchListener(new OnTouchListener(){
 
 				@Override

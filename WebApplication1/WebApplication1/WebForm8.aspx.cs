@@ -37,6 +37,8 @@ namespace WebApplication1
 					cookbook.creator = (string)reader["creator"];
 					cookbook.uniqueid = (string)reader["uniqueid"];
 					cookbook.privacyOption = (string)reader["privacyOption"];
+					byte[] image = (byte[])reader["image"];
+					cookbook.image = Convert.ToBase64String(image);
 					cookbooks.Cookbook.Add(cookbook);
 				} 
 				con.Close();
@@ -63,6 +65,7 @@ namespace WebApplication1
 			public string creator { get; set; }
 			public string privacyOption { get; set; }
 			public string uniqueid { get; set; }
+			public string image { get; set; }
 
 		}
 	}
