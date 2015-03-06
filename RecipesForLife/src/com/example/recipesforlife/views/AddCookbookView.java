@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -175,6 +176,14 @@ public class AddCookbookView extends CookbookListActivity {
 			Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
 			book.setPrivacy(spinner.getSelectedItem().toString());
 			book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
+			if(utils.getTextFromDialog(R.id.cookbookImageEditText, bookAddDialog).equals(""))
+			{
+				Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.books)).getBitmap();
+			    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			    byte[] array = stream.toByteArray();
+			    byteArray = array;
+			}  
 			book.setImage(byteArray);
 			cookbookModel cbmodel = new cookbookModel(context);
 			String uniqueid = cbmodel.insertBook(book, false);

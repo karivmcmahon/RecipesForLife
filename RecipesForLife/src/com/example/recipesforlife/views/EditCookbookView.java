@@ -153,6 +153,7 @@ public class EditCookbookView extends CookbookListActivity {
 	{
 		utils.setDialogTextString(R.id.bookNameEditText, editDialog, cookbook.get(0).getName());
 		utils.setDialogTextString(R.id.bookDescEditText, editDialog, cookbook.get(0).getDescription());
+		byteArray = cookbook.get(0).getImage();
 	}
 
 	/**

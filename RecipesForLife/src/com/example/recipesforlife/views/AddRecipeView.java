@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -432,6 +433,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 				return false;
 				
 			}});
+		
 		utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.recipeCusineView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
@@ -464,7 +466,15 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.getTextFromDialog(R.id.recipeDietaryEditText, addRecipeDialog3);
 		utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
-		spinner.getSelectedItem().toString();	
+		spinner.getSelectedItem().toString();
+	if(utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3).equals(""))
+		{
+			Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
+		    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		    byte[] byteArray = stream.toByteArray();
+		    array = byteArray;
+		}  
 		sendDataToModel();
 		addRecipeDialog3.dismiss();
 	}

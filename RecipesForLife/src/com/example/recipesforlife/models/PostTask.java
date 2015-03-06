@@ -25,12 +25,14 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 	Intent i;
 	Context context;
 	String response = "";
+	boolean cookbook = false;
 	public static final String MyPREFERENCES = "MyPrefs";
 	public static final String emailk = "emailKey";
-	public PostTask(util  utils, Context context)
+	public PostTask(util  utils, Context context, boolean cookbook)
 	{
 		this.utils = utils;
 		this.context = context;
+		this.cookbook = cookbook;
 
 	}
 
@@ -47,7 +49,7 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 		return message;
 		//return null;
 	}
-	
+
 	// @Override
 	/** protected void onProgressUpdate(Integer... integers) {
 	        // Here you can execute what you want to execute
@@ -64,47 +66,50 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 		 }
 	    } **/
 
-	 @Override
-	    protected void onPostExecute(String response) {
-		 super.onPostExecute(response);
-		 if(response.equals("success"))
-		 {
-		 Toast.makeText(context, 
-			"App synced ", Toast.LENGTH_LONG).show();
-		 SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-	 	cookbookModel model = new cookbookModel(context);
-		 ArrayList<cookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-			CookbookListActivity.values.clear();
-			CookbookListActivity.ids.clear();
-			CookbookListActivity.images.clear();
-			for(int i = 0; i < cookbookList.size(); i++)
+	@Override
+	protected void onPostExecute(String response) {
+		super.onPostExecute(response);
+		if(response.equals("success"))
+		{
+			Toast.makeText(context, 
+					"App synced ", Toast.LENGTH_LONG).show();
+			if(cookbook == true)
 			{
-				CookbookListActivity.values.add(cookbookList.get(i).getName());
-				CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
-				CookbookListActivity.images.add(cookbookList.get(i).getImage());
-			}
-			//If the list is under 6 then create empty rows to fill the layout of the app
-			if(cookbookList.size() < 6)
-			{
-				int num = 6 - cookbookList.size();
-				for(int a = 0; a < num; a++)
+				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+				cookbookModel model = new cookbookModel(context);
+				ArrayList<cookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+				CookbookListActivity.values.clear();
+				CookbookListActivity.ids.clear();
+				CookbookListActivity.images.clear();
+				for(int i = 0; i < cookbookList.size(); i++)
 				{
-					byte[] emptyarr = new byte[0];
-					CookbookListActivity.values.add("");
-					CookbookListActivity.ids.add("");
-					CookbookListActivity.images.add(emptyarr);
+					CookbookListActivity.values.add(cookbookList.get(i).getName());
+					CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
+					CookbookListActivity.images.add(cookbookList.get(i).getImage());
 				}
+				//If the list is under 6 then create empty rows to fill the layout of the app
+				if(cookbookList.size() < 6)
+				{
+					int num = 6 - cookbookList.size();
+					for(int a = 0; a < num; a++)
+					{
+						byte[] emptyarr = new byte[0];
+						CookbookListActivity.values.add("");
+						CookbookListActivity.ids.add("");
+						CookbookListActivity.images.add(emptyarr);
+					}
+				}
+				CookbookListActivity.adapter.notifyDataSetChanged();
 			}
-			CookbookListActivity.adapter.notifyDataSetChanged();
-		 }
-		 else if(response.equals("fail"))
-		 {
-			 Toast.makeText(context, 
-						"App sync failed", Toast.LENGTH_LONG).show();
-		 }
-	        //Toast.makeText(GameScreen_bugfix.this, "music loaded!", Toast.LENGTH_SHORT).show();
-		 Log.v("All Done!","ALL DONE");
-	    }
+		}
+		else if(response.equals("fail"))
+		{
+			Toast.makeText(context, 
+					"App sync failed", Toast.LENGTH_LONG).show();
+		}
+		//Toast.makeText(GameScreen_bugfix.this, "music loaded!", Toast.LENGTH_SHORT).show();
+		Log.v("All Done!","ALL DONE");
+	}
 
 
 

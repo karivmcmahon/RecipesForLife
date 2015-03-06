@@ -107,9 +107,9 @@ public class SignUpSignInActivity extends Activity {
 			editor3.putString("Contributers Update Server", "2015-01-01 12:00:00");
 			editor3.commit();
 			buildDatabase();
-			new PostTask(utils, context).execute();
+			new PostTask(utils, context, false).execute();
 		} else {
-			new PostTask(utils, context).execute();
+			new PostTask(utils, context, false).execute();
 		}
 		// Style for activity
 		typeFace = Typeface.createFromAsset(getAssets(), "fonts/elsie.ttf");

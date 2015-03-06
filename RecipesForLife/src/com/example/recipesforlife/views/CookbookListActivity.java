@@ -129,7 +129,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		//Sync for apps to be done in background on resume
 		mHandler.postDelayed(new Runnable() {
 			public void run() {
-				AsyncTask posttask = new PostTask(utils, getApplicationContext()).execute();
+				AsyncTask posttask = new PostTask(utils, getApplicationContext(), true).execute();
 				Log.v("finished",  "finished" +  posttask.getStatus());
 				if(posttask.getStatus() == PostTask.Status.FINISHED)
 				{
