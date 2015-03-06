@@ -79,6 +79,7 @@ public class recipeModel extends baseDataSource {
 			catch(SQLException e)
 			{
 				database.endTransaction();
+				throw e;
 			}
 			close();
 
@@ -176,7 +177,7 @@ public class recipeModel extends baseDataSource {
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		values = new ContentValues();
-		values.put("name", recipe.getName()); 
+		//values.put("name", recipe.getName()); 
 		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000");
 		values.put("description", recipe.getDesc()); 
@@ -212,6 +213,7 @@ public class recipeModel extends baseDataSource {
 			e.printStackTrace();
 			database.endTransaction();
 			close();    	
+			throw e;
 		} 
 		close(); 
 		return uniqueid;

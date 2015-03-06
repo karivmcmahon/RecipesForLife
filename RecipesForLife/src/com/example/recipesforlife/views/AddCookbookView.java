@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Displays dialog to create a cookbook
@@ -186,13 +188,19 @@ public class AddCookbookView extends CookbookListActivity {
 			}  
 			book.setImage(byteArray);
 			cookbookModel cbmodel = new cookbookModel(context);
-			String uniqueid = cbmodel.insertBook(book, false);
-			CookbookListActivity.values.add(0, utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
-			CookbookListActivity.ids.add(0, uniqueid);
-			CookbookListActivity.images.add(0, byteArray);
-			bookAddDialog.dismiss();
-		//	Log.v("cookbook size ", "cookbook size " + CookbookListActivity.values.size());
-			CookbookListActivity.adapter.notifyDataSetChanged();	
+			try
+			{
+				String uniqueid = cbmodel.insertBook(book, false);
+				CookbookListActivity.values.add(0, utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
+				CookbookListActivity.ids.add(0, uniqueid);
+				CookbookListActivity.images.add(0, byteArray);
+				bookAddDialog.dismiss();
+			//	Log.v("cookbook size ", "cookbook size " + CookbookListActivity.values.size());
+				CookbookListActivity.adapter.notifyDataSetChanged();	
+			}catch(SQLException e)
+			{
+				Toast.makeText(context, "Cookbook was not added", Toast.LENGTH_LONG).show();
+			}
 			
 		}
 	}

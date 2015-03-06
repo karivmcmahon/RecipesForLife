@@ -75,8 +75,10 @@ public class cookbookModel extends baseDataSource {
 			close();
 		}catch(SQLException e)
 		{
+			e.printStackTrace();
 			database.endTransaction();
 			close();
+			throw e;
 		} 
 		close();
 		return uid;
@@ -108,6 +110,7 @@ public class cookbookModel extends baseDataSource {
 		catch(SQLException e)
 		{
 			database.endTransaction();
+			throw e;
 		}
 		close();
 

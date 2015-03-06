@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
@@ -74,7 +76,7 @@ public class EditCookbookView extends CookbookListActivity {
 		fillSpinner();
 		setStyle();
 		setText();
-		
+
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, editDialog);
 		browseButton.setOnClickListener(new OnClickListener()
 		{
@@ -179,38 +181,44 @@ public class EditCookbookView extends CookbookListActivity {
 			cb.setPrivacy(spinner.getSelectedItem().toString());
 			cb.setUniqueid(uid);
 			cb.setImage(byteArray);
-			model.updateBook(cb);
+			try
+			{
+				model.updateBook(cb);
 
-			SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		ArrayList<cookbookBean >cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-			ArrayList<String> values = new ArrayList<String>();
-			ArrayList<String> ids = new ArrayList<String>();
-			ArrayList<byte[]> images = new ArrayList<byte[]>();
-			ccadapter.booknames.clear();
-			ccadapter.bookids.clear();
-			ccadapter.bookimages.clear();
-			for(int i = 0; i < cookbookList.size(); i++)
-			{
-				CookbookListActivity.values.add(cookbookList.get(i).getName());
-				CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
-				CookbookListActivity.images.add(cookbookList.get(i).getImage());
-			}
-			if(cookbookList.size() < 6)
-			{
-				int num = 6 - cookbookList.size();
-				for(int a = 0; a < num; a++)
+				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+				ArrayList<cookbookBean >cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+				ArrayList<String> values = new ArrayList<String>();
+				ArrayList<String> ids = new ArrayList<String>();
+				ArrayList<byte[]> images = new ArrayList<byte[]>();
+				ccadapter.booknames.clear();
+				ccadapter.bookids.clear();
+				ccadapter.bookimages.clear();
+				for(int i = 0; i < cookbookList.size(); i++)
 				{
-					byte[] emptyarr = new byte[0];
-					CookbookListActivity.values.add("");
-					CookbookListActivity.ids.add("");
-					CookbookListActivity.images.add(emptyarr);
+					CookbookListActivity.values.add(cookbookList.get(i).getName());
+					CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
+					CookbookListActivity.images.add(cookbookList.get(i).getImage());
 				}
+				if(cookbookList.size() < 6)
+				{
+					int num = 6 - cookbookList.size();
+					for(int a = 0; a < num; a++)
+					{
+						byte[] emptyarr = new byte[0];
+						CookbookListActivity.values.add("");
+						CookbookListActivity.ids.add("");
+						CookbookListActivity.images.add(emptyarr);
+					}
+				}
+				CookbookListActivity.adapter.notifyDataSetChanged();
+			}catch(SQLException e)
+			{
+				Toast.makeText(context, "Cookbook was not edited", Toast.LENGTH_LONG).show();
 			}
 			editDialog.dismiss();
-			CookbookListActivity.adapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 

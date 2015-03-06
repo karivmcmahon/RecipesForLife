@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -43,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.imageBean;
@@ -276,20 +278,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					saveRecipe();
-					final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.textviewdialog);
-					utils.setDialogText(R.id.textView, dialog, 18);
-					TextView txtView = (TextView) dialog.findViewById(R.id.textView);
-					txtView.setText("Recipe has been saved");
-					// Show dialog
-					dialog.show();
-					Button button = utils.setButtonTextDialog(R.id.okButton, 22, dialog);
-					button.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(View arg0) {
-							dialog.dismiss();
-						}
-					});
+					
 				}
 				return false;
 			}});
@@ -866,8 +855,27 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
 		recipechange.setUniqueid(recipe.getUniqueid());
 		recipeModel rm = new recipeModel(getApplicationContext());
-		
-		rm.updateRecipe(recipechange, prepList, ingredList, imgBean );	
+		try
+		{
+			rm.updateRecipe(recipechange, prepList, ingredList, imgBean );	
+			final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.textviewdialog);
+			utils.setDialogText(R.id.textView, dialog, 18);
+			TextView txtView = (TextView) dialog.findViewById(R.id.textView);
+			txtView.setText("Recipe has been saved");
+			// Show dialog
+			dialog.show();
+			Button button = utils.setButtonTextDialog(R.id.okButton, 22, dialog);
+			button.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					dialog.dismiss();
+				}
+			});
+		}catch(SQLException e)
+		{
+			Toast.makeText(getApplicationContext(), "Recipe was not edited", Toast.LENGTH_LONG).show();
+		}
 
 	}
 
