@@ -19,6 +19,8 @@ namespace WebApplication1
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
+				try
+				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				var time = js.Deserialize<List<Date2>>(jsonInput);
 				string lastUpdated = time[0].changeTime;
@@ -46,6 +48,11 @@ namespace WebApplication1
 				//Serializes cookbooks and sends to app
 				string json = js.Serialize(cookbooks);
 				Response.Write(json);
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
+				}
 			}
 		}
 		

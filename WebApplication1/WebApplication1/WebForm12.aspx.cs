@@ -26,11 +26,18 @@ namespace WebApplication1
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
-				var time = js.Deserialize<List<Date2>>(jsonInput);
-				lastUpdated = time[0].updateTime;
-				change = time[0].change;
-				con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-				selectContribs();
+				try
+				{
+					var time = js.Deserialize<List<Date2>>(jsonInput);
+					lastUpdated = time[0].updateTime;
+					change = time[0].change;
+					con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					selectContribs();
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
+				}
 				
 			}
 		}

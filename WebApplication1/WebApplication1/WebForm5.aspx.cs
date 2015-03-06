@@ -24,11 +24,18 @@ namespace WebApplication1
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
-				recipe = js.Deserialize<List<Recipe>>(jsonInput);
-				for (int i = 0; i < recipe.Count(); i++)
+				try
 				{
-					updateRecipe(i);
-					
+					recipe = js.Deserialize<List<Recipe>>(jsonInput);
+					for (int i = 0; i < recipe.Count(); i++)
+					{
+						updateRecipe(i);
+						
+					}
+				}catch(Exception ex)
+				{
+					Response.Write("Error ");
+					Response.Write(ex);
 				}
 			}
 		}
@@ -100,95 +107,95 @@ namespace WebApplication1
 		public void updateIngredDetails(int i,int  a)
 		{
 			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
-					updateDets.Parameters.AddWithValue("@id", ingredId);
-					updateDets.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
-					updateDets.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
-					updateDets.Parameters.AddWithValue("@value", recipe[i].Ingredient[1].Value[a]);
+			updateDets.Parameters.AddWithValue("@id", ingredId);
+			updateDets.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
+			updateDets.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
+			updateDets.Parameters.AddWithValue("@value", recipe[i].Ingredient[1].Value[a]);
 
-					updateDets.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
-					updateDets.Parameters.AddWithValue("@uniqueid", recipe[i].Ingredient[4].uniqueid[a]);
-					try
-					{
+			updateDets.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+			updateDets.Parameters.AddWithValue("@uniqueid", recipe[i].Ingredient[4].uniqueid[a]);
+			try
+			{
 
-						SqlDataReader detsReader = updateDets.ExecuteReader();
-						detsReader.Close();
-					}
-					catch(Exception ex)
-					{
-						Response.Write("Error ");
-						Response.Write(ex);
-					}
+				SqlDataReader detsReader = updateDets.ExecuteReader();
+				detsReader.Close();
+			}
+			catch(Exception ex)
+			{
+				Response.Write("Error ");
+				Response.Write(ex);
+			}
 		}
 		
 		//Inserts ingredient if updated ingredient does not exist
 		public void insertIngred(int i , int a)
 		{
 			SqlCommand insertIngredient = new SqlCommand(" INSERT INTO Ingredient(name, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime, @changeTime)", connection);
-				insertIngredient.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
-				insertIngredient.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
-				insertIngredient.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
-				try
+			insertIngredient.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
+			insertIngredient.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
+			insertIngredient.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+			try
+			{
+				if (ingredId == 0)
 				{
-					if (ingredId == 0)
-					{
-						ingredId = (Int32)insertIngredient.ExecuteScalar();
-					}
-					
-					
+					ingredId = (Int32)insertIngredient.ExecuteScalar();
 				}
-				catch(Exception ex)
-				{
-					Response.Write("Error ");
-					Response.Write(ex);
-				}
+				
+				
+			}
+			catch(Exception ex)
+			{
+				Response.Write("Error ");
+				Response.Write(ex);
+			}
 		}
 		
 		//Checks if ingredient exists by fetching id from database
 		public void selectIngredId(int i, int a)
 		{
 			SqlCommand selectIngId = new SqlCommand(" SELECT id FROM Ingredient WHERE name=@name", connection);
-				selectIngId.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
-				try
-				{
+			selectIngId.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
+			try
+			{
 
-					SqlDataReader selectIngIdReader = selectIngId.ExecuteReader();
-					if(selectIngIdReader.HasRows)
+				SqlDataReader selectIngIdReader = selectIngId.ExecuteReader();
+				if(selectIngIdReader.HasRows)
+				{
+					while (selectIngIdReader.Read())
 					{
-						while (selectIngIdReader.Read())
-						{
-							// read a row, for example:
-							ingredId= selectIngIdReader.GetInt32(0);
-						}
+						// read a row, for example:
+						ingredId= selectIngIdReader.GetInt32(0);
 					}
-					selectIngIdReader.Close();
-
 				}
-				catch (Exception ex)
-				{
+				selectIngIdReader.Close();
 
-					Response.Write("Error ");
-					Response.Write(ex);
-				}
+			}
+			catch (Exception ex)
+			{
+
+				Response.Write("Error ");
+				Response.Write(ex);
+			}
 		}
 		
 		//Updates recipe prep info
 		public void updateImage(int i)
 		{
 			
-				SqlCommand updateImage = new SqlCommand("UPDATE Images SET image=@image, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
-				byte[] image  = null;
+			SqlCommand updateImage = new SqlCommand("UPDATE Images SET image=@image, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
+			byte[] image  = null;
 			if(recipe[i].image != "")
 			{
 				image = Convert.FromBase64String(recipe[i].image);
 			}
-		
-				updateImage.Parameters.AddWithValue("@image", image);
-				updateImage.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
-				updateImage.Parameters.AddWithValue("@uniqueid", recipe[i].imageid);
-				
-				SqlDataReader rdrPrep = updateImage.ExecuteReader();
-				rdrPrep.Close();
-					  
+			
+			updateImage.Parameters.AddWithValue("@image", image);
+			updateImage.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
+			updateImage.Parameters.AddWithValue("@uniqueid", recipe[i].imageid);
+			
+			SqlDataReader rdrPrep = updateImage.ExecuteReader();
+			rdrPrep.Close();
+			
 		}
 		
 		//Stores JSON as recipe

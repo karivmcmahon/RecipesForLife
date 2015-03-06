@@ -29,7 +29,15 @@ namespace WebApplication1
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
-				insertAccount();               
+				try
+				{
+					insertAccount();    
+				}
+				catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
+				}
 			}
 			
 		}
@@ -64,7 +72,7 @@ namespace WebApplication1
 				}
 				catch (Exception ex)
 				{
-					Response.Write("Error In Inserting account ");
+					Response.Write("Error");
 					Response.Write(ex);
 				}
 

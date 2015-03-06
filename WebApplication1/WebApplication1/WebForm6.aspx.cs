@@ -21,11 +21,18 @@ namespace WebApplication1
 		{
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
-			{			
-				var time = js.Deserialize<List<Date>>(jsonInput);
-				lastUpdated = time[0].changeTime;
-				connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-				selectRecipe();
+			{	
+				try
+				{
+					var time = js.Deserialize<List<Date>>(jsonInput);
+					lastUpdated = time[0].changeTime;
+					connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					selectRecipe();
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
+				}
 			}
 		}
 		

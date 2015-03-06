@@ -28,11 +28,18 @@ namespace WebApplication1
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
-				//Gets last update
-				var time = js.Deserialize<List<RecipeDate>>(jsonInput);
-				lastUpdated = time[0].updateTime;
-				connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-				selectRecipe();
+				try
+				{
+					//Gets last update
+					var time = js.Deserialize<List<RecipeDate>>(jsonInput);
+					lastUpdated = time[0].updateTime;
+					connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					selectRecipe();
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
+				}
 			}
 
 		}

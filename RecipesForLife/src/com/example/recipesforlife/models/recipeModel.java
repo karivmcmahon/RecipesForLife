@@ -177,7 +177,7 @@ public class recipeModel extends baseDataSource {
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		values = new ContentValues();
-		//values.put("name", recipe.getName()); 
+		values.put("name", recipe.getName()); 
 		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000");
 		values.put("description", recipe.getDesc()); 

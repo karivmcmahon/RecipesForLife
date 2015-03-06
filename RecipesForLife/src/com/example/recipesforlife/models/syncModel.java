@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -124,7 +125,7 @@ public class syncModel extends baseDataSource
 		ArrayList<accountBean> accountList = getAccount();
 		JSONArray jsonArray = new JSONArray();
 
-		for(int i = 0; i < userList.size(); i++)
+		for(int i = 0; i < accountList.size(); i++)
 		{
 			JSONObject account = new JSONObject();
 			account.put("email",  accountList.get(i).getEmail());
@@ -162,6 +163,11 @@ public class syncModel extends baseDataSource
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception account error");
+				}
+				
 
 			} 
 			catch (ClientProtocolException e) 
@@ -208,6 +214,11 @@ public class syncModel extends baseDataSource
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception account error");
+				}
+				
 
 			} 
 			catch (ClientProtocolException e) 
@@ -233,7 +244,14 @@ public class syncModel extends baseDataSource
 					user.setCookingInterest(json.getString("cookingInterest"));
 					user.setCountry(json.getString("country"));
 					accountModel accountmodel = new accountModel(context);
-					accountmodel.insertAccount(account, user);
+					try
+					{
+						accountmodel.insertAccount(account, user);
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
 			}
 

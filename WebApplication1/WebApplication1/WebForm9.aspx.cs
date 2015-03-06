@@ -20,6 +20,8 @@ namespace WebApplication1
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
+				try
+				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				var cookbook = js.Deserialize<List<Cookbook>>(jsonInput);
 				for (int i = 0; i < cookbook.Count(); i++)
@@ -51,6 +53,11 @@ namespace WebApplication1
 						Response.Write(ex);
 					}
 					connection.Close();	
+				}
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
 				}
 			}
 		}

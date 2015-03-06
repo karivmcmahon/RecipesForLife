@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -76,10 +78,10 @@ public class util  {
 	@SuppressLint("SimpleDateFormat")
 	public String dateToString(Date date, boolean inappstring) {
 		SimpleDateFormat formatter;
-		
-		
-			formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		
+
+
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
 		String currentDate = formatter.format(date);
 		return currentDate;
 	}
@@ -325,7 +327,7 @@ public class util  {
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncContributersModel syncContributer = new syncContributersModel(context);
 			try {
-				
+
 				//Get json from server for inserts
 				sync.getJSONFromServer();
 				Editor editor = sharedpreferences.edit();
@@ -339,27 +341,27 @@ public class util  {
 				syncRecipe.getJSONFromServer(false);
 				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
-				
+
 				syncContributer.getJSONFromServer(false);
 				editor.putString("Contributers", getLastUpdated(true));
 				editor.commit();
-				
+
 				//Get json from server for updates
 
 				syncRecipe.getJSONFromServer(true);
 				editor.putString("Change", getLastUpdated(true));
 				editor.commit(); 
-				
-			    syncCookbook.getJSONFromServer(true);
+
+				syncCookbook.getJSONFromServer(true);
 				editor.putString("Cookbook Update", getLastUpdated(true));
 				editor.commit(); 
-				
+
 				syncContributer.getJSONFromServer(true);
 				editor.putString("Contributers Update", getLastUpdated(true));
 				editor.commit();
 
 				// Sending JSONS to server for inserts
-				
+
 				sync.getAndCreateAccountJSON();
 				editor.putString("Account Date Server", getLastUpdated(true));
 				editor.commit();
@@ -368,12 +370,12 @@ public class util  {
 				syncCookbook.getAndCreateJSON(false);
 				editor.putString("Cookbook Server", getLastUpdated(true));
 				editor.commit();
-			
+
 
 				syncRecipe.getAndCreateJSON(false);
 				editor.putString("Date Server", getLastUpdated(true));
 				editor.commit();
-				
+
 				syncContributer.getAndCreateJSON(false);
 				editor.putString("Contributers Server", getLastUpdated(true));
 				editor.commit();
@@ -382,11 +384,11 @@ public class util  {
 				syncRecipe.getAndCreateJSON(true);
 				editor.putString("Change Server", getLastUpdated(true));
 				editor.commit(); 
-				
+
 				syncCookbook.getAndCreateJSON(true);
 				editor.putString("Cookbook Update Server", getLastUpdated(true));
 				editor.commit();
-				
+
 				syncContributer.getAndCreateJSON(true);
 				editor.putString("Contributers Update Server", getLastUpdated(true));
 				editor.commit();
@@ -410,10 +412,19 @@ public class util  {
 				return "fail";
 				/*Toast.makeText(context, 
 						"App sync failed", Toast.LENGTH_LONG).show();*/
-			} 
+
+			}
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "fail";
+				/*Toast.makeText(context, 
+					"App sync failed", Toast.LENGTH_LONG).show();*/
+
+			}
 		}
 		return "fail";
-		
+
 	} 
 
 	/**
@@ -431,8 +442,8 @@ public class util  {
 				android.R.color.transparent);
 		return dialog;
 	}
-	
-	
+
+
 	/**
 	 * Gets spinner index  - found online http://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position
 	 * @param spinner
@@ -452,7 +463,7 @@ public class util  {
 		}
 		return index;
 	} 
-	
+
 
 
 

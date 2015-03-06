@@ -27,14 +27,21 @@ namespace WebApplication1
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
-				//Deserializes JSON into recipe
-				JavaScriptSerializer js = new JavaScriptSerializer();
-				recipe = js.Deserialize<List<Recipe>>(jsonInput);
-				for(int i = 0; i < recipe.Count(); i++)
+				try
 				{
-					
-					insertRecipe(i);
-					
+					//Deserializes JSON into recipe
+					JavaScriptSerializer js = new JavaScriptSerializer();
+					recipe = js.Deserialize<List<Recipe>>(jsonInput);
+					for(int i = 0; i < recipe.Count(); i++)
+					{
+						
+						insertRecipe(i);
+						
+					}
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
 				}
 			}
 		}

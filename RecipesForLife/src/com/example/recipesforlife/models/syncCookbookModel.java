@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -132,7 +133,7 @@ public class syncCookbookModel extends baseDataSource {
 		}
 		else
 		{
-		 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm7.aspx");      	   	
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm7.aspx");      	   	
 		}
 		try 
 		{
@@ -147,6 +148,10 @@ public class syncCookbookModel extends baseDataSource {
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception cookbooks error");
+				}
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -177,18 +182,18 @@ public class syncCookbookModel extends baseDataSource {
 		if(update == true)
 		{
 			date.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
-		    myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx");      	   	
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx");      	   	
 		}
 		else
 		{
 			date.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT"));
-		    myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx");      	   	
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx");      	   	
 		}
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
-		
+
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
@@ -199,7 +204,12 @@ public class syncCookbookModel extends baseDataSource {
 			{
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE cb2 " + str);
+				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception cookbooks error");
+				}
+				
 
 			} 
 			catch (ClientProtocolException e) 
@@ -225,11 +235,26 @@ public class syncCookbookModel extends baseDataSource {
 				cookbookModel model = new cookbookModel(context);
 				if(update == true)
 				{
-					model.updateBook(book);
+					try
+					{
+						model.updateBook(book);
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
 				else
 				{
-					model.insertBook(book, true);
+					try
+					{
+						model.insertBook(book, true);
+
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
 
 			} 

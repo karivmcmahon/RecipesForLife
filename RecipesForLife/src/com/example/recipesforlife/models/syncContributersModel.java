@@ -23,6 +23,7 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ import android.widget.Toast;
  *
  */
 public class syncContributersModel extends baseDataSource {
-	
+
 	Context context;
 
 
@@ -40,7 +41,7 @@ public class syncContributersModel extends baseDataSource {
 		super(context);
 		this.context = context;
 	}
-	
+
 	/**
 	 * Gets contributers within a specific date range
 	 * @param update
@@ -60,7 +61,7 @@ public class syncContributersModel extends baseDataSource {
 		{
 			cursor = database.rawQuery("SELECT * FROM Contributers WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Contributers Server", "DEFAULT"), sharedpreferences.getString("Contributers", "DEFAULT")   });
 		}
-		
+
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -69,7 +70,7 @@ public class syncContributersModel extends baseDataSource {
 				String updates = cursor.getString(getIndex("updateTime", cursor));
 				String change = cursor.getString(getIndex("changeTime", cursor));
 				String progress = cursor.getString(getIndex("progress", cursor));
-				
+
 				cookbookModel bookmodel = new cookbookModel(context);
 				String uid = bookmodel.selectCookbooksByRowID(cookbookid);
 				contributerBean contrib = new contributerBean();
@@ -79,22 +80,22 @@ public class syncContributersModel extends baseDataSource {
 				contrib.setUpdateTime(updates);
 				contrib.setProgress(progress);
 				contribList.add(contrib);
-				
+
 			}
 		}
 		cursor.close();
 		close();
 		return contribList;
 	} 
-	
+
 	/**
 	 * Create a json of the contributers information
 	 * @param update
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	 public void getAndCreateJSON(boolean update) throws JSONException, IOException
-	 {
+	public void getAndCreateJSON(boolean update) throws JSONException, IOException
+	{
 		ArrayList<contributerBean> contribs = getContribs(update);
 		JSONArray jsonArray = new JSONArray();
 
@@ -110,13 +111,13 @@ public class syncContributersModel extends baseDataSource {
 		} 
 		sendJSONToServer(jsonArray, update);
 	} 
-	
-	 /**
-	  * Send json to the server
-	  * @param jsonArray
-	  * @param update
-	  * @throws IOException
-	  */
+
+	/**
+	 * Send json to the server
+	 * @param jsonArray
+	 * @param update
+	 * @throws IOException
+	 */
 	public void sendJSONToServer(JSONArray jsonArray, boolean update ) throws IOException
 	{
 		String str = "";
@@ -131,7 +132,7 @@ public class syncContributersModel extends baseDataSource {
 		{
 			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");   
 		}
-		
+
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
@@ -145,6 +146,11 @@ public class syncContributersModel extends baseDataSource {
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception contributers error");
+				}
+				
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -159,7 +165,7 @@ public class syncContributersModel extends baseDataSource {
 		}
 
 	}
-	
+
 	/**
 	 * Get contributer json from server and either insert or update the contributer
 	 * @param update
@@ -182,14 +188,14 @@ public class syncContributersModel extends baseDataSource {
 			date.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
 			date.put("change", "false");
 		}
-		
+
 		jsonArray.put(date);
 		String str = "";
 		HttpResponse response = null;
 		HttpClient myClient = new DefaultHttpClient();
 		HttpPost myConnection = null;
 		myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx"); 
-		
+
 		try 
 		{
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
@@ -200,7 +206,12 @@ public class syncContributersModel extends baseDataSource {
 			{
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE contribs " + str);
+				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception contributers error");
+				}
+				
 
 			} 
 			catch (ClientProtocolException e) 
@@ -208,7 +219,7 @@ public class syncContributersModel extends baseDataSource {
 				e.printStackTrace();
 				throw e;
 			} 
-		    JSONObject jObject = new JSONObject(str);
+			JSONObject jObject = new JSONObject(str);
 			JSONArray jArray = (JSONArray) jObject.get("Contributer");
 
 			for(int i = 0; i < jArray.length(); i++)
@@ -223,13 +234,27 @@ public class syncContributersModel extends baseDataSource {
 				int id = model.selectCookbooksIDByUnique(uniqid);
 				if(update == true)
 				{
-					model.updateContributers(email, id, progress);
+					try
+					{
+						model.updateContributers(email, id, progress);
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
 				else
 				{
-					model.insertContributers(email, id);
+					try
+					{
+						model.insertContributers(email, id);
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
-				
+
 
 			} 
 

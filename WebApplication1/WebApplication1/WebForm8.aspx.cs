@@ -19,32 +19,39 @@ namespace WebApplication1
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
-				JavaScriptSerializer js = new JavaScriptSerializer();
-				var time = js.Deserialize<List<Date2>>(jsonInput);
-				string lastUpdated = time[0].updateTime;
-				SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-				SqlCommand select = new SqlCommand(" SELECT * FROM Cookbook WHERE updateTime > @lastUpdated", con);
-				select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
-				con.Open();
-				Cookbooks cookbooks = new Cookbooks();
-				cookbooks.Cookbook = new List<Cookbook>();
-				var reader = select.ExecuteReader();
-				while (reader.Read())
+				try
 				{
-					byte[] image = new byte[0];
-					Cookbook cookbook = new Cookbook();
-					cookbook.name = (string)reader["name"];
-					cookbook.description = (string)reader["description"];
-					cookbook.creator = (string)reader["creator"];
-					cookbook.uniqueid = (string)reader["uniqueid"];
-					cookbook.privacyOption = (string)reader["privacyOption"];
-					image = (byte[])reader["image"];
-					cookbook.image = Convert.ToBase64String(image);
-					cookbooks.Cookbook.Add(cookbook);
-				} 
-				con.Close();
-				string json = js.Serialize(cookbooks);
-				Response.Write(json);
+					JavaScriptSerializer js = new JavaScriptSerializer();
+					var time = js.Deserialize<List<Date2>>(jsonInput);
+					string lastUpdated = time[0].updateTime;
+					SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					SqlCommand select = new SqlCommand(" SELECT * FROM Cookbook WHERE updateTime > @lastUpdated", con);
+					select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
+					con.Open();
+					Cookbooks cookbooks = new Cookbooks();
+					cookbooks.Cookbook = new List<Cookbook>();
+					var reader = select.ExecuteReader();
+					while (reader.Read())
+					{
+						byte[] image = new byte[0];
+						Cookbook cookbook = new Cookbook();
+						cookbook.name = (string)reader["name"];
+						cookbook.description = (string)reader["description"];
+						cookbook.creator = (string)reader["creator"];
+						cookbook.uniqueid = (string)reader["uniqueid"];
+						cookbook.privacyOption = (string)reader["privacyOption"];
+						image = (byte[])reader["image"];
+						cookbook.image = Convert.ToBase64String(image);
+						cookbooks.Cookbook.Add(cookbook);
+					} 
+					con.Close();
+					string json = js.Serialize(cookbooks);
+					Response.Write(json);
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
+				}
 			}
 		}
 		

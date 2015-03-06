@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -41,7 +42,7 @@ public class syncRecipeModel extends baseDataSource {
 	public syncRecipeModel(Context context) {
 		super(context);
 		this.context = context;
-		
+
 		// TODO Auto-generated constructor stub
 	}
 
@@ -57,13 +58,13 @@ public class syncRecipeModel extends baseDataSource {
 		Cursor cursor = null;
 		if(update == true)
 		{
-		  cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
 		}
 		else
 		{
 			cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
 		}
-		 if (cursor != null && cursor.getCount() > 0) {
+		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				recipeList.add(cursorToRecipe(cursor));
@@ -317,8 +318,8 @@ public class syncRecipeModel extends baseDataSource {
 		}
 		else
 		{
-	    	myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");  
-	    	date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");  
+			date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		jsonArray.put(date);
 		try 
@@ -332,7 +333,11 @@ public class syncRecipeModel extends baseDataSource {
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
-
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception recipe error");
+				}
+				
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -363,7 +368,7 @@ public class syncRecipeModel extends baseDataSource {
 				}
 				else
 				{
-				imgbean.setImage(Base64.decode(json.optString("image"), Base64.DEFAULT));
+					imgbean.setImage(Base64.decode(json.optString("image"), Base64.DEFAULT));
 				}
 				imgbean.setUniqueid(json.optString("imageid"));
 
@@ -416,14 +421,28 @@ public class syncRecipeModel extends baseDataSource {
 					}
 				}
 				recipeModel model = new recipeModel(context);
-	
+
 				if(update == true)
 				{
-					model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean);
+					try
+					{
+						model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean);
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
 				else
 				{
-					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, imgbean);
+					try
+					{
+						model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, imgbean);
+					}
+					catch(SQLException e)
+					{
+						throw e;
+					}
 				}
 
 			}
@@ -456,11 +475,11 @@ public class syncRecipeModel extends baseDataSource {
 		HttpPost myConnection = null;
 		if(update == true)
 		{
-			 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx"); 
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx"); 
 		}
 		else
 		{
-			 myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");
+			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");
 		}
 		try 
 		{
@@ -475,6 +494,11 @@ public class syncRecipeModel extends baseDataSource {
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
 				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception recipe error");
+				}
+				
 			} 
 			catch (ClientProtocolException e) 
 			{							

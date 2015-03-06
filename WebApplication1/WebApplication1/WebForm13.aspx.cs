@@ -19,6 +19,8 @@ namespace WebApplication1
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
+				try
+				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				var contribs = js.Deserialize<List<Contributer>>(jsonInput);
 				for (int i = 0; i < contribs.Count(); i++)
@@ -66,6 +68,11 @@ namespace WebApplication1
 						Response.Write(ex);
 					}
 					connn.Close();
+				}
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
 				}
 			}
 		}
