@@ -31,13 +31,14 @@ namespace WebApplication1
 				var reader = select.ExecuteReader();
 				while (reader.Read())
 				{
+					byte[] image = new byte[0];
 					Cookbook cookbook = new Cookbook();
 					cookbook.name = (string)reader["name"];
 					cookbook.description = (string)reader["description"];
 					cookbook.creator = (string)reader["creator"];
 					cookbook.uniqueid = (string)reader["uniqueid"];
 					cookbook.privacyOption = (string)reader["privacyOption"];
-					byte[] image = (byte[])reader["image"];
+					image = (byte[])reader["image"];
 					cookbook.image = Convert.ToBase64String(image);
 					cookbooks.Cookbook.Add(cookbook);
 				} 

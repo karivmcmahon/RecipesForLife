@@ -96,6 +96,7 @@ public class cookbookModel extends baseDataSource {
 		updateVals.put("description", cookbook.getDescription());
 		updateVals.put("privacyOption", cookbook.getPrivacy());
 		updateVals.put("changeTime", utils.getLastUpdated(false));	
+		updateVals.put("image", cookbook.getImage());
 		String[] args = new String[]{cookbook.getUniqueid()};
 		database.beginTransaction();
 		try

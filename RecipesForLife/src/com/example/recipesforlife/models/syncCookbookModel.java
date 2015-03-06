@@ -199,7 +199,7 @@ public class syncCookbookModel extends baseDataSource {
 			{
 				response = myClient.execute(myConnection);
 				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE cb " + str);
+				Log.v("RESPONSE", "RESPONSE cb2 " + str);
 
 			} 
 			catch (ClientProtocolException e) 

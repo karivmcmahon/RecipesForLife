@@ -1,13 +1,23 @@
 package com.example.recipesforlife.views;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -25,7 +35,7 @@ import com.example.recipesforlife.models.util;
  * @author Kari
  *
  */
-public class EditCookbookView  {
+public class EditCookbookView extends CookbookListActivity {
 
 	Context context;
 	Activity activity;
@@ -38,8 +48,10 @@ public class EditCookbookView  {
 	TextView errorView;
 	cookbookModel model;
 	ArrayList<cookbookBean> cookbook;
+	byte[] byteArray;
 	String uid;
 	Spinner spinner;
+	private static final int SELECT_PHOTO = 101;
 
 	public EditCookbookView(Context context, Activity activity, CustomCookbookListAdapter adapter, int position)
 	{
@@ -62,6 +74,32 @@ public class EditCookbookView  {
 		fillSpinner();
 		setStyle();
 		setText();
+		
+		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, editDialog);
+		browseButton.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent pickIntent = new Intent();
+				pickIntent.setType("image/*");
+				pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+				String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+				chooserIntent.putExtra
+				(
+						Intent.EXTRA_INITIAL_INTENTS, 
+						new Intent[] { takePhotoIntent }
+						); 
+
+				activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
+			}
+
+		});
 		Button btn = utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
 		btn.setOnClickListener(new OnClickListener(){
 
@@ -87,6 +125,7 @@ public class EditCookbookView  {
 		utils.setDialogText(R.id.bookNameView, editDialog, 22);
 		utils.setDialogText(R.id.bookDescView, editDialog, 22);
 		utils.setDialogText(R.id.privacyView, editDialog, 22);
+		utils.setDialogText(R.id.cookbookImageView, editDialog, 22);
 	}
 
 	/**
@@ -138,22 +177,107 @@ public class EditCookbookView  {
 			cb.setDescription(utils.getTextFromDialog(R.id.bookDescEditText, editDialog));
 			cb.setPrivacy(spinner.getSelectedItem().toString());
 			cb.setUniqueid(uid);
+			cb.setImage(byteArray);
 			model.updateBook(cb);
 
 			SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			ArrayList<cookbookBean >cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+		ArrayList<cookbookBean >cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 			ArrayList<String> values = new ArrayList<String>();
 			ArrayList<String> ids = new ArrayList<String>();
+			ArrayList<byte[]> images = new ArrayList<byte[]>();
+			ccadapter.booknames.clear();
+			ccadapter.bookids.clear();
+			ccadapter.bookimages.clear();
 			for(int i = 0; i < cookbookList.size(); i++)
 			{
-				values.add(cookbookList.get(i).getName());
-				ids.add(cookbookList.get(i).getUniqueid());
+				CookbookListActivity.values.add(cookbookList.get(i).getName());
+				CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
+				CookbookListActivity.images.add(cookbookList.get(i).getImage());
 			}
-			ccadapter.booknames = values;
-			ccadapter.bookids = ids;
-			ccadapter.notifyDataSetChanged();
+			if(cookbookList.size() < 6)
+			{
+				int num = 6 - cookbookList.size();
+				for(int a = 0; a < num; a++)
+				{
+					byte[] emptyarr = new byte[0];
+					CookbookListActivity.values.add("");
+					CookbookListActivity.ids.add("");
+					CookbookListActivity.images.add(emptyarr);
+				}
+			}
 			editDialog.dismiss();
+			CookbookListActivity.adapter.notifyDataSetChanged();
 		}
+	}
+	
+	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
+	{
+
+		switch(requestCode) { 
+		case SELECT_PHOTO:
+			if(resultCode == activity.RESULT_OK){  
+				Uri selectedImage = imageReturnedIntent.getData();
+
+
+				try {
+					Bitmap yourSelectedImage = decodeUri(selectedImage);
+					File f = new File(getRealPathFromURI(selectedImage));
+
+					String imageName = f.getName();
+
+					utils.setDialogTextString(R.id.cookbookImageEditText, editDialog, imageName);
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					byteArray = stream.toByteArray(); 
+
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+
+	}
+
+	public String getRealPathFromURI(Uri uri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		@SuppressWarnings("deprecation")
+		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
+	}
+
+	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+		// Decode image size
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o);
+
+		// The new size we want to scale to
+		final int REQUIRED_SIZE = 140;
+
+		// Find the correct scale value. It should be the power of 2.
+		int width_tmp = o.outWidth, height_tmp = o.outHeight;
+		int scale = 1;
+		while (true) {
+			if (width_tmp / 2 < REQUIRED_SIZE
+					|| height_tmp / 2 < REQUIRED_SIZE) {
+				break;
+			}
+			width_tmp /= 2;
+			height_tmp /= 2;
+			scale *= 2;
+		}
+
+		// Decode with inSampleSize
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize = scale;
+		return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o2);
+
 	}
 }
 

@@ -34,8 +34,8 @@ import com.example.recipesforlife.models.util;
 public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	private final Activity activity;
 	public ArrayList<String> booknames;
-	public static ArrayList<String> bookids;
-	public static ArrayList<byte[]> bookimages;
+	public  ArrayList<String> bookids;
+	public  ArrayList<byte[]> bookimages;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
@@ -44,6 +44,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	boolean isCreator = false;
 	cookbookModel model;
 	ImageLoader2 imgload;
+	EditCookbookView edit;
 
 	/** 
 	 * Gets list data
@@ -73,6 +74,9 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
+		Log.v("position", "Position " + booknames.get(position));
+		Log.v("position", "bi " + bookimages.size());
+		Log.v("position", "Position " + bookids.get(position));
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Fill list adapter with cookbook names
 		String creator = model.creatorForCookbook(bookids.get(position));
@@ -110,7 +114,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						EditCookbookView edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
+						edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
 						edit.editBook();
 					}
 					return false;
@@ -160,5 +164,10 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 			}
 		}
 		return rowView;
+	}
+	
+	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
+	{
+		edit.resultRecieved( requestCode,  resultCode, imageReturnedIntent);
 	}
 }

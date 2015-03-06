@@ -10,12 +10,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +53,7 @@ public class CookbookListActivity extends ActionBarActivity {
 	public static ArrayList<byte[]> images;
 	AddCookbookView add;
 	private Handler mHandler = new Handler();
+	cookbookModel model;
 
 
 	NavigationDrawerCreation nav;
@@ -79,7 +82,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
-		cookbookModel model = new cookbookModel(getApplicationContext());
+		model = new cookbookModel(getApplicationContext());
 
 		//Gets list of cookbooks and displays them
 		cookbookList = new ArrayList<cookbookBean>();
@@ -124,12 +127,42 @@ public class CookbookListActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		//Sync for apps to be done in background on resume
-		 mHandler.postDelayed(new Runnable() {
-	            public void run() {
-	            	new PostTask(utils, getApplicationContext()).execute();
-	            }
-	        }, 3000);
-		
+		mHandler.postDelayed(new Runnable() {
+			public void run() {
+				AsyncTask posttask = new PostTask(utils, getApplicationContext()).execute();
+				Log.v("finished",  "finished" +  posttask.getStatus());
+				if(posttask.getStatus() == PostTask.Status.FINISHED)
+				{
+					Log.v("finished", "finished");
+					SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+			 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+					values.clear();
+					ids.clear();
+					images.clear();
+					for(int i = 0; i < cookbookList.size(); i++)
+					{
+						values.add(cookbookList.get(i).getName());
+						ids.add(cookbookList.get(i).getUniqueid());
+						images.add(cookbookList.get(i).getImage());
+					}
+					//If the list is under 6 then create empty rows to fill the layout of the app
+					if(cookbookList.size() < 6)
+					{
+						int num = 6 - cookbookList.size();
+						for(int a = 0; a < num; a++)
+						{
+							byte[] emptyarr = new byte[0];
+							values.add("");
+							ids.add("");
+							images.add(emptyarr);
+						}
+					}
+					adapter.notifyDataSetChanged();
+				}
+				
+			}
+		}, 3000);
+
 
 
 	}
@@ -168,11 +201,18 @@ public class CookbookListActivity extends ActionBarActivity {
 		return result;
 
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
-		add.resultRecieved(requestCode, resultCode, imageReturnedIntent);
+		if(requestCode == 100)
+		{
+			add.resultRecieved(requestCode, resultCode, imageReturnedIntent);
+		}
+		else if(requestCode == 101)
+		{
+			adapter.resultRecieved(requestCode, resultCode, imageReturnedIntent);
+		}
 
 	}
 
