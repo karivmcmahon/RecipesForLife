@@ -58,11 +58,11 @@ public class syncRecipeModel extends baseDataSource {
 		Cursor cursor = null;
 		if(update == true)
 		{
-			cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Change Server", "DEFAULT"), sharedpreferences.getString("Change", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Recipe WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Change", "DEFAULT")  });
 		}
 		else
 		{
-			cursor = database.rawQuery("SELECT * FROM Recipe WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Recipe WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
 		}
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -426,7 +426,7 @@ public class syncRecipeModel extends baseDataSource {
 				{
 					try
 					{
-						model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean);
+						model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean,true);
 					}
 					catch(SQLException e)
 					{

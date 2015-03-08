@@ -1,5 +1,6 @@
 package com.example.recipesforlife.models;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,10 +18,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -329,78 +334,60 @@ public class util  {
 			try {
 
 				//Get json from server for inserts
-				sync.getJSONFromServer();
+				
 				Editor editor = sharedpreferences.edit();
+				
+				//INSERTS SYNC 
+				sync.getJSONFromServer();
+				sync.getAndCreateAccountJSON();
 				editor.putString("Account Date", getLastUpdated(true));
 				editor.commit();
 
 				syncCookbook.getJSONFromServer(false);
+				syncCookbook.getAndCreateJSON(false);
 				editor.putString("Cookbook", getLastUpdated(true));
 				editor.commit();
 
 				syncRecipe.getJSONFromServer(false);
+				syncRecipe.getAndCreateJSON(false);
 				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
 
 				syncContributer.getJSONFromServer(false);
+				syncContributer.getAndCreateJSON(false);
 				editor.putString("Contributers", getLastUpdated(true));
 				editor.commit();
 
-				//Get json from server for updates
+				//UPDATES SYNC
 
 				syncRecipe.getJSONFromServer(true);
+				syncRecipe.getAndCreateJSON(true);
 				editor.putString("Change", getLastUpdated(true));
 				editor.commit(); 
 
 				syncCookbook.getJSONFromServer(true);
+				syncCookbook.getAndCreateJSON(true);
 				editor.putString("Cookbook Update", getLastUpdated(true));
-				editor.commit(); 
+				editor.commit();
+				
+				
 
 				syncContributer.getJSONFromServer(true);
+				syncContributer.getAndCreateJSON(true);
 				editor.putString("Contributers Update", getLastUpdated(true));
 				editor.commit();
 
-				// Sending JSONS to server for inserts
-
-				sync.getAndCreateAccountJSON();
-				editor.putString("Account Date Server", getLastUpdated(true));
-				editor.commit();
-
-
-				syncCookbook.getAndCreateJSON(false);
-				editor.putString("Cookbook Server", getLastUpdated(true));
-				editor.commit();
-
-
-				syncRecipe.getAndCreateJSON(false);
-				editor.putString("Date Server", getLastUpdated(true));
-				editor.commit();
-
-				syncContributer.getAndCreateJSON(false);
-				editor.putString("Contributers Server", getLastUpdated(true));
-				editor.commit();
-
-				// Sending  JSON's to server for changes
-				syncRecipe.getAndCreateJSON(true);
-				editor.putString("Change Server", getLastUpdated(true));
-				editor.commit(); 
-
-				syncCookbook.getAndCreateJSON(true);
-				editor.putString("Cookbook Update Server", getLastUpdated(true));
-				editor.commit();
-
-				syncContributer.getAndCreateJSON(true);
-				editor.putString("Contributers Update Server", getLastUpdated(true));
-				editor.commit();
-
+			
 
 				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Cookbook", "DEFAULT"));
-				Log.v("LAST UPDATE SERVER", "LAST UPDATE SERVER " + sharedpreferences.getString("Cookbook Server", "DEFAULT"));
+				
 				return "success";
 
 				/*Toast.makeText(context, 
 						"App synced", Toast.LENGTH_LONG).show();*/
 			} catch (JSONException e) {
+				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Cookbook Date", "DEFAULT"));
+				
 				e.printStackTrace();
 				return "fail";
 				/*Toast.makeText(context, 
@@ -408,6 +395,8 @@ public class util  {
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Cookbook Date", "DEFAULT"));
+				
 				e.printStackTrace();
 				return "fail";
 				/*Toast.makeText(context, 
@@ -415,6 +404,8 @@ public class util  {
 
 			}
 			catch (SQLException e) {
+				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Cookbook Date", "DEFAULT"));
+				
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return "fail";
@@ -464,6 +455,45 @@ public class util  {
 		return index;
 	} 
 
+	public String getRealPathFromURI(Uri uri) {
+		String[] projection = { MediaStore.Images.Media.DATA };
+		@SuppressWarnings("deprecation")
+		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
+	}
+
+	public Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+		// Decode image size
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o);
+
+		// The new size we want to scale to
+		final int REQUIRED_SIZE = 140;
+
+		// Find the correct scale value. It should be the power of 2.
+		int width_tmp = o.outWidth, height_tmp = o.outHeight;
+		int scale = 1;
+		while (true) {
+			if (width_tmp / 2 < REQUIRED_SIZE
+					|| height_tmp / 2 < REQUIRED_SIZE) {
+				break;
+			}
+			width_tmp /= 2;
+			height_tmp /= 2;
+			scale *= 2;
+		}
+
+		// Decode with inSampleSize
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize = scale;
+		return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o2);
+
+	}
 
 
 

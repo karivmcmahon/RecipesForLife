@@ -596,36 +596,20 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
-		Log.v("URI " , "URI ");
+		
 		switch(requestCode) { 
 		case SELECT_PHOTO:
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
-				Log.v("URI " , "URI " + selectedImage);
-				/**	InputStream imageStream = null;
 				try {
-					imageStream = activity.getContentResolver().openInputStream(selectedImage);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} **/
-				try {
-					Bitmap yourSelectedImage = decodeUri(selectedImage);
-					File f = new File(getRealPathFromURI(selectedImage));
-					Log.v("img nme", "img nme " + f);
-					imageName = f.getName();
-					Log.v("img nme", "img nme " + imageName);
+					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
+					File f = new File(utils.getRealPathFromURI(selectedImage));
+					imageName = f.getName();					
 					utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
 					byte[] byteArray = stream.toByteArray(); 
-					//    int bytes = yourSelectedImage.getRowBytes() * yourSelectedImage.getHeight();
-
-					// ByteBuffer buffer = ByteBuffer.allocate(bytes); 
-					// yourSelectedImage.copyPixelsToBuffer(buffer); 
-
 					array = byteArray;
-					Log.v("arr", "arr " + array);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -636,45 +620,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 	}
 
-	public String getRealPathFromURI(Uri uri) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		@SuppressWarnings("deprecation")
-		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
-		int column_index = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
-	}
-
-	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
-
-		// Decode image size
-		BitmapFactory.Options o = new BitmapFactory.Options();
-		o.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o);
-
-		// The new size we want to scale to
-		final int REQUIRED_SIZE = 140;
-
-		// Find the correct scale value. It should be the power of 2.
-		int width_tmp = o.outWidth, height_tmp = o.outHeight;
-		int scale = 1;
-		while (true) {
-			if (width_tmp / 2 < REQUIRED_SIZE
-					|| height_tmp / 2 < REQUIRED_SIZE) {
-				break;
-			}
-			width_tmp /= 2;
-			height_tmp /= 2;
-			scale *= 2;
-		}
-
-		// Decode with inSampleSize
-		BitmapFactory.Options o2 = new BitmapFactory.Options();
-		o2.inSampleSize = scale;
-		return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o2);
-
-	}
+	
 
 }
 

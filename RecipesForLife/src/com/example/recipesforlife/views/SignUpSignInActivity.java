@@ -77,35 +77,31 @@ public class SignUpSignInActivity extends Activity {
 			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();
-			editor2.putString("Date", "2015-01-01 12:00:00");
-			editor2.commit();
-			Editor editor3 = sharedpreferences.edit();
-			editor3.putString("Date Server", "2015-01-01 12:00:00");
-			editor3.commit();
+			//Dates for account syncing
 			editor2.putString("Account Date", "2015-01-01 12:00:00");
 			editor2.commit();
-			editor3.putString("Account Date Server", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Change", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Change Server", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Cookbook", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Cookbook Server", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Cookbook Update", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Cookbook Update Server", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Contributers", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Contributers Server", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Contributers Update", "2015-01-01 12:00:00");
-			editor3.commit();
-			editor3.putString("Contributers Update Server", "2015-01-01 12:00:00");
-			editor3.commit();
+			
+			//Dates for recipe syncing
+			editor2.putString("Date", "2015-01-01 12:00:00");
+			editor2.commit();
+			
+			editor2.putString("Change", "2015-01-01 12:00:00");
+			editor2.commit();
+			
+			//Dates for cookbook syncing
+			editor2.putString("Cookbook", "2015-01-01 12:00:00");
+			editor2.commit();
+			
+			editor2.putString("Cookbook Update", "2015-01-01 12:00:00");
+			editor2.commit();
+			
+			//Dates for contribs syncing
+			editor2.putString("Contributers", "2015-01-01 12:00:00");
+			editor2.commit();
+			
+			editor2.putString("Contributers Update", "2015-01-01 12:00:00");
+			editor2.commit();
+			
 			buildDatabase();
 			new PostTask(utils, context, false).execute();
 		} else {
@@ -344,7 +340,7 @@ public class SignUpSignInActivity extends Activity {
 			// Insert to db
 			try {
 				accountModel accountmodel = new accountModel(getApplicationContext());
-				accountmodel.insertAccount(accountBean, userBean);
+				accountmodel.insertAccount(accountBean, userBean, false);
 				nextDialog.dismiss();
 
 			} catch (Exception e) {

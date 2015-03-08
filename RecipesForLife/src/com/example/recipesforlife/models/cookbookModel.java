@@ -25,9 +25,9 @@ public class cookbookModel extends baseDataSource {
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 	recipeModel recipemodel;
-	SharedPreferences sharedpreferences;
 	Context context;
 	utility utils;
+	SharedPreferences sharedpreferences;
 
 	public cookbookModel(Context context) {
 		super(context);
@@ -35,6 +35,7 @@ public class cookbookModel extends baseDataSource {
 		this.context = context;
 		utils = new utility();
 		recipemodel = new recipeModel(context);
+		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
 	/**
@@ -44,11 +45,10 @@ public class cookbookModel extends baseDataSource {
 	 */
 	public String insertBook(cookbookBean book, boolean server)
 	{
-
+		
 		open();
 		ContentValues values = new ContentValues();
 		values.put("name", book.getName()); 
-		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000"); 
 		values.put("creator", book.getCreator()); 
 		values.put("privacyOption", book.getPrivacy()); 
@@ -57,12 +57,13 @@ public class cookbookModel extends baseDataSource {
 		String uid = "";
 		if(server == true)
 		{
-			
+			values.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT"));
 			values.put("uniqueid", book.getUniqueid());
 			uid = book.getUniqueid();
 		}
 		else
 		{
+			values.put("updateTime", utils.getLastUpdated(false)); 
 			uid = utils.generateUUID(book.getCreator(), "Cookbook", database);
 			values.put("uniqueid", uid);
 		}
@@ -89,15 +90,22 @@ public class cookbookModel extends baseDataSource {
 	 * Updates a cookbook in the database
 	 * @param cookbook
 	 */
-	public void updateBook(cookbookBean cookbook)
+	public void updateBook(cookbookBean cookbook, boolean server)
 	{
-		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+		
 		open();
 		ContentValues updateVals = new ContentValues();
 		updateVals.put("name", cookbook.getName());
 		updateVals.put("description", cookbook.getDescription());
 		updateVals.put("privacyOption", cookbook.getPrivacy());
-		updateVals.put("changeTime", utils.getLastUpdated(false));	
+		if(server == true)
+		{
+			updateVals.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
+		}
+		else
+		{
+			updateVals.put("changeTime", utils.getLastUpdated(false));	
+		}
 		updateVals.put("image", cookbook.getImage());
 		String[] args = new String[]{cookbook.getUniqueid()};
 		database.beginTransaction();
@@ -121,13 +129,20 @@ public class cookbookModel extends baseDataSource {
 	 * @param email
 	 * @param cookbookid
 	 */
-	public void insertContributers(String email, int cookbookid)
+	public void insertContributers(String email, int cookbookid, boolean server)
 	{
 
 		open();
 		ContentValues values = new ContentValues();
 		values.put("cookbookid", cookbookid); 
-		values.put("updateTime", utils.getLastUpdated(false)); 
+		if(server == true)
+		{
+			values.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
+		}
+		else
+		{
+			values.put("updateTime", utils.getLastUpdated(false)); 
+		}
 		values.put("changeTime", "2015-01-01 12:00:00.000"); 
 		values.put("accountid", email); 
 		values.put("progress", "added"); 
@@ -141,7 +156,9 @@ public class cookbookModel extends baseDataSource {
 		}catch(SQLException e)
 		{
 			database.endTransaction();
+			e.printStackTrace();
 			close();
+			throw e;
 		} 
 		close();
 
@@ -153,13 +170,20 @@ public class cookbookModel extends baseDataSource {
 	 * @param email
 	 * @param cookbookid
 	 */
-	public void updateContributers(String email, int cookbookid, String progress)
+	public void updateContributers(String email, int cookbookid, String progress, boolean server)
 	{
 
 		open();
 		ContentValues values = new ContentValues();
 		values.put("cookbookid", cookbookid); 
-		values.put("changeTime", utils.getLastUpdated(false)); 
+		if(server == true)
+		{
+			values.put("changeTime", sharedpreferences.getString("Contributers Update", "DEFAULT"));
+		}
+		else
+		{
+			values.put("changeTime", utils.getLastUpdated(false)); 
+		}
 		values.put("accountid", email); 
 		values.put("progress", progress); 
 		database.beginTransaction();
@@ -171,8 +195,10 @@ public class cookbookModel extends baseDataSource {
 			close();
 		}catch(SQLException e)
 		{
+			e.printStackTrace();
 			database.endTransaction();
 			close();
+			throw e;
 		} 
 		close();
 

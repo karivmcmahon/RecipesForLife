@@ -113,7 +113,7 @@ public void testAccountInsert() throws Exception
 		anUser.setCookingInterest("Home cook");
 		anUser.setBio("Home cook");
 		anUser.setCountry("Scotland");
-		accountmodel.insertAccount(anAccount, anUser);
+		accountmodel.insertAccount(anAccount, anUser, false);
 		account = accountmodel.selectAccount("hilz@aol.co.uk", "whisk");
 		user = accountmodel.selectUser(account.get(0).getId());
 		Assert.assertEquals(account.get(0).getEmail(), "hilz@aol.co.uk");
@@ -126,7 +126,7 @@ public void testAccountInsert() throws Exception
 		anUser.setCookingInterest("Home cook");
 		anUser.setBio("Home cook");
 		anUser.setCountry("Scotland");
-		accountmodel.insertAccount(anAccount, anUser);
+		accountmodel.insertAccount(anAccount, anUser, false);
 		account = accountmodel.selectAccount("hils@aol.co.uk", "whisk");
 		Assert.assertEquals(account.size(),0);
 		

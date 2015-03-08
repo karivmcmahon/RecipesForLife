@@ -52,16 +52,22 @@ public class syncCookbookModel extends baseDataSource {
 		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
 		if(update == true)
 		{
-			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Cookbook Update Server", "DEFAULT"), sharedpreferences.getString("Cookbook Update", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Cookbook Update", "DEFAULT")  });
 		}
 		else
 		{
-			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Cookbook Server", "DEFAULT"), sharedpreferences.getString("Cookbook", "DEFAULT")   });
+		
+		    cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Cookbook", "DEFAULT") });
+			Log.v("date ", "date " + sharedpreferences.getString("Cookbook", "DEFAULT"));
+			Log.v("date ", "count " + cursor.getCount());
 		}
 		if (cursor != null && cursor.getCount() > 0) {
+			Log.v("iterate", "iterate2");
 			for (int i = 0; i < cursor.getCount(); i++) {
+				Log.v("iterate", "iterate");
 				cursor.moveToPosition(i);
 				cbList.add(cursorToCookbook(cursor));
+				Log.v("iterate", "iterate");
 			}
 		}
 		cursor.close();
@@ -96,7 +102,7 @@ public class syncCookbookModel extends baseDataSource {
 	{
 		ArrayList<cookbookBean> bookList = getCookbook(update);
 		JSONArray jsonArray = new JSONArray();
-
+		Log.v("book ", "book " + bookList.size());
 		for(int i = 0; i < bookList.size(); i++)
 		{
 			JSONObject book = new JSONObject();		
@@ -237,7 +243,7 @@ public class syncCookbookModel extends baseDataSource {
 				{
 					try
 					{
-						model.updateBook(book);
+						model.updateBook(book, true);
 					}
 					catch(SQLException e)
 					{

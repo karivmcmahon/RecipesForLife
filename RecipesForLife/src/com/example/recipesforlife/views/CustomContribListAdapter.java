@@ -94,7 +94,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 							public void onClick(View arg0) {
 								cookbookModel model = new cookbookModel(context);
 								int id = model.selectCookbooksIDByUnique(cookbookuid);
-								model.updateContributers( users.get(position), id, "deleted");
+								model.updateContributers( users.get(position), id, "deleted", false);
 								users.remove(position);
 								notifyDataSetChanged();
 								dialog.dismiss(); 

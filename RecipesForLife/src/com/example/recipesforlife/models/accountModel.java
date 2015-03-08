@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.util.Log;
 
 import com.example.recipesforlife.controllers.accountBean;
 import com.example.recipesforlife.controllers.userBean;
+import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
  * Class handles database details relating to the users account
@@ -25,6 +27,9 @@ public class accountModel extends baseDataSource
 	Context context;
 	syncModel sync;
 	utility utils;
+	SharedPreferences sharedpreferences;
+	public static final String MyPREFERENCES = "MyPrefs" ;
+	public static final String emailk = "emailKey"; 
 
 	public accountModel(Context context) {
 		super(context);
@@ -32,26 +37,30 @@ public class accountModel extends baseDataSource
 		this.context = context;
 		sync = new syncModel(context);
 		utils = new utility();
+		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
 	/**
 	 * Code to insert sign up information into sqlite database
 	 * @param accountInfo
 	 */
-	public void insertAccount(accountBean account, userBean user) 
+	public void insertAccount(accountBean account, userBean user, boolean server) 
 	{
 		open();
 		database.beginTransaction();
 		try
 		{
-			insertUserData(account, user);
+			insertUserData(account, user, server);
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
 			Log.v("suc", "suc");
 		}catch(SQLException e)
 		{
+			e.printStackTrace();
 			database.endTransaction();
 			Log.v("Trans fail", "Trans fail");
+			throw e;
+			
 		}
 		close();
 	} 
@@ -165,18 +174,34 @@ public class accountModel extends baseDataSource
 	 * Insert user info into the user sqlite table
 	 * @param accountInfo
 	 */
-	public void insertUserData(accountBean account, userBean user)
+	public void insertUserData(accountBean account, userBean user, boolean server)
 	{
 		//User values
 		values = new ContentValues();
 		values.put("name", user.getName()); 
-		values.put("updateTime", utils.getLastUpdated(false)); 
+		if(server == true)
+		{
+			values.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT")); 
+		}
+		else
+		{
+			values.put("updateTime", utils.getLastUpdated(false)); 
+		}
+		
 		values.put("country", user.getCountry()); 
 		values.put("bio", user.getBio()); 
 		values.put("city", user.getCity()); 
-		values.put("cookingInterest", user.getCookingInterest());     	 
+		values.put("cookingInterest", user.getCookingInterest()); 
+		try
+		{
 		id = database.insertOrThrow("Users", null, values);
-		insertAccountData(account, id);
+		insertAccountData(account, id, server);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	/**
@@ -184,15 +209,30 @@ public class accountModel extends baseDataSource
 	 * @param accountInfo
 	 * @param id
 	 */
-	public void insertAccountData(accountBean account, long id)
+	public void insertAccountData(accountBean account, long id, boolean server)
 	{
 		//Account values
 		accountValues = new ContentValues();
 		accountValues.put("id", (int)id);
 		accountValues.put("email", account.getEmail());
-		accountValues.put("updateTime", utils.getLastUpdated(false));
+		if(server == true)
+		{
+			accountValues.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT")); 
+		}
+		else
+		{
+			accountValues.put("updateTime", utils.getLastUpdated(false));
+		}
 		accountValues.put("password", account.getPassword());
+		try
+		{
 		database.insertOrThrow("Account", null, accountValues);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 

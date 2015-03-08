@@ -43,7 +43,7 @@ public class CookbookListActivity extends ActionBarActivity {
 
 	ListView listView;
 	public static final String MyPREFERENCES = "MyPrefs";
-	ArrayList<cookbookBean> cookbookList;
+	static ArrayList<cookbookBean> cookbookList;
 	public static final String pass = "passwordKey"; 
 	String type = "";
 	util utils;
@@ -53,7 +53,8 @@ public class CookbookListActivity extends ActionBarActivity {
 	public static ArrayList<byte[]> images;
 	AddCookbookView add;
 	private Handler mHandler = new Handler();
-	cookbookModel model;
+	static cookbookModel model;
+	static Context context;
 
 
 	NavigationDrawerCreation nav;
@@ -66,6 +67,8 @@ public class CookbookListActivity extends ActionBarActivity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.listview);
+		
+		context = getApplicationContext();
 
 		//Sets up nav bar
 		nav = new NavigationDrawerCreation(this, "My Cookbooks");
@@ -83,33 +86,9 @@ public class CookbookListActivity extends ActionBarActivity {
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
 		model = new cookbookModel(getApplicationContext());
-
 		//Gets list of cookbooks and displays them
 		cookbookList = new ArrayList<cookbookBean>();
-		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		//Fill list adapter with cookbook names
-		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-		values = new ArrayList<String>();
-		ids = new ArrayList<String>();
-		images = new ArrayList<byte[]>();
-		for(int i = 0; i < cookbookList.size(); i++)
-		{
-			values.add(cookbookList.get(i).getName());
-			ids.add(cookbookList.get(i).getUniqueid());
-			images.add(cookbookList.get(i).getImage());
-		}
-		//If the list is under 6 then create empty rows to fill the layout of the app
-		if(cookbookList.size() < 6)
-		{
-			int num = 6 - cookbookList.size();
-			for(int a = 0; a < num; a++)
-			{
-				byte[] emptyarr = new byte[0];
-				values.add("");
-				ids.add("");
-				images.add(emptyarr);
-			}
-		}
+		updateCookbookList();
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
 
@@ -134,29 +113,7 @@ public class CookbookListActivity extends ActionBarActivity {
 				if(posttask.getStatus() == PostTask.Status.FINISHED)
 				{
 					Log.v("finished", "finished");
-					SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-					values.clear();
-					ids.clear();
-					images.clear();
-					for(int i = 0; i < cookbookList.size(); i++)
-					{
-						values.add(cookbookList.get(i).getName());
-						ids.add(cookbookList.get(i).getUniqueid());
-						images.add(cookbookList.get(i).getImage());
-					}
-					//If the list is under 6 then create empty rows to fill the layout of the app
-					if(cookbookList.size() < 6)
-					{
-						int num = 6 - cookbookList.size();
-						for(int a = 0; a < num; a++)
-						{
-							byte[] emptyarr = new byte[0];
-							values.add("");
-							ids.add("");
-							images.add(emptyarr);
-						}
-					}
+					updateCookbookList();
 					adapter.notifyDataSetChanged();
 				}
 				
@@ -165,6 +122,34 @@ public class CookbookListActivity extends ActionBarActivity {
 
 
 
+	}
+	
+	public static void updateCookbookList()
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		//Fill list adapter with cookbook names
+		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+		values = new ArrayList<String>();
+		ids = new ArrayList<String>();
+		images = new ArrayList<byte[]>();
+		for(int i = 0; i < cookbookList.size(); i++)
+		{
+			values.add(cookbookList.get(i).getName());
+			ids.add(cookbookList.get(i).getUniqueid());
+			images.add(cookbookList.get(i).getImage());
+		}
+		//If the list is under 6 then create empty rows to fill the layout of the app
+		if(cookbookList.size() < 6)
+		{
+			int num = 6 - cookbookList.size();
+			for(int a = 0; a < num; a++)
+			{
+				byte[] emptyarr = new byte[0];
+				values.add("");
+				ids.add("");
+				images.add(emptyarr);
+			}
+		}
 	}
 
 	@Override

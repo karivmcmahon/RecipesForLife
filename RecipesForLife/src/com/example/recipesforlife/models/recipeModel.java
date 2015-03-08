@@ -38,6 +38,7 @@ public class recipeModel extends baseDataSource {
 		this.context = context;
 		sync = new syncRecipeModel(context);
 		utils = new utility();
+		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
 	/**
@@ -46,7 +47,7 @@ public class recipeModel extends baseDataSource {
 	 * @param prepList
 	 * @param ingredList
 	 */
-	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList, imageBean image)
+	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList, imageBean image, boolean server)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -56,7 +57,14 @@ public class recipeModel extends baseDataSource {
 		recipeUpdateVals.put("prepTime", newRecipe.getPrep());
 		recipeUpdateVals.put("cookingTime", newRecipe.getCooking());
 		recipeUpdateVals.put("serves", newRecipe.getServes());
+		if(server == true)
+		{
+			recipeUpdateVals.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
+		}
+		else
+		{
 		recipeUpdateVals.put("changeTime", utils.getLastUpdated(false));
+		}
 		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] {newRecipe.getUniqueid()});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -174,11 +182,9 @@ public class recipeModel extends baseDataSource {
 	 */
 	public String insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList, imageBean img)
 	{
-		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		values = new ContentValues();
 		values.put("name", recipe.getName()); 
-		values.put("updateTime", utils.getLastUpdated(false)); 
 		values.put("changeTime", "2015-01-01 12:00:00.000");
 		values.put("description", recipe.getDesc()); 
 		values.put("prepTime", recipe.getPrep()); 
@@ -191,11 +197,13 @@ public class recipeModel extends baseDataSource {
 		{
 			uniqueid = recipe.getUniqueid();
 			values.put("uniqueid", uniqueid);
+			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
 		}
 		else
 		{
 			uniqueid = utils.generateUUID(recipe.getAddedBy(), "Recipe", database);
 			values.put("uniqueid", uniqueid);
+			values.put("updateTime", utils.getLastUpdated(false)); 
 		}
 		database.beginTransaction();
 		try

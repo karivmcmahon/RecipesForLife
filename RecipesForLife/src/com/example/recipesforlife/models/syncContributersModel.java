@@ -55,11 +55,11 @@ public class syncContributersModel extends baseDataSource {
 		Cursor cursor = null;
 		if(update == true)
 		{
-			cursor = database.rawQuery("SELECT * FROM Contributers WHERE datetime(changeTime) > datetime(?) AND datetime(?) > datetime(changeTime)", new String[] { sharedpreferences.getString("Contributers Update Server", "DEFAULT"), sharedpreferences.getString("Contributers Update", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Contributers WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Contributers Update", "DEFAULT")   });
 		}
 		else
 		{
-			cursor = database.rawQuery("SELECT * FROM Contributers WHERE datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Contributers Server", "DEFAULT"), sharedpreferences.getString("Contributers", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Contributers WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Contributers", "DEFAULT") });
 		}
 
 		if (cursor != null && cursor.getCount() > 0) {
@@ -236,7 +236,7 @@ public class syncContributersModel extends baseDataSource {
 				{
 					try
 					{
-						model.updateContributers(email, id, progress);
+						model.updateContributers(email, id, progress, true);
 					}
 					catch(SQLException e)
 					{
@@ -247,7 +247,7 @@ public class syncContributersModel extends baseDataSource {
 				{
 					try
 					{
-						model.insertContributers(email, id);
+						model.insertContributers(email, id, true);
 					}
 					catch(SQLException e)
 					{

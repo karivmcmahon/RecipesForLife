@@ -857,7 +857,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipeModel rm = new recipeModel(getApplicationContext());
 		try
 		{
-			rm.updateRecipe(recipechange, prepList, ingredList, imgBean );	
+			rm.updateRecipe(recipechange, prepList, ingredList, imgBean, false );	
 			final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.textviewdialog);
 			utils.setDialogText(R.id.textView, dialog, 18);
 			TextView txtView = (TextView) dialog.findViewById(R.id.textView);
@@ -886,18 +886,14 @@ public class RecipeEditActivity extends ActionBarActivity {
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
 				try {
-					Bitmap yourSelectedImage = decodeUri(selectedImage);
-					File f = new File(getRealPathFromURI(selectedImage));
+					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
+					File f = new File(utils.getRealPathFromURI(selectedImage));
 					String imageName = f.getName();
-
 					utils.setDialogTextString(R.id.recipeImagesEditText, imageDialog, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-					byte[] byteArray = stream.toByteArray(); 
-					
-					imgBean.setImage(byteArray);
-					
-					
+					byte[] byteArray = stream.toByteArray(); 		
+					imgBean.setImage(byteArray);			
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -908,45 +904,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 	}
 
-	public String getRealPathFromURI(Uri uri) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		@SuppressWarnings("deprecation")
-		Cursor cursor = managedQuery(uri, projection, null, null, null);
-		int column_index = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
-	}
-
-	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
-
-		// Decode image size
-		BitmapFactory.Options o = new BitmapFactory.Options();
-		o.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
-
-		// The new size we want to scale to
-		final int REQUIRED_SIZE = 140;
-
-		// Find the correct scale value. It should be the power of 2.
-		int width_tmp = o.outWidth, height_tmp = o.outHeight;
-		int scale = 1;
-		while (true) {
-			if (width_tmp / 2 < REQUIRED_SIZE
-					|| height_tmp / 2 < REQUIRED_SIZE) {
-				break;
-			}
-			width_tmp /= 2;
-			height_tmp /= 2;
-			scale *= 2;
-		}
-
-		// Decode with inSampleSize
-		BitmapFactory.Options o2 = new BitmapFactory.Options();
-		o2.inSampleSize = scale;
-		return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
-
-	}
+	
 
 	/**
 	 * Finds current available id's - found online

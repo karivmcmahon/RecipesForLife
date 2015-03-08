@@ -101,7 +101,7 @@ public class cookbookTestCase  extends AndroidTestCase {
 		cb.setChangeTime("2015-01-01 12:00:00");
 		cb.setPrivacy("public");
 		cb.setUniqueid("cookbookuniqueid1");
-		cookbookmodel.updateBook(cb);
+		cookbookmodel.updateBook(cb, false);
 		
 		ArrayList<cookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
 		Assert.assertEquals(cblist.get(0).getName(), "Fun Foods");
@@ -115,21 +115,21 @@ public class cookbookTestCase  extends AndroidTestCase {
 	
 	public void testInsertContribs()
 	{
-		cookbookmodel.insertContributers("beyonce@hotmail.co.uk", 1);
+		cookbookmodel.insertContributers("beyonce@hotmail.co.uk", 1, false);
 		ArrayList<String> contribs = cookbookmodel.selectCookbookContributers("cookbookuniqueid1", "added");
 		Assert.assertEquals(contribs.get(1), "beyonce@hotmail.co.uk");
 	}
 	
 	public void testSelectContribs()
 	{
-		cookbookmodel.insertContributers("kimk@aol.co.uk", 1);
+		cookbookmodel.insertContributers("kimk@aol.co.uk", 1, false);
 		ArrayList<String> contribs = cookbookmodel.selectCookbookContributers("cookbookuniqueid1", "added");
 		Assert.assertEquals(contribs.get(0), "kimk@aol.co.uk");
 	}
 	
 	public void testUpdateContribs()
 	{
-		cookbookmodel.updateContributers("kimk@aol.co.uk", 1, "deleted");
+		cookbookmodel.updateContributers("kimk@aol.co.uk", 1, "deleted", false);
 		ArrayList<String> contribs = cookbookmodel.selectCookbookContributers("cookbookuniqueid1", "deleted");
 		Assert.assertEquals(contribs.get(0), "kimk@aol.co.uk");
 	}

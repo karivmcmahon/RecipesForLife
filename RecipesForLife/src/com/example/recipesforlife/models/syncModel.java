@@ -49,7 +49,7 @@ public class syncModel extends baseDataSource
 		open();
 		ArrayList<userBean> userList = new ArrayList<userBean>();
 		Cursor cursor;
-		cursor = database.rawQuery("SELECT * FROM Users WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime)", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT")   });
+		cursor = database.rawQuery("SELECT * FROM Users WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Account Date", "DEFAULT")});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -72,7 +72,7 @@ public class syncModel extends baseDataSource
 		open();
 		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
 		Cursor cursor;
-		cursor = database.rawQuery("SELECT * FROM Account WHERE  datetime(updateTime) > datetime(?) AND datetime(?) > datetime(updateTime) ", new String[] { sharedpreferences.getString("Account Date Server", "DEFAULT"), sharedpreferences.getString("Account Date", "DEFAULT") });        
+		cursor = database.rawQuery("SELECT * FROM Account WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Account Date", "DEFAULT") });        
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -246,7 +246,7 @@ public class syncModel extends baseDataSource
 					accountModel accountmodel = new accountModel(context);
 					try
 					{
-						accountmodel.insertAccount(account, user);
+						accountmodel.insertAccount(account, user, true);
 					}
 					catch(SQLException e)
 					{

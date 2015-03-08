@@ -147,11 +147,11 @@ public class ContributerView {
 			boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 			if(contribExists == true)
 			{
-				model.updateContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, "added");
+				model.updateContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, "added", false);
 			}
 			else
 			{
-				model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
+				model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, false);
 			}
 			//Updates contributer list
 			ArrayList<String > contribslist = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");

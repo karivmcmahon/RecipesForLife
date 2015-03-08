@@ -183,33 +183,8 @@ public class EditCookbookView extends CookbookListActivity {
 			cb.setImage(byteArray);
 			try
 			{
-				model.updateBook(cb);
-
-				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-				ArrayList<cookbookBean >cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-				ArrayList<String> values = new ArrayList<String>();
-				ArrayList<String> ids = new ArrayList<String>();
-				ArrayList<byte[]> images = new ArrayList<byte[]>();
-				ccadapter.booknames.clear();
-				ccadapter.bookids.clear();
-				ccadapter.bookimages.clear();
-				for(int i = 0; i < cookbookList.size(); i++)
-				{
-					CookbookListActivity.values.add(cookbookList.get(i).getName());
-					CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
-					CookbookListActivity.images.add(cookbookList.get(i).getImage());
-				}
-				if(cookbookList.size() < 6)
-				{
-					int num = 6 - cookbookList.size();
-					for(int a = 0; a < num; a++)
-					{
-						byte[] emptyarr = new byte[0];
-						CookbookListActivity.values.add("");
-						CookbookListActivity.ids.add("");
-						CookbookListActivity.images.add(emptyarr);
-					}
-				}
+				model.updateBook(cb, false);
+				CookbookListActivity.updateCookbookList();
 				CookbookListActivity.adapter.notifyDataSetChanged();
 			}catch(SQLException e)
 			{
@@ -229,8 +204,8 @@ public class EditCookbookView extends CookbookListActivity {
 
 
 				try {
-					Bitmap yourSelectedImage = decodeUri(selectedImage);
-					File f = new File(getRealPathFromURI(selectedImage));
+					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
+					File f = new File(utils.getRealPathFromURI(selectedImage));
 
 					String imageName = f.getName();
 
@@ -249,45 +224,7 @@ public class EditCookbookView extends CookbookListActivity {
 
 	}
 
-	public String getRealPathFromURI(Uri uri) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		@SuppressWarnings("deprecation")
-		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
-		int column_index = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
-	}
-
-	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
-
-		// Decode image size
-		BitmapFactory.Options o = new BitmapFactory.Options();
-		o.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o);
-
-		// The new size we want to scale to
-		final int REQUIRED_SIZE = 140;
-
-		// Find the correct scale value. It should be the power of 2.
-		int width_tmp = o.outWidth, height_tmp = o.outHeight;
-		int scale = 1;
-		while (true) {
-			if (width_tmp / 2 < REQUIRED_SIZE
-					|| height_tmp / 2 < REQUIRED_SIZE) {
-				break;
-			}
-			width_tmp /= 2;
-			height_tmp /= 2;
-			scale *= 2;
-		}
-
-		// Decode with inSampleSize
-		BitmapFactory.Options o2 = new BitmapFactory.Options();
-		o2.inSampleSize = scale;
-		return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o2);
-
-	}
+	
 }
 
 
