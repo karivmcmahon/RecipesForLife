@@ -37,7 +37,7 @@ import com.example.recipesforlife.models.util;
  * @author Kari
  *
  */
-public class EditCookbookView extends CookbookListActivity {
+public class EditCookbookView  {
 
 	Context context;
 	Activity activity;
@@ -54,7 +54,7 @@ public class EditCookbookView extends CookbookListActivity {
 	String uid;
 	Spinner spinner;
 	private static final int SELECT_PHOTO = 101;
-
+	
 	public EditCookbookView(Context context, Activity activity, CustomCookbookListAdapter adapter, int position)
 	{
 		this.context = context;
@@ -184,9 +184,34 @@ public class EditCookbookView extends CookbookListActivity {
 			try
 			{
 				model.updateBook(cb, false);
-				CookbookListActivity.updateCookbookList();
+				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+				cookbookModel model = new cookbookModel(context);
+				ArrayList<cookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+				CookbookListActivity.values.clear();
+				CookbookListActivity.ids.clear();
+				CookbookListActivity.images.clear();
+				for(int i = 0; i < cookbookList.size(); i++)
+				{
+					CookbookListActivity.values.add(cookbookList.get(i).getName());
+					CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
+					CookbookListActivity.images.add(cookbookList.get(i).getImage());
+				}
+				//If the list is under 6 then create empty rows to fill the layout of the app
+				if(cookbookList.size() < 6)
+				{
+					int num = 6 - cookbookList.size();
+					for(int a = 0; a < num; a++)
+					{
+						byte[] emptyarr = new byte[0];
+						CookbookListActivity.values.add("");
+						CookbookListActivity.ids.add("");
+						CookbookListActivity.images.add(emptyarr);
+					}
+				}
 				CookbookListActivity.adapter.notifyDataSetChanged();
-			}catch(SQLException e)
+			}
+				
+			catch(SQLException e)
 			{
 				Toast.makeText(context, "Cookbook was not edited", Toast.LENGTH_LONG).show();
 			}

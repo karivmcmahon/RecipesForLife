@@ -85,12 +85,16 @@ public class CookbookListActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
+		
+		
 		model = new cookbookModel(getApplicationContext());
 		//Gets list of cookbooks and displays them
 		cookbookList = new ArrayList<cookbookBean>();
-		updateCookbookList();
+		updateCookbookList(false);
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
+		
+		
 
 
 	}
@@ -109,13 +113,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		mHandler.postDelayed(new Runnable() {
 			public void run() {
 				AsyncTask posttask = new PostTask(utils, getApplicationContext(), true).execute();
-				Log.v("finished",  "finished" +  posttask.getStatus());
-				if(posttask.getStatus() == PostTask.Status.FINISHED)
-				{
-					Log.v("finished", "finished");
-					updateCookbookList();
-					adapter.notifyDataSetChanged();
-				}
+				
 				
 			}
 		}, 3000);
@@ -124,7 +122,7 @@ public class CookbookListActivity extends ActionBarActivity {
 
 	}
 	
-	public static void updateCookbookList()
+	public static void updateCookbookList(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Fill list adapter with cookbook names
@@ -150,6 +148,7 @@ public class CookbookListActivity extends ActionBarActivity {
 				images.add(emptyarr);
 			}
 		}
+		
 	}
 
 	@Override
