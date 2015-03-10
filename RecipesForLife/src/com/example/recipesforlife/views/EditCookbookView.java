@@ -145,6 +145,7 @@ public class EditCookbookView  {
 				activity, R.layout.item, spinnerArray);
 		spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinneradapter);
+		 spinner.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		spinner.setSelection(utils.getIndex(spinner, cookbook.get(0).getPrivacy()));
 	}
 

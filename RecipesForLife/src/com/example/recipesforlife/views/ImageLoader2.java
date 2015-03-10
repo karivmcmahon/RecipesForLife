@@ -88,8 +88,10 @@ public class ImageLoader2 {
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-		// Decode bitmap with inSampleSize set
+		// Decode bitmap with inSampleSize se#
 		options.inJustDecodeBounds = false;
+		options.inPurgeable = true;
+		options.inInputShareable = true;
 		return BitmapFactory.decodeStream(imageStream, null, options);
 	}
 

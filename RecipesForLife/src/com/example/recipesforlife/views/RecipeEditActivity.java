@@ -726,6 +726,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			Spinner sItems = new Spinner(RecipeEditActivity.this);
+			 sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 			sItems.setAdapter(adapter);
 			sItems.setLayoutParams(params);
 

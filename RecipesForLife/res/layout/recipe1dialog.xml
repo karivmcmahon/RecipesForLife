@@ -60,8 +60,11 @@
 	            android:layout_below="@+id/recipenameEditText"
 	            android:layout_marginTop="22dp"
 	            android:ems="10"
-	            android:textSize="14dp" 
-	            android:textColor="#FFFFFF"/>
+	            android:textSize="14dp"
+	            
+	            android:theme="@android:style/Theme.Holo"
+	            
+	            />
         </LinearLayout>
         
          <LinearLayout

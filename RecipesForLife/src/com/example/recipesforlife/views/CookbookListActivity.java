@@ -94,6 +94,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
 		
+		//Log.v("Memory", "Memory " + getMemoryClass());
 		
 
 

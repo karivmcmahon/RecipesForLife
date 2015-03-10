@@ -123,6 +123,7 @@
 	         android:background="#FFFFFF"
 	         android:padding="2dp"
 	          android:textCursorDrawable="@drawable/cursor"
+	          android:hint="Write any additional notes about the ingredient or other units for ingredient here"
 	         />
 
        </LinearLayout>

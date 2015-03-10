@@ -193,7 +193,8 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		{
 		//If add button selected on action bar then display add recipe dialog
 		case R.id.action_bookadd:
-			add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid);
+			Intent intent = getIntent();
+			add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid, intent.getStringExtra("bookname"));
 			add.addRecipe();
 			result = true;
 		default:

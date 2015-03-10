@@ -32,7 +32,8 @@ public class TimePickerFragment extends DialogFragment
     
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-	    TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {		
+	 
+		TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {		
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {		
 				 hour = Integer.toString(hourOfDay);
@@ -45,8 +46,11 @@ public class TimePickerFragment extends DialogFragment
 	         Message m = new Message();
 	         m.setData(b);
 	         mHandler.sendMessage(m);
+	        
 		}
 	};
+
+	
 	// Create a new instance of TimePickerDialog and return
 	return new TimePickerDialog(getActivity(), listener, h,m,true);
 	}

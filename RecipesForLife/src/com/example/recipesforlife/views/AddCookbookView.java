@@ -144,6 +144,7 @@ public class AddCookbookView extends CookbookListActivity {
 				activity, R.layout.item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
+		 sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 	}
 

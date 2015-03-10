@@ -29,6 +29,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,6 +75,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	private static final int SELECT_PHOTO = 100;
 	String imageName = "";
 	byte[] array;
+	String bookname;
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -117,11 +120,12 @@ public class AddRecipeView extends RecipeListViewActivity {
 			edit.setText(hour + ":" + minute);
 		}
 	};
-	public AddRecipeView(Context context, ActionBarActivity activity, String uniqueid)
+	public AddRecipeView(Context context, ActionBarActivity activity, String uniqueid, String bookname)
 	{
 		this.context = context;
 		this.activity = activity;
 		this.uniqueid = uniqueid;
+		this.bookname = bookname;
 		utils = new util(context, activity);
 	}
 
@@ -166,8 +170,10 @@ public class AddRecipeView extends RecipeListViewActivity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
+		final Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		sItems.setAdapter(adapter);
+	    sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		sItems.setSelection(utils.getIndex(sItems, bookname));
 		nextButton = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog);
 	}
 
@@ -311,13 +317,14 @@ public class AddRecipeView extends RecipeListViewActivity {
 		spinnerArray.add("lb");
 		spinnerArray.add("ounces");
 		spinnerArray.add("pinch");
-		spinnerArray.add(" ");
+		spinnerArray.add("other");
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.item, spinnerArray);
 
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
+		 sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 		recipeIngredDialog.show();
 	}
