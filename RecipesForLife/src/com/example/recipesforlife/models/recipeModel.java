@@ -310,7 +310,7 @@ public class recipeModel extends baseDataSource {
 	 */
 	public void insertCookbookRecipe(String name, String addedBy)
 	{
-
+		Log.v("nammeme","name " + name + "addedBy " + addedBy);
 		ContentValues value = new ContentValues();
 		//cookbookModel model = new cookbookModel(context);
 		int id = selectCookbooksID(name, addedBy);
@@ -631,18 +631,18 @@ public class recipeModel extends baseDataSource {
 	public int selectCookbooksID(String name, String user)
 	{
 		int id = 0;
-		//	open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=? AND name=?", new String[] { user , name });
+		
+		Cursor cursor = database.rawQuery("SELECT Cookbook.id AS cid FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE Cookbook.name=? AND Cookbook.creator=? OR Cookbook.name=? AND Contributers.accountid=? GROUP BY uniqueid ", new String[] {name, user, name, user});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
-				id = cursor.getInt(getIndex("id",cursor));
-
+				id = cursor.getInt(getIndex("cid",cursor));
+				Log.v("id ", "id " + id);
 
 			}
 		}
 		cursor.close(); 
-		//close();
+		
 		return id;	
 	}
 

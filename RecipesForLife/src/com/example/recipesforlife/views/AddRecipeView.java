@@ -575,6 +575,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		recipe.setServes(serves);
 		recipe.setPrep(prep);
 		recipe.setRecipeBook(recipeBook);
+		Log.v("recipebook", "recipebook " + recipeBook);
 		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
 		imageBean imgBean = new imageBean();
 		imgBean.setImage(array);
@@ -604,6 +605,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 				try {
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
+					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
 					imageName = f.getName();					
 					utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();

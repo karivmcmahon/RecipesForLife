@@ -37,8 +37,8 @@
            android:textSize="14dp"
            android:layout_toRightOf="@+id/countryView"
            android:ems="10"
-           android:hint="Scotland"
            android:background="#FFFFFF"
+            android:textCursorDrawable="@drawable/cursor"
       >
        </EditText>
        
@@ -58,9 +58,11 @@
          android:layout_alignLeft="@+id/countryEdit"
          android:layout_alignTop="@+id/cityView"
          android:ems="10"
-         android:hint="Glasgow"
          android:textSize="14dp"
-         android:background="#FFFFFF" />
+         android:background="#FFFFFF"
+          android:textCursorDrawable="@drawable/cursor" >
+          <requestFocus />
+          </EditText>
 
      <EditText
          android:id="@+id/bioEditText"
@@ -69,9 +71,9 @@
          android:layout_alignLeft="@+id/countryEdit"
          android:layout_alignTop="@+id/bioView"
          android:ems="10"
-         android:hint="I love cooking italian"
          android:textSize="14dp"
          android:background="#FFFFFF"
+          android:textCursorDrawable="@drawable/cursor"
          />
      
       <TextView
@@ -92,9 +94,9 @@
          android:layout_below="@+id/bioView"
          android:layout_marginTop="22dp"
          android:ems="10"
-         android:hint="Home cook"
          android:textSize="14dp"
          android:background="#FFFFFF"
+          android:textCursorDrawable="@drawable/cursor"
 	/>
        <TextView
            android:id="@+id/interestView"

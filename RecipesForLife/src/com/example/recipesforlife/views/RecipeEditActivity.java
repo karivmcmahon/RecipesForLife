@@ -888,6 +888,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				try {
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
+					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
 					String imageName = f.getName();
 					utils.setDialogTextString(R.id.recipeImagesEditText, imageDialog, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();

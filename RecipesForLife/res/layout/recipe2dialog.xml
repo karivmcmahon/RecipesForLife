@@ -123,6 +123,7 @@
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
 	         android:inputType="number"
+	         android:textCursorDrawable="@drawable/cursor"
 	         
 	         />
        </LinearLayout>

@@ -32,6 +32,7 @@
 	         android:ems="10"
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
+	          android:textCursorDrawable="@drawable/cursor"
 	         />
        </LinearLayout>
        
@@ -52,12 +53,13 @@
 	         <EditText
 	             android:id="@+id/recipeDescEdit"
 	             android:layout_width="wrap_content"
-	             android:layout_height="wrap_content"
+	             android:layout_height="80dp"
 	            android:textSize="14dp"
 	             android:ems="10"
 	             android:inputType="textMultiLine"
 	             android:layout_marginTop="22dp"
-	             android:background="#FFFFFF">            
+	             android:background="#FFFFFF"
+	              android:textCursorDrawable="@drawable/cursor">            
 	         </EditText>
          </LinearLayout>
          

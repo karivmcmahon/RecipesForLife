@@ -181,7 +181,7 @@ public class AddCookbookView extends CookbookListActivity {
 			if(utils.getTextFromDialog(R.id.cookbookImageEditText, bookAddDialog).equals(""))
 			{
 				Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.books)).getBitmap();
-			    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			    byte[] array = stream.toByteArray();
 			    byteArray = array;
@@ -217,7 +217,7 @@ public class AddCookbookView extends CookbookListActivity {
 				try {
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
-
+					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
 					String imageName = f.getName();
 
 					utils.setDialogTextString(R.id.cookbookImageEditText, bookAddDialog, imageName);

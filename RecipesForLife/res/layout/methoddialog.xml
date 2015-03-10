@@ -40,6 +40,7 @@
 	         android:background="#FFFFFF"
 	         android:padding="2dp"
 	         android:inputType="number"
+	          android:textCursorDrawable="@drawable/cursor"
 	         />
 	       
 	       <TextView
@@ -64,6 +65,7 @@
 	         android:background="#FFFFFF"
 	         android:padding="2dp"
 	         android:inputType="textMultiLine"
+	          android:textCursorDrawable="@drawable/cursor"
 	         />
 	       </LinearLayout>
 	       

@@ -50,10 +50,10 @@
         android:layout_alignTop="@+id/passwordView"
         android:textSize="14dp"
         android:background="#FFFFFF"
-        android:hint="password"
         android:ems="10" 
-         android:inputType="textPassword" >
-
+        android:inputType="textPassword" 
+        android:textCursorDrawable="@drawable/cursor">
+		  
     </EditText>
 
     <EditText
@@ -64,9 +64,11 @@
         android:layout_toRightOf="@+id/passwordView"
         android:textSize="14dp"
        android:background="#FFFFFF"
-        android:hint="janedoe@aol.co.uk"
         android:ems="10"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textCursorDrawable="@drawable/cursor"
+        ><requestFocus /></EditText>
+         
 
     <Button
         android:id="@+id/button1"
@@ -77,6 +79,7 @@
         android:layout_centerHorizontal="true"
          android:layout_centerVertical="true"
         android:background="@drawable/button"
+        
         android:text="Sign In " />
 
     <TextView

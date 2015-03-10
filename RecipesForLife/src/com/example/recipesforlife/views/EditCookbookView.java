@@ -231,7 +231,7 @@ public class EditCookbookView  {
 				try {
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
-
+					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
 					String imageName = f.getName();
 
 					utils.setDialogTextString(R.id.cookbookImageEditText, editDialog, imageName);

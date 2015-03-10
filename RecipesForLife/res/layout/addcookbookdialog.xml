@@ -32,6 +32,7 @@
 	         android:layout_marginTop="22dp"
 	         android:ems="10"
 	         android:background="#FFFFFF"
+	         android:textCursorDrawable="@drawable/cursor"
 	         
 	         />
        </LinearLayout>
@@ -56,6 +57,7 @@
 	         android:layout_marginTop="22dp"
 	         android:ems="10"
 	         android:background="#FFFFFF"
+	         android:textCursorDrawable="@drawable/cursor"
 	         
 	         />
        </LinearLayout>
@@ -76,13 +78,15 @@
 	       <EditText
 	         android:id="@+id/cookbookImageEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
+	         android:layout_height="50dp"
 	         android:layout_toRightOf="@+id/recipeImagesView"
 	         android:layout_below="@+id/recipeAddView3"
 	         android:layout_marginTop="22dp"
 	         android:ems="10"
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
+	          android:hint="Press browse to select image"
+	          android:focusable="false"
 	         
 	         />
 	       

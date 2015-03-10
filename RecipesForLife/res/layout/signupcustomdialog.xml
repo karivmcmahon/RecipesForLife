@@ -58,9 +58,9 @@
            android:textSize="14dp"
            android:layout_toRightOf="@+id/passwordView"
            android:ems="10"
-           android:hint="password"
            android:background="#FFFFFF"
            android:inputType="textPassword" 
+            android:textCursorDrawable="@drawable/cursor"
             >
        </EditText>
        
@@ -83,19 +83,20 @@
            android:layout_alignTop="@+id/emailView"
            android:background="#FFFFFF"
            android:ems="10"
-           android:hint="jane@aol.co.uk"
-           android:inputType="textEmailAddress"/>
+           android:inputType="textEmailAddress"
+            android:textCursorDrawable="@drawable/cursor"/>
 
        <EditText
            android:id="@+id/nameEdit"
            android:layout_width="wrap_content"
            android:layout_height="30dp"
            android:textSize="14dp"
-           android:hint="Jane Doe"
            android:layout_alignRight="@+id/emailEdit"
            android:layout_alignTop="@+id/nameView"
            android:background="#FFFFFF"
            android:inputType="textPersonName"
-           android:ems="10" />
+           android:ems="10"
+            android:textCursorDrawable="@drawable/cursor" >
+            <requestFocus /></EditText>
  
 </RelativeLayout>

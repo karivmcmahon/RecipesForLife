@@ -52,7 +52,7 @@
       <ImageView
           android:id="@+id/foodImage"
           android:layout_width="fill_parent"
-          android:layout_height="150dp"
+          android:layout_height="400dp"
           android:layout_below="@+id/recipeDesc"
           android:scaleType="fitXY"
           android:layout_marginTop="44dp"

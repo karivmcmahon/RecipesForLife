@@ -74,15 +74,17 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-		Log.v("position", "Position " + booknames.get(position));
-		Log.v("position", "bi " + bookimages.size());
-		Log.v("position", "Position " + bookids.get(position));
+		
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Fill list adapter with cookbook names
 		String creator = model.creatorForCookbook(bookids.get(position));
 		if(creator.equals(sharedpreferences.getString(emailk, "")))
 		{
 			isCreator = true;
+		}
+		else
+		{
+			isCreator = false;
 		}
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
@@ -104,6 +106,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 			if(isCreator == false)
 			{
 				editButton.setVisibility(View.INVISIBLE);
+				Log.v("Invisible", "invisible");
 			}
 			else
 			{

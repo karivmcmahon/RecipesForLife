@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -21,7 +22,9 @@ import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
@@ -493,6 +496,36 @@ public class util  {
 		o2.inSampleSize = scale;
 		return BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(selectedImage), null, o2);
 
+	}
+	
+	public Bitmap rotateImage(Bitmap bitmap, String filePath)
+	{
+	    Bitmap resultBitmap = bitmap;
+
+	    try
+	    {
+	        ExifInterface exifInterface = new ExifInterface(filePath);
+	        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+	        Matrix matrix = new Matrix();
+
+	        if (orientation == 6) {
+                matrix.postRotate(90);
+            }
+            else if (orientation == 3) {
+                matrix.postRotate(180);
+            }
+            else if (orientation == 8) {
+                matrix.postRotate(270);
+            }
+
+	        // Rotate the bitmap
+	        resultBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+	    }
+	    catch (Exception exception)
+	    {
+	        Log.v("Could not rotate the image", "e");
+	    }
+	    return resultBitmap;
 	}
 
 
