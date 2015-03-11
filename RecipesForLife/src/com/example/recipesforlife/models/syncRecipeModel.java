@@ -92,7 +92,7 @@ public class syncRecipeModel extends baseDataSource {
 		rb.setServes(cursor.getString(getIndex("serves", cursor)));
 		rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
 		rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
-
+		rb.setProgress(cursor.getString(getIndex("progress", cursor)));
 		return rb;
 	}
 
@@ -238,6 +238,7 @@ public class syncRecipeModel extends baseDataSource {
 			String stringToStore = new String(Base64.encode(image.getImage(), Base64.DEFAULT));
 			recipe.put("image", stringToStore);
 			recipe.put("imageid", image.getUniqueid());
+			recipe.put("progress", recipeList.get(i).getProgress());
 
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray();
@@ -360,6 +361,7 @@ public class syncRecipeModel extends baseDataSource {
 				recipe.setPrep(json.getString("prepTime"));
 				recipe.setAddedBy(json.getString("addedBy"));
 				recipe.setUniqueid(json.getString("uniqueid"));
+				recipe.setProgress(json.getString("progress"));
 				imageBean imgbean = new imageBean();
 				if(json.optString("image").equals(""))
 				{

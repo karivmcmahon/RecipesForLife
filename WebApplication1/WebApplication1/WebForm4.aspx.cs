@@ -69,6 +69,7 @@ namespace WebApplication1
 				recipe.cookingTime = (string)recipeReader["cookingTime"];
 				recipe.addedBy = (string)recipeReader["addedBy"];
 				recipe.uniqueid = (string)recipeReader["uniqueid"];
+				recipe.progress = (string)recipeReader["progress"];
 				recipe.serves = (Int32)recipeReader["serves"];
 				selectPrep(recipe.Preperation, recipe);
 				selectIngredient(recipe.Ingredient, recipe);
@@ -180,6 +181,7 @@ namespace WebApplication1
 			public string cookingid { get; set; }
 			public string image { get; set; }
 			public string imageid { get; set; }
+			public string progress { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 			

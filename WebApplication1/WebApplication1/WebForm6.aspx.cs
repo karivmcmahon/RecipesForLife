@@ -60,6 +60,7 @@ namespace WebApplication1
 				recipe.addedBy = (string)reader["addedBy"];
 				recipe.uniqueid = (string)reader["uniqueid"];
 				recipe.serves = (Int32)reader["serves"];
+				recipe.progress = (string)reader["progress"];
 				recipes.Recipe.Add(recipe); 
 				selectPrep(recipe, recipe.Preperation);
 				selectIngred(recipe, recipe.Ingredient);
@@ -147,6 +148,7 @@ namespace WebApplication1
 			public string imageid { get; set; }
 			public Int32 id { get; set; }
 			public string uniqueid { get; set; }
+			public string progress { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 			//  public List<Ingredient> Ingredient { get; set; }

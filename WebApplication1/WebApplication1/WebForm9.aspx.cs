@@ -27,12 +27,13 @@ namespace WebApplication1
 				for (int i = 0; i < cookbook.Count(); i++)
 				{
 					SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-					SqlCommand updateCookbook = new SqlCommand("UPDATE Cookbook SET name=@name, description=@description, privacyOption=@privacyOption, changeTime=@changeTime, image=@image WHERE uniqueid=@uniqueid", connection);
+					SqlCommand updateCookbook = new SqlCommand("UPDATE Cookbook SET name=@name, description=@description, privacyOption=@privacyOption, changeTime=@changeTime, image=@image,progress=@progress WHERE uniqueid=@uniqueid", connection);
 					updateCookbook.Parameters.AddWithValue("@name", cookbook[i].name);
 					updateCookbook.Parameters.AddWithValue("@description", cookbook[i].description);
 					updateCookbook.Parameters.AddWithValue("@privacyOption", cookbook[i].privacyOption);
 					updateCookbook.Parameters.AddWithValue("@changeTime", cookbook[i].changeTime);
 					updateCookbook.Parameters.AddWithValue("@uniqueid", cookbook[i].uniqueid);
+					updateCookbook.Parameters.AddWithValue("@progress", cookbook[i].progress);
 					byte[] image  = null;
 					if(cookbook[i].image != "")
 					{
@@ -73,6 +74,7 @@ namespace WebApplication1
 			public string changeTime { get; set; }
 			public string uniqueid { get; set; }
 			public string image { get; set; }
+			public string progress { get; set; }
 
 		}
 	}

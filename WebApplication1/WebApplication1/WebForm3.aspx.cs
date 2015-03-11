@@ -54,7 +54,7 @@ namespace WebApplication1
 		{
 			connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-			SqlCommand insertRecipe = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid)", connn);
+			SqlCommand insertRecipe = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid, progress) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid, @progress)", connn);
 			insertRecipe.Parameters.AddWithValue("@name", recipe[i].name);
 			insertRecipe.Parameters.AddWithValue("@description", recipe[i].description);
 			insertRecipe.Parameters.AddWithValue("@serves", recipe[i].serves);
@@ -64,6 +64,7 @@ namespace WebApplication1
 			insertRecipe.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 			insertRecipe.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 			insertRecipe.Parameters.AddWithValue("@uniqueid", recipe[i].uniqueid);
+			insertRecipe.Parameters.AddWithValue("@progress", recipe[i].progress);
 			connn.Open();
 			connn2.Open();
 			try
@@ -333,6 +334,7 @@ namespace WebApplication1
 			public string cookbookid {get; set; }
 			public string image { get; set; }
 			public string imageid {get; set;}
+			public string progress { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 		}

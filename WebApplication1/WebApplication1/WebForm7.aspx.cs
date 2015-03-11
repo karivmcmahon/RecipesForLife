@@ -26,7 +26,7 @@ namespace WebApplication1
 					for (int i = 0; i < cookbook.Count(); i++)
 					{
 						SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-						SqlCommand insertCookbook = new SqlCommand("INSERT INTO Cookbook(name,description,creator,updateTime,changeTime,uniqueid, privacyOption, image) VALUES (@name, @description, @creator, @updateTime, @changeTime, @uniqueid, @privacyOption, @image)", connection);
+						SqlCommand insertCookbook = new SqlCommand("INSERT INTO Cookbook(name,description,creator,updateTime,changeTime,uniqueid, privacyOption, image, progress) VALUES (@name, @description, @creator, @updateTime, @changeTime, @uniqueid, @privacyOption, @image, @progress)", connection);
 						insertCookbook.Parameters.AddWithValue("@name", cookbook[i].name);
 						insertCookbook.Parameters.AddWithValue("@description", cookbook[i].description);
 						insertCookbook.Parameters.AddWithValue("@creator", cookbook[i].creator);
@@ -34,6 +34,7 @@ namespace WebApplication1
 						insertCookbook.Parameters.AddWithValue("@changeTime", cookbook[i].changeTime);
 						insertCookbook.Parameters.AddWithValue("@uniqueid", cookbook[i].uniqueid);
 						insertCookbook.Parameters.AddWithValue("@privacyOption", cookbook[i].privacyOption);
+						insertCookbook.Parameters.AddWithValue("@progress", cookbook[i].progress);
 						byte[] image  = null;
 						if(cookbook[i].image != "")
 						{
@@ -72,6 +73,7 @@ namespace WebApplication1
 			public string changeTime { get; set; }
 			public string uniqueid { get; set; }
 			public string image { get; set; }
+			public string progress { get; set; }
 
 		}
 		

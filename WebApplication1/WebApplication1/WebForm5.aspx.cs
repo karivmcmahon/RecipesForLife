@@ -43,7 +43,7 @@ namespace WebApplication1
 		public void updateRecipe(int i)
 		{
 			connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-			SqlCommand updateRecipe = new SqlCommand("UPDATE Recipe SET name=@name, description=@description, serves=@serves, prepTime=@prepTime, cookingTime=@cookingTime, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
+			SqlCommand updateRecipe = new SqlCommand("UPDATE Recipe SET name=@name, description=@description, serves=@serves, prepTime=@prepTime, cookingTime=@cookingTime, changeTime=@changeTime, progress=@progress WHERE uniqueid=@uniqueid", connection);
 			updateRecipe.Parameters.AddWithValue("@name", recipe[i].name);
 			updateRecipe.Parameters.AddWithValue("@description", recipe[i].description);
 			updateRecipe.Parameters.AddWithValue("@serves", recipe[i].serves);
@@ -51,6 +51,7 @@ namespace WebApplication1
 			updateRecipe.Parameters.AddWithValue("@cookingTime", recipe[i].cookingTime);
 			updateRecipe.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 			updateRecipe.Parameters.AddWithValue("@uniqueid", recipe[i].uniqueid);
+			updateRecipe.Parameters.AddWithValue("@progress", recipe[i].progress);
 
 			connection.Open();
 			try
@@ -211,6 +212,7 @@ namespace WebApplication1
 			public string uniqueid { get; set; }
 			public string image { get; set; }
 			public string imageid { get; set; }
+			public string progress { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 		}
