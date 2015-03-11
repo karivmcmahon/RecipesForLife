@@ -182,6 +182,7 @@ public class EditCookbookView  {
 			cb.setPrivacy(spinner.getSelectedItem().toString());
 			cb.setUniqueid(uid);
 			cb.setImage(byteArray);
+			cb.setProgress("added");
 			try
 			{
 				model.updateBook(cb, false);

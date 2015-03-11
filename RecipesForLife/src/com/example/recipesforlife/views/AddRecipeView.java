@@ -569,7 +569,6 @@ public class AddRecipeView extends RecipeListViewActivity {
 		recipe.setServes(serves);
 		recipe.setPrep(prep);
 		recipe.setRecipeBook(recipeBook);
-		Log.v("recipebook", "recipebook " + recipeBook);
 		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
 		imageBean imgBean = new imageBean();
 		imgBean.setImage(array);

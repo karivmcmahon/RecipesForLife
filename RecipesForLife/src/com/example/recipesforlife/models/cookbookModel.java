@@ -54,6 +54,7 @@ public class cookbookModel extends baseDataSource {
 		values.put("privacyOption", book.getPrivacy()); 
 		values.put("description", book.getDescription());
 		values.put("image", book.getImage());
+		values.put("progress", "added");
 		String uid = "";
 		if(server == true)
 		{
@@ -98,6 +99,7 @@ public class cookbookModel extends baseDataSource {
 		updateVals.put("name", cookbook.getName());
 		updateVals.put("description", cookbook.getDescription());
 		updateVals.put("privacyOption", cookbook.getPrivacy());
+		updateVals.put("progress", cookbook.getProgress());
 		if(server == true)
 		{
 			updateVals.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
@@ -264,7 +266,7 @@ public class cookbookModel extends baseDataSource {
 
 		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE creator=? OR Contributers.accountid=? GROUP BY uniqueid ", new String[] { user, user });
+		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE creator=? AND Cookbook.progress=? OR Contributers.accountid=? AND Cookbook.progress=?  GROUP BY uniqueid ", new String[] { user, "added", user, "added"});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -419,7 +421,7 @@ public class cookbookModel extends baseDataSource {
 	{
 		open();
 		ArrayList<recipeBean> names = new ArrayList<recipeBean>();
-		Cursor cursor = database.rawQuery("SELECT Recipe.id AS recipeid, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id ", new String[] { uniqueid });
+		Cursor cursor = database.rawQuery("SELECT Recipe.id AS recipeid, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id AND Recipe.progress=?", new String[] { uniqueid, "added" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -448,6 +450,7 @@ public class cookbookModel extends baseDataSource {
 		cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
 		cb.setImage(cursor.getBlob(getIndex("image", cursor)));
+		cb.setProgress(cursor.getString(getIndex("progress",cursor)));
 		return cb;
 	}
 
@@ -497,7 +500,7 @@ public class cookbookModel extends baseDataSource {
 	{
 		int id = 0;
 		open();
-		Cursor cursor = database.rawQuery("SELECT Cookbook.id AS cid FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE Cookbook.name=? AND Cookbook.creator=? OR Cookbook.name=? AND Contributers.accountid=? GROUP BY uniqueid ", new String[] {name, user, name, user});
+		Cursor cursor = database.rawQuery("SELECT Cookbook.id AS cid FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE Cookbook.name=? AND Cookbook.creator=? AND Cookbook.progress=? OR Cookbook.name=? AND Contributers.accountid=?  AND Cookbook.progress=? GROUP BY uniqueid ", new String[] {name, user, "added", name, user, "added"});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

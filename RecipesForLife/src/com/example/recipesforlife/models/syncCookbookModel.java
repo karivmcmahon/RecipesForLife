@@ -84,6 +84,7 @@ public class syncCookbookModel extends baseDataSource {
 		cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
 		cb.setImage(cursor.getBlob(getIndex("image", cursor)));
+		cb.setProgress(cursor.getString(getIndex("progress", cursor)));
 		return cb;
 	}
 
@@ -106,6 +107,7 @@ public class syncCookbookModel extends baseDataSource {
 			book.put("changeTime", bookList.get(i).getChangeTime());
 			book.put("uniqueid", bookList.get(i).getUniqueid());	
 			book.put("privacyOption", bookList.get(i).getPrivacy());
+			book.put("progress", bookList.get(i).getProgress());
 			String image64 = new String(Base64.encode(bookList.get(i).getImage(), Base64.DEFAULT));
 			book.put("image", image64);
 			jsonArray.put(book);			
@@ -230,6 +232,7 @@ public class syncCookbookModel extends baseDataSource {
 				book.setUniqueid(json.getString("uniqueid"));
 				book.setCreator(json.getString("creator"));
 				book.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
+				book.setProgress(json.getString("progress"));
 				cookbookModel model = new cookbookModel(context);
 				if(update == true)
 				{

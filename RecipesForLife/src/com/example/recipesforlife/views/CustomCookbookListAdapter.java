@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.util.Base64;
 import android.util.Log;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
@@ -166,6 +168,57 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 			{
 				delButton.setVisibility(View.INVISIBLE);
 			}
+			delButton.setOnTouchListener(new OnTouchListener(){
+
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+					// TODO Auto-generated method stub
+					final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
+					utils.setDialogText(R.id.textView, dialog, 18);
+					TextView tv = (TextView) dialog.findViewById(R.id.textView);
+					tv.setText("Would you like to delete this cookbook ?");
+					// Show dialog
+					dialog.show();
+					
+					//Deletes users and dismiss dialog
+					Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+					yesButton.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							cookbookModel model = new cookbookModel(context);
+							ArrayList<cookbookBean> cbBean = model.selectCookbook(bookids.get(position));
+							cbBean.get(0).setProgress("deleted");
+							try
+							{
+							model.updateBook( cbBean.get(0), false);
+							booknames.remove(position);
+							bookids.remove(position);
+							bookimages.remove(position);
+							notifyDataSetChanged();
+							}
+							catch(SQLiteException e)
+							{
+								Toast.makeText(context, "Cookbook was not deleted", Toast.LENGTH_LONG).show();
+							}
+							dialog.dismiss();
+						}
+					});
+					
+					//If user selects no - dismiss dialog
+					Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+					noButton.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View arg0) {
+							dialog.dismiss();
+						}
+					});
+					}
+					return false;
+				}});
 		}
 		return rowView;
 	}

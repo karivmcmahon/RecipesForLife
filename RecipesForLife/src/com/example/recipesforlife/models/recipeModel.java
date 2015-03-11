@@ -60,6 +60,7 @@ public class recipeModel extends baseDataSource {
 		recipeUpdateVals.put("prepTime", newRecipe.getPrep());
 		recipeUpdateVals.put("cookingTime", newRecipe.getCooking());
 		recipeUpdateVals.put("serves", newRecipe.getServes());
+		recipeUpdateVals.put("progress", newRecipe.getProgress());
 		if(server == true)
 		{
 			recipeUpdateVals.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
@@ -198,6 +199,7 @@ public class recipeModel extends baseDataSource {
 		values.put("totalTime", "4:00:00");    
 		values.put("serves", recipe.getServes()); 
 		values.put("addedBy", recipe.getAddedBy()); 
+		values.put("progress", "added");
 		String uniqueid = "";
 		if(server == true)
 		{
@@ -476,7 +478,7 @@ public class recipeModel extends baseDataSource {
 	{		
 		open();
 
-		Cursor cursor = database.rawQuery("SELECT  Recipe.name AS recipename FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id AND Recipe.name = ?", new String[] { uniqueid, name });
+		Cursor cursor = database.rawQuery("SELECT  Recipe.name AS recipename FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id AND Recipe.name = ? AND Recipe.progress=?", new String[] { uniqueid, name, "added" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -504,6 +506,7 @@ public class recipeModel extends baseDataSource {
 		rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
 		rb.setId(cursor.getInt(getIndex("id",cursor))); 
 		rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
+		rb.setProgress(cursor.getString(getIndex("progress", cursor)));
 		return rb;
 	}
 

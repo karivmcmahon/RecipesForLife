@@ -850,6 +850,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipechange.setPrep(utils.getTextView(R.id.prepTimeVal));
 		recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
 		recipechange.setUniqueid(recipe.getUniqueid());
+		recipechange.setProgress("added");
 		recipeModel rm = new recipeModel(getApplicationContext());
 		try
 		{

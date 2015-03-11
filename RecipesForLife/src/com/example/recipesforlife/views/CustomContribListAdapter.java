@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.cookbookModel;
@@ -94,9 +97,16 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 							public void onClick(View arg0) {
 								cookbookModel model = new cookbookModel(context);
 								int id = model.selectCookbooksIDByUnique(cookbookuid);
+								try
+								{
 								model.updateContributers( users.get(position), id, "deleted", false);
 								users.remove(position);
 								notifyDataSetChanged();
+								}
+								catch(SQLiteException e)
+								{
+									Toast.makeText(context, "Contributer could not be added", Toast.LENGTH_LONG).show();
+								}
 								dialog.dismiss(); 
 							}
 						});

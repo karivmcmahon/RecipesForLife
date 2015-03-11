@@ -12,7 +12,14 @@ public class cookbookBean {
 	String creator;
 	String uniqueid;
 	byte[] image;
-
+	String progress;
+	
+	public String getProgress() {
+		return progress;
+	}
+	public void setProgress(String progress) {
+		this.progress = progress;
+	}
 	public byte[] getImage() {
 		return image;
 	}

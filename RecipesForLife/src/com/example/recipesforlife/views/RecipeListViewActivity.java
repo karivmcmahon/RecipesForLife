@@ -92,7 +92,6 @@ public class RecipeListViewActivity extends ActionBarActivity {
 				recipenames.add("");
 				recipeids.add("");
 				recipeimages.add(arr);
-				Log.v("add","add");
 			}
 		}
 		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids, recipeimages);
