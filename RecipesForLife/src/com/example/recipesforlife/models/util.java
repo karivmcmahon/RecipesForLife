@@ -442,7 +442,7 @@ public class util  {
 	 * Gets spinner index  - found online http://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position
 	 * @param spinner
 	 * @param myString
-	 * @return
+	 * @return int - the index
 	 */
 	public int getIndex(Spinner spinner, String myString)
 	{
@@ -458,6 +458,11 @@ public class util  {
 		return index;
 	} 
 
+	/**
+	 * Gets image path
+	 * @param uri
+	 * @return String
+	 */
 	public String getRealPathFromURI(Uri uri) {
 		String[] projection = { MediaStore.Images.Media.DATA };
 		@SuppressWarnings("deprecation")
@@ -468,6 +473,12 @@ public class util  {
 		return cursor.getString(column_index);
 	}
 
+	/**
+	 * Decodes image and finds the correct scale value for sample size
+	 * @param selectedImage
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
 
 		// Decode image size
@@ -498,6 +509,12 @@ public class util  {
 
 	}
 	
+	/**
+	 * Rotates image based on ExifInterface - particularly useful for camera photos
+	 * @param bitmap
+	 * @param filePath
+	 * @return Bitmap
+	 */
 	public Bitmap rotateImage(Bitmap bitmap, String filePath)
 	{
 	    Bitmap resultBitmap = bitmap;
@@ -523,7 +540,7 @@ public class util  {
 	    }
 	    catch (Exception exception)
 	    {
-	        Log.v("Could not rotate the image", "e");
+	        Log.v("Could not rotate the image", "Could not rotate image " + exception);
 	    }
 	    return resultBitmap;
 	}

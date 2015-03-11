@@ -93,11 +93,6 @@ public class CookbookListActivity extends ActionBarActivity {
 		updateCookbookList(false);
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
-		
-		//Log.v("Memory", "Memory " + getMemoryClass());
-		
-
-
 	}
 
 	@Override
@@ -113,9 +108,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		//Sync for apps to be done in background on resume
 		mHandler.postDelayed(new Runnable() {
 			public void run() {
-				AsyncTask posttask = new PostTask(utils, getApplicationContext(), true).execute();
-				
-				
+				AsyncTask posttask = new PostTask(utils, getApplicationContext(), true).execute();	
 			}
 		}, 3000);
 
@@ -123,6 +116,10 @@ public class CookbookListActivity extends ActionBarActivity {
 
 	}
 	
+	/**
+	 * Updates the cookbook list - called when data has changed in database
+	 * @param update
+	 */
 	public static void updateCookbookList(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -188,6 +185,9 @@ public class CookbookListActivity extends ActionBarActivity {
 	}
 
 	@Override
+	/**
+	 * Retrieves activity result - calls appropriate method based on result code
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
 		if(requestCode == 100)

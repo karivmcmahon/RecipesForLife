@@ -45,7 +45,7 @@ public class cookbookModel extends baseDataSource {
 	 */
 	public String insertBook(cookbookBean book, boolean server)
 	{
-		
+
 		open();
 		ContentValues values = new ContentValues();
 		values.put("name", book.getName()); 
@@ -92,7 +92,7 @@ public class cookbookModel extends baseDataSource {
 	 */
 	public void updateBook(cookbookBean cookbook, boolean server)
 	{
-		
+
 		open();
 		ContentValues updateVals = new ContentValues();
 		updateVals.put("name", cookbook.getName());
@@ -164,11 +164,13 @@ public class cookbookModel extends baseDataSource {
 
 
 	}
-	
+
 	/**
-	 * Insert contributers into the database where we know the contributers name and cookbook id
+	 * Updates contributers in the database where we know the contributers name and cookbook id
 	 * @param email
 	 * @param cookbookid
+	 * @param progress - what progress stage is contributer at - addedd,deleted
+	 * @param server - is it being updated from server or app - will affect timestamp
 	 */
 	public void updateContributers(String email, int cookbookid, String progress, boolean server)
 	{
@@ -205,21 +207,11 @@ public class cookbookModel extends baseDataSource {
 
 	}
 
-	/**
-	 * Delete contributers from the database based on cookbook id and account id 
-	 * @param id
-	 * @param user
-	 */
-/**	public void  deleteContributers(int id, String user)
-	{		
-		open();
-		database.delete("Contributers","cookbookid=? AND accountid=?", new String[] { Integer.toString(id), user }); 
-		close();        
-	} **/
+
 
 	/**
 	 * Select contributers for a specific cookbook
-	 * @param uniqueid
+	 * @param uniqueid - coobooks unique id
 	 * @return ArrayList<String> of contributers emails
 	 */
 	public ArrayList<String> selectCookbookContributers(String uniqueid, String progress)
@@ -232,15 +224,13 @@ public class cookbookModel extends baseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				names.add(cursor.getString(getIndex("accountid",cursor)));
-
-
 			}
 		}
 		cursor.close();
 		close();
 		return names;	
 	}
-	
+
 	/**
 	 * Check if contributer exists where email and cookbookid matches
 	 * @param email
@@ -253,7 +243,7 @@ public class cookbookModel extends baseDataSource {
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM  Contributers  WHERE cookbookid=? AND accountid=?", new String[] { Integer.toString(id) , email});
 		if (cursor != null && cursor.getCount() > 0) {
-		 exists = true;
+			exists = true;
 		}
 		else
 		{
@@ -287,7 +277,7 @@ public class cookbookModel extends baseDataSource {
 	}
 
 	/**
-	 * Select cookbooks where the user is a crearoe
+	 * Select cookbooks where the user is a creator
 	 * @param user
 	 * @return ArrayList<cookbookBean> - List of cookbooks
 	 */
@@ -307,9 +297,9 @@ public class cookbookModel extends baseDataSource {
 		close();
 		return cbList;	
 	}
-	
+
 	/**
-	 * Select cookbooks where the user is a crearoe
+	 * Select creator from a specific cookbook
 	 * @param user
 	 * @return ArrayList<cookbookBean> - List of cookbooks
 	 */
@@ -475,6 +465,11 @@ public class cookbookModel extends baseDataSource {
 	}
 
 
+	/**
+	 * Select images based on recipe id
+	 * @param id
+	 * @return
+	 */
 	public imageBean selectImage(int id)
 	{
 		imageBean img = new imageBean();
@@ -493,7 +488,7 @@ public class cookbookModel extends baseDataSource {
 	}
 
 	/**
-	 * Select cookbooks id based on creator and name of the book
+	 * Select cookbooks id based on creator or contribs of book the and name of the book
 	 * @param name
 	 * @param user
 	 * @return int - the id
@@ -507,15 +502,13 @@ public class cookbookModel extends baseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				id = cursor.getInt(getIndex("cid",cursor));
-				Log.v("id ", "id " + id);
-
 			}
 		}
 		cursor.close(); 
 		close();
 		return id;	
 	}
-	
+
 	/**
 	 * Select uniqueid for a cookbook where the cookbook is at a rowid
 	 * @param rowid
@@ -530,8 +523,6 @@ public class cookbookModel extends baseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				id = cursor.getString(getIndex("uniqueid",cursor));
-
-
 			}
 		}
 		cursor.close(); 

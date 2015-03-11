@@ -55,19 +55,13 @@ public class syncCookbookModel extends baseDataSource {
 			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Cookbook Update", "DEFAULT")  });
 		}
 		else
-		{
-		
-		    cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Cookbook", "DEFAULT") });
-			Log.v("date ", "date " + sharedpreferences.getString("Cookbook", "DEFAULT"));
-			Log.v("date ", "count " + cursor.getCount());
+		{	
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Cookbook", "DEFAULT") });
 		}
 		if (cursor != null && cursor.getCount() > 0) {
-			Log.v("iterate", "iterate2");
 			for (int i = 0; i < cursor.getCount(); i++) {
-				Log.v("iterate", "iterate");
 				cursor.moveToPosition(i);
 				cbList.add(cursorToCookbook(cursor));
-				Log.v("iterate", "iterate");
 			}
 		}
 		cursor.close();
@@ -102,7 +96,6 @@ public class syncCookbookModel extends baseDataSource {
 	{
 		ArrayList<cookbookBean> bookList = getCookbook(update);
 		JSONArray jsonArray = new JSONArray();
-		Log.v("book ", "book " + bookList.size());
 		for(int i = 0; i < bookList.size(); i++)
 		{
 			JSONObject book = new JSONObject();		
@@ -113,7 +106,6 @@ public class syncCookbookModel extends baseDataSource {
 			book.put("changeTime", bookList.get(i).getChangeTime());
 			book.put("uniqueid", bookList.get(i).getUniqueid());	
 			book.put("privacyOption", bookList.get(i).getPrivacy());
-			//byte[] zero = new byte[0];
 			String image64 = new String(Base64.encode(bookList.get(i).getImage(), Base64.DEFAULT));
 			book.put("image", image64);
 			jsonArray.put(book);			
@@ -215,7 +207,7 @@ public class syncCookbookModel extends baseDataSource {
 				{
 					throw new ClientProtocolException("Exception cookbooks error");
 				}
-				
+
 
 			} 
 			catch (ClientProtocolException e) 

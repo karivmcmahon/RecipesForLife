@@ -37,7 +37,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	Context context;
 	util utils;
 	ImageLoader2 imgload;
-	
+
 	public CustomRecipeListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages)
 	{
 		super(context, R.layout.recipelistsingle, recipenames);
@@ -52,7 +52,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		utils = new util(this.context, activity);
 
 	}
-	
+
 	@Override
 	/**
 	 * Adapts list data 
@@ -61,7 +61,6 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
-		Log.v("size", "size " + recipenames.size());
 		//Shows empty row for layout reasons or a recipe based on the string
 		if(recipenames.get(position).toString().equals(""))
 		{
@@ -70,47 +69,46 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		else
 		{
 
-		 rowView= inflater.inflate(R.layout.recipelistsingle, null, true);
-		TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
-		txtTitle.setText(recipenames.get(position));
-		utils.setRowText(R.id.myImageViewText, rowView, 22);
-		//If recipe selected view the recipe
-		ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
-		Log.v("on refresh", "On refresh");
-		imgload.DisplayImage(recipeImage, recipeimages.get(position), Base64.encodeToString(recipeimages.get(position), Base64.DEFAULT) + recipeids.get(position));
-		recipeImage.setOnTouchListener(new OnTouchListener() {
+			rowView= inflater.inflate(R.layout.recipelistsingle, null, true);
+			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
+			txtTitle.setText(recipenames.get(position));
+			utils.setRowText(R.id.myImageViewText, rowView, 22);
+			//If recipe selected view the recipe
+			ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
+			imgload.DisplayImage(recipeImage, recipeimages.get(position), Base64.encodeToString(recipeimages.get(position), Base64.DEFAULT) + recipeids.get(position));
+			recipeImage.setOnTouchListener(new OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-				// TODO Auto-generated method stub
-					Intent i = new Intent(activity, RecipeViewActivity.class);
-					i.putExtra("uniqueidr", recipeids.get(position));
-					i.putExtra("name", recipenames.get(position));
-					activity.startActivity(i);
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+						// TODO Auto-generated method stub
+						Intent i = new Intent(activity, RecipeViewActivity.class);
+						i.putExtra("uniqueidr", recipeids.get(position));
+						i.putExtra("name", recipenames.get(position));
+						activity.startActivity(i);
+					}
+					return false;
 				}
-				return false;
-			}
-			
-		});
-		//If edit button selected, then take the user to edit recipe page
-		ImageView editRecipeImage = (ImageView) rowView.findViewById(R.id.editView);
-		editRecipeImage.setOnTouchListener(new OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) 
-				{
-					Intent i = new Intent(activity, RecipeEditActivity.class);
-					i.putExtra("uniqueidr", recipeids.get(position));
-					i.putExtra("name", recipenames.get(position));
-					activity.startActivity(i);
+			});
+			//If edit button selected, then take the user to edit recipe page
+			ImageView editRecipeImage = (ImageView) rowView.findViewById(R.id.editView);
+			editRecipeImage.setOnTouchListener(new OnTouchListener() {
+
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN) 
+					{
+						Intent i = new Intent(activity, RecipeEditActivity.class);
+						i.putExtra("uniqueidr", recipeids.get(position));
+						i.putExtra("name", recipenames.get(position));
+						activity.startActivity(i);
+					}
+					return false;
 				}
-				return false;
-			}
-			
-		});
+
+			});
 		}
 		return rowView;		
 	}

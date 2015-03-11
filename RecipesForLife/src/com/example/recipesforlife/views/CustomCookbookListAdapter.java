@@ -76,7 +76,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	{
 		
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		//Fill list adapter with cookbook names
+		//Gets cookbook creator and checks if their creator - determines what images are shown
 		String creator = model.creatorForCookbook(bookids.get(position));
 		if(creator.equals(sharedpreferences.getString(emailk, "")))
 		{
@@ -106,7 +106,6 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 			if(isCreator == false)
 			{
 				editButton.setVisibility(View.INVISIBLE);
-				Log.v("Invisible", "invisible");
 			}
 			else
 			{

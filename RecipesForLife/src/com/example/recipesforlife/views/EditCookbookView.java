@@ -185,6 +185,8 @@ public class EditCookbookView  {
 			try
 			{
 				model.updateBook(cb, false);
+				
+				//updates list after book update
 				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 				cookbookModel model = new cookbookModel(context);
 				ArrayList<cookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
@@ -220,6 +222,12 @@ public class EditCookbookView  {
 		}
 	}
 
+	/**
+	 * Recieve result from intent
+	 * @param requestCode
+	 * @param resultCode
+	 * @param imageReturnedIntent
+	 */
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 
@@ -227,14 +235,13 @@ public class EditCookbookView  {
 		case SELECT_PHOTO:
 			if(resultCode == activity.RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
-
-
 				try {
+					//Gets image and file and rotate
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
+					//Set to dialog and compresses then set to byte array
 					String imageName = f.getName();
-
 					utils.setDialogTextString(R.id.cookbookImageEditText, editDialog, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);

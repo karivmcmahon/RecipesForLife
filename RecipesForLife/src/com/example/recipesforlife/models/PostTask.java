@@ -37,6 +37,7 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 	}
 
 	@Override
+	//The sync works in the background
 	public String doInBackground(Void... arg0 ) {
 
 		Log.v("Run in bg", "Run in bg");
@@ -50,31 +51,19 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 		//return null;
 	}
 
-	// @Override
-	/** protected void onProgressUpdate(Integer... integers) {
-	        // Here you can execute what you want to execute
-	        // after the background task completes
-		 if(response.equals("success"))
-		 {
-		 Toast.makeText(context, 
-			"App synced ", Toast.LENGTH_LONG).show();
-		 }
-		 else if(response.equals("fail"))
-		 {
-			 Toast.makeText(context, 
-						"App sync failed", Toast.LENGTH_LONG).show();
-		 }
-	    } **/
 
 	@Override
+	//Once sync complete display whether the sync was successful or not
 	protected void onPostExecute(String response) {
 		super.onPostExecute(response);
 		if(response.equals("success"))
 		{
+			//Displays success message
 			Toast.makeText(context, 
 					"App synced ", Toast.LENGTH_LONG).show();
 			if(cookbook == true)
 			{
+				//If cookbook page requests sync - refresh the list view
 				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 				cookbookModel model = new cookbookModel(context);
 				ArrayList<cookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
@@ -107,13 +96,5 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 			Toast.makeText(context, 
 					"App sync failed", Toast.LENGTH_LONG).show();
 		}
-		//Toast.makeText(GameScreen_bugfix.this, "music loaded!", Toast.LENGTH_SHORT).show();
-		Log.v("All Done!","ALL DONE");
 	}
-
-
-
-
-
-
 }

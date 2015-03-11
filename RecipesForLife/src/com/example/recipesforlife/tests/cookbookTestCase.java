@@ -1,5 +1,6 @@
 package com.example.recipesforlife.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,11 +10,15 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
+import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.recipeBean;
 
 import junit.framework.Assert;
@@ -87,6 +92,11 @@ public class cookbookTestCase  extends AndroidTestCase {
 		cb.setDescription("My personal cookbook");
 		cb.setPrivacy("public");
 		cb.setUniqueid("cookbookuniqueid2");
+		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		byte[] byteArray = stream.toByteArray();
+		cb.setImage(byteArray);
 		cookbookmodel.insertBook(cb, false);
 		
 		ArrayList<cookbookBean> cblist = cookbookmodel.selectCookbooksByCreator("doe");

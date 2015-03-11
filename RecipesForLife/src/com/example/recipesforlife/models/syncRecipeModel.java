@@ -337,7 +337,7 @@ public class syncRecipeModel extends baseDataSource {
 				{
 					throw new ClientProtocolException("Exception recipe error");
 				}
-				
+
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -498,7 +498,7 @@ public class syncRecipeModel extends baseDataSource {
 				{
 					throw new ClientProtocolException("Exception recipe error");
 				}
-				
+
 			} 
 			catch (ClientProtocolException e) 
 			{							

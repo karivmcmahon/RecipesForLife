@@ -21,11 +21,16 @@ import android.util.Log;
 import android.widget.ImageView;
 
 
-//Modified https://github.com/thest1/LazyList/blob/master/src/com/fedorvlasov/lazylist/ImageLoader.java
+/**
+ * Image Loader for list view images 
+ * Modified verision of https://github.com/thest1/LazyList/blob/master/src/com/fedorvlasov/lazylist/ImageLoader.java
+ * @author Kari
+ *
+ */
 public class ImageLoader2 {
 
 	MemoryCache memoryCache=new MemoryCache();
-	FileCache fileCache;
+	
 	private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
 	ExecutorService executorService;
 	Handler handler=new Handler();//handler to display images in UI thread
@@ -34,13 +39,18 @@ public class ImageLoader2 {
 	Context context;
 
 	public ImageLoader2(Context context){
-		fileCache=new FileCache(context);
 		executorService=Executors.newFixedThreadPool(5);
 		utils = new utility();
 		this.context = context;
 	}
 
-	//final int stub_id=R.drawable.stub;
+	
+	/**
+	 * Sets the image to be displayed if in cache otherwise it will queue photo
+	 * @param imageView
+	 * @param arr
+	 * @param recipeid
+	 */
 	public void DisplayImage(ImageView imageView, byte[] arr, String recipeid)
 	{
 		uuid = recipeid;
@@ -51,21 +61,29 @@ public class ImageLoader2 {
 	   else
         {
             queuePhoto(arr, imageView);
-            //imageView.setImageResource(stub_id);
         } 
 	}
 
+	/**
+	 * Submits photo to executor service
+	 * @param bytearr
+	 * @param imageView
+	 */
 	private void queuePhoto(byte[] bytearr, ImageView imageView)
 	{
 		PhotoToLoad p=new PhotoToLoad( bytearr, imageView, uuid);
 		executorService.submit(new PhotosLoader(p));
 	}
 
+	/**
+	 * Gets bitmap by using method decode sampled bitmap
+	 * @param bytearr
+	 * @return Bitmap
+	 */
 	private Bitmap getBitmap(byte[] bytearr) 
 	{
 
 		ByteArrayInputStream imageStream = new ByteArrayInputStream(bytearr);
-		//from SD cache
 		Bitmap b = null;
 		try {
 			b = decodeSampledBitmap(context, imageStream , 200, 150 );
@@ -73,7 +91,6 @@ public class ImageLoader2 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Log.v("Bitmap", "Bitmap " + b);
 		if(b!=null)
 			return b;
 		return null;
@@ -81,6 +98,15 @@ public class ImageLoader2 {
 
 	}
 
+	/**
+	 * Gets bitmap with correct sample size for width and height
+	 * @param context
+	 * @param imageStream
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static Bitmap decodeSampledBitmap(Context context, ByteArrayInputStream imageStream,
 			int reqWidth, int reqHeight) 
 					throws FileNotFoundException {
@@ -95,6 +121,13 @@ public class ImageLoader2 {
 		return BitmapFactory.decodeStream(imageStream, null, options);
 	}
 
+	/**
+	 * Calculates sample size based on width and height
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 */
 	public static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image
@@ -131,6 +164,11 @@ public class ImageLoader2 {
 		}
 	}
 
+	/**
+	 *  Class handles photo loading
+	 * @author Kari
+	 *
+	 */
 	class PhotosLoader implements Runnable {
 		PhotoToLoad photoToLoad;
 		PhotosLoader(PhotoToLoad photoToLoad){
@@ -142,7 +180,9 @@ public class ImageLoader2 {
 			try{
 				if(imageViewReused(photoToLoad))
 					return;
+				//gets image
 				Bitmap bmp=getBitmap(photoToLoad.bytearr);
+				//places image in cache
 				memoryCache.put(photoToLoad.recipeid, bmp);
 				if(imageViewReused(photoToLoad))
 					return;
@@ -154,6 +194,11 @@ public class ImageLoader2 {
 		}
 	}
 
+	/**
+	 * Checks if imageview has been used
+	 * @param photoToLoad
+	 * @return
+	 */
 	boolean imageViewReused(PhotoToLoad photoToLoad){
 		String tag=imageViews.get(photoToLoad.imageView);
 		if(tag==null || !tag.equals(photoToLoad.recipeid))
@@ -173,20 +218,16 @@ public class ImageLoader2 {
 				return;
 			if(bitmap!=null)
 				photoToLoad.imageView.setImageBitmap(bitmap);
-		//	else
-			//	photoToLoad.imageView.setImageResource(stub_id);
 		}
 	}
 
+	/**
+	 * Clears cache
+	 */
 	public void clearCache() {
 		memoryCache.clear();
-		fileCache.clear();
 	}
 	
-	public String generateUUID( ) {
-		//   final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		final String uuid = UUID.randomUUID().toString();
-		return uuid;
-	}
+	
 
 }

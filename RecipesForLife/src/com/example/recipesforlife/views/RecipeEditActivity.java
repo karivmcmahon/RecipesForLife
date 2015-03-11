@@ -9,14 +9,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,7 +24,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +32,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -163,6 +158,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					//set image dialog style
 					imageDialog = utils.createDialog(RecipeEditActivity.this, R.layout.imagedialog);
 					final TextView errorView = (TextView) imageDialog.findViewById(R.id.errorView);
 					utils.setDialogText(R.id.errorView,imageDialog,16);
@@ -177,7 +173,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
-								// TODO Auto-generated method stub
+								// Get image
 								Intent pickIntent = new Intent();
 								pickIntent.setType("image/*");
 								pickIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -205,6 +201,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 								// TODO Auto-generated method stub
 
 								imageDialog.dismiss();
+								//Loads image for imageview
 								ImageView img = (ImageView) findViewById(R.id.foodImage);
 								ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
 								task.execute();
@@ -306,8 +303,6 @@ public class RecipeEditActivity extends ActionBarActivity {
 		boolean result = nav.drawerToggle(item);
 		switch (item.getItemId()) {
 
-		case R.id.action_bookadd:
-			result = true;
 		default:
 			result = false;
 		}
@@ -319,7 +314,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.plain, menu);
 		return true;
 	}
 	@Override
@@ -880,6 +875,12 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 	}
 
+	/**
+	 * Retrieves result from activity intent
+	 * @param requestCode
+	 * @param resultCode
+	 * @param imageReturnedIntent
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 		switch(requestCode) { 
@@ -887,12 +888,15 @@ public class RecipeEditActivity extends ActionBarActivity {
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
 				try {
+					//Gets image and its file and rotates it
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
 					String imageName = f.getName();
+					//set image name to edit text
 					utils.setDialogTextString(R.id.recipeImagesEditText, imageDialog, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					//compresses image and set to byte array
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
 					byte[] byteArray = stream.toByteArray(); 		
 					imgBean.setImage(byteArray);			

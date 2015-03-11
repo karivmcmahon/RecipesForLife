@@ -32,6 +32,7 @@ public class recipeModel extends baseDataSource {
 	SharedPreferences sharedpreferences;
 	syncRecipeModel sync;
 	utility utils;
+
 	public recipeModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -46,6 +47,8 @@ public class recipeModel extends baseDataSource {
 	 * @param newRecipe
 	 * @param prepList
 	 * @param ingredList
+	 * @param image
+	 * @param server - if its came from server will affect timestamp
 	 */
 	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList, imageBean image, boolean server)
 	{
@@ -63,7 +66,7 @@ public class recipeModel extends baseDataSource {
 		}
 		else
 		{
-		recipeUpdateVals.put("changeTime", utils.getLastUpdated(false));
+			recipeUpdateVals.put("changeTime", utils.getLastUpdated(false));
 		}
 		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] {newRecipe.getUniqueid()});
 		if (cursor != null && cursor.getCount() > 0) {
@@ -127,8 +130,8 @@ public class recipeModel extends baseDataSource {
 
 
 	/**
-	 * Update recipe preperation details
-	 * @param prepList
+	 * Update recipe image details
+	 * @param img - the img bean which is being updated
 	 */
 	public void updateRecipeImage(imageBean img)
 	{
@@ -178,8 +181,11 @@ public class recipeModel extends baseDataSource {
 
 	/**
 	 * Inserts recipeBean data into database
-	 * @param recipe
-	 */
+	 * @param ingredList
+	 * @param prepList
+	 * @param img
+	 * @param server
+	 **/
 	public String insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList, imageBean img)
 	{
 		open();
@@ -228,8 +234,10 @@ public class recipeModel extends baseDataSource {
 	}
 
 	/**
-	 * Insert preperation information into database based on recipeBean
-	 * @param recipe
+	 * Insert preperation information into database 
+	 * @param prepList
+	 * @param server
+	 * @param addedBy
 	 */
 	public void insertPrep(ArrayList<preperationBean> prepList, boolean server, String addedBy)
 	{
@@ -255,10 +263,15 @@ public class recipeModel extends baseDataSource {
 
 	}
 
+	/** 
+	 * Insert image into database for recipe
+	 * @param img
+	 * @param server
+	 * @param addedBy
+	 */
 	public void insertImage(imageBean img, boolean server, String addedBy)
 	{
 		ContentValues imagevalues = new ContentValues();
-		Log.v("Immmmmmm", "Immmmmmm" +img.getImage());
 		imagevalues.put("image", img.getImage() );
 		imagevalues.put("updateTime", utils.getLastUpdated(false)); 
 		imagevalues.put("changeTime", "2015-01-01 12:00:00.000");
@@ -277,6 +290,10 @@ public class recipeModel extends baseDataSource {
 		insertImageLink(imageID);	
 	};
 
+	/**
+	 * Insert link between image and recipe
+	 * @param imageid
+	 */
 	public void insertImageLink(long imageid)
 	{
 		ContentValues imagevalues = new ContentValues();
@@ -289,7 +306,7 @@ public class recipeModel extends baseDataSource {
 
 	} 
 	/**
-	 * Insert prep id and recipe ids into PrepRecipe in the database
+	 * Insert link between prep and recipe
 	 */
 	public void insertPrepToRecipe(boolean server)
 	{
@@ -304,15 +321,13 @@ public class recipeModel extends baseDataSource {
 	}
 
 	/**
-	 * Insert the cookbook id and recipe id into linking table
+	 * Insert the link between cookbook and recipe
 	 * @param name
 	 * @param addedBy
 	 */
 	public void insertCookbookRecipe(String name, String addedBy)
 	{
-		Log.v("nammeme","name " + name + "addedBy " + addedBy);
 		ContentValues value = new ContentValues();
-		//cookbookModel model = new cookbookModel(context);
 		int id = selectCookbooksID(name, addedBy);
 		value.put("Recipeid", recipeID);
 		value.put("Cookbookid", id);
@@ -324,7 +339,9 @@ public class recipeModel extends baseDataSource {
 
 	/**
 	 * Insert ingredient information into database
-	 * @param recipe
+	 * @param ingredList
+	 * @param addedBy
+	 * @param server
 	 */
 	public void insertIngredient( boolean server, ArrayList<ingredientBean> ingredList, String addedBy)
 	{
@@ -353,7 +370,8 @@ public class recipeModel extends baseDataSource {
 	/**
 	 * Insert ingredient details into database
 	 * @param i
-	 * @param recipe
+	 * @param ingredList
+	 * @param addedBy
 	 */
 	public void insertIngredientDetails(int i, ArrayList<ingredientBean> ingredList, boolean server, String addedBy)
 	{
@@ -405,9 +423,7 @@ public class recipeModel extends baseDataSource {
 
 	/**
 	 * Retrieve ingredient from database the helps us know whether to insert ingredient. If id 0 then insert
-	 * @param recipe
-	 * @param x
-	 * @return id 
+	 * @param name
 	 */
 	public int selectIngredient(String name)
 	{	
@@ -452,9 +468,9 @@ public class recipeModel extends baseDataSource {
 	}
 	/**
 	 * Retrieve recipe from database by a certain a user so we do not add duplicate recipes
-	 * @param recipe
-	 * @param x
-	 * @return id 
+	 * @param name
+	 * @param uniqueid
+	 * @return boolean - whether it exists or not
 	 */
 	public boolean selectRecipe(String name, String uniqueid)
 	{		
@@ -492,10 +508,9 @@ public class recipeModel extends baseDataSource {
 	}
 
 	/**
-	 * Retrieve recipe from database by a certain a user so we do not add duplicate recipes
-	 * @param recipe
-	 * @param x
-	 * @return id 
+	 * Retrieve recipe by recipe uniqueid
+	 * @param uniqueid
+	 * @return recipBean
 	 */
 	public recipeBean selectRecipe2(String uniqueid)
 	{		
@@ -516,7 +531,7 @@ public class recipeModel extends baseDataSource {
 	}
 
 	/**
-	 * Selects all recipes by a specific user 
+	 * Selects all recipes by a specific user who added the recipe
 	 * @param user
 	 * @return ArrayList<recipeBean>
 	 */
@@ -560,6 +575,11 @@ public class recipeModel extends baseDataSource {
 		return prepList;
 	}
 
+
+	/**
+	 * Select images based on recipe id
+	 * @param id - recipe id
+	 **/
 	public imageBean selectImages(int id)
 	{
 		imageBean img = new imageBean();
@@ -628,21 +648,26 @@ public class recipeModel extends baseDataSource {
 
 
 
+	/**
+	 * Select cookbook id based on the cookbook name and user whether they are contributer or creator
+	 * @param name
+	 * @param user
+	 * @return cookbook id
+	 */
 	public int selectCookbooksID(String name, String user)
 	{
 		int id = 0;
-		
+
 		Cursor cursor = database.rawQuery("SELECT Cookbook.id AS cid FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE Cookbook.name=? AND Cookbook.creator=? OR Cookbook.name=? AND Contributers.accountid=? GROUP BY uniqueid ", new String[] {name, user, name, user});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				id = cursor.getInt(getIndex("cid",cursor));
-				Log.v("id ", "id " + id);
 
 			}
 		}
 		cursor.close(); 
-		
+
 		return id;	
 	}
 

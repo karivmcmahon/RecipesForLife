@@ -99,7 +99,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		}
 	};
 
-	//Handles message from time dialog 2
+	//Handles message from time dialog 2 - cooking time
 	static Handler mHandler2 = new Handler(){
 		@Override
 		public void handleMessage(Message m){
@@ -160,8 +160,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);	
 		cookbookModel cbmodel = new cookbookModel(context);
-		//create spinner of cookbooks that user is part of
-		ArrayList<cookbookBean> cbList = cbmodel.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+
+		//Fills the spinner with users cookbooks
+		ArrayList<cookbookBean> cbList = cbmodel.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));	
 		List<String> spinnerArray =  new ArrayList<String>();
 		for(int i = 0; i < cbList.size(); i++)
 		{
@@ -172,7 +173,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		final Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		sItems.setAdapter(adapter);
-	    sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setSelection(utils.getIndex(sItems, bookname));
 		nextButton = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog);
 	}
@@ -196,7 +197,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	}
 
 	/**
-	 * Get data from the first dialog
+	 * Get data from the first dialog - does some error checking before getting date
 	 */
 	public void getInitialRecipeAddDialogData()
 	{
@@ -321,10 +322,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.item, spinnerArray);
-
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
-		 sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 		recipeIngredDialog.show();
 	}
@@ -382,15 +382,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 		else
 		{
 			recipeAddDialog2.dismiss();
-			//insert data to database
-
-
-
-
-			//Third - recipe add dialog - not done yet
+			//Displays and gets third dialog data
 			setUpThirdRecipeAddDialog();
-
-
 			addRecipeButton.setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -399,10 +392,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 				}
 			});
-			//addRecipeDialog3.show();
 		}
 	}
-	//		}
 
 	/**
 	 * Set up third recipe add dialog
@@ -420,13 +411,11 @@ public class AddRecipeView extends RecipeListViewActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) 
 				{
-					// TODO Auto-generated method stub
+					//Displays an intent to get an image
 					Intent pickIntent = new Intent();
 					pickIntent.setType("image/*");
 					pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
 					Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
 					String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
 					Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
 					chooserIntent.putExtra
@@ -434,9 +423,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 							Intent.EXTRA_INITIAL_INTENTS, 
 							new Intent[] { takePhotoIntent }
 							); 
-
 					activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
-					Log.v("img nme", "img nme " + imageName);
 					utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
 				}
 				return false;
@@ -450,15 +437,13 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
 		addRecipeButton = utils.setButtonTextDialog(R.id.addRecipeButton, 22, addRecipeDialog3);
 
-
+		//Fill spinner
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("Easy");
 		spinnerArray.add("Medium");
 		spinnerArray.add("Hard");
-
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.item, spinnerArray);
-
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		sItems.setAdapter(adapter);
@@ -476,8 +461,10 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		spinner.getSelectedItem().toString();
+		//if no image is selected
 		if(utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3).equals(""))
 		{
+			//then set a default image
 			Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -598,25 +585,35 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 		}catch(SQLException e)
 		{
-			Toast.makeText(context, "Recipe was not edited", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Recipe was not added", Toast.LENGTH_LONG).show();
 		}
 	}
 
+	/**
+	 * Retrieves result from intent
+	 * @param requestCode
+	 * @param resultCode
+	 * @param imageReturnedIntent
+	 */
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
-		
+
 		switch(requestCode) { 
 		case SELECT_PHOTO:
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
 				try {
+					//Get image and file and rotate correctly
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
+					//Set image name in edit text
 					imageName = f.getName();					
 					utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
+					//compress image
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					//set image to byte array
 					byte[] byteArray = stream.toByteArray(); 
 					array = byteArray;
 				} catch (FileNotFoundException e) {
@@ -629,7 +626,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 	}
 
-	
+
 
 }
 

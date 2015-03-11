@@ -15,6 +15,11 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
+/**
+ * Handles the loading of single images
+ * @author Kari
+ *
+ */
 public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 
@@ -40,6 +45,7 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	}
 
 	@Override
+	//Loads image in background - away from ui thread
 	protected Bitmap doInBackground(Void... arg0) {
 
 		Bitmap bitmap = null;
@@ -51,12 +57,11 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 		return bitmap;
 	}
 
 	@Override
+	//Once loads iss finished set the image
 	protected void onPostExecute( Bitmap result )  {
 
 		ImageView imageView = (ImageView) imageViewReference.get();
@@ -65,38 +70,57 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 	}
 
+	/**
+	 * sets bitmap options 
+	 * @param context
+	 * @param imageStream
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static Bitmap decodeSampledBitmapFromResource(Context context, ByteArrayInputStream imageStream,
 			int reqWidth, int reqHeight) 
 					throws FileNotFoundException {
-		
+
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
-	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+		options.inPurgeable = true;
+		options.inInputShareable = true;
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeStream(imageStream, null, options);
 	}
-	
+
+	/**
+	 * Calculates the best sample size for height and width
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 */
 	public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-    // Raw height and width of image
-    final int height = options.outHeight;
-    final int width = options.outWidth;
-    int inSampleSize = 1;
+			BitmapFactory.Options options, int reqWidth, int reqHeight) 
+	{
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
 
-    if (height > reqHeight || width > reqWidth) {
+		if (height > reqHeight || width > reqWidth) {
 
-        final int halfHeight = height / 2;
-        final int halfWidth = width / 2;
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
 
-        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-        // height and width larger than the requested height and width.
-        while ((halfHeight / inSampleSize) > reqHeight
-                && (halfWidth / inSampleSize) > reqWidth) {
-            inSampleSize *= 2;
-        }
-    }
+			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) > reqHeight
+					&& (halfWidth / inSampleSize) > reqWidth) {
+				inSampleSize *= 2;
+			}
+		}
 
-    return inSampleSize;
-}
+		return inSampleSize;
+	}
 }

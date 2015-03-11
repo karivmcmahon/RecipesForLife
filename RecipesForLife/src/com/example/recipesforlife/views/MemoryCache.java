@@ -9,8 +9,12 @@ import java.util.Map.Entry;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-
-//Modified https://github.com/thest1/LazyList/blob/master/src/com/fedorvlasov/lazylist/MemoryCache.java
+/**
+ * This class is the memory cache as part of the image loader from list view
+ * Based on this code https://github.com/thest1/LazyList/blob/master/src/com/fedorvlasov/lazylist/MemoryCache.java
+ * @author Kari
+ *
+ */
 public class MemoryCache {
 	
 	private static final String TAG = "MemoryCache";
@@ -24,11 +28,20 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory()/4);
     }
     
+    /**
+     * Sets limit
+     * @param new_limit
+     */
     public void setLimit(long new_limit){
         limit=new_limit;
-        Log.i(TAG, "MemoryCache will use up to "+limit/1024./1024.+"MB");
+       
     }
 
+    /**
+     * Get bitmap based on id
+     * @param id
+     * @return
+     */
     public Bitmap get(String id){
         try{
             if(!cache.containsKey(id))
@@ -41,6 +54,11 @@ public class MemoryCache {
         }
     }
 
+    /**
+     * Puts bitmap in cache
+     * @param id
+     * @param bitmap
+     */
     public void put(String id, Bitmap bitmap){
         try{
             if(cache.containsKey(id))
@@ -53,6 +71,9 @@ public class MemoryCache {
         }
     }
     
+    /**
+     * Checks the cache size
+     */
     private void checkSize() {
         Log.i(TAG, "cache size="+size+" length="+cache.size());
         if(size>limit){
@@ -68,6 +89,9 @@ public class MemoryCache {
         }
     }
 
+    /**
+     * Clears the cache
+     */
     public void clear() {
         try{
             //NullPointerException sometimes happen here http://code.google.com/p/osmdroid/issues/detail?id=78 

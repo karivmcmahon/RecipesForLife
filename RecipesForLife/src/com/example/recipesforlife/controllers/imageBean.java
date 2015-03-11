@@ -1,5 +1,10 @@
 package com.example.recipesforlife.controllers;
 
+/**
+ * Stores an images details
+ * @author Kari
+ *
+ */
 public class imageBean {
 	byte[] image;
 	String uniqueid;

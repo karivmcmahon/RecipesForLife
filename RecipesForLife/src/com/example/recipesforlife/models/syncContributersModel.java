@@ -150,7 +150,7 @@ public class syncContributersModel extends baseDataSource {
 				{
 					throw new ClientProtocolException("Exception contributers error");
 				}
-				
+
 			} 
 			catch (ClientProtocolException e) 
 			{							
@@ -211,7 +211,7 @@ public class syncContributersModel extends baseDataSource {
 				{
 					throw new ClientProtocolException("Exception contributers error");
 				}
-				
+
 
 			} 
 			catch (ClientProtocolException e) 

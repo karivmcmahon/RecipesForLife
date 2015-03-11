@@ -1,5 +1,6 @@
 package com.example.recipesforlife.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,12 +8,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.StrictMode;
 import android.test.AndroidTestCase;
 import android.test.InstrumentationTestCase;
 import android.test.ProviderTestCase2;
 import android.test.RenamingDelegatingContext;
 
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
@@ -106,12 +111,17 @@ public void testInsertRecipe()
 		ingredList.add(ingred);
 		
 		
-		 
-		recipemodel.insertRecipe(recipe, false, ingredList, prepList, null);
+		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		byte[] byteArray = stream.toByteArray();
+		imageBean imgbean = new imageBean();
+		imgbean.setImage(byteArray);
+		recipemodel.insertRecipe(recipe, false, ingredList, prepList, imgbean);
 		
 	   
-		boolean exists = recipemodel.selectRecipe("Chicken Soup","addison");
-		Assert.assertEquals(true, exists);
+		ArrayList<recipeBean> exists = recipemodel.selectRecipesByUser("addison");
+		Assert.assertEquals("Chicken Soup", exists.get(0).getName().toString());
 		
 		
 	} 

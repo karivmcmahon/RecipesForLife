@@ -68,7 +68,7 @@ public class AddCookbookView extends CookbookListActivity {
 	 */
 	public void addCookbook()
 	{
-		
+
 		bookAddDialog = utils.createDialog(activity , R.layout.addcookbookdialog);
 		errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
 		bookDetails = new ArrayList<String>();
@@ -83,21 +83,18 @@ public class AddCookbookView extends CookbookListActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				//Intent to pick a picture
 				Intent pickIntent = new Intent();
 				pickIntent.setType("image/*");
 				pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
 				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
 				String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
 				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
 				chooserIntent.putExtra
 				(
-						Intent.EXTRA_INITIAL_INTENTS, 
-						new Intent[] { takePhotoIntent }
-						); 
-
+					Intent.EXTRA_INITIAL_INTENTS, 
+					new Intent[] { takePhotoIntent }
+				); 
 				activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
 			}
 
@@ -111,7 +108,7 @@ public class AddCookbookView extends CookbookListActivity {
 				//once book is added then add the details to list and notify the change
 				addBook();
 
-					
+
 			}});
 		bookAddDialog.show();	
 	}
@@ -144,7 +141,8 @@ public class AddCookbookView extends CookbookListActivity {
 				activity, R.layout.item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
-		 sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		//makes spinner triangle white
+		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 	}
 
@@ -179,49 +177,58 @@ public class AddCookbookView extends CookbookListActivity {
 			Spinner spinner = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
 			book.setPrivacy(spinner.getSelectedItem().toString());
 			book.setCreator(sharedpreferences.getString(emailk, "DEFAULT"));
+			//if an image is not set - then set a default
 			if(utils.getTextFromDialog(R.id.cookbookImageEditText, bookAddDialog).equals(""))
 			{
 				Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.books)).getBitmap();
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			    byte[] array = stream.toByteArray();
-			    byteArray = array;
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] array = stream.toByteArray();
+				byteArray = array;
 			}  
 			book.setImage(byteArray);
+			
 			cookbookModel cbmodel = new cookbookModel(context);
 			try
 			{
+				//insert book - once inserted add to list
 				String uniqueid = cbmodel.insertBook(book, false);
 				CookbookListActivity.values.add(0, utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog));
 				CookbookListActivity.ids.add(0, uniqueid);
 				CookbookListActivity.images.add(0, byteArray);
 				bookAddDialog.dismiss();
-			//	Log.v("cookbook size ", "cookbook size " + CookbookListActivity.values.size());
 				CookbookListActivity.adapter.notifyDataSetChanged();	
 			}catch(SQLException e)
 			{
 				Toast.makeText(context, "Cookbook was not added", Toast.LENGTH_LONG).show();
 			}
-			
+
 		}
 	}
 
+	/**
+	 * Gets the result from the activity intent
+	 * @param requestCode
+	 * @param resultCode
+	 * @param imageReturnedIntent
+	 */
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 
 		switch(requestCode) { 
 		case SELECT_PHOTO:
 			if(resultCode == RESULT_OK){  
+				//Gets the image
 				Uri selectedImage = imageReturnedIntent.getData();
-
-
 				try {
+					//Gets image and file then rotates the image correctly
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
+					//Sets name of image in edittext
 					String imageName = f.getName();
-
 					utils.setDialogTextString(R.id.cookbookImageEditText, bookAddDialog, imageName);
+					//Compress image and set to a byte array - 100 means compress for max quality
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
 					byteArray = stream.toByteArray(); 
@@ -236,7 +243,7 @@ public class AddCookbookView extends CookbookListActivity {
 
 	}
 
-	
+
 }
 
 

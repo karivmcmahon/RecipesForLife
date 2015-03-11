@@ -53,14 +53,11 @@ public class accountModel extends baseDataSource
 			insertUserData(account, user, server);
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
-			Log.v("suc", "suc");
 		}catch(SQLException e)
 		{
 			e.printStackTrace();
 			database.endTransaction();
-			Log.v("Trans fail", "Trans fail");
 			throw e;
-			
 		}
 		close();
 	} 
@@ -187,15 +184,15 @@ public class accountModel extends baseDataSource
 		{
 			values.put("updateTime", utils.getLastUpdated(false)); 
 		}
-		
+
 		values.put("country", user.getCountry()); 
 		values.put("bio", user.getBio()); 
 		values.put("city", user.getCity()); 
 		values.put("cookingInterest", user.getCookingInterest()); 
 		try
 		{
-		id = database.insertOrThrow("Users", null, values);
-		insertAccountData(account, id, server);
+			id = database.insertOrThrow("Users", null, values);
+			insertAccountData(account, id, server);
 		}
 		catch(SQLException e)
 		{
@@ -226,7 +223,7 @@ public class accountModel extends baseDataSource
 		accountValues.put("password", account.getPassword());
 		try
 		{
-		database.insertOrThrow("Account", null, accountValues);
+			database.insertOrThrow("Account", null, accountValues);
 		}
 		catch(SQLException e)
 		{
