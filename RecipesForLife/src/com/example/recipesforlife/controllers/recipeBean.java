@@ -21,6 +21,34 @@ public class recipeBean {
 	String cookbookId;
 	byte image[];
 	String progress;
+	String cusine;
+	public String getCusine() {
+		return cusine;
+	}
+	public void setCusine(String cusine) {
+		this.cusine = cusine;
+	}
+	public String getDifficulty() {
+		return difficulty;
+	}
+	public void setDifficulty(String difficulty) {
+		this.difficulty = difficulty;
+	}
+	public String getTips() {
+		return tips;
+	}
+	public void setTips(String tips) {
+		this.tips = tips;
+	}
+	public String getDietary() {
+		return dietary;
+	}
+	public void setDietary(String dietary) {
+		this.dietary = dietary;
+	}
+	String difficulty;
+	String tips;
+	String dietary;
 	
 	
 	public String getProgress() {

@@ -176,6 +176,14 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextBlackItalic(R.id.recipeDesc, recipeFont);
 		utils.setTextPink(R.id.serves, recipeFont);
 		utils.setTextBlack(R.id.servesVal, recipeFont);
+		utils.setTextPink(R.id.difficulty, recipeFont);
+		utils.setTextBlack(R.id.difficultyVal, recipeFont);
+		utils.setTextPink(R.id.dietary, recipeFont);
+		utils.setTextBlack(R.id.dietaryVal, recipeFont);
+		utils.setTextPink(R.id.cusine, recipeFont);
+		utils.setTextBlack(R.id.cusineVal, recipeFont);
+		utils.setTextPink(R.id.tipsTitle, recipeFontHeader);
+		utils.setTextBlack(R.id.tips, recipeFont);
 		utils.setTextPink(R.id.prepTime, recipeFont);
 		utils.setTextPink(R.id.cookingTime, recipeFont);
 		utils.setTextBlack(R.id.prepTimeVal, recipeFont);
@@ -201,7 +209,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
 		imgBean = model.selectImages(recipe.getId());
-		Log.v("ibean" , "ibean " + imgBean.getImage());
+		
 		
 		ImageView img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
@@ -231,6 +239,10 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextString(R.id.servesVal, recipe.getServes());
 		utils.setTextString(R.id.prepTimeVal, recipe.getPrep());
 		utils.setTextString(R.id.cookingTimeVal, recipe.getCooking());
+		utils.setTextString(R.id.difficultyVal, recipe.getDifficulty());
+		utils.setTextString(R.id.tips, recipe.getTips());
+		utils.setTextString(R.id.dietaryVal, recipe.getDietary());
+		utils.setTextString(R.id.cusineVal, recipe.getCusine());
 
 	}
 

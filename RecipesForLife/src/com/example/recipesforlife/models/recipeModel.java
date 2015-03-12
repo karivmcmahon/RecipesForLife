@@ -200,6 +200,10 @@ public class recipeModel extends baseDataSource {
 		values.put("serves", recipe.getServes()); 
 		values.put("addedBy", recipe.getAddedBy()); 
 		values.put("progress", "added");
+		values.put("cusine", recipe.getCusine());
+		values.put("tips", recipe.getTips());
+		values.put("difficulty", recipe.getDifficulty());
+		values.put("dietary", recipe.getDietary());
 		String uniqueid = "";
 		if(server == true)
 		{
@@ -507,6 +511,10 @@ public class recipeModel extends baseDataSource {
 		rb.setId(cursor.getInt(getIndex("id",cursor))); 
 		rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
 		rb.setProgress(cursor.getString(getIndex("progress", cursor)));
+		rb.setCusine(cursor.getString(getIndex("cusine", cursor)));
+		rb.setDifficulty(cursor.getString(getIndex("difficulty", cursor)));
+		rb.setTips(cursor.getString(getIndex("tips", cursor)));
+		rb.setDietary(cursor.getString(getIndex("dietary", cursor)));
 		return rb;
 	}
 

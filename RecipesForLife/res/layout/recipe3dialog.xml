@@ -64,25 +64,17 @@
 	           android:gravity="left"
 	           android:text="Cusine:" />
 	      
-	       <EditText
-	         android:id="@+id/recipeCusineEditText"
-	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
-	         android:layout_toRightOf="@+id/recipeCusineView"
-	         android:layout_marginTop="22dp"
-	         android:ems="10"
-	         android:textSize="14dp"
-	         android:background="#FFFFFF"
-	         />
+	      <Spinner
+	            android:id="@+id/recipeCusineSpinner"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_toRightOf="@+id/recipeCusineView"
+	            android:layout_marginTop="22dp"
+	            android:ems="10"
+	            android:textSize="14dp" 
+	            android:textColor="#FFFFFF"/>	 
 	       
-		 <ImageButton
-		    android:id="@+id/cusineAddButton"
-	    	android:background="@drawable/plus32"
-	    	android:layout_toRightOf="@+id/recipeCusineEditText"  
-	     	android:layout_marginTop="22dp"
-	    	android:layout_width="40dp" 
-	    	android:layout_height="40dp" 
-	    />
+		
        </LinearLayout>
        
      	<LinearLayout
@@ -123,7 +115,7 @@
 	       <EditText
 	         android:id="@+id/recipeDietaryEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
+	         android:layout_height="50dp"
 	         android:layout_toRightOf="@+id/recipeDietaryView"
 	         android:layout_marginTop="22dp"
 	         android:ems="10"
@@ -131,14 +123,7 @@
 	         android:background="#FFFFFF"
 	         />
 	       
-		 <ImageButton
-		    android:id="@+id/dietaryAddButton"
-	    	android:background="@drawable/plus32"
-	    	android:layout_toRightOf="@+id/recipeDietaryEditText"  
-	     	android:layout_marginTop="22dp"
-	    	android:layout_width="40dp" 
-	    	android:layout_height="40dp" 
-	    />
+		
        </LinearLayout>
        
         <LinearLayout
@@ -156,7 +141,7 @@
 	       <EditText
 	         android:id="@+id/recipeTipsEditText"
 	         android:layout_width="wrap_content"
-	         android:layout_height="30dp"
+	         android:layout_height="50dp"
 	         android:layout_toRightOf="@+id/recipeTipsView"
 	         android:layout_marginTop="22dp"
 	         android:ems="10"

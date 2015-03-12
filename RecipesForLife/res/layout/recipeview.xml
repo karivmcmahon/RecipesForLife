@@ -86,6 +86,78 @@
         
        />
         
+        <TextView
+        android:id="@+id/difficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/serves"
+        android:layout_toRightOf="@+id/forkImage"
+        android:text="Difficulty: "
+        android:textColor="#F3216C"
+       />
+        
+        <TextView
+        android:id="@+id/difficultyVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/servesVal"
+        android:layout_toRightOf="@+id/difficulty"
+        android:text=""
+        
+       />
+        
+         <ImageView
+          android:id="@+id/chefImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:layout_below="@+id/foodImage"
+        	  android:layout_toLeftOf="@+id/cusine"
+          android:scaleType="fitXY"     
+          android:src="@drawable/chef" 
+           />
+         
+         <TextView
+        android:id="@+id/cusine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/foodImage"
+         android:layout_toLeftOf="@+id/cusineVal"
+        android:text="Cusine: "
+        android:textColor="#F3216C"
+       />
+        
+        <TextView
+        android:id="@+id/cusineVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/foodImage"
+        
+         android:layout_centerInParent="true"
+        android:text=""
+        
+       />
+        
+         <TextView
+        android:id="@+id/dietary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cusine"
+         android:layout_toLeftOf="@+id/dietaryVal"
+        android:text="Dietary: "
+        android:textColor="#F3216C"
+       />
+        
+        <TextView
+        android:id="@+id/dietaryVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cusineVal"
+         android:layout_centerInParent="true"
+       
+        android:text=""
+        
+       />
+        
          <ImageView
           android:id="@+id/timeImage"
           android:layout_width="40dp"
@@ -140,7 +212,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/forkImage"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="Ingredients: "
         android:textColor="#F3216C"
        />
@@ -171,6 +243,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/methodTitle"
+        android:layout_marginTop="10dp"
+        android:text=" "
+        android:layout_marginLeft="10dp"
+       />
+          
+           <TextView
+        android:id="@+id/tipsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/methodList"
+        android:layout_marginTop="20dp"
+        android:text="Additional Tips: "
+        android:textColor="#F3216C"
+        
+       />
+         
+          <TextView
+        android:id="@+id/tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tipsTitle"
         android:layout_marginTop="10dp"
         android:text=" "
         android:layout_marginLeft="10dp"
