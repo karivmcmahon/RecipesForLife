@@ -71,6 +71,38 @@ namespace WebApplication1
 				recipe.uniqueid = (string)recipeReader["uniqueid"];
 				recipe.progress = (string)recipeReader["progress"];
 				recipe.serves = (Int32)recipeReader["serves"];
+				if( recipeReader["difficulty"] == DBNull.Value)
+				{
+					recipe.difficulty = "";
+				}
+				else
+				{
+					recipe.difficulty = (string)recipeReader["difficulty"];
+				}
+				if( recipeReader["dietary"] == DBNull.Value)
+				{
+					recipe.dietary = "";
+				}
+				else
+				{
+					recipe.dietary = (string)recipeReader["dietary"];
+				}
+				if( recipeReader["tips"] == DBNull.Value)
+				{
+					recipe.tips = "";
+				}
+				else
+				{
+					recipe.tips = (string)recipeReader["tips"];
+				}
+				if( recipeReader["cusine"] == DBNull.Value)
+				{
+					recipe.cusine = "";
+				}
+				else
+				{
+					recipe.cusine = (string)recipeReader["cusine"];
+				}
 				selectPrep(recipe.Preperation, recipe);
 				selectIngredient(recipe.Ingredient, recipe);
 				recipe = selectBook(recipe);	
@@ -182,6 +214,10 @@ namespace WebApplication1
 			public string image { get; set; }
 			public string imageid { get; set; }
 			public string progress { get; set; }
+			public string difficulty { get; set; }
+			public string dietary { get; set; }
+			public string tips { get; set; }
+			public string cusine { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 			

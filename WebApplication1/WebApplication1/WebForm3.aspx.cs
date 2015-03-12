@@ -54,7 +54,7 @@ namespace WebApplication1
 		{
 			connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-			SqlCommand insertRecipe = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid, progress) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid, @progress)", connn);
+			SqlCommand insertRecipe = new SqlCommand(" INSERT INTO Recipe(name, description, updateTime, serves, prepTime, cookingTime, addedBy, changeTime,uniqueid, progress, difficulty, dietary, tips, cusine) OUTPUT INSERTED.id VALUES (@name, @description, @updateTime, @serves, @prepTime, @cookingTime, @addedBy, @changeTime, @uniqueid, @progress, @difficulty, @dietary, @tips, @cusine)", connn);
 			insertRecipe.Parameters.AddWithValue("@name", recipe[i].name);
 			insertRecipe.Parameters.AddWithValue("@description", recipe[i].description);
 			insertRecipe.Parameters.AddWithValue("@serves", recipe[i].serves);
@@ -65,6 +65,10 @@ namespace WebApplication1
 			insertRecipe.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 			insertRecipe.Parameters.AddWithValue("@uniqueid", recipe[i].uniqueid);
 			insertRecipe.Parameters.AddWithValue("@progress", recipe[i].progress);
+			insertRecipe.Parameters.AddWithValue("@difficulty", recipe[i].difficulty);
+			insertRecipe.Parameters.AddWithValue("@dietary", recipe[i].dietary);
+			insertRecipe.Parameters.AddWithValue("@tips", recipe[i].tips);
+			insertRecipe.Parameters.AddWithValue("@cusine", recipe[i].cusine);
 			connn.Open();
 			connn2.Open();
 			try
@@ -335,6 +339,10 @@ namespace WebApplication1
 			public string image { get; set; }
 			public string imageid {get; set;}
 			public string progress { get; set; }
+			public string difficulty { get; set; }
+			public string dietary { get; set; }
+			public string tips { get; set; }
+			public string cusine { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
 		}

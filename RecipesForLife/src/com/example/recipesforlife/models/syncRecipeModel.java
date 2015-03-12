@@ -93,6 +93,10 @@ public class syncRecipeModel extends baseDataSource {
 		rb.setAddedBy(cursor.getString(getIndex("addedBy", cursor)));
 		rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
 		rb.setProgress(cursor.getString(getIndex("progress", cursor)));
+		rb.setDietary(cursor.getString(getIndex("dietary",cursor)));
+		rb.setDifficulty(cursor.getString(getIndex("difficulty",cursor)));
+		rb.setCusine(cursor.getString(getIndex("cusine", cursor)));
+		rb.setTips(cursor.getString(getIndex("tips", cursor)));
 		return rb;
 	}
 
@@ -239,6 +243,10 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("image", stringToStore);
 			recipe.put("imageid", image.getUniqueid());
 			recipe.put("progress", recipeList.get(i).getProgress());
+			recipe.put("difficulty", recipeList.get(i).getDifficulty());
+			recipe.put("dietary", recipeList.get(i).getDietary());
+			recipe.put("tips", recipeList.get(i).getTips());
+			recipe.put("cusine", recipeList.get(i).getCusine());
 
 			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray();
@@ -362,6 +370,10 @@ public class syncRecipeModel extends baseDataSource {
 				recipe.setAddedBy(json.getString("addedBy"));
 				recipe.setUniqueid(json.getString("uniqueid"));
 				recipe.setProgress(json.getString("progress"));
+				recipe.setDifficulty(json.getString("difficulty"));
+				recipe.setDietary(json.getString("dietary"));
+				recipe.setTips(json.getString("tips"));
+				recipe.setCusine(json.getString("cusine"));
 				imageBean imgbean = new imageBean();
 				if(json.optString("image").equals(""))
 				{
@@ -378,10 +390,11 @@ public class syncRecipeModel extends baseDataSource {
 				String cookingid = "";
 				//if(json.has("cookingid"))
 				//{
+				
 				cookingid = json.optString("cookingid");
-				//}
-				String name = cbmodel.selectCookbooksNameByID(cookingid);
-				recipe.setRecipeBook(name);
+				Log.v("recipe", "recipe " + recipe.getName() + " id " + cookingid);
+				
+				recipe.setRecipeBook(cookingid);
 
 				ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
 				JSONArray ingredArray = (JSONArray) json.get("Ingredient");

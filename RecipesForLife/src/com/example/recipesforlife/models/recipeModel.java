@@ -227,7 +227,7 @@ public class recipeModel extends baseDataSource {
 			recipeID = database.insertOrThrow("Recipe", null, values);
 			insertIngredient(server, ingredList, recipe.getAddedBy());
 			insertPrep(prepList, server, recipe.getAddedBy());
-			insertCookbookRecipe(recipe.getRecipeBook(),recipe.getAddedBy());
+			insertCookbookRecipe(recipe.getRecipeBook());
 			insertImage(img, server, recipe.getAddedBy());
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
@@ -335,10 +335,11 @@ public class recipeModel extends baseDataSource {
 	 * @param name
 	 * @param addedBy
 	 */
-	public void insertCookbookRecipe(String name, String addedBy)
+	public void insertCookbookRecipe(String name)
 	{
 		ContentValues value = new ContentValues();
-		int id = selectCookbooksID(name, addedBy);
+		int id = selectCookbooksIDByUnique(name);
+		Log.v("name ", "name " + name + "id " + id);
 		value.put("Recipeid", recipeID);
 		value.put("Cookbookid", id);
 		value.put("updateTime", utils.getLastUpdated(false)); 
@@ -664,25 +665,25 @@ public class recipeModel extends baseDataSource {
 
 
 	/**
-	 * Select cookbook id based on the cookbook name and user whether they are contributer or creator
-	 * @param name
-	 * @param user
-	 * @return cookbook id
+	 * Select cookbooks id based on uniqueid
+	 * @param uniqueid
+	 * @return int id
 	 */
-	public int selectCookbooksID(String name, String user)
+	public int selectCookbooksIDByUnique(String uniqueid)
 	{
 		int id = 0;
-
-		Cursor cursor = database.rawQuery("SELECT Cookbook.id AS cid FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE Cookbook.name=? AND Cookbook.creator=? OR Cookbook.name=? AND Contributers.accountid=? GROUP BY uniqueid ", new String[] {name, user, name, user});
+		//open();
+		Cursor cursor = database.rawQuery("SELECT id FROM Cookbook WHERE uniqueid=?", new String[] { uniqueid});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
-				id = cursor.getInt(getIndex("cid",cursor));
+				id = cursor.getInt(getIndex("id",cursor));
+
 
 			}
 		}
 		cursor.close(); 
-
+		//close();
 		return id;	
 	}
 

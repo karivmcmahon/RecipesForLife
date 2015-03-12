@@ -76,6 +76,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	String imageName = "";
 	byte[] array;
 	String bookname;
+	ArrayList<String> cookbookuids = new ArrayList<String>();
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -167,6 +168,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		for(int i = 0; i < cbList.size(); i++)
 		{
 			spinnerArray.add(cbList.get(i).getName());
+			cookbookuids.add(cbList.get(i).getUniqueid());
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.item, spinnerArray);
@@ -208,7 +210,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 		name = utils.getTextFromDialog(R.id.recipenameEditText, recipeAddDialog);
 		desc = utils.getTextFromDialog(R.id.recipeDescEdit, recipeAddDialog);
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
-		recipeBook = spinner.getSelectedItem().toString();
+		int pos = spinner.getSelectedItemPosition();
+		recipeBook = cookbookuids.get(pos);
 		recipeModel model = new recipeModel(context);
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Error checking
