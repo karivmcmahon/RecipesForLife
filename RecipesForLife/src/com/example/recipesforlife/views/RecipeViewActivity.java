@@ -177,7 +177,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextPink(R.id.serves, recipeFont);
 		utils.setTextBlack(R.id.servesVal, recipeFont);
 		utils.setTextPink(R.id.difficulty, recipeFont);
-		utils.setTextBlack(R.id.difficultyVal, recipeFont);
+		utils.setTextBlack(R.id.diffVal, recipeFont);
 		utils.setTextPink(R.id.dietary, recipeFont);
 		utils.setTextBlack(R.id.dietaryVal, recipeFont);
 		utils.setTextPink(R.id.cusine, recipeFont);
@@ -239,7 +239,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextString(R.id.servesVal, recipe.getServes());
 		utils.setTextString(R.id.prepTimeVal, recipe.getPrep());
 		utils.setTextString(R.id.cookingTimeVal, recipe.getCooking());
-		utils.setTextString(R.id.difficultyVal, recipe.getDifficulty());
+		utils.setTextString(R.id.diffVal, recipe.getDifficulty());
 		utils.setTextString(R.id.tips, recipe.getTips());
 		utils.setTextString(R.id.dietaryVal, recipe.getDietary());
 		utils.setTextString(R.id.cusineVal, recipe.getCusine());

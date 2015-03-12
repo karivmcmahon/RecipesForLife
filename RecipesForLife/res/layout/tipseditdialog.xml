@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/shape3"
-    android:orientation="vertical" >
+    android:orientation="vertical"  >
     
-     <TextView
+    <TextView
            android:id="@+id/recipeEditView"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
@@ -17,51 +17,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 	      <TextView
-	           android:id="@+id/recipeServesView"
+	           android:id="@+id/recipeTipsView"
 	           android:layout_width="wrap_content"
 	           android:layout_height="wrap_content"
 	           android:layout_marginTop="22dp"
 	           android:gravity="left"
-	           android:text="Serves: "
+	           android:text="Tips: "
 	            />
 	      
 	       <EditText
-	         android:id="@+id/recipeServesEditText"
+	         android:id="@+id/recipeTipsEditText"
 	         android:layout_width="wrap_content"
 	         android:layout_height="30dp"
 	         android:layout_marginTop="22dp"
 	         android:ems="10"
 	         android:textSize="14dp"
 	         android:background="#FFFFFF"
-	         android:inputType="number"
 	          android:textCursorDrawable="@drawable/cursor"
 	         
 	         />
        </LinearLayout>
        
-       <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-	      <TextView
-	           android:id="@+id/recipeDifficultyView"
-	           android:layout_width="wrap_content"
-	           android:layout_height="wrap_content"
-	           android:layout_marginTop="22dp"
-	           android:gravity="left"
-	           android:text="Difficulty: "
-	            />
-	      
-	      <Spinner
-	            android:id="@+id/recipeDifficultySpinner"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_toRightOf="@+id/recipeDifficultyView"
-	            android:layout_marginTop="22dp"
-	            android:ems="10"
-	            android:textSize="14dp" 
-	            android:textColor="#FFFFFF"/>	  
-       </LinearLayout>
+       
        
        	   <TextView
 	           android:id="@+id/errorView"
@@ -79,5 +56,6 @@
            android:layout_marginTop="10dp"
            android:background="@drawable/button"
            android:text="Ok" />
+    
 
 </LinearLayout>

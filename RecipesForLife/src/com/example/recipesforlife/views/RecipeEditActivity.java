@@ -239,7 +239,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 					getTimeDialog();
 				}
 				return false;
-			}});
+			}}); 
 
 		//If edit prep icon selected display the prep dialog
 		ImageView prepButton = (ImageView) findViewById(R.id.methodEditImage);
@@ -261,6 +261,28 @@ public class RecipeEditActivity extends ActionBarActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					getAndCreateIngredDialog();
+				}
+				return false;
+			}});
+		
+		ImageView tipsButton = (ImageView) findViewById(R.id.tipsEditImage);
+		tipsButton.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					getTipsDialog();
+				}
+				return false;
+			}});
+		
+		ImageView chefEditButton = (ImageView) findViewById(R.id.chefEditImage);
+		chefEditButton.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					getChefDialog();
 				}
 				return false;
 			}});
@@ -359,7 +381,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void setStyle()
 	{
-		utils.setTextPink(R.id.recipeTitle, 26);
+	    utils.setTextPink(R.id.recipeTitle, 26);
 		utils.setTextBlackItalic(R.id.recipeDesc, 22);
 		utils.setTextPink(R.id.serves, 22);
 		utils.setTextBlack(R.id.servesVal, 20);
@@ -371,6 +393,15 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setTextPink(R.id.methodTitle, 26);
 		utils.setTextBlack(R.id.ingredientList, 22);
 		utils.setTextBlack(R.id.methodList, 22);	
+		utils.setTextPink(R.id.tipsTitle, 26);
+		utils.setTextBlack(R.id.tips, 22);
+		utils.setTextBlack(R.id.diffVal, 22);
+		utils.setTextPink(R.id.difficulty, 22);
+		utils.setTextBlack(R.id.cusineVal, 22);
+		utils.setTextPink(R.id.cusine, 22);
+		utils.setTextBlack(R.id.dietaryVal, 22);
+		utils.setTextPink(R.id.dietary, 22); 
+		
 	}
 
 	/**
@@ -415,7 +446,10 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setTextString(R.id.servesVal, recipe.getServes());
 		utils.setTextString(R.id.prepTimeVal, recipe.getPrep());
 		utils.setTextString(R.id.cookingTimeVal, recipe.getCooking());
-
+		utils.setTextString(R.id.diffVal, recipe.getDifficulty());
+		utils.setTextString(R.id.tips, recipe.getTips());
+		utils.setTextString(R.id.dietaryVal, recipe.getDietary());
+		utils.setTextString(R.id.cusineVal, recipe.getCusine()); 
 	}
 
 	/**
@@ -456,6 +490,20 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.recipeEditView, servesDialog, 22);
 		utils.setDialogText(R.id.recipeServesView, servesDialog, 22);
 		utils.setDialogTextString(R.id.recipeServesEditText, servesDialog, recipe.getServes());
+		utils.setDialogText(R.id.recipeDifficultyView, servesDialog, 22);
+		
+		List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("Easy");
+		spinnerArray.add("Medium");
+		spinnerArray.add("Hard");
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				this, R.layout.item, spinnerArray);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		final Spinner sItems = (Spinner) servesDialog.findViewById(R.id.recipeDifficultySpinner);
+		sItems.getBackground().setColorFilter(this.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		sItems.setAdapter(adapter);
+		sItems.setSelection(utils.getIndex(sItems, recipe.getDifficulty()));
+		
 		Button servesButton = utils.setButtonTextDialog(R.id.saveButton, 22, servesDialog);
 		servesButton.setOnClickListener(new OnClickListener(){
 
@@ -468,6 +516,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				else
 				{
 					utils.setTextString(R.id.servesVal, utils.getTextFromDialog(R.id.recipeServesEditText, servesDialog));
+					utils.setTextString(R.id.diffVal, sItems.getSelectedItem().toString());
 					servesDialog.dismiss();
 				}
 
@@ -511,6 +560,79 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 			}});
 		titleDialog.show();
+	}
+	
+	/**
+	 * Creates a title dialog where the user can edit the title dialog
+	 */
+	public void getTipsDialog()
+	{
+		final Dialog tipsDialog = utils.createDialog(RecipeEditActivity.this, R.layout.tipseditdialog);
+		final TextView errorView = (TextView) tipsDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,tipsDialog,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
+		utils.setDialogText(R.id.recipeEditView, tipsDialog, 22);
+		utils.setDialogText(R.id.recipeTipsView, tipsDialog, 22);
+		utils.setDialogTextString(R.id.recipeTipsEditText, tipsDialog, recipe.getTips());
+		Button tipsButton = utils.setButtonTextDialog(R.id.saveButton, 22, tipsDialog);
+		tipsButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+					utils.setTextString(R.id.tips, utils.getTextFromDialog(R.id.recipeTipsEditText, tipsDialog));
+					
+					tipsDialog.dismiss();
+				
+
+			}});
+		tipsDialog.show(); 
+	}
+
+	public void getChefDialog()
+	{
+		final Dialog cusineDialog = utils.createDialog(RecipeEditActivity.this, R.layout.dietarycusinedialog);
+		final TextView errorView = (TextView) cusineDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,cusineDialog,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
+		utils.setDialogText(R.id.recipeEditView, cusineDialog, 22);
+		utils.setDialogText(R.id.recipeCusineView, cusineDialog, 22);
+		utils.setDialogTextString(R.id.recipeDietaryEditText, cusineDialog, recipe.getDietary());
+		utils.setDialogText(R.id.recipeDietaryView, cusineDialog, 22);
+		
+		List<String> cusineSpinnerArray =  new ArrayList<String>();
+		cusineSpinnerArray.add("Italian");
+		cusineSpinnerArray.add("Indian");
+		cusineSpinnerArray.add("Chinese");
+		cusineSpinnerArray.add("Thai");
+		cusineSpinnerArray.add("Spanish");
+		cusineSpinnerArray.add("French");
+		cusineSpinnerArray.add("American");
+		cusineSpinnerArray.add("English");
+		cusineSpinnerArray.add("African");
+		cusineSpinnerArray.add("Middle Eastern");
+		cusineSpinnerArray.add("Other");
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				this, R.layout.item, cusineSpinnerArray);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		final Spinner sItems = (Spinner) cusineDialog.findViewById(R.id.recipeCusineSpinner);
+		sItems.getBackground().setColorFilter(this.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		sItems.setAdapter(adapter);
+		sItems.setSelection(utils.getIndex(sItems, recipe.getCusine()));
+		
+		Button cusineButton = utils.setButtonTextDialog(R.id.saveButton, 22, cusineDialog);
+		cusineButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+					utils.setTextString(R.id.dietaryVal, utils.getTextFromDialog(R.id.recipeDietaryEditText, cusineDialog));
+					utils.setTextString(R.id.cusineVal, sItems.getSelectedItem().toString());
+					cusineDialog.dismiss();
+				
+
+			}});
+		cusineDialog.show();
 	}
 
 
@@ -851,6 +973,10 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipechange.setCooking(utils.getTextView(R.id.cookingTimeVal));
 		recipechange.setUniqueid(recipe.getUniqueid());
 		recipechange.setProgress("added");
+		recipechange.setTips(utils.getTextView(R.id.tips));
+		recipechange.setDietary(utils.getTextView(R.id.dietaryVal));
+		recipechange.setDifficulty(utils.getTextView(R.id.diffVal));
+		recipechange.setCusine(utils.getTextView(R.id.cusineVal));
 		recipeModel rm = new recipeModel(getApplicationContext());
 		try
 		{

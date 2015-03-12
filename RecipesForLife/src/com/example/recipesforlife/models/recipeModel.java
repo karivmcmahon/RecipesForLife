@@ -61,6 +61,10 @@ public class recipeModel extends baseDataSource {
 		recipeUpdateVals.put("cookingTime", newRecipe.getCooking());
 		recipeUpdateVals.put("serves", newRecipe.getServes());
 		recipeUpdateVals.put("progress", newRecipe.getProgress());
+		recipeUpdateVals.put("dietary", newRecipe.getDietary());
+		recipeUpdateVals.put("difficulty", newRecipe.getDifficulty());
+		recipeUpdateVals.put("cusine", newRecipe.getCusine());
+		recipeUpdateVals.put("tips", newRecipe.getTips());
 		if(server == true)
 		{
 			recipeUpdateVals.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
