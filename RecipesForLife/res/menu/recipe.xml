@@ -32,5 +32,6 @@
 	 <item android:id="@+id/action_search"
           android:icon="@drawable/search"
           android:title="@string/action_search"
-          yourapp:showAsAction="always"  />
+          yourapp:showAsAction="always"
+          yourapp:actionViewClass="android.widget.SearchView"  />
 </menu>
