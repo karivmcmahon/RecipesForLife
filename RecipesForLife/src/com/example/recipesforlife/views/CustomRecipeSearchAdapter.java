@@ -63,33 +63,33 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<recipeBean> {
 		
 		TextView diffTitle = (TextView) rowView.findViewById(R.id.difficultyTitle);
 		diffTitle.setText("Difficulty: ");
-		utils.setRowText(R.id.difficultyTitle, rowView, 18);
+		utils.setRowText(R.id.difficultyTitle, rowView, 20);
 		diffTitle.setTextColor(Color.parseColor("#F3216C"));
 		
 		TextView diff = (TextView) rowView.findViewById(R.id.difficulty);
 		diff.setText(rb.get(position).getDifficulty());
-		utils.setRowText(R.id.difficulty, rowView, 18);
+		utils.setRowText(R.id.difficulty, rowView, 20);
 		diff.setTextColor(Color.parseColor("#000000"));
 		
 		TextView cusineTitle = (TextView) rowView.findViewById(R.id.cusineTitle);
 		cusineTitle.setText("Cusine: ");
-		utils.setRowText(R.id.cusineTitle, rowView, 18);
+		utils.setRowText(R.id.cusineTitle, rowView, 20);
 		cusineTitle.setTextColor(Color.parseColor("#F3216C"));
 		
 		TextView cusine = (TextView) rowView.findViewById(R.id.cusine);
 		cusine.setText(rb.get(position).getCusine());
-		utils.setRowText(R.id.cusine, rowView, 18);
+		utils.setRowText(R.id.cusine, rowView, 20);
 		cusine.setTextColor(Color.parseColor("#000000")); 
 		
 		TextView timeTitle = (TextView) rowView.findViewById(R.id.cookTimeTitle);
-		timeTitle.setText("Total cook time: ");
-		utils.setRowText(R.id.cookTimeTitle, rowView, 18);
+		timeTitle.setText("Time: ");
+		utils.setRowText(R.id.cookTimeTitle, rowView, 20);
 		timeTitle.setTextColor(Color.parseColor("#F3216C"));
 		
-		TextView time = (TextView) rowView.findViewById(R.id.cookTime);
+		/**TextView time = (TextView) rowView.findViewById(R.id.cookTime);
 		time.setText(rb.get(position).getPrep() + rb.get(position).getCooking());
 		utils.setRowText(R.id.cookTime, rowView, 18);
-		time.setTextColor(Color.parseColor("#000000")); 
+		time.setTextColor(Color.parseColor("#000000"));**/ 
 		
 		ImageView recipeImage = (ImageView) rowView.findViewById(R.id.icon);
 		imgload.DisplayImage(recipeImage, rb.get(position).getImage(), Base64.encodeToString(rb.get(position).getImage(), Base64.DEFAULT) + rb.get(position).getUniqueid());

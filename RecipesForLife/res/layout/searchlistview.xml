@@ -23,24 +23,74 @@
             android:background="@drawable/fadedbar4"/>
     
     <LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
     android:id="@+id/ll"
+    
    
       >
+      
+         <TextView  
+        android:id="@+id/recipeheader"     
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:padding="5dp"
+        android:background="@drawable/fadedbar4"
+         android:gravity="center"
+       />
         <ListView
               android:id="@+id/list"
               android:layout_height="wrap_content"
-              android:layout_width="match_parent">
+              android:layout_width="match_parent"
+               android:background="@drawable/gradient_bg"
+               android:layout_marginTop="5dp">
          </ListView>
          
-         <TextView
-            
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:src="@drawable/images"
-        android:scaleType="fitXY"/>
+        <TextView  
+        android:id="@+id/cookbookheader"     
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:padding="5dp"
+         android:text="Cookbooks that feature ' ' "
+          android:gravity="center"
+         android:background="@drawable/fadedbar4"
+       />
+        
+        <TextView  
+        android:id="@+id/cookbookrows"     
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:padding="5dp"
+         android:text="No results"
+          android:gravity="center"
+         android:background="@drawable/gradient_bg"
+       />
+        
+        <TextView  
+        android:id="@+id/userheader"     
+       android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:padding="5dp"
+         android:gravity="center"
+         android:text="Users that feature ' '"
+          android:background="@drawable/fadedbar4"
+       />
+        
+        <TextView  
+        android:id="@+id/userrows"     
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:padding="5dp"
+        android:text="No results"
+        android:gravity="center"
+        android:background="@drawable/gradient_bg"
+       />
 
  
 </LinearLayout>
