@@ -3,7 +3,9 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.searchModel;
 
 import android.app.Activity;
@@ -20,6 +22,7 @@ import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 public class SearchResultsActivity extends ActionBarActivity {
 
@@ -30,6 +33,7 @@ public class SearchResultsActivity extends ActionBarActivity {
     	super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
+		setContentView(R.layout.searchlistview);
 		
 		//Sets up nav bar
 		nav = new NavigationDrawerCreation(SearchResultsActivity.this, "Search");
@@ -95,11 +99,14 @@ public class SearchResultsActivity extends ActionBarActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             searchModel sm = new searchModel(getApplicationContext());
             ArrayList<recipeBean> rb = sm.selectRecipe(query);
-            for(int i = 0; i < rb.size(); i++)
-            {
-            	Log.v("NAME ", "Name " + rb.get(i).getName() + " " + i);
-            }
-            //use the query to search your data somehow
+            
+            ListView listView = (ListView) findViewById(R.id.list);
+    		
+    		
+    		CustomRecipeSearchAdapter adapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
+    		listView.setAdapter(adapter); 
+    		
+           
         }
     }
     

@@ -12,6 +12,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,6 +68,10 @@ public class NavigationDrawerCreation   {
 		imageids.add(R.drawable.power18);
 		drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
 		drawerList = (ListView) activity.findViewById(R.id.left_drawer);
+		
+		Context contexts = activity.getApplicationContext();
+		Log.v("image ", "image " + imageids.size());
+		Log.v("image ", "image " + navBarTitles.size());
 
 		// Set the adapter for the list view
 		drawerList.setAdapter(new CustomNavArrayAdapter(activity.getApplicationContext(),
