@@ -107,35 +107,30 @@ public class SearchResultsActivity extends ActionBarActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             searchModel sm = new searchModel(getApplicationContext());
             final ArrayList<recipeBean> rb = sm.selectRecipe(query);
+            final ArrayList<cookbookBean> cb = sm.selectCookbooks(query);
             
             TextView tv = (TextView) findViewById(R.id.recipeheader);
             tv.setText("Recipes that feature '" + query + "' :");
             utils.setText(R.id.recipeheader, 30);
             utils.setText(R.id.cookbookheader, 30);
             utils.setText(R.id.userheader, 30);
-            utils.setTextPink(R.id.cookbookrows, 26);
             utils.setTextPink(R.id.userrows, 26);
            
             ListView listView = (ListView) findViewById(R.id.list);
-    		
             if(rb.size() == 0)
             {
             	recipeBean recipebean = new recipeBean();
             	recipebean.setName("empty");
             	rb.add(recipebean);
             }
-    		
     		CustomRecipeSearchAdapter adapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
     		listView.setAdapter(adapter); 
     		
     		listView.setOnItemClickListener(new OnItemClickListener() {
-    		     
-
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					// TODO Auto-generated method stub
-					Log.v("Posssss", "Posssss" + position);
 					Intent i = new Intent(SearchResultsActivity.this, RecipeViewActivity.class);
 					i.putExtra("uniqueidr", rb.get(position).getUniqueid());
 					i.putExtra("name", rb.get(position).getName());
@@ -144,6 +139,32 @@ public class SearchResultsActivity extends ActionBarActivity {
 				}                 
     		});
     		
+    		TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
+            cookbooktv.setText("Cookbooks that feature '" + query + "' :");
+            ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
+            if(cb.size() == 0)
+            {
+            	cookbookBean cookbookbean = new cookbookBean();
+            	cookbookbean.setName("empty");
+            	cb.add(cookbookbean);
+            } 
+    		CustomCookbookSearchAdapter cookbookadapter = new CustomCookbookSearchAdapter( getApplicationContext(), this,  cb);
+    		cookbooklistView.setAdapter(cookbookadapter); 
+    		
+    		cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					Intent i = new Intent(SearchResultsActivity.this, RecipeListViewActivity.class);
+					//intents used on getting the recipes		
+					i.putExtra("uniqueid", cb.get(position).getUniqueid());
+					i.putExtra("type", "view");
+					i.putExtra("bookname", cb.get(position).getName());
+					startActivity(i);
+					
+				}                 
+    		});
            
         }
     }

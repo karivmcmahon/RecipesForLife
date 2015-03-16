@@ -45,13 +45,11 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<recipeBean> {
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-		Log.v("pos" , "HELP");
+		
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
-		Log.v("pos" , "sizeeee rb " + rb.size());
 		if(rb.get(position).getName().equals("empty"))
 		{
-			Log.v("pos" , "empty");
 			rowView= inflater.inflate(R.layout.noresultsearch, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.noResults);
 			utils.setRowText(R.id.noResults, rowView, 26);

@@ -2,6 +2,7 @@ package com.example.recipesforlife.models;
 
 import java.util.ArrayList;
 
+import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.recipeBean;
 
@@ -75,6 +76,37 @@ public class searchModel extends baseDataSource {
 		rb.setImage(imgbean.getImage());
 		rb.setRecipeBook(cursor.getString(getIndex("cname", cursor)));
 		return rb;
+	}
+	
+	public ArrayList<cookbookBean> selectCookbooks(String word)
+	{	
+		ArrayList<cookbookBean> cb = new ArrayList<cookbookBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook WHERE Cookbook.privacyOption='public' AND (Cookbook.name LIKE ? OR Cookbook.description LIKE  ?)", new String[] { "%" + word + "%" , "%" + word + "%" });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				cb.add(cursorToCookbook(cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return cb;
+	}
+	
+	public cookbookBean cursorToCookbook(Cursor cursor) {
+		cookbookBean cb = new cookbookBean();
+		cb.setName(cursor.getString(getIndex("name",cursor)));
+		cb.setDescription(cursor.getString(getIndex("description",cursor)));
+		cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
+		cb.setPrivacy(cursor.getString(getIndex("privacyOption",cursor)));
+		cb.setCreator(cursor.getString(getIndex("creator",cursor)));
+		cb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
+		cb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
+		cb.setImage(cursor.getBlob(getIndex("image", cursor)));
+		cb.setProgress(cursor.getString(getIndex("progress",cursor)));
+		return cb;
 	}
 
 }
