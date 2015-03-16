@@ -21,7 +21,7 @@ public class searchModel extends baseDataSource {
 	{	
 		ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, * FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE (Cookbook.privacyOption='public' AND Recipe.progress='added') AND (Recipe.name LIKE ? OR Recipe.description LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" });
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE (Cookbook.privacyOption='public' AND Recipe.progress='added') AND (Recipe.name LIKE ? OR Recipe.description LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -65,7 +65,7 @@ public class searchModel extends baseDataSource {
 		rb.setPrep(cursor.getString(getIndex("prepTime", cursor)));
 		rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
 		rb.setId(cursor.getInt(getIndex("idr",cursor))); 
-		rb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
+		rb.setUniqueid(cursor.getString(getIndex("rid", cursor)));
 		rb.setProgress(cursor.getString(getIndex("progress", cursor)));
 		rb.setCusine(cursor.getString(getIndex("cusine", cursor)));
 		rb.setDifficulty(cursor.getString(getIndex("difficulty", cursor)));
@@ -73,7 +73,7 @@ public class searchModel extends baseDataSource {
 		rb.setDietary(cursor.getString(getIndex("dietary", cursor)));
 		imageBean imgbean = selectImages(cursor.getInt(getIndex("idr",cursor)));
 		rb.setImage(imgbean.getImage());
-		rb.setRecipeBook(cursor.getString(getIndex("name", cursor)));
+		rb.setRecipeBook(cursor.getString(getIndex("cname", cursor)));
 		return rb;
 	}
 

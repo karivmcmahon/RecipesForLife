@@ -2,10 +2,13 @@ package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -105,16 +108,17 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		SearchManager searchManager =
+		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		android.support.v7.widget.SearchView searchView =
+		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+		    searchView.setSearchableInfo(
+		            searchManager.getSearchableInfo(getComponentName()));
 		return true;
 	}
 	
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-	    MenuItem searchViewMenuItem = menu.findItem(R.id.action_search);    
-	    SearchView mSearchView = (SearchView) searchViewMenuItem.getActionView();
-	    int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
-	    ImageView v = (ImageView) mSearchView.findViewById(searchImgId);
-	    v.setImageResource(R.drawable.search); 
+	public boolean onPrepareOptionsMenu(Menu menu) {   
 	    return super.onPrepareOptionsMenu(menu);
 	}
 

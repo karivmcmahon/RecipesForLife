@@ -24,6 +24,9 @@ import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -103,7 +106,7 @@ public class SearchResultsActivity extends ActionBarActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             searchModel sm = new searchModel(getApplicationContext());
-            ArrayList<recipeBean> rb = sm.selectRecipe(query);
+            final ArrayList<recipeBean> rb = sm.selectRecipe(query);
             
             TextView tv = (TextView) findViewById(R.id.recipeheader);
             tv.setText("Recipes that feature '" + query + "' :");
@@ -115,9 +118,31 @@ public class SearchResultsActivity extends ActionBarActivity {
            
             ListView listView = (ListView) findViewById(R.id.list);
     		
+            if(rb.size() == 0)
+            {
+            	recipeBean recipebean = new recipeBean();
+            	recipebean.setName("empty");
+            	rb.add(recipebean);
+            }
     		
     		CustomRecipeSearchAdapter adapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
     		listView.setAdapter(adapter); 
+    		
+    		listView.setOnItemClickListener(new OnItemClickListener() {
+    		     
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					Log.v("Posssss", "Posssss" + position);
+					Intent i = new Intent(SearchResultsActivity.this, RecipeViewActivity.class);
+					i.putExtra("uniqueidr", rb.get(position).getUniqueid());
+					i.putExtra("name", rb.get(position).getName());
+					startActivity(i);
+					
+				}                 
+    		});
     		
            
         }

@@ -102,11 +102,7 @@ public class CookbookListActivity extends ActionBarActivity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-	  /**  MenuItem searchViewMenuItem = menu.findItem(R.id.action_search);    
-	    SearchView mSearchView = (SearchView) searchViewMenuItem.getActionView();
-	    int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
-	    ImageView v = (ImageView) mSearchView.findViewById(searchImgId);
-	    v.setImageResource(R.drawable.search); **/ 
+	 
 	    return super.onPrepareOptionsMenu(menu);
 	}
 

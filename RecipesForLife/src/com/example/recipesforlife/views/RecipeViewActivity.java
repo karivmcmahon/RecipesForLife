@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -60,11 +62,11 @@ public class RecipeViewActivity extends ActionBarActivity {
 		nav.createDrawer();
 		SpannableString s = new SpannableString(recipeName);
 		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
-		        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 		// Update the action bar title with the TypefaceSpan instance
-				android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-				actionBar.setTitle(s);
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle(s);
 
 
 	}
@@ -81,21 +83,17 @@ public class RecipeViewActivity extends ActionBarActivity {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-	    MenuItem searchViewMenuItem = menu.findItem(R.id.action_search);    
-	    SearchView mSearchView = (SearchView) searchViewMenuItem.getActionView();
-	    int searchImgId = getResources().getIdentifier("android:id/search_button", null, null);
-	    ImageView v = (ImageView) mSearchView.findViewById(searchImgId);
-	    v.setImageResource(R.drawable.search); 
-	    return super.onPrepareOptionsMenu(menu);
+
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		nav.drawerToggle(item);
 
 		//These choices increae or decrease font size
@@ -151,25 +149,33 @@ public class RecipeViewActivity extends ActionBarActivity {
 
 	}
 
-	
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		 getMenuInflater().inflate(R.menu.recipe, menu);
-	        MenuItem item = menu.findItem(R.id.action_share);
-	        //Creates a share recipe link when the share button on the action bar selected
-	        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	        if(mShareActionProvider != null)
-	        {
-	        	Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-	    		sharingIntent.setType("text/plain");
-	    		String shareBody = "Check out my recipe for " + recipeName +  " on the android app Recipes For Life" ;
-	    		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-	    		  mShareActionProvider.setShareIntent(sharingIntent);
-	        }
-	      
-	        
+		getMenuInflater().inflate(R.menu.recipe, menu);
+
+		SearchManager searchManager =
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		android.support.v7.widget.SearchView searchView =
+				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(getComponentName()));
+
+		MenuItem item = menu.findItem(R.id.action_share);
+		//Creates a share recipe link when the share button on the action bar selected
+		mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+		if(mShareActionProvider != null)
+		{
+			Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+			sharingIntent.setType("text/plain");
+			String shareBody = "Check out my recipe for " + recipeName +  " on the android app Recipes For Life" ;
+			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+			mShareActionProvider.setShareIntent(sharingIntent);
+		}
+
+
 		return true;
 	}
 
@@ -220,14 +226,14 @@ public class RecipeViewActivity extends ActionBarActivity {
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
 		imgBean = model.selectImages(recipe.getId());
-		
-		
+
+
 		ImageView img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
 		task.execute();
-		
-		
-		
+
+
+
 		TextView instructions = (TextView) findViewById(R.id.methodList);
 		Collections.sort(prepList, new Comparator<preperationBean>() {
 			@Override 
