@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.userBean;
 import com.example.recipesforlife.models.cookbookModel;
 import com.example.recipesforlife.models.searchModel;
 import com.example.recipesforlife.models.util;
@@ -108,13 +109,12 @@ public class SearchResultsActivity extends ActionBarActivity {
             searchModel sm = new searchModel(getApplicationContext());
             final ArrayList<recipeBean> rb = sm.selectRecipe(query);
             final ArrayList<cookbookBean> cb = sm.selectCookbooks(query);
-            
+            final ArrayList<userBean> ub = sm.selectUsers(query);
             TextView tv = (TextView) findViewById(R.id.recipeheader);
             tv.setText("Recipes that feature '" + query + "' :");
             utils.setText(R.id.recipeheader, 30);
             utils.setText(R.id.cookbookheader, 30);
             utils.setText(R.id.userheader, 30);
-            utils.setTextPink(R.id.userrows, 26);
            
             ListView listView = (ListView) findViewById(R.id.list);
             if(rb.size() == 0)
@@ -163,6 +163,28 @@ public class SearchResultsActivity extends ActionBarActivity {
 					i.putExtra("bookname", cb.get(position).getName());
 					startActivity(i);
 					
+				}                 
+    		});
+    		
+    		
+    		TextView usertv = (TextView) findViewById(R.id.userheader);
+            usertv.setText("Accounts that feature '" + query + "' :");
+            ListView userlistView = (ListView) findViewById(R.id.userlist);
+            if(ub.size() == 0)
+            {
+            	userBean userbean = new userBean();
+            	userbean.setName("empty");
+            	ub.add(userbean);
+            } 
+    		CustomUserSearchAdapter useradapter = new CustomUserSearchAdapter( getApplicationContext(), this,  ub);
+    		userlistView.setAdapter(useradapter); 
+    		
+    		userlistView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+				
 				}                 
     		});
            

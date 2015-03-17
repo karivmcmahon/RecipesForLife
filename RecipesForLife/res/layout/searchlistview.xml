@@ -75,15 +75,13 @@
             android:padding="5dp"
             android:text="Users that feature &apos; &apos;" />
 
-        <TextView
-            android:id="@+id/userrows"
-            android:layout_width="fill_parent"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:background="@drawable/gradient_bg"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="No results" />
+         <ListView
+            android:id="@+id/userlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/gradient_bg" >
+        </ListView>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -1689,6 +1689,7 @@ containing a value of this type.
         public static final int user58=0x7f020065;
     }
     public static final class id {
+        public static final int accountid=0x7f0600f4;
         public static final int action_bar=0x7f060031;
         public static final int action_bar_activity_content=0x7f060018;
         public static final int action_bar_container=0x7f060030;
@@ -1696,19 +1697,19 @@ containing a value of this type.
         public static final int action_bar_spinner=0x7f060017;
         public static final int action_bar_subtitle=0x7f06001f;
         public static final int action_bar_title=0x7f06001e;
-        public static final int action_bookadd=0x7f0600f2;
+        public static final int action_bookadd=0x7f0600f5;
         public static final int action_context_bar=0x7f060032;
-        public static final int action_fontdown=0x7f0600f5;
-        public static final int action_fontup=0x7f0600f4;
-        public static final int action_fullScreen=0x7f0600f7;
+        public static final int action_fontdown=0x7f0600f8;
+        public static final int action_fontup=0x7f0600f7;
+        public static final int action_fullScreen=0x7f0600fa;
         public static final int action_menu_divider=0x7f06001a;
         public static final int action_menu_presenter=0x7f06001b;
         public static final int action_mode_bar=0x7f06002e;
         public static final int action_mode_bar_stub=0x7f06002d;
         public static final int action_mode_close_button=0x7f060020;
-        public static final int action_screenOn=0x7f0600f8;
-        public static final int action_search=0x7f0600f3;
-        public static final int action_share=0x7f0600f6;
+        public static final int action_screenOn=0x7f0600fb;
+        public static final int action_search=0x7f0600f6;
+        public static final int action_share=0x7f0600f9;
         public static final int activity_chooser_view_content=0x7f060021;
         public static final int addBookView=0x7f060046;
         public static final int addButton=0x7f060043;
@@ -1725,6 +1726,7 @@ containing a value of this type.
         public static final int amountView=0x7f060079;
         public static final int bButton=0x7f060074;
         public static final int beginning=0x7f060012;
+        public static final int bio=0x7f0600f3;
         public static final int bioEditText=0x7f0600e6;
         public static final int bioView=0x7f0600e4;
         public static final int bookDescEditText=0x7f06004a;
@@ -1930,7 +1932,8 @@ containing a value of this type.
         public static final int useLogo=0x7f060005;
         public static final int userView=0x7f060067;
         public static final int userheader=0x7f0600d7;
-        public static final int userrows=0x7f0600d8;
+        public static final int userinfo=0x7f0600f2;
+        public static final int userlist=0x7f0600d8;
         public static final int valueSpinner=0x7f06007c;
         public static final int valueTitleView=0x7f0600cf;
         public static final int valueView=0x7f06007b;
@@ -2029,6 +2032,7 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f03003d;
         public static final int textviewdialog=0x7f03003e;
         public static final int tipseditdialog=0x7f03003f;
+        public static final int userindividsearch=0x7f030040;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.userBean;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -107,6 +108,39 @@ public class searchModel extends baseDataSource {
 		cb.setImage(cursor.getBlob(getIndex("image", cursor)));
 		cb.setProgress(cursor.getString(getIndex("progress",cursor)));
 		return cb;
+	}
+	
+	public ArrayList<userBean> selectUsers(String word)
+	{	
+		ArrayList<userBean> ub = new ArrayList<userBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT  * FROM Account INNER JOIN Users ON Account.id = Users.id WHERE Account.email LIKE ? OR Users.name LIKE ?", new String[] { "%" + word + "%" , "%" + word + "%" });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				ub.add(cursorToUsers(cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return ub;
+	}
+	
+	/**
+	 * Sets info from db to the controller
+	 * @param cursor
+	 * @return userBean
+	 */
+	public userBean cursorToUsers(Cursor cursor) {
+		userBean ub = new userBean();      
+		ub.setName(cursor.getString(getIndex("name", cursor)));
+		ub.setBio(cursor.getString(getIndex("bio", cursor)));
+		ub.setCity(cursor.getString(getIndex("city", cursor)));
+		ub.setCountry(cursor.getString(getIndex("country", cursor)));
+		ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
+		ub.setEmail(cursor.getString(getIndex("email", cursor)));
+		return ub;
 	}
 
 }
