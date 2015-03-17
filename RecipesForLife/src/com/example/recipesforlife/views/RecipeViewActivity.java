@@ -8,7 +8,9 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.view.MenuItemCompat;
@@ -19,7 +21,11 @@ import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +35,9 @@ import com.example.recipesforlife.controllers.imageBean;
 import com.example.recipesforlife.controllers.ingredientBean;
 import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.reviewBean;
 import com.example.recipesforlife.models.recipeModel;
+import com.example.recipesforlife.models.reviewModel;
 import com.example.recipesforlife.models.util;
 
 
@@ -47,8 +55,12 @@ public class RecipeViewActivity extends ActionBarActivity {
 	String recipeName = "";
 	int recipeFont = 22;
 	int recipeFontHeader = 26;
-
-
+	recipeBean recipe;
+	public static final String MyPREFERENCES = "MyPrefs" ;
+	public static final String emailk = "emailKey"; 
+	SharedPreferences sharedpreferences;
+	ArrayList<reviewBean> rbs;
+	 CustomReviewAdapter adapter;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,6 +79,44 @@ public class RecipeViewActivity extends ActionBarActivity {
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
+		
+		final reviewModel reviewmodel = new reviewModel(getApplicationContext());
+		 rbs = reviewmodel.selectReviews(recipe.getId());
+		 Log.v("RBS ", "RBS " + rbs.size());
+		ListView listView = (ListView) findViewById(R.id.reviewlist);
+	//	listView.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
+	    adapter = new CustomReviewAdapter( getApplicationContext(), this,  rbs);
+		listView.setAdapter(adapter); 
+		
+        utils.setButtonText(R.id.sumbitButton, 22);
+        Button submitbutton = (Button) findViewById(R.id.sumbitButton);
+        submitbutton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+				reviewBean rb = new reviewBean();
+				rb.setComment(utils.getText(R.id.reviewBox));
+				rb.setRecipeid(recipe.getId());
+				rb.setUser(sharedpreferences.getString(emailk, "DEFAULT"));
+				try
+				{
+					
+					reviewmodel.insertReview(rb, false);
+					rbs.add(rb);
+					adapter.notifyDataSetChanged();
+					
+				}catch(SQLException e)
+				{
+					Toast.makeText(getApplicationContext(), "Review was not added", Toast.LENGTH_LONG).show();
+				}
+				
+				
+			}});
+        
+        
+        
 
 
 	}
@@ -209,6 +259,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextPink(R.id.methodTitle, recipeFontHeader);
 		utils.setTextBlack(R.id.ingredientList, recipeFont);
 		utils.setTextBlack(R.id.methodList, recipeFont);	
+		utils.setTextPink(R.id.reviewHeader, recipeFontHeader);
 	}
 
 	/**
@@ -217,7 +268,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 	public void setTextForLayout()
 	{
 		recipeModel model = new recipeModel(getApplicationContext());
-		recipeBean recipe = new recipeBean();
+		recipe = new recipeBean();
 		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
 		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
 		imageBean imgBean = new imageBean();
