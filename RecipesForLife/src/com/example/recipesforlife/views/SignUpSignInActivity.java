@@ -102,6 +102,9 @@ public class SignUpSignInActivity extends Activity {
 			editor2.putString("Contributers Update", "2015-01-01 12:00:00");
 			editor2.commit();
 			
+			editor2.putString("Review", "2015-01-01 12:00:00");
+			editor2.commit();
+			
 			buildDatabase();
 			new PostTask(utils, context, false).execute();
 		} else {

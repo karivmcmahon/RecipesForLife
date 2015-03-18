@@ -5,7 +5,21 @@ public class reviewBean {
 	String comment;
 	String user;
 	int recipeid;
+	String recipeuniqueid;
+	String updateTime;
 
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	public String getRecipeuniqueid() {
+		return recipeuniqueid;
+	}
+	public void setRecipeuniqueid(String recipeuniqueid) {
+		this.recipeuniqueid = recipeuniqueid;
+	}
 	public String getComment() {
 		return comment;
 	}

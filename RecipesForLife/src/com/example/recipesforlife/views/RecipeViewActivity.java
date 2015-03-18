@@ -117,6 +117,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 					reviewmodel.insertReview(rb, false);
 					rbs.add(0, rb);
 					adapter.notifyDataSetChanged();
+					utils.setTextString(R.id.reviewBox, "");
 					}
 				}catch(SQLException e)
 				{

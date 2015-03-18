@@ -334,6 +334,7 @@ public class util  {
 			syncRecipeModel syncRecipe = new syncRecipeModel(context);
 			syncCookbookModel syncCookbook = new syncCookbookModel(context);
 			syncContributersModel syncContributer = new syncContributersModel(context);
+			syncReviewModel syncReview = new syncReviewModel(context);
 			try {
 
 				//Get json from server for inserts
@@ -378,6 +379,11 @@ public class util  {
 				syncContributer.getJSONFromServer(true);
 				syncContributer.getAndCreateJSON(true);
 				editor.putString("Contributers Update", getLastUpdated(true));
+				editor.commit();
+				
+				syncReview.getJSONFromServer();
+				syncReview.getAndCreateJSON();
+				editor.putString("Review", getLastUpdated(true));
 				editor.commit();
 
 			

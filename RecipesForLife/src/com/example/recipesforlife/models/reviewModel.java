@@ -38,15 +38,15 @@ public class reviewModel extends baseDataSource  {
 		open();
 		values = new ContentValues();
 		values.put("review", review.getComment());
-		values.put("accountid", sharedpreferences.getString(emailk, "DEFAULT"));
+		
 		if(server == true)
 		{
-			
-			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
+			values.put("accountid", review.getUser());
+			values.put("updateTime", sharedpreferences.getString("Review", "DEFAULT")); 
 		}
 		else
 		{
-			
+			values.put("accountid", sharedpreferences.getString(emailk, "DEFAULT"));
 			values.put("updateTime", utils.getLastUpdated(false)); 
 		}
 		database.beginTransaction();
