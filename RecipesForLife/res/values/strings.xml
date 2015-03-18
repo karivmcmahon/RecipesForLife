@@ -10,6 +10,7 @@
      <string name="action_screenOn">Screen On</string>
       <string name="action_fullScreen">Full Screen</string>
       <string name="action_bookadd">Cookbook Add</string>
+       <string name="action_copy">Copy</string>
     <string name="hello_world">Hello world!</string>
     <string name="drawer_open">Open</string>
 <string name="drawer_close">Close</string>

@@ -567,6 +567,45 @@ public class recipeModel extends baseDataSource {
 		close();
 		return rb;	
 	}
+	
+	
+	public ArrayList<recipeBean> selectAllRecipesUserCanAccess(String user)
+	{
+
+		ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON CookbookRecipe.Recipeid = Recipe.id INNER JOIN Contributers ON Contributers.cookbookid = Cookbook.id WHERE Cookbook.progress = 'added' AND Recipe.progress = 'added' AND (Recipe.addedBy =? OR Contributers.accountid = ?)", new String[] {  user, user });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				rb.add(cursorToAllRecipes(cursor));	                
+			}
+		}
+		cursor.close();
+		close();
+		return rb;	
+	}
+	
+	public recipeBean cursorToAllRecipes(Cursor cursor) 
+	{
+		recipeBean rb = new recipeBean();
+		rb.setName(cursor.getString(getIndex("rname",cursor)));
+		rb.setDesc(cursor.getString(getIndex("desc",cursor)));
+		rb.setServes(cursor.getString(getIndex("serves", cursor)));
+		rb.setPrep(cursor.getString(getIndex("prepTime", cursor)));
+		rb.setCooking(cursor.getString(getIndex("cookingTime", cursor)));
+		rb.setId(cursor.getInt(getIndex("idr",cursor))); 
+		rb.setUniqueid(cursor.getString(getIndex("rid", cursor)));
+		rb.setProgress(cursor.getString(getIndex("progress", cursor)));
+		rb.setCusine(cursor.getString(getIndex("cusine", cursor)));
+		rb.setDifficulty(cursor.getString(getIndex("difficulty", cursor)));
+		rb.setTips(cursor.getString(getIndex("tips", cursor)));
+		rb.setDietary(cursor.getString(getIndex("dietary", cursor)));
+		//imageBean imgbean = selectImages(cursor.getInt(getIndex("idr",cursor)));
+		//rb.setImage(imgbean.getImage());
+		//rb.setRecipeBook(cursor.getString(getIndex("cname", cursor)));
+		return rb;
+	}
 
 	/**
 	 * Selects preperation info based on recipe

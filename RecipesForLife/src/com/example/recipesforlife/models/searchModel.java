@@ -23,7 +23,7 @@ public class searchModel extends baseDataSource {
 	{	
 		ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE (Cookbook.privacyOption='public' AND Recipe.progress='added') AND (Recipe.name LIKE ? OR Recipe.description LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" });
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND (Recipe.name LIKE ? OR Recipe.description LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -83,7 +83,7 @@ public class searchModel extends baseDataSource {
 	{	
 		ArrayList<cookbookBean> cb = new ArrayList<cookbookBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook WHERE Cookbook.privacyOption='public' AND (Cookbook.name LIKE ? OR Cookbook.description LIKE  ?)", new String[] { "%" + word + "%" , "%" + word + "%" });
+		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook WHERE Cookbook.privacyOption='public' AND Cookbook.progress='added' AND (Cookbook.name LIKE ? OR Cookbook.description LIKE  ?)", new String[] { "%" + word + "%" , "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

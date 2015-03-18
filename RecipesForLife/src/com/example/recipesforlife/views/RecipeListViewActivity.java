@@ -1,11 +1,16 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.SQLException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.view.MenuItemCompat;
@@ -15,14 +20,25 @@ import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.cookbookBean;
 import com.example.recipesforlife.controllers.imageBean;
+import com.example.recipesforlife.controllers.ingredientBean;
+import com.example.recipesforlife.controllers.preperationBean;
 import com.example.recipesforlife.controllers.recipeBean;
 import com.example.recipesforlife.models.cookbookModel;
+import com.example.recipesforlife.models.recipeModel;
 import com.example.recipesforlife.models.util;
 
 /**
@@ -175,20 +191,90 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//Checks for nav drawer selection
-		boolean result = nav.drawerToggle(item);
+		nav.drawerToggle(item);
 
-		switch (item.getItemId()) 
+		if(item.getItemId() ==  R.id.action_bookadd)
 		{
-		//If add button selected on action bar then display add recipe dialog
-		case R.id.action_bookadd:
 			Intent intent = getIntent();
 			add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid, intent.getStringExtra("bookname"));
 			add.addRecipe();
-			result = true;
-		default:
-			result = false;
+			
 		}
-		return result;
+		else if(item.getItemId() ==  R.id.action_copy)
+		{
+			final Dialog cloneDialog = utils.createDialog(RecipeListViewActivity.this , R.layout.clonedialog);
+			utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
+			utils.setDialogText(R.id.currentRecipesView,cloneDialog,22);
+			utils.setDialogText(R.id.recipeNameView,cloneDialog,22);
+			
+			final TextView errorView = (TextView) cloneDialog.findViewById(R.id.errorView);
+			utils.setDialogText(R.id.errorView,cloneDialog,16);
+			errorView.setTextColor(Color.parseColor("#F70521"));
+			
+			final recipeModel model = new recipeModel(getApplicationContext());
+			final SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+			final ArrayList<recipeBean> rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
+			List<String> spinnerArray =  new ArrayList<String>();
+			for(int i = 0; i < rbList.size(); i++)
+			{
+				spinnerArray.add(rbList.get(i).getName());
+				//cookbookuids.add(cbList.get(i).getUniqueid());
+			}
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+					RecipeListViewActivity.this, R.layout.item, spinnerArray);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+			final Spinner spinner = (Spinner) cloneDialog.findViewById(R.id.currentRecipesSpinner);
+			spinner.setAdapter(adapter);
+			spinner.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+			
+			Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
+			addButton.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					int namepos = spinner.getSelectedItemPosition();
+					rbList.get(namepos).setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
+					rbList.get(namepos).setAddedBy(sharedpreferences.getString(emailk, ""));
+					rbList.get(namepos).setRecipeBook(uniqueid);
+					ArrayList<preperationBean> prepList = model.selectPreperation(rbList.get(namepos).getId());
+					ArrayList<ingredientBean> ingredList = model.selectIngredients(rbList.get(namepos).getId());
+					imageBean imgBean = model.selectImages(rbList.get(namepos).getId());
+					
+					try
+					{
+						if(model.selectRecipe(rbList.get(namepos).getName(), uniqueid))
+						{
+							errorView.setText("You already have a recipe with that name");
+						}
+						else if(rbList.get(namepos).getName().equals(""))
+						{
+							errorView.setText("Please enter a recipe name");
+						}
+						else
+						{
+							String uid = model.insertRecipe(rbList.get(namepos), false, ingredList, prepList, imgBean);
+							cloneDialog.dismiss();
+							//Updates recipe list once inserted
+							recipenames.add(0, rbList.get(namepos).getName());
+							recipeids.add(0,  uid);
+						    recipeimages.add(0, imgBean.getImage());
+							RecipeListViewActivity.adapter.notifyDataSetChanged(); 
+							cloneDialog.dismiss();
+						}
+
+					}catch(SQLException e)
+					{
+						Toast.makeText(getApplicationContext(), "Recipe was not cloned", Toast.LENGTH_LONG).show();
+					}
+					
+					
+					
+				}});
+			
+			cloneDialog.show();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
