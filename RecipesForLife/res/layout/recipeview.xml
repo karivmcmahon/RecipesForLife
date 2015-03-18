@@ -303,7 +303,8 @@
 	             android:inputType="textMultiLine"
 	             android:layout_marginTop="10dp"
 	             android:background="#FFFFFF"
-	             android:textCursorDrawable="@drawable/cursor">            
+	             android:textCursorDrawable="@drawable/cursor"
+	             android:hint="Add a review or suggestion">            
 	         </EditText>
 	         
 	         <Button
@@ -317,16 +318,32 @@
 	        
 	        </LinearLayout>
 	        
+        <LinearLayout
+     
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+         android:layout_below="@+id/ll" >
+	         
+        <TextView
+	           android:id="@+id/errorView"
+	           android:layout_width="wrap_content"
+	           android:layout_height="wrap_content"
+	           android:layout_marginTop="22dp"
+	           android:gravity="center"
+	           android:text="" />
+	        
         <ListView
             android:id="@+id/reviewlist"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="300dp"
             android:background="@drawable/gradient_bg"
             android:scaleType="fitXY"
-             android:layout_below="@+id/ll"
+            
              android:divider="#F3216C"
              android:dividerHeight="1px" >
         </ListView>
+        </LinearLayout>
  
 
 </RelativeLayout>

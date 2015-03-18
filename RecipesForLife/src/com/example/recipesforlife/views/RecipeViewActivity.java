@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.SQLException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.view.MenuItemCompat;
@@ -89,12 +90,16 @@ public class RecipeViewActivity extends ActionBarActivity {
 		listView.setAdapter(adapter); 
 		
         utils.setButtonText(R.id.sumbitButton, 22);
+        final TextView errorView = (TextView) findViewById(R.id.errorView);
+		utils.setText(R.id.errorView,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
         Button submitbutton = (Button) findViewById(R.id.sumbitButton);
         submitbutton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				errorView.setText("");
 				sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 				reviewBean rb = new reviewBean();
 				rb.setComment(utils.getText(R.id.reviewBox));
@@ -102,11 +107,17 @@ public class RecipeViewActivity extends ActionBarActivity {
 				rb.setUser(sharedpreferences.getString(emailk, "DEFAULT"));
 				try
 				{
+					if(rb.getComment().equals(""))
+					{
+						errorView.setText("Please enter a comment");
+					}
+					else
+					{
 					
 					reviewmodel.insertReview(rb, false);
-					rbs.add(rb);
+					rbs.add(0, rb);
 					adapter.notifyDataSetChanged();
-					
+					}
 				}catch(SQLException e)
 				{
 					Toast.makeText(getApplicationContext(), "Review was not added", Toast.LENGTH_LONG).show();

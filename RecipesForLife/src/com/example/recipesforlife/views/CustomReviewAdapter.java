@@ -34,7 +34,6 @@ public class CustomReviewAdapter extends ArrayAdapter<reviewBean> {
 		imgload = new ImageLoader2(this.context);
 		// TODO Auto-generated constructor stub
 		utils = new util(this.context, activity);
-		Log.v("RBS ", "RBS " + rb.size());
 	}
 	
 	@Override
@@ -58,7 +57,6 @@ public class CustomReviewAdapter extends ArrayAdapter<reviewBean> {
 		recipeDesc.setText("By " + rb.get(position).getUser());
 		utils.setRowText(R.id.by, rowView, 20);
 		recipeDesc.setTextColor(Color.parseColor("#000000"));
-		Log.v("row","row");
 		return rowView;
 	}
 }
