@@ -21,6 +21,7 @@ namespace WebApplication1
 				try
 				{
 					JavaScriptSerializer js = new JavaScriptSerializer();
+					js.MaxJsonLength = Int32.MaxValue;
 					var review = js.Deserialize<List<Review>>(jsonInput);
 					for (int i = 0; i < review.Count(); i++)
 					{

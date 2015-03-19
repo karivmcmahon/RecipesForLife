@@ -58,7 +58,7 @@
           android:layout_below="@+id/recipeDesc"
           android:scaleType="fitXY"
           android:layout_marginTop="44dp"
-          android:src="@drawable/cookie" />
+           />
       
        <ImageView
           android:id="@+id/forkImage"
@@ -112,8 +112,9 @@
           android:id="@+id/chefImage"
           android:layout_width="40dp"
           android:layout_height="40dp"
-          android:layout_below="@+id/foodImage"
-        	  android:layout_toLeftOf="@+id/cusine"
+          android:layout_below="@+id/forkImage"
+          android:layout_marginTop="40dp"
+           android:layout_marginBottom="20dp"
           android:scaleType="fitXY"     
           android:src="@drawable/chef" 
            />
@@ -122,8 +123,9 @@
         android:id="@+id/cusine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/foodImage"
-         android:layout_toLeftOf="@+id/cusineVal"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/difficulty"
+         android:layout_toRightOf="@+id/chefImage"
         android:text="Cusine: "
         android:textColor="#F3216C"
        />
@@ -132,9 +134,9 @@
         android:id="@+id/cusineVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/foodImage"
+        android:layout_below="@+id/forkImage"
+          android:layout_toRightOf="@+id/cusine"
         
-         android:layout_centerInParent="true"
         android:text=""
         
        />
@@ -144,7 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cusine"
-         android:layout_toLeftOf="@+id/dietaryVal"
+         android:layout_toRightOf="@+id/chefImage"
         android:text="Dietary: "
         android:textColor="#F3216C"
        />
@@ -154,7 +156,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cusineVal"
-         android:layout_centerInParent="true"
+  		  android:layout_toRightOf="@+id/dietary"
        
         android:text=""
         
@@ -213,7 +215,7 @@
         android:id="@+id/ingredientTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/forkImage"
+        android:layout_below="@+id/chefImage"
         android:layout_marginTop="40dp"
         android:text="Ingredients: "
         android:textColor="#F3216C"

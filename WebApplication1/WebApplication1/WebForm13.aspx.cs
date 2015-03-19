@@ -22,6 +22,7 @@ namespace WebApplication1
 				try
 				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
+				js.MaxJsonLength = Int32.MaxValue;
 				var contribs = js.Deserialize<List<Contributer>>(jsonInput);
 				for (int i = 0; i < contribs.Count(); i++)
 				{

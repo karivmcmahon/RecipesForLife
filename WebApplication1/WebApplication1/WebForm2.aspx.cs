@@ -28,6 +28,7 @@ namespace WebApplication1
 				{
 					//deserializing a json
 					JavaScriptSerializer js = new JavaScriptSerializer();
+					js.MaxJsonLength = Int32.MaxValue;
 					dates = js.Deserialize<List<Date>>(jsonInput);
 					//Gets last updated time
 					string lastUpdated = dates[0].updateTime;

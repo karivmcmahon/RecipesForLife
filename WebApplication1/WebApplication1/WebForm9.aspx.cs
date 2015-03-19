@@ -23,6 +23,7 @@ namespace WebApplication1
 				try
 				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
+				js.MaxJsonLength = Int32.MaxValue;
 				var cookbook = js.Deserialize<List<Cookbook>>(jsonInput);
 				for (int i = 0; i < cookbook.Count(); i++)
 				{

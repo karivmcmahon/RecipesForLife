@@ -21,6 +21,7 @@ namespace WebApplication1
 		Int32 ingredId = 0;
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			js.MaxJsonLength = Int32.MaxValue;
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{

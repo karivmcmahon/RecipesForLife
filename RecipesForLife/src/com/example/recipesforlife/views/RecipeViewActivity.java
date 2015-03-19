@@ -1,5 +1,8 @@
 package com.example.recipesforlife.views;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,8 +14,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.SQLException;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -62,6 +70,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 	SharedPreferences sharedpreferences;
 	ArrayList<reviewBean> rbs;
 	 CustomReviewAdapter adapter;
+	 ImageView img;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -231,9 +240,10 @@ public class RecipeViewActivity extends ActionBarActivity {
 		if(mShareActionProvider != null)
 		{
 			Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-			sharingIntent.setType("text/plain");
 			String shareBody = "Check out my recipe for " + recipeName +  " on the android app Recipes For Life" ;
-			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+			sharingIntent.setType("image/jpeg");
+			sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+		    sharingIntent.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(img));
 			mShareActionProvider.setShareIntent(sharingIntent);
 		}
 
@@ -291,7 +301,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		imgBean = model.selectImages(recipe.getId());
 
 
-		ImageView img = (ImageView) findViewById(R.id.foodImage);
+	     img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
 		task.execute();
 
@@ -324,6 +334,31 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextString(R.id.dietaryVal, recipe.getDietary());
 		utils.setTextString(R.id.cusineVal, recipe.getCusine());
 
+	}
+	
+	public Uri getLocalBitmapUri(ImageView imageView) {
+	    // Extract Bitmap from ImageView drawable
+	    Drawable drawable = imageView.getDrawable();
+	    Bitmap bmp = null;
+	    if (drawable instanceof BitmapDrawable){
+	       bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+	    } else {
+	       return null;
+	    }
+	    // Store image to default external storage directory
+	    Uri bmpUri = null;
+	    try {
+	        File file =  new File(Environment.getExternalStoragePublicDirectory(  
+		        Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+	        file.getParentFile().mkdirs();
+	        FileOutputStream out = new FileOutputStream(file);
+	        bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+	        out.close();
+	        bmpUri = Uri.fromFile(file);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    return bmpUri;
 	}
 
 }

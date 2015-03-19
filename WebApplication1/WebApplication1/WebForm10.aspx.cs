@@ -22,6 +22,7 @@ namespace WebApplication1
 				try
 				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
+				js.MaxJsonLength = Int32.MaxValue;
 				var time = js.Deserialize<List<Date2>>(jsonInput);
 				string lastUpdated = time[0].changeTime;
 				SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);

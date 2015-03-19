@@ -31,6 +31,7 @@ namespace WebApplication1
 				{
 					//Deserializes JSON into recipe
 					JavaScriptSerializer js = new JavaScriptSerializer();
+					js.MaxJsonLength = Int32.MaxValue;
 					recipe = js.Deserialize<List<Recipe>>(jsonInput);
 					for(int i = 0; i < recipe.Count(); i++)
 					{

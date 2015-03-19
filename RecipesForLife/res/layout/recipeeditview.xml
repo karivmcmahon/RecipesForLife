@@ -138,33 +138,24 @@
         android:text=""
         
        />
-         <ImageView
+        
+        <ImageView
           android:id="@+id/chefImage"
           android:layout_width="40dp"
           android:layout_height="40dp"
-          android:layout_below="@+id/foodImage"
-        	  android:layout_toRightOf="@+id/servesEditImage"
+          android:layout_below="@+id/forkImage"
+          android:layout_marginTop="40dp"
+           android:layout_marginBottom="20dp"
           android:scaleType="fitXY"     
           android:src="@drawable/chef" 
            />
          
-          <ImageView
-          android:id="@+id/chefEditImage"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
-          android:padding="5dp"
-  
-           android:layout_below="@+id/foodImage"
-          android:layout_toRightOf="@+id/cusineVal"
-          android:scaleType="fitXY"     
-          android:src="@drawable/penpink" 
-           />
-          
          <TextView
         android:id="@+id/cusine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/foodImage"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/difficulty"
          android:layout_toRightOf="@+id/chefImage"
         android:text="Cusine: "
         android:textColor="#F3216C"
@@ -174,9 +165,9 @@
         android:id="@+id/cusineVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/foodImage"
-        android:layout_toRightOf="@+id/cusine"
-         
+        android:layout_below="@+id/forkImage"
+          android:layout_toRightOf="@+id/cusine"
+        
         android:text=""
         
        />
@@ -196,17 +187,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cusineVal"
-          android:layout_toRightOf="@+id/dietary"
+  		  android:layout_toRightOf="@+id/dietary"
        
         android:text=""
         
        />
-         <ImageView
+
+         
+          <ImageView
+          android:id="@+id/chefEditImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:padding="5dp"
+  		   android:layout_below="@+id/difficulty"
+             android:layout_marginTop="20dp"
+          android:layout_toRightOf="@+id/cusineVal"
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+           />
+          
+       
+        
+        <ImageView
           android:id="@+id/timeImage"
           android:layout_width="40dp"
           android:layout_height="40dp"
           android:layout_below="@+id/foodImage"
-           android:layout_toRightOf="@+id/chefEditImage"
+          android:layout_toLeftOf="@+id/cookingTime"
           android:scaleType="fitXY"     
           android:src="@drawable/black407" 
            />
@@ -216,7 +223,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/foodImage"
-          android:layout_toRightOf="@+id/timeImage"
+        android:layout_toLeftOf="@+id/prepTimeVal"
         android:text="Prep Time:"
         android:textColor="#F3216C"
        />
@@ -226,21 +233,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/foodImage"
-        android:layout_toRightOf="@+id/prepTime" 
+         android:layout_toLeftOf="@+id/timeEditImage"
         android:text="18:00"
        />
-         
-         <ImageView
-          android:id="@+id/timeEditImage"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
-          android:padding="5dp"
-           android:layout_below="@+id/foodImage"
-         
-            android:layout_toRightOf="@+id/cookingTimeVal"
-          android:scaleType="fitXY"     
-          android:src="@drawable/penpink" 
-           />
        
          
           <TextView
@@ -248,7 +243,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/prepTime"
-        android:layout_toRightOf="@+id/timeImage"
+        android:layout_toLeftOf="@+id/cookingTimeVal"
         android:text="Cooking Time:"
         android:textColor="#F3216C"
        />
@@ -257,16 +252,30 @@
         android:id="@+id/cookingTimeVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/prepTimeVal"
-        android:layout_toRightOf="@+id/cookingTime"    
+        android:layout_below="@+id/prepTimeVal"  
+         android:layout_toLeftOf="@+id/timeEditImage"  
         android:text="18:00"
        />
+         <ImageView
+          android:id="@+id/timeEditImage"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:padding="5dp"
+           android:layout_below="@+id/foodImage"
+          android:layout_alignParentRight="true"   
+           
+          android:scaleType="fitXY"     
+          android:src="@drawable/penpink" 
+           />
+       
+         
+      
           
         <TextView
         android:id="@+id/ingredientTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/forkImage"
+        android:layout_below="@+id/chefImage"
         android:layout_marginTop="40dp"
         android:text="Ingredients: "
         android:textColor="#F3216C"
@@ -276,9 +285,9 @@
           android:id="@+id/ingredEditImage"
           android:layout_width="30dp"
           android:layout_height="30dp"
-         android:layout_below="@+id/forkImage"
+         android:layout_below="@+id/chefImage"
    		  android:layout_toRightOf="@+id/ingredientTitle"
-   		   android:layout_marginTop="20dp"
+   		   android:layout_marginTop="40dp"
           android:scaleType="fitXY"     
           android:src="@drawable/penpink" 
            />

@@ -26,6 +26,7 @@ namespace WebApplication1
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//Reads Json on page load
+			
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -50,6 +51,7 @@ namespace WebApplication1
 		{
 			//Serializing a json
 			JavaScriptSerializer js = new JavaScriptSerializer();
+			js.MaxJsonLength = Int32.MaxValue;
 			account = js.Deserialize<List<Account>>(jsonInput);
 			//Inserts json info into users table of database
 			for (int i = 0; i < account.Count(); i++)

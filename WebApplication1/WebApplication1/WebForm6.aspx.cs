@@ -19,6 +19,7 @@ namespace WebApplication1
 		SqlConnection connection = null;
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			js.MaxJsonLength = Int32.MaxValue;
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{	

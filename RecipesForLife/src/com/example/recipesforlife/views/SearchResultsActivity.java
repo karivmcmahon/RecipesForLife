@@ -60,14 +60,14 @@ public class SearchResultsActivity extends ActionBarActivity {
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.plain, menu);
 		
-	/**	SearchManager searchManager =
+		SearchManager searchManager =
 		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
 		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 		    searchView.setSearchableInfo(
-		            searchManager.getSearchableInfo(getComponentName())); **/
+		            searchManager.getSearchableInfo(getComponentName()));
 		    
 		return true;
 	}
@@ -101,6 +101,11 @@ public class SearchResultsActivity extends ActionBarActivity {
 
 	}
 
+	@Override
+	 protected void onNewIntent(Intent intent) {
+	  
+	  handleIntent(intent);
+	 }
 
     private void handleIntent(Intent intent) {
 
