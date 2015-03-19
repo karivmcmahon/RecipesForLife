@@ -1,6 +1,10 @@
 package com.example.recipesforlife.views;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,7 @@ import com.example.recipesforlife.models.PostTask;
 import com.example.recipesforlife.models.accountModel;
 import com.example.recipesforlife.models.databaseConnection;
 import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.models.passwordHashing;
 
 /**
  * Class that handles the sign in/sign up page that is showed initially
@@ -240,8 +245,11 @@ public class SignUpSignInActivity extends Activity {
 	 * Checks the details entered is a valid account and logs them in
 	 */
 	public void checkLogin() {
+		passwordHashing ph = new passwordHashing();
+		
 		String email = utils.getText(R.id.editText1);
-		String password = utils.getText(R.id.editText2);
+		String password =  utils.getText(R.id.editText2);
+
 		// Check if these details are correct
 		Context t = getApplicationContext();
 		accountModel accountmodel = new accountModel(t);
@@ -285,22 +293,31 @@ public class SignUpSignInActivity extends Activity {
 	 */
 	public boolean getInitialDialogInfo(Dialog dialog) {
 
+		passwordHashing ph = new passwordHashing();
 		TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView, dialog, 16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
 
 		email = utils.getTextFromDialog(R.id.emailEdit, dialog);
 		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
+	
 		name = utils.getTextFromDialog(R.id.nameEdit, dialog);
-
+        String regex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,12})";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
 		Context t = getApplicationContext();
 		accountModel accountmodel = new accountModel(t);
+	
 		if (accountmodel.checkEmail(email) == true) {
 			errorView.setText("Email already in use \n");
 		} else if (email.equals("")) {
 			errorView.setText("Please enter an email address \n");
 		} else if (password.equals("")) {
 			errorView.setText("Please enter a password \n");
+		}
+		 else if(!matcher.matches())
+		{
+			errorView.setText("The password should contain 1 uppercase, 1 lowercase and 1 special characters. \n The password should be between 6-12 characters");
 		} else if (name.equals("")) {
 			errorView.setText("Please enter a name \n");
 		}

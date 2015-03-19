@@ -1,5 +1,7 @@
 package com.example.recipesforlife.models;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -131,11 +133,27 @@ public class accountModel extends baseDataSource
 	 */
 	public boolean logIn(String email, String password) {
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password });
+		boolean valid = false;
+		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=?", new String[] { email });
 		if (cursor != null && cursor.getCount() > 0) {
+			passwordHashing ph = new passwordHashing();
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				try {
+					valid = ph.validatePassword(password, cursor.getString(getIndex("password", cursor)));
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvalidKeySpecException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			   
+			
 			cursor.close();
 			close();
-			return true;
+			return valid;
 		}
 		else
 		{
@@ -212,15 +230,17 @@ public class accountModel extends baseDataSource
 		accountValues = new ContentValues();
 		accountValues.put("id", (int)id);
 		accountValues.put("email", account.getEmail());
+		passwordHashing ph = new passwordHashing();
+		accountValues.put("password", account.getPassword());
 		if(server == true)
-		{
+		{			
 			accountValues.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT")); 
 		}
 		else
 		{
 			accountValues.put("updateTime", utils.getLastUpdated(false));
 		}
-		accountValues.put("password", account.getPassword());
+		
 		try
 		{
 			database.insertOrThrow("Account", null, accountValues);
