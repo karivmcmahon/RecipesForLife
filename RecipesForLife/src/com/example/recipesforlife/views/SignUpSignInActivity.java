@@ -302,9 +302,8 @@ public class SignUpSignInActivity extends Activity {
 		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
 	
 		name = utils.getTextFromDialog(R.id.nameEdit, dialog);
-        String regex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,12})";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(password);
+        String passwordregex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%-_]).{6,12})";
+        String emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"	+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 		Context t = getApplicationContext();
 		accountModel accountmodel = new accountModel(t);
 	
@@ -312,10 +311,13 @@ public class SignUpSignInActivity extends Activity {
 			errorView.setText("Email already in use \n");
 		} else if (email.equals("")) {
 			errorView.setText("Please enter an email address \n");
+		} else if(!email.matches(emailregex))
+		{
+			errorView.setText("Email address invalid");
 		} else if (password.equals("")) {
 			errorView.setText("Please enter a password \n");
 		}
-		 else if(!matcher.matches())
+		 else if(!password.matches(passwordregex))
 		{
 			errorView.setText("The password should contain 1 uppercase, 1 lowercase and 1 special characters. \n The password should be between 6-12 characters");
 		} else if (name.equals("")) {
@@ -351,7 +353,16 @@ public class SignUpSignInActivity extends Activity {
 		} else {
 			// Add info to list
 			accountBean.setEmail(email);
-			accountBean.setPassword(password);
+			passwordHashing ph = new passwordHashing();
+			try {
+				accountBean.setPassword(ph.createHash(password));
+			} catch (NoSuchAlgorithmException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvalidKeySpecException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			userBean.setName(name);
 			userBean.setCity(city);
 			userBean.setBio(bio);
