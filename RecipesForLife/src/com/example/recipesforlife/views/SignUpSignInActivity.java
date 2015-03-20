@@ -302,9 +302,13 @@ public class SignUpSignInActivity extends Activity {
 		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
 	
 		name = utils.getTextFromDialog(R.id.nameEdit, dialog);
+		//http://www.mkyong.com/regular-expressions/how-to-validate-password-with-regular-expression/
         String passwordregex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%-_]).{6,12})";
+        //http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
         String emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"	+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-		Context t = getApplicationContext();
+	
+        
+        Context t = getApplicationContext();
 		accountModel accountmodel = new accountModel(t);
 	
 		if (accountmodel.checkEmail(email) == true) {
@@ -319,7 +323,7 @@ public class SignUpSignInActivity extends Activity {
 		}
 		 else if(!password.matches(passwordregex))
 		{
-			errorView.setText("The password should contain 1 uppercase, 1 lowercase and 1 special characters. \n The password should be between 6-12 characters");
+			errorView.setText("The password should contain 1 uppercase, 1 lowercase, 1 special characters and a digit. \n The password should be between 6-12 characters");
 		} else if (name.equals("")) {
 			errorView.setText("Please enter a name \n");
 		}

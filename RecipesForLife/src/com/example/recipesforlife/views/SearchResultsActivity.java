@@ -18,6 +18,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
@@ -54,6 +55,8 @@ public class SearchResultsActivity extends ActionBarActivity {
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
+		
+		 
        handleIntent(getIntent());
     }
 
@@ -66,7 +69,8 @@ public class SearchResultsActivity extends ActionBarActivity {
 		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
 		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		    searchView.setSearchableInfo(
+		 
+		searchView.setSearchableInfo(
 		            searchManager.getSearchableInfo(getComponentName()));
 		    
 		return true;
@@ -111,6 +115,11 @@ public class SearchResultsActivity extends ActionBarActivity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            SearchRecentSuggestions suggestions = 
+            		   new SearchRecentSuggestions(this, 
+            		      SampleRecentSuggestionsProvider.AUTHORITY, 
+            		      SampleRecentSuggestionsProvider.MODE); 
+            		suggestions.saveRecentQuery(query, null);
             searchModel sm = new searchModel(getApplicationContext());
             final ArrayList<recipeBean> rb = sm.selectRecipe(query);
             final ArrayList<cookbookBean> cb = sm.selectCookbooks(query);

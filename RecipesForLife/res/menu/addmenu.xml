@@ -15,7 +15,8 @@
           android:icon="@drawable/search"
           android:title="@string/action_search"
           yourapp:showAsAction="ifRoom"
-           yourapp:actionViewClass="android.support.v7.widget.SearchView"  />
+           yourapp:actionViewClass="android.support.v7.widget.SearchView"
+           />
     
 
 

@@ -336,6 +336,8 @@ public class RecipeViewActivity extends ActionBarActivity {
 
 	}
 	
+	
+	// from here https://guides.codepath.com/android/Sharing-Content-with-Intents
 	public Uri getLocalBitmapUri(ImageView imageView) {
 	    // Extract Bitmap from ImageView drawable
 	    Drawable drawable = imageView.getDrawable();
