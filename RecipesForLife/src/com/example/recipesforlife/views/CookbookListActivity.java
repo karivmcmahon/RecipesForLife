@@ -112,12 +112,7 @@ public class CookbookListActivity extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu, menu);
 
-		SearchManager searchManager =
-				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		android.support.v7.widget.SearchView searchView =
-				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		searchView.setSearchableInfo(
-				searchManager.getSearchableInfo(getComponentName()));
+		utils.setUpSearch(menu);
 
 		return true;
 	}

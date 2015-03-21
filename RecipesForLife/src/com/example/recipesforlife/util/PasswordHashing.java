@@ -9,8 +9,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 /**
- * Found here https://crackstation.net/hashing-security.htm
- * @author Kari
+ * Code to hash and salt password. The code for this was found here https://crackstation.net/hashing-security.htm
+ * 
  *
  */
 public class PasswordHashing

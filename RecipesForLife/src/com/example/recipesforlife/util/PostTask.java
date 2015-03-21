@@ -40,16 +40,10 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 	@Override
 	//The sync works in the background
 	public String doInBackground(Void... arg0 ) {
-
-		Log.v("Run in bg", "Run in bg");
-
 		String message = utils.sync();
-
 		Log.v("All Done!","ALL DONE");
-		response = message;
-		//publishProgress(1);
+		response = message;	
 		return message;
-		//return null;
 	}
 
 

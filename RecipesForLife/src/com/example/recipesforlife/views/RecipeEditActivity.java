@@ -180,20 +180,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
 								// Get image
-								Intent pickIntent = new Intent();
-								pickIntent.setType("image/*");
-								pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-								Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-								String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
-								Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-								chooserIntent.putExtra
-								(
-										Intent.EXTRA_INITIAL_INTENTS, 
-										new Intent[] { takePhotoIntent }
-										); 
-
+								Intent chooserIntent = utils.getImageIntent();
 								startActivityForResult(chooserIntent, SELECT_PHOTO);
 							}
 							return false;
@@ -343,12 +330,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_plain, menu);
-		SearchManager searchManager =
-				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		android.support.v7.widget.SearchView searchView =
-				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		searchView.setSearchableInfo(
-				searchManager.getSearchableInfo(getComponentName()));
+		utils.setUpSearch(menu);
 		return true;
 	}
 	@Override

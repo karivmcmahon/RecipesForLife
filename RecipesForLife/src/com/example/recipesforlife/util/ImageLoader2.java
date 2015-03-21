@@ -123,7 +123,7 @@ public class ImageLoader2 {
 	 * @param options
 	 * @param reqWidth
 	 * @param reqHeight
-	 * @return
+	 * @return int - sample size for image
 	 */
 	public static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {

@@ -28,7 +28,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * Utility class handling common methods for multiple classes
+ * Utility class handling common methods for multiple classes - this is mainly for common mehtods used in the
+ * model classes
  * @author Kari
  *
  */
@@ -59,7 +60,7 @@ public class Utility  {
 
 
 	/**
-	 * Get current date
+	 * Get current date and time
 	 */
 	public String getLastUpdated(boolean appstring)
 	{
@@ -158,6 +159,16 @@ public class Utility  {
 
 	}
 
+	
+	/**
+	 * Retrieves JSON from server
+	 * @param url - url to retrieve JSON
+	 * @param pref - datetime from a shared preference
+	 * @param update - whether its for an update or insert
+	 * @return A JSON string recieved from server
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public String retrieveFromServer(String url, String pref, boolean update) throws IOException, JSONException
 	{
 

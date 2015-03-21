@@ -47,8 +47,13 @@ public class CustomReviewAdapter extends ArrayAdapter<ReviewBean> {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		rowView= inflater.inflate(R.layout.recipe_individreview, null, true);
+		rowView = setListStyle(rowView, position);
 
-
+		return rowView;
+	}
+	
+	public View setListStyle(View rowView, int position)
+	{
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.comment);
 		txtTitle.setText(rb.get(position).getComment());
 		utils.setRowText(R.id.comment, rowView, 26);
@@ -58,6 +63,7 @@ public class CustomReviewAdapter extends ArrayAdapter<ReviewBean> {
 		recipeDesc.setText("By " + rb.get(position).getUser());
 		utils.setRowText(R.id.by, rowView, 20);
 		recipeDesc.setTextColor(Color.parseColor("#000000"));
+		
 		return rowView;
 	}
 }

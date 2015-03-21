@@ -12,7 +12,7 @@ import android.util.Log;
 /**
  * This class is the memory cache as part of the image loader from list view
  * Based on this code https://github.com/thest1/LazyList/blob/master/src/com/fedorvlasov/lazylist/MemoryCache.java
- * @author Kari
+ * 
  *
  */
 public class MemoryCache {
@@ -46,7 +46,6 @@ public class MemoryCache {
 		try{
 			if(!cache.containsKey(id))
 				return null;
-			//NullPointerException sometimes happen here http://code.google.com/p/osmdroid/issues/detail?id=78 
 			return cache.get(id);
 		}catch(NullPointerException ex){
 			ex.printStackTrace();
@@ -94,7 +93,7 @@ public class MemoryCache {
 	 */
 	public void clear() {
 		try{
-			//NullPointerException sometimes happen here http://code.google.com/p/osmdroid/issues/detail?id=78 
+			
 			cache.clear();
 			size=0;
 		}catch(NullPointerException ex){

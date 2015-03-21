@@ -55,21 +55,28 @@ public class CustomUserSearchAdapter extends ArrayAdapter<UserBean> {
 		{
 			rowView= inflater.inflate(R.layout.search_userview, null, true);
 
-			TextView txtTitle = (TextView) rowView.findViewById(R.id.userinfo);
-			txtTitle.setText(ub.get(position).getName() + " - " + ub.get(position).getCountry());
-			utils.setRowText(R.id.userinfo, rowView, 26);
-			txtTitle.setTextColor(Color.parseColor("#F3216C"));
-
-			TextView bio = (TextView) rowView.findViewById(R.id.bio);
-			bio.setText(ub.get(position).getBio());
-			utils.setRowText(R.id.bio, rowView, 20);
-			bio.setTextColor(Color.parseColor("#000000"));
-
-			TextView account = (TextView) rowView.findViewById(R.id.accountid);
-			account.setText("Account id:  " + ub.get(position).getEmail());
-			utils.setRowText(R.id.accountid, rowView, 18);
-			account.setTextColor(Color.parseColor("#000000"));
+			rowView = setListStyle(rowView, position);
 		}
+		return rowView;
+	}
+	
+	public View setListStyle(View rowView, int position)
+	{
+		TextView txtTitle = (TextView) rowView.findViewById(R.id.userinfo);
+		txtTitle.setText(ub.get(position).getName() + " - " + ub.get(position).getCountry());
+		utils.setRowText(R.id.userinfo, rowView, 26);
+		txtTitle.setTextColor(Color.parseColor("#F3216C"));
+
+		TextView bio = (TextView) rowView.findViewById(R.id.bio);
+		bio.setText(ub.get(position).getBio());
+		utils.setRowText(R.id.bio, rowView, 20);
+		bio.setTextColor(Color.parseColor("#000000"));
+
+		TextView account = (TextView) rowView.findViewById(R.id.accountid);
+		account.setText("Account id:  " + ub.get(position).getEmail());
+		utils.setRowText(R.id.accountid, rowView, 18);
+		account.setTextColor(Color.parseColor("#000000"));
+		
 		return rowView;
 	}
 }

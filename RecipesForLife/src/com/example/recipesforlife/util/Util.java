@@ -22,7 +22,9 @@ import org.json.JSONException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
@@ -37,7 +39,9 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -48,6 +52,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.SyncContributersModel;
 import com.example.recipesforlife.models.SyncCookbookModel;
 import com.example.recipesforlife.models.SyncModel;
@@ -130,7 +135,6 @@ public class Util  {
 	public void setDialogText(int resource, Dialog dialog, int fontSize)
 	{
 		//Style for activity
-		//typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		TextView view = (TextView)	 dialog.findViewById(resource);
 		view.setTypeface(typeFace);
 		view.setTextSize(fontSize);
@@ -146,7 +150,6 @@ public class Util  {
 	public void setRowText(int resource, View rowview, int fontSize)
 	{
 		//Style for activity
-		//typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		TextView view = (TextView)	 rowview.findViewById(resource);
 		view.setTypeface(typeFace);
 		view.setTextSize(fontSize);
@@ -162,7 +165,6 @@ public class Util  {
 	public void setDialogTextString(int resource, Dialog dialog, String text)
 	{
 		//Style for activity
-		//typeFace=Typeface.createFromAsset(getAssets(),"fonts/elsie.ttf");
 		EditText view = (EditText)	 dialog.findViewById(resource);
 		view.setText(text);
 	}
@@ -179,6 +181,19 @@ public class Util  {
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
+	
+	/**
+	 * Set text to black and italic
+	 * @param resource
+	 * @param fontSize
+	 */
+	public void setTextBlackItalic(int resource,int fontSize)
+	{
+		TextView view = (TextView) activity.findViewById(resource);
+		view.setTextSize(fontSize);
+		view.setTypeface(typeFace, Typeface.ITALIC);
+	
+	}
 
 	/**
 	 * Set custom text
@@ -189,7 +204,6 @@ public class Util  {
 	{
 		TextView view = (TextView) activity.findViewById(resource);
 		view.setText(text);
-
 	}
 
 	/**
@@ -205,7 +219,7 @@ public class Util  {
 	}
 
 	/**
-	 * 
+	 * Gets text from textview
 	 * @param resource
 	 * @return
 	 */
@@ -229,7 +243,7 @@ public class Util  {
 	}
 
 	/**
-	 * Set custom text
+	 * Set custom text with pink color
 	 * @param resource
 	 * @param fontSize
 	 */
@@ -242,7 +256,7 @@ public class Util  {
 	}
 
 	/**
-	 * Set text to black
+	 * Set custom text with black color
 	 * @param resource
 	 * @param fontSize
 	 */
@@ -254,19 +268,7 @@ public class Util  {
 		//view.setTextColor(Color.parseColor("#F3216C"));
 	}
 
-	/**
-	 * Set text to black and italic
-	 * @param resource
-	 * @param fontSize
-	 */
-	public void setTextBlackItalic(int resource,int fontSize)
-	{
-		TextView view = (TextView) activity.findViewById(resource);
-		//view.setTypeface(typeFace);
-		view.setTextSize(fontSize);
-		view.setTypeface(typeFace, Typeface.ITALIC);
-		//view.setTextColor(Color.parseColor("#F3216C"));
-	}
+
 
 	/**
 	 * Set custom text for button
@@ -478,7 +480,7 @@ public class Util  {
 	} 
 
 	/**
-	 * Gets image path
+	 * Gets image path based on URI - used to show path when user selects image in browse
 	 * @param uri
 	 * @return String
 	 */
@@ -564,7 +566,31 @@ public class Util  {
 		return resultBitmap;
 	}
 	
+	public Intent getImageIntent()
+	{
+		Intent pickIntent = new Intent();
+		pickIntent.setType("image/*");
+		pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+		Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+		Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+		chooserIntent.putExtra
+		(
+				Intent.EXTRA_INITIAL_INTENTS, 
+				new Intent[] { takePhotoIntent }
+				); 
+		return chooserIntent;
+	}
 	
+	public void setUpSearch(Menu menu)
+	{
+		SearchManager searchManager =
+				(SearchManager) activity.getSystemService(Context.SEARCH_SERVICE);
+		android.support.v7.widget.SearchView searchView =
+				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(activity.getComponentName()));
+	}
 
 
 

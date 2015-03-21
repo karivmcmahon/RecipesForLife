@@ -2,6 +2,11 @@ package com.example.recipesforlife.util;
 
 import android.content.SearchRecentSuggestionsProvider; 
 
+/**
+ * Class used to set up search for recent suggestions
+ * @author Kari
+ *
+ */
 public class SampleRecentSuggestionsProvider 
 extends SearchRecentSuggestionsProvider { 
 

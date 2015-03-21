@@ -84,20 +84,7 @@ public class EditCookbookView  {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent pickIntent = new Intent();
-				pickIntent.setType("image/*");
-				pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-				Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-				String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
-				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-				chooserIntent.putExtra
-				(
-						Intent.EXTRA_INITIAL_INTENTS, 
-						new Intent[] { takePhotoIntent }
-						); 
-
+				Intent chooserIntent = utils.getImageIntent();
 				activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
 			}
 

@@ -59,46 +59,8 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 		else
 		{
 			rowView= inflater.inflate(R.layout.search_recipeview, null, true);
-
-			TextView txtTitle = (TextView) rowView.findViewById(R.id.recipeName);
-			txtTitle.setText(rb.get(position).getName());
-			utils.setRowText(R.id.recipeName, rowView, 26);
-			txtTitle.setTextColor(Color.parseColor("#F3216C"));
-
-			TextView recipeDesc = (TextView) rowView.findViewById(R.id.recipeDescription);
-			recipeDesc.setText(rb.get(position).getDesc());
-			utils.setRowText(R.id.recipeDescription, rowView, 20);
-			recipeDesc.setTextColor(Color.parseColor("#000000"));
-
-			TextView recipeBook = (TextView) rowView.findViewById(R.id.cookbook);
-			recipeBook.setText("From " + rb.get(position).getRecipeBook());
-			utils.setRowText(R.id.cookbook, rowView, 18);
-			recipeBook.setTextColor(Color.parseColor("#000000"));
-
-			TextView diffTitle = (TextView) rowView.findViewById(R.id.difficultyTitle);
-			diffTitle.setText("Difficulty: ");
-			utils.setRowText(R.id.difficultyTitle, rowView, 20);
-			diffTitle.setTextColor(Color.parseColor("#F3216C"));
-
-			TextView diff = (TextView) rowView.findViewById(R.id.difficulty);
-			diff.setText(rb.get(position).getDifficulty());
-			utils.setRowText(R.id.difficulty, rowView, 20);
-			diff.setTextColor(Color.parseColor("#000000"));
-
-			TextView cusineTitle = (TextView) rowView.findViewById(R.id.cusineTitle);
-			cusineTitle.setText("Cusine: ");
-			utils.setRowText(R.id.cusineTitle, rowView, 20);
-			cusineTitle.setTextColor(Color.parseColor("#F3216C"));
-
-			TextView cusine = (TextView) rowView.findViewById(R.id.cusine);
-			cusine.setText(rb.get(position).getCusine());
-			utils.setRowText(R.id.cusine, rowView, 20);
-			cusine.setTextColor(Color.parseColor("#000000")); 
-
-			TextView timeTitle = (TextView) rowView.findViewById(R.id.cookTimeTitle);
-			timeTitle.setText("Time: ");
-			utils.setRowText(R.id.cookTimeTitle, rowView, 20);
-			timeTitle.setTextColor(Color.parseColor("#F3216C"));
+			rowView = setListStyle(rowView, position);
+			
 
 
 			SimpleDateFormat  format = new SimpleDateFormat("HH:mm");  
@@ -128,6 +90,50 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 		return rowView;
 
 
+	}
+	
+	public View setListStyle(View rowView, int position)
+	{
+		TextView txtTitle = (TextView) rowView.findViewById(R.id.recipeName);
+		txtTitle.setText(rb.get(position).getName());
+		utils.setRowText(R.id.recipeName, rowView, 26);
+		txtTitle.setTextColor(Color.parseColor("#F3216C"));
+
+		TextView recipeDesc = (TextView) rowView.findViewById(R.id.recipeDescription);
+		recipeDesc.setText(rb.get(position).getDesc());
+		utils.setRowText(R.id.recipeDescription, rowView, 20);
+		recipeDesc.setTextColor(Color.parseColor("#000000"));
+
+		TextView recipeBook = (TextView) rowView.findViewById(R.id.cookbook);
+		recipeBook.setText("From " + rb.get(position).getRecipeBook());
+		utils.setRowText(R.id.cookbook, rowView, 18);
+		recipeBook.setTextColor(Color.parseColor("#000000"));
+
+		TextView diffTitle = (TextView) rowView.findViewById(R.id.difficultyTitle);
+		diffTitle.setText("Difficulty: ");
+		utils.setRowText(R.id.difficultyTitle, rowView, 20);
+		diffTitle.setTextColor(Color.parseColor("#F3216C"));
+
+		TextView diff = (TextView) rowView.findViewById(R.id.difficulty);
+		diff.setText(rb.get(position).getDifficulty());
+		utils.setRowText(R.id.difficulty, rowView, 20);
+		diff.setTextColor(Color.parseColor("#000000"));
+
+		TextView cusineTitle = (TextView) rowView.findViewById(R.id.cusineTitle);
+		cusineTitle.setText("Cusine: ");
+		utils.setRowText(R.id.cusineTitle, rowView, 20);
+		cusineTitle.setTextColor(Color.parseColor("#F3216C"));
+
+		TextView cusine = (TextView) rowView.findViewById(R.id.cusine);
+		cusine.setText(rb.get(position).getCusine());
+		utils.setRowText(R.id.cusine, rowView, 20);
+		cusine.setTextColor(Color.parseColor("#000000")); 
+
+		TextView timeTitle = (TextView) rowView.findViewById(R.id.cookTimeTitle);
+		timeTitle.setText("Time: ");
+		utils.setRowText(R.id.cookTimeTitle, rowView, 20);
+		timeTitle.setTextColor(Color.parseColor("#F3216C"));
+		return rowView;
 	}
 
 

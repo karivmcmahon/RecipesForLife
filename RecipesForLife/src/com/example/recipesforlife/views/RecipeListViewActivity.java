@@ -63,6 +63,9 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public static ArrayList<String> recipeids, recipeimagesid;
 	public static ArrayList<byte[]> recipeimages;
 	AddRecipeView add;
+	ArrayList<RecipeBean> rbList;
+    Dialog cloneDialog;
+    TextView errorView;
 
 
 
@@ -125,12 +128,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
-		SearchManager searchManager =
-				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		android.support.v7.widget.SearchView searchView =
-				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		searchView.setSearchableInfo(
-				searchManager.getSearchableInfo(getComponentName()));
+		utils.setUpSearch(menu);
 		return true;
 	}
 
@@ -203,77 +201,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		}
 		else if(item.getItemId() ==  R.id.action_copy)
 		{
-			final Dialog cloneDialog = utils.createDialog(RecipeListViewActivity.this , R.layout.recipe_clone);
-			utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
-			utils.setDialogText(R.id.currentRecipesView,cloneDialog,22);
-			utils.setDialogText(R.id.recipeNameView,cloneDialog,22);
-
-			final TextView errorView = (TextView) cloneDialog.findViewById(R.id.errorView);
-			utils.setDialogText(R.id.errorView,cloneDialog,16);
-			errorView.setTextColor(Color.parseColor("#F70521"));
-
-			final RecipeModel model = new RecipeModel(getApplicationContext());
-			final SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			final ArrayList<RecipeBean> rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
-			List<String> spinnerArray =  new ArrayList<String>();
-			for(int i = 0; i < rbList.size(); i++)
-			{
-				spinnerArray.add(rbList.get(i).getName());
-				//cookbookuids.add(cbList.get(i).getUniqueid());
-			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-					RecipeListViewActivity.this, R.layout.general_spinner_item, spinnerArray);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
-			final Spinner spinner = (Spinner) cloneDialog.findViewById(R.id.currentRecipesSpinner);
-			spinner.setAdapter(adapter);
-			spinner.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
-
-			Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
-			addButton.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					int namepos = spinner.getSelectedItemPosition();
-					rbList.get(namepos).setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
-					rbList.get(namepos).setAddedBy(sharedpreferences.getString(emailk, ""));
-					rbList.get(namepos).setRecipeBook(uniqueid);
-					ArrayList<PreperationBean> prepList = model.selectPreperation(rbList.get(namepos).getId());
-					ArrayList<IngredientBean> ingredList = model.selectIngredients(rbList.get(namepos).getId());
-					ImageBean imgBean = model.selectImages(rbList.get(namepos).getId());
-
-					try
-					{
-						if(model.selectRecipe(rbList.get(namepos).getName(), uniqueid))
-						{
-							errorView.setText("You already have a recipe with that name");
-						}
-						else if(rbList.get(namepos).getName().equals(""))
-						{
-							errorView.setText("Please enter a recipe name");
-						}
-						else
-						{
-							String uid = model.insertRecipe(rbList.get(namepos), false, ingredList, prepList, imgBean);
-							cloneDialog.dismiss();
-							//Updates recipe list once inserted
-							recipenames.add(0, rbList.get(namepos).getName());
-							recipeids.add(0,  uid);
-							recipeimages.add(0, imgBean.getImage());
-							RecipeListViewActivity.adapter.notifyDataSetChanged(); 
-							cloneDialog.dismiss();
-						}
-
-					}catch(SQLException e)
-					{
-						Toast.makeText(getApplicationContext(), "Recipe was not cloned", Toast.LENGTH_LONG).show();
-					}
-
-
-
-				}});
-
-			cloneDialog.show();
+			createCloneDialog();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -284,8 +212,109 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		add.resultRecieved(requestCode, resultCode, imageReturnedIntent);
 
 	}
+	
+	/**
+	 * Creates the clone dialog - to clone recipes into cookbook
+	 */
+	public void createCloneDialog()
+	{
+		cloneDialog = utils.createDialog(RecipeListViewActivity.this , R.layout.recipe_clone);
+		setCloneDialogStyle();
+
+		final RecipeModel model = new RecipeModel(getApplicationContext());
+		final SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
+		
+		final Spinner spinner = fillSpinner();
+
+		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
+		addButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				//gets a position of select item
+				int namepos = spinner.getSelectedItemPosition();
+				//sets recipe thats being cloned to new info
+				rbList.get(namepos).setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
+				rbList.get(namepos).setAddedBy(sharedpreferences.getString(emailk, ""));
+				rbList.get(namepos).setRecipeBook(uniqueid);
+				//Retrieve preps, ingreds and images 
+				ArrayList<PreperationBean> prepList = model.selectPreperation(rbList.get(namepos).getId());
+				ArrayList<IngredientBean> ingredList = model.selectIngredients(rbList.get(namepos).getId());
+				ImageBean imgBean = model.selectImages(rbList.get(namepos).getId());
+
+				try
+				{
+					//check for errors
+					if(model.selectRecipe(rbList.get(namepos).getName(), uniqueid))
+					{
+						errorView.setText("You already have a recipe with that name");
+					}
+					else if(rbList.get(namepos).getName().equals(""))
+					{
+						errorView.setText("Please enter a recipe name");
+					}
+					else
+					{
+						//clone recipe
+						String uid = model.insertRecipe(rbList.get(namepos), false, ingredList, prepList, imgBean);
+						//Add to list
+						recipenames.add(0, rbList.get(namepos).getName());
+						recipeids.add(0,  uid);
+						recipeimages.add(0, imgBean.getImage());
+						RecipeListViewActivity.adapter.notifyDataSetChanged(); 
+						cloneDialog.dismiss();
+					}
+
+				}catch(SQLException e)
+				{
+					Toast.makeText(getApplicationContext(), "Recipe was not cloned", Toast.LENGTH_LONG).show();
+				}
 
 
+
+			}});
+
+		cloneDialog.show();
+	}
+	
+	/**
+	 * Fills spinner for cloning
+	 * @return filled spinner
+	 */
+	public Spinner fillSpinner()
+	{
+		//Fill with a list of recipes the user owns
+		List<String> spinnerArray =  new ArrayList<String>();
+		for(int i = 0; i < rbList.size(); i++)
+		{
+			spinnerArray.add(rbList.get(i).getName());
+			
+		}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				RecipeListViewActivity.this, R.layout.general_spinner_item, spinnerArray);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+		final Spinner spinner = (Spinner) cloneDialog.findViewById(R.id.currentRecipesSpinner);
+		spinner.setAdapter(adapter);
+		spinner.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		return spinner;
+	}
+	
+	/**
+	 * Set up a clone dialog style
+	 */
+	public void setCloneDialogStyle()
+	{
+		utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
+		utils.setDialogText(R.id.currentRecipesView,cloneDialog,22);
+		utils.setDialogText(R.id.recipeNameView,cloneDialog,22);
+		errorView = (TextView) cloneDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,cloneDialog,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
+	}
 }
+
+
+
 
 

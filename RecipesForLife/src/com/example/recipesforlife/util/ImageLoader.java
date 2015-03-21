@@ -48,8 +48,8 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	//Loads image in background - away from ui thread
 	protected Bitmap doInBackground(Void... arg0) {
 
+		//Get bitmap of image in the background
 		Bitmap bitmap = null;
-
 		ByteArrayInputStream imageStream = new ByteArrayInputStream(imgbean.getImage());
 		try {
 			bitmap = decodeSampledBitmapFromResource(context, imageStream, 200,200);
@@ -61,7 +61,7 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	}
 
 	@Override
-	//Once loads iss finished set the image
+	//Once load is finished set the image to the imageview
 	protected void onPostExecute( Bitmap result )  {
 
 		ImageView imageView = (ImageView) imageViewReference.get();
@@ -71,12 +71,12 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	}
 
 	/**
-	 * sets bitmap options 
+	 * Sets bitmap options 
 	 * @param context
 	 * @param imageStream
 	 * @param reqWidth
 	 * @param reqHeight
-	 * @return
+	 * @return Changed bitmap
 	 * @throws FileNotFoundException
 	 */
 	public static Bitmap decodeSampledBitmapFromResource(Context context, ByteArrayInputStream imageStream,
@@ -94,11 +94,11 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	}
 
 	/**
-	 * Calculates the best sample size for height and width
+	 * Calculates the best sample size for the required width height and width
 	 * @param options
 	 * @param reqWidth
 	 * @param reqHeight
-	 * @return
+	 * @return int - sample size
 	 */
 	public static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) 
