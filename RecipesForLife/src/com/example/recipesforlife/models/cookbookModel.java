@@ -23,16 +23,17 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  */
 public class CookbookModel extends BaseDataSource {
 
-	public static final String MyPREFERENCES = "MyPrefs" ;
-	public static final String emailk = "emailKey"; 
+	
 	RecipeModel recipemodel;
 	Context context;
 	Utility utils;
+	//Shared prefs to store user details
 	SharedPreferences sharedpreferences;
+	public static final String MyPREFERENCES = "MyPrefs" ;
+	public static final String emailk = "emailKey"; 
 
 	public CookbookModel(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 		this.context = context;
 		utils = new Utility();
 		recipemodel = new RecipeModel(context);
@@ -40,13 +41,19 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 
+	/**
+	 *  Inserts cookbook information into sqlite database
+	 * 
+	 * @param book - cookbook information to be inserted into db
+	 * @param server - Whether the request came from the server or the application
+	 * @return String - the unique id generated for the cookbook
+	 */
 	public String insertBook(CookbookBean book, boolean server)
 	{
-
 		open();
 		ContentValues values = new ContentValues();
 		values.put("name", book.getName()); 
-		values.put("changeTime", "2015-01-01 12:00:00.000"); 
+		values.put("changeTime", "2015-01-01 12:00:00.000"); //An initial time set for change time when inserted
 		values.put("creator", book.getCreator()); 
 		values.put("privacyOption", book.getPrivacy()); 
 		values.put("description", book.getDescription());
@@ -55,14 +62,14 @@ public class CookbookModel extends BaseDataSource {
 		String uid = "";
 		if(server == true)
 		{
-			values.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT"));
-			values.put("uniqueid", book.getUniqueid());
+			values.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT")); //if server use shared pref time
+			values.put("uniqueid", book.getUniqueid()); //gets unique id if from server
 			uid = book.getUniqueid();
 		}
 		else
 		{
-			values.put("updateTime", utils.getLastUpdated(false)); 
-			uid = utils.generateUUID(book.getCreator(), "Cookbook", database);
+			values.put("updateTime", utils.getLastUpdated(false));  //if application get time from timestamp
+			uid = utils.generateUUID(book.getCreator(), "Cookbook", database); //generate uuid for when being inserted
 			values.put("uniqueid", uid);
 		}
 		database.beginTransaction();
@@ -84,9 +91,11 @@ public class CookbookModel extends BaseDataSource {
 
 	}
 
+	
 	/**
-	 * Updates a cookbook in the database
-	 * @param cookbook
+	 * Updates the cookbook in the database
+	 * @param cookbook - cookbook information to be updated
+	 * @param server - if request from the server or the application
 	 */
 	public void updateBook(CookbookBean cookbook, boolean server)
 	{
@@ -99,10 +108,12 @@ public class CookbookModel extends BaseDataSource {
 		updateVals.put("progress", cookbook.getProgress());
 		if(server == true)
 		{
+			//Get timestamp based on shared pref if request from server
 			updateVals.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
 		}
 		else
 		{
+			//Sets time from timestamp if request from the application
 			updateVals.put("changeTime", utils.getLastUpdated(false));	
 		}
 		updateVals.put("image", cookbook.getImage());
@@ -123,10 +134,13 @@ public class CookbookModel extends BaseDataSource {
 
 	}
 
+	
 	/**
-	 * Insert contributers into the database where we know the contributers name and cookbook id
-	 * @param email
-	 * @param cookbookid
+	 * Inserts contributers information into the database
+	 * 
+	 * @param email - email address of contributer
+	 * @param cookbookid - id of cookbook
+	 * @param server - if request from server or the application
 	 */
 	public void insertContributers(String email, int cookbookid, boolean server)
 	{
@@ -136,15 +150,17 @@ public class CookbookModel extends BaseDataSource {
 		values.put("cookbookid", cookbookid); 
 		if(server == true)
 		{
+			//Get timestamp based on the shared pref if request from the server
 			values.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
 		}
 		else
 		{
+			//Get current timestamp if from application
 			values.put("updateTime", utils.getLastUpdated(false)); 
 		}
 		values.put("changeTime", "2015-01-01 12:00:00.000"); 
 		values.put("accountid", email); 
-		values.put("progress", "added"); 
+		values.put("progress", "added"); //progress set to help manage if the contributer is added/deleted
 		database.beginTransaction();
 		try
 		{ 
@@ -164,12 +180,14 @@ public class CookbookModel extends BaseDataSource {
 
 	}
 
+	
 	/**
-	 * Updates contributers in the database where we know the contributers name and cookbook id
-	 * @param email
-	 * @param cookbookid
-	 * @param progress - what progress stage is contributer at - addedd,deleted
-	 * @param server - is it being updated from server or app - will affect timestamp
+	 * Update contributers in the database
+	 * 
+	 * @param email - email of the contributer
+	 * @param cookbookid - id of the cookbook
+	 * @param progress - progress of contributer account whether added or deleted
+	 * @param server - if the request from the server or from the application
 	 */
 	public void updateContributers(String email, int cookbookid, String progress, boolean server)
 	{
@@ -179,10 +197,12 @@ public class CookbookModel extends BaseDataSource {
 		values.put("cookbookid", cookbookid); 
 		if(server == true)
 		{
+			//Get timestamp based on the shared pref if request from server
 			values.put("changeTime", sharedpreferences.getString("Contributers Update", "DEFAULT"));
 		}
 		else
 		{
+			//Get current timestamp if from application
 			values.put("changeTime", utils.getLastUpdated(false)); 
 		}
 		values.put("accountid", email); 
@@ -254,7 +274,7 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Select cookbooks which belong to a user 
+	 * Select cookbooks which belong to a user whether they are creator or a contributer
 	 * @param user
 	 * @return ArrayList<cookbookBean> - List of cookbooks
 	 */
@@ -298,7 +318,7 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Select creator from a specific cookbook
+	 * Select the creator from a specific cookbook
 	 * @param user
 	 * @return ArrayList<cookbookBean> - List of cookbooks
 	 */
@@ -320,7 +340,7 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Select cookbooks by uniqueid
+	 * Select cookbooks by a uniqueid
 	 * @param uniqueid
 	 * @return List of cookbooks
 	 */
@@ -341,7 +361,7 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Select cookbooks id based on uniqueid
+	 * Select cookbooks id based on a uniqueid of the cookbook
 	 * @param uniqueid
 	 * @return int id
 	 */
@@ -410,7 +430,7 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Selecting a list of recipes based on a cookbook's id
+	 * Selecting a list of recipes based on a cookbook's unique id
 	 * @param uniqueid
 	 * @return List of recipes
 	 */
@@ -423,8 +443,6 @@ public class CookbookModel extends BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				names.add(cursorToRecipe(cursor));
-
-
 			}
 		}
 		cursor.close();
@@ -433,9 +451,9 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Creating a cookbookBean based on cursor
+	 * Creating a cookbookBean based on cursor from the database
 	 * @param cursor
-	 * @return cookbookBean
+	 * @return cookbookBean - cookbook info
 	 */
 	public CookbookBean cursorToCookbook(Cursor cursor) {
 		CookbookBean cb = new CookbookBean();
@@ -452,7 +470,7 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/** 
-	 * Creating a recipebean based on cursor
+	 * Creating a recipebean based on cursor from the database
 	 * @param cursor
 	 * @return recipeBean - recipe info
 	 */
@@ -468,7 +486,7 @@ public class CookbookModel extends BaseDataSource {
 	/**
 	 * Select images based on recipe id
 	 * @param id
-	 * @return
+	 * @return imageBean - image info
 	 */
 	public ImageBean selectImage(int id)
 	{
@@ -488,8 +506,8 @@ public class CookbookModel extends BaseDataSource {
 	}
 
 	/**
-	 * Select cookbooks id based on creator or contribs of book the and name of the book
-	 * @param name
+	 * Select cookbooks id based on creator or contribs of the book  and name of the book
+	 * @param name - name of book
 	 * @param user
 	 * @return int - the id
 	 */

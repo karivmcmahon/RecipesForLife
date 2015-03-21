@@ -25,19 +25,30 @@ import android.util.Log;
 import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.controllers.ReviewBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+/**
+ * Gets and sends review JSON to server
+ * @author Kari
+ *
+ */
 public class SyncReviewModel  extends BaseDataSource {
 	Context context;
+	Utility util;
 
 
 	public SyncReviewModel(Context context) {
 		super(context);
 		this.context = context;
-		// TODO Auto-generated constructor stub
+		util = new Utility();
 	}
 
 
+	/**
+	 * Get reviews from database based on a certain datetime range
+	 * @return List of review info in the form of review beans
+	 */
 	public ArrayList<ReviewBean> getReviews()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -56,11 +67,14 @@ public class SyncReviewModel  extends BaseDataSource {
 		return rbList;
 	}
 
+	/**
+	 * Select recipe unique id based on review d
+	 * @param reviewid
+	 * @return String - uniqueid
+	 */
 	public String selectUniqueId(int reviewid)
 	{	
-		Log.v("UID", "UID");
 		String uniqueid = "";
-		//open();
 		Cursor cursor = database.rawQuery("SELECT Recipe.uniqueid AS ruid FROM Recipe INNER JOIN ReviewRecipe ON ReviewRecipe.Recipeid = Recipe.id INNER JOIN Review ON Review.reviewId = ReviewRecipe.ReviewId WHERE Review.reviewId = ? GROUP BY Recipe.uniqueid ", new String[] { Integer.toString(reviewid) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -69,21 +83,31 @@ public class SyncReviewModel  extends BaseDataSource {
 			}
 		}
 		cursor.close();
-		//close();
 		return uniqueid;
 	}
 
+	
+	/**
+	 * Sets information from database to bean
+	 * @param cursor
+	 * @return ReviewBean containing info from database
+	 */
 	public ReviewBean cursorToReview(Cursor cursor) {
 		ReviewBean rb = new ReviewBean();
 		rb.setComment(cursor.getString(getIndex("review", cursor)));
 		rb.setUser(cursor.getString(getIndex("accountid", cursor)));
 		rb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
-		Log.v("JSON", "INT reviewb " + cursor.getInt(getIndex("reviewId", cursor))); 
 		String uid = selectUniqueId(cursor.getInt(getIndex("reviewId", cursor)));
 		rb.setRecipeuniqueid(uid);
 		return rb;
 	}
 
+	
+	/**
+	 * Create review JSON and send to server
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public void getAndCreateJSON() throws JSONException, IOException
 	{
 		ArrayList<ReviewBean> reviewList = getReviews();
@@ -97,124 +121,56 @@ public class SyncReviewModel  extends BaseDataSource {
 			review.put("updateTime", reviewList.get(i).getUpdateTime());
 			jsonArray.put(review);			
 		} 
-		Log.v("JSON", "JSON reviewb " + jsonArray); 
-		sendJSONToServer(jsonArray);
+
+		util.sendJSONToServer(jsonArray, false, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm14.aspx" );
 	}
 
-	public void sendJSONToServer(JSONArray jsonArray ) throws IOException
-	{
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = null;
-		myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm14.aspx");      	   			
-		try 
-		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
 
 
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception reviews error");
-				}
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-
-	}
-
+	/**
+	 * Gets review JSON from server and insert it into sqlite database
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public void getJSONFromServer() throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		JSONObject date = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
+
 		JSONObject json;
-		HttpPost myConnection = null;
+		String str= "";
 
-		date.put("updateTime", sharedpreferences.getString("Review", "DEFAULT"));
-		myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm15.aspx");      	   	
-		jsonArray.put(date);
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
 
-		try 
+		str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm15.aspx", sharedpreferences.getString("Review", "DEFAULT"), false);
+
+
+		JSONObject jObject = new JSONObject(str);
+		JSONArray jArray = (JSONArray) jObject.get("Review");
+
+		for(int i = 0; i < jArray.length(); i++)
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			try 
+
+
+			json = jArray.getJSONObject(i);
+			ReviewBean review = new ReviewBean();
+			review.setComment(json.getString("comment"));
+			review.setUser(json.getString("user"));
+			RecipeModel rm = new RecipeModel(context);
+			RecipeBean recipebean = rm.selectRecipe2(json.getString("recipeuniqueid"));
+			review.setRecipeid(recipebean.getId());
+			ReviewModel model = new ReviewModel(context);
+			try
 			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception reviews error");
-				}
+				model.insertReview(review, true);
 
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-			JSONObject jObject = new JSONObject(str);
-			JSONArray jArray = (JSONArray) jObject.get("Review");
-
-			for(int i = 0; i < jArray.length(); i++)
-			{
-
-
-				json = jArray.getJSONObject(i);
-				ReviewBean review = new ReviewBean();
-				review.setComment(json.getString("comment"));
-				review.setUser(json.getString("user"));
-				RecipeModel rm = new RecipeModel(context);
-				RecipeBean recipebean = rm.selectRecipe2(json.getString("recipeuniqueid"));
-				review.setRecipeid(recipebean.getId());
-				ReviewModel model = new ReviewModel(context);
-				try
-				{
-					model.insertReview(review, true);
-
-				}
-				catch(SQLException e)
-				{
-					throw e;
-				}
 			}
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-		catch(JSONException e)
-		{
-			e.printStackTrace();
-			throw e;
+			catch(SQLException e)
+			{
+				throw e;
+			}
 		}
 	}
 
-
 }
+
+
+

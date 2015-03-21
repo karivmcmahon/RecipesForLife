@@ -8,7 +8,15 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
@@ -555,6 +563,8 @@ public class Util  {
 		}
 		return resultBitmap;
 	}
+	
+	
 
 
 

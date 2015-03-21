@@ -16,6 +16,11 @@ import com.example.recipesforlife.controllers.ReviewBean;
 import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
+/**
+ * Class that handles review information to and from the database
+ * @author Kari
+ *
+ */
 public class ReviewModel extends BaseDataSource  {
 
 	Context context;
@@ -34,6 +39,11 @@ public class ReviewModel extends BaseDataSource  {
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
+	/**
+	 * Insert review into database
+	 * @param review - review info
+	 * @param server - if request comes from server or from application
+	 */
 	public void insertReview(ReviewBean review, boolean server)
 	{
 		open();
@@ -69,6 +79,11 @@ public class ReviewModel extends BaseDataSource  {
 
 	}
 
+	/**
+	 * Insert link between reviews and recipe
+	 * @param review - review info
+	 * @param server - if request from db or server
+	 */
 	public void insertReviewLink(ReviewBean review, boolean server)
 	{
 
@@ -89,6 +104,11 @@ public class ReviewModel extends BaseDataSource  {
 	}
 
 
+	/**
+	 * Select reviews for a recipe based on the recipe ids
+	 * @param recipeid
+	 * @return
+	 */
 	public ArrayList<ReviewBean> selectReviews(int recipeid)
 	{	
 		ArrayList<ReviewBean> rb = new ArrayList<ReviewBean>();
@@ -107,6 +127,11 @@ public class ReviewModel extends BaseDataSource  {
 
 	}
 
+	/**
+	 * Gets information from database and set to review bean
+	 * @param cursor
+	 * @return reviewBean - review info from database
+	 */
 	public ReviewBean cursorToReview(Cursor cursor) {
 		ReviewBean rb = new ReviewBean();
 		rb.setComment(cursor.getString(getIndex("review", cursor)));

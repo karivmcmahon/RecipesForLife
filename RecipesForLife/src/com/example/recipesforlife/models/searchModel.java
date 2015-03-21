@@ -10,6 +10,11 @@ import com.example.recipesforlife.controllers.UserBean;
 import android.content.Context;
 import android.database.Cursor;
 
+/**
+ * Class handles database queries relating to the application search
+ * @author Kari
+ *
+ */
 public class SearchModel extends BaseDataSource {
 
 	Context context;
@@ -19,6 +24,11 @@ public class SearchModel extends BaseDataSource {
 		this.context = context;
 	}
 
+	/**
+	 * Selects recipes which contains the word or sentance that was searched
+	 * @param word - query from search
+	 * @return List of recipes
+	 */
 	public ArrayList<RecipeBean> selectRecipe(String word)
 	{	
 		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
@@ -36,10 +46,14 @@ public class SearchModel extends BaseDataSource {
 		return rb;
 	}
 
+	/**
+	 * Select image from recipe
+	 * @param id
+	 * @return ImageBean - image info
+	 */
 	public ImageBean selectImages(int id)
 	{
 		ImageBean img = new ImageBean();
-		//open();
 		Cursor cursor2 = database.rawQuery("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
 		if (cursor2 != null && cursor2.getCount() > 0) {
 			for (int i = 0; i < cursor2.getCount(); i++) {
@@ -49,14 +63,13 @@ public class SearchModel extends BaseDataSource {
 			}
 		}
 		cursor2.close();
-		//close();
 		return img;
 	}
 
 	/**
 	 * Sets info from db to the controller
 	 * @param cursor
-	 * @return userBean
+	 * @return RecipeBean - recipe information
 	 */
 	public RecipeBean cursorToRecipe(Cursor cursor) 
 	{
@@ -79,6 +92,11 @@ public class SearchModel extends BaseDataSource {
 		return rb;
 	}
 
+	/**
+	 * Select cookbooks based on search query where cookbooks contain the word searhed
+	 * @param word
+	 * @return List of cookbooks
+	 */
 	public ArrayList<CookbookBean> selectCookbooks(String word)
 	{	
 		ArrayList<CookbookBean> cb = new ArrayList<CookbookBean>();
@@ -96,6 +114,11 @@ public class SearchModel extends BaseDataSource {
 		return cb;
 	}
 
+	/**
+	 * Sets info from database to cookbook bean
+	 * @param cursor
+	 * @return CookbookBean  - cookbook info
+	 */
 	public CookbookBean cursorToCookbook(Cursor cursor) {
 		CookbookBean cb = new CookbookBean();
 		cb.setName(cursor.getString(getIndex("name",cursor)));
@@ -110,6 +133,11 @@ public class SearchModel extends BaseDataSource {
 		return cb;
 	}
 
+	/**
+	 * Select users from the database based on the search query
+	 * @param word
+	 * @return A list of user beans
+	 */
 	public ArrayList<UserBean> selectUsers(String word)
 	{	
 		ArrayList<UserBean> ub = new ArrayList<UserBean>();

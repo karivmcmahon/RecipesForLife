@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.recipesforlife.controllers.AccountBean;
 import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -33,14 +34,16 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
 public class SyncModel extends BaseDataSource
 {
 	Context context;
+	Utility util;
 	public SyncModel(Context context) {
 		super(context);
 		this.context = context;
+		util = new Utility();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * Gets	the users that have been added after last sync datetime
+	 * Gets	the users between a datetime range
 	 * @return the list of users
 	 */
 	public ArrayList<UserBean> getUsers()
@@ -62,13 +65,12 @@ public class SyncModel extends BaseDataSource
 	}
 
 	/**
-	 * Gets the accounts that have been added after last sync datetime
+	 * Gets the accounts between a datetime range
 	 * @return the list of accounts
 	 */
 	public ArrayList<AccountBean> getAccount()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		///	Log.v("Date server ", "Date server " + sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"));
 		open();
 		ArrayList<AccountBean> accountList = new ArrayList<AccountBean>();
 		Cursor cursor;
@@ -138,51 +140,10 @@ public class SyncModel extends BaseDataSource
 			account.put("updateTime", accountList.get(i).getUpdateTime());
 			jsonArray.put(account);			
 		} 
-		sendJSONToServer(jsonArray);
+		util.sendJSONToServer(jsonArray, false, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");
 	}
 
-	/**
-	 * Sends the json with account info to the server 
-	 * @param jsonArray
-	 * @throws IOException 
-	 */
-	public void sendJSONToServer(JSONArray jsonArray) throws IOException
-	{
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");      	   	
-		try 
-		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception account error");
-				}
 
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-
-	}
 
 	/**
 	 * Gets the json with it's sync info from the server
@@ -192,84 +153,45 @@ public class SyncModel extends BaseDataSource
 	public void getJSONFromServer() throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		JSONObject date = new JSONObject();
+
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		date.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT") );
-		jsonArray.put(date);
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx");      	   	
-		HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-		HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
+		String str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx", sharedpreferences.getString("Account Date", "DEFAULT") , false);
 
-		try 
+		JSONArray jArray = new JSONArray(str);
+		if (jArray.length() != 0) 
 		{
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-
-			try 
+			json = jArray.getJSONObject(0);
+			for (int i = 0; i < jArray.length(); i++) 
 			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
+				AccountBean account = new AccountBean();
+				UserBean user = new UserBean();
+				json = jArray.getJSONObject(i);
+				account.setEmail(json.getString("email"));
+				account.setPassword(json.getString("password"));
+				user.setName(json.getString("name"));
+				user.setBio(json.getString("bio"));
+				user.setCity(json.getString("city"));
+				user.setCookingInterest(json.getString("cookingInterest"));
+				user.setCountry(json.getString("country"));
+				AccountModel accountmodel = new AccountModel(context);
+				try
 				{
-					throw new ClientProtocolException("Exception account error");
+					accountmodel.insertAccount(account, user, true);
 				}
-
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-
-			JSONArray jArray = new JSONArray(str);
-			if (jArray.length() != 0) 
-			{
-				json = jArray.getJSONObject(0);
-				for (int i = 0; i < jArray.length(); i++) 
+				catch(SQLException e)
 				{
-					AccountBean account = new AccountBean();
-					UserBean user = new UserBean();
-					json = jArray.getJSONObject(i);
-					account.setEmail(json.getString("email"));
-					account.setPassword(json.getString("password"));
-					user.setName(json.getString("name"));
-					user.setBio(json.getString("bio"));
-					user.setCity(json.getString("city"));
-					user.setCookingInterest(json.getString("cookingInterest"));
-					user.setCountry(json.getString("country"));
-					AccountModel accountmodel = new AccountModel(context);
-					try
-					{
-						accountmodel.insertAccount(account, user, true);
-					}
-					catch(SQLException e)
-					{
-						throw e;
-					}
+					throw e;
 				}
 			}
+		}
 
 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-		catch(JSONException e)
-		{
-			e.printStackTrace();
-			throw e;
-		}
 	}
 
-
-
-
 }
+
+
+
+
+

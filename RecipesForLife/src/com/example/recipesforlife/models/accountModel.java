@@ -22,31 +22,42 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
+/**
+ * @author Kari
+ *
+ */
+/**
+ * @author Kari
+ *
+ */
 public class AccountModel extends BaseDataSource
 {
-	long id;
-	String str;
 	ContentValues values;
 	ContentValues accountValues;
 	Context context;
 	SyncModel sync;
 	Utility utils;
+	//shared preference details
 	SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 
 	public AccountModel(Context context) {
 		super(context);
-		// TODO Auto-generated constructor st
 		this.context = context;
 		sync = new SyncModel(context);
 		utils = new Utility();
+		//intialise shared preference
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
+	
 	/**
-	 * Code to insert sign up information into sqlite database
-	 * @param accountInfo
+	 * Inserts account information into the sqlite database
+	 * 
+	 * @param account - a controller containing account info
+	 * @param user - a controller containing user info
+	 * @param server - if this request is coming from the server or from the app
 	 */
 	public void insertAccount(AccountBean account, UserBean user, boolean server) 
 	{
@@ -66,11 +77,13 @@ public class AccountModel extends BaseDataSource
 		close();
 	} 
 
+	
 	/**
-	 * Select account information where email and password matches
+	 * Selects a list of accounts from database based on email and password
+	 * 
 	 * @param email
 	 * @param password
-	 * @return A list of accounts
+	 * @return a list of accounts in the form of accountbean controller
 	 */
 	public ArrayList<AccountBean> selectAccount(String email, String password)
 	{
@@ -88,10 +101,11 @@ public class AccountModel extends BaseDataSource
 		return accountList;
 	}
 
+	
 	/**
-	 * Select users where the id matches
-	 * @param id
-	 * @return A list of users
+	 * Selects user information from database based on row id
+	 * @param id - row id in database
+	 * @return - A list of user information in the form of UserBeans
 	 */
 	public ArrayList<UserBean> selectUser(int id)
 	{
@@ -109,10 +123,11 @@ public class AccountModel extends BaseDataSource
 		return userList;
 	}
 
+
 	/**
-	 * Sets info from db to the controller
-	 * @param cursor
-	 * @return userBean
+	 * Gets information from the database based on the cursor and sets to user bean
+	 * @param cursor 
+	 * @return user information in the form of a user bean
 	 */
 	public UserBean cursorToUser(Cursor cursor) {
 		UserBean ub = new UserBean();
@@ -127,11 +142,12 @@ public class AccountModel extends BaseDataSource
 
 
 
+
 	/**
-	 * Check if details provided are an account
+	 * Checks if an account is valid based on the email and password input by the user
 	 * @param email
 	 * @param password
-	 * @return true if an account or false if not
+	 * @return a boolean stating whether its valid of not
 	 */
 	public boolean logIn(String email, String password) {
 		open();
@@ -142,17 +158,14 @@ public class AccountModel extends BaseDataSource
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				try {
+					//This checks if the password input and the one in the database matches
 					valid = ph.validatePassword(password, cursor.getString(getIndex("password", cursor)));
 				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvalidKeySpecException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-
-
 			cursor.close();
 			close();
 			return valid;
@@ -187,15 +200,19 @@ public class AccountModel extends BaseDataSource
 		} 	
 	}
 
+	
 	/**
-	 * Insert user info into the user sqlite table
-	 * @param accountInfo
+	 * Inserts user information into the database
+	 * 
+	 * @param account - Account information to be inserted
+	 * @param user - User information to be inserted
+	 * @param server - Boolean which states whether request is coming from server or not
 	 */
 	public void insertUserData(AccountBean account, UserBean user, boolean server)
 	{
-		//User values
 		values = new ContentValues();
 		values.put("name", user.getName()); 
+		//If request is from server set updateTime to shared pref time otherwise set to timestamp for that time
 		if(server == true)
 		{
 			values.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT")); 
@@ -211,7 +228,7 @@ public class AccountModel extends BaseDataSource
 		values.put("cookingInterest", user.getCookingInterest()); 
 		try
 		{
-			id = database.insertOrThrow("Users", null, values);
+			long id = database.insertOrThrow("Users", null, values);
 			insertAccountData(account, id, server);
 		}
 		catch(SQLException e)
@@ -221,10 +238,12 @@ public class AccountModel extends BaseDataSource
 		}
 	}
 
+
 	/**
-	 * Insert account info into account sqlite table
-	 * @param accountInfo
-	 * @param id
+	 * Inserts account information into database
+	 * @param account - account info to be inserted
+	 * @param id - row id of the row user data was inserted into
+	 * @param server - whether request was from the server or the application
 	 */
 	public void insertAccountData(AccountBean account, long id, boolean server)
 	{
@@ -232,8 +251,8 @@ public class AccountModel extends BaseDataSource
 		accountValues = new ContentValues();
 		accountValues.put("id", (int)id);
 		accountValues.put("email", account.getEmail());
-		PasswordHashing ph = new PasswordHashing();
 		accountValues.put("password", account.getPassword());
+		//If request is from server set updateTime to shared pref time otherwise set to timestamp for that time
 		if(server == true)
 		{			
 			accountValues.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT")); 

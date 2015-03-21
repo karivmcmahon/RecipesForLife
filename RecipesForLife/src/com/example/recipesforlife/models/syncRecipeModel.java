@@ -27,6 +27,7 @@ import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -37,17 +38,19 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
 public class SyncRecipeModel extends BaseDataSource {
 	Context context;
 	RecipeModel rm;
+	Utility util;
 
 
 	public SyncRecipeModel(Context context) {
 		super(context);
 		this.context = context;
-
+		util = new Utility();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * Gets recipe to send to server based on date they were added using shared preferecnes
+	 * Gets recipe to send to server based on date they were added using shared preferences
+	 * @param update - whether its for update or insert
 	 * @return ArrayList<recipeBean> recipeList
 	 */
 	public ArrayList<RecipeBean> getRecipe(boolean update)
@@ -101,7 +104,7 @@ public class SyncRecipeModel extends BaseDataSource {
 	}
 
 	/**
-	 * Get ingredients for recipes based on recipe id within the date time frame
+	 * Get ingredients for recipes based on recipe id 
 	 * @param id
 	 * @return ArrayList<IngredientBean>
 	 */
@@ -168,7 +171,7 @@ public class SyncRecipeModel extends BaseDataSource {
 	}
 
 	/**
-	 * Gets preperation information from recipe within date frame for syncing
+	 * Gets preperation information based on recipe id
 	 * @param id
 	 * @return ArrayList<preperationBean>
 	 */
@@ -215,6 +218,7 @@ public class SyncRecipeModel extends BaseDataSource {
 
 	/**
 	 * Builds a json with all the recipe data to send to the server
+	 * @param update - whether its for update or insert
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
@@ -302,232 +306,148 @@ public class SyncRecipeModel extends BaseDataSource {
 			recipe.accumulate("Ingredient", newObj);			
 			jsonArray.put(recipe);			
 		} 
-		sendJSONToServer(jsonArray, update);
+		if(update == true)
+		{
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx" );
+		}
+		else
+		{
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx" );
+		}
 	}
 
 	/**
 	 * Gets the json with it's sync info from the server
+	 * @param - update - whether its for update or insert
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
 	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		JSONObject date = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
+
 		JSONObject json;
 		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = null;
 		if(update == true)
 		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx");   
-			date.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
+
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx", sharedpreferences.getString("Change", "DEFAULT"), true);
 		}
 		else
 		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx");  
-			date.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm4.aspx", sharedpreferences.getString("Date", "DEFAULT"), false);
 		}
-		jsonArray.put(date);
-		try 
+
+		JSONObject jObject = new JSONObject(str);
+		JSONArray jArray = (JSONArray) jObject.get("Recipe");
+
+		for(int i = 0; i < jArray.length(); i++)
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			try 
+
+
+			json = jArray.getJSONObject(i);
+			RecipeBean recipe = new RecipeBean();
+			recipe.setName( json.getString("name"));
+			recipe.setDesc(json.getString("description"));
+			recipe.setServes(json.getString("serves"));
+			recipe.setCooking(json.getString("cookingTime"));
+			recipe.setPrep(json.getString("prepTime"));
+			recipe.setAddedBy(json.getString("addedBy"));
+			recipe.setUniqueid(json.getString("uniqueid"));
+			recipe.setProgress(json.getString("progress"));
+			recipe.setDifficulty(json.getString("difficulty"));
+			recipe.setDietary(json.getString("dietary"));
+			recipe.setTips(json.getString("tips"));
+			recipe.setCusine(json.getString("cusine"));
+			ImageBean imgbean = new ImageBean();
+			if(json.optString("image").equals(""))
 			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception recipe error");
-				}
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-			JSONObject jObject = new JSONObject(str);
-			JSONArray jArray = (JSONArray) jObject.get("Recipe");
-
-			for(int i = 0; i < jArray.length(); i++)
+				byte[] emptyarr = new byte[0];
+				imgbean.setImage(emptyarr);
+			}
+			else
 			{
+				imgbean.setImage(Base64.decode(json.optString("image"), Base64.DEFAULT));
+			}
+			imgbean.setUniqueid(json.optString("imageid"));
 
+			
+			String cookingid = "";
+			cookingid = json.optString("cookingid");
+			
+			recipe.setRecipeBook(cookingid);
 
-				json = jArray.getJSONObject(i);
-				RecipeBean recipe = new RecipeBean();
-				recipe.setName( json.getString("name"));
-				recipe.setDesc(json.getString("description"));
-				recipe.setServes(json.getString("serves"));
-				recipe.setCooking(json.getString("cookingTime"));
-				recipe.setPrep(json.getString("prepTime"));
-				recipe.setAddedBy(json.getString("addedBy"));
-				recipe.setUniqueid(json.getString("uniqueid"));
-				recipe.setProgress(json.getString("progress"));
-				recipe.setDifficulty(json.getString("difficulty"));
-				recipe.setDietary(json.getString("dietary"));
-				recipe.setTips(json.getString("tips"));
-				recipe.setCusine(json.getString("cusine"));
-				ImageBean imgbean = new ImageBean();
-				if(json.optString("image").equals(""))
+			ArrayList<IngredientBean> ingredBeanList = new ArrayList<IngredientBean>();
+			JSONArray ingredArray = (JSONArray) json.get("Ingredient");
+			for(int a = 0; a < ingredArray.length(); a++)
+			{
+				JSONObject ingredObject = ingredArray.getJSONObject(a);
+				JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
+				JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
+				JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
+				JSONArray valueArray = (JSONArray) ingredObject.get("Value");
+				JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
+				for(int b = 0; b < ingredsArray.length(); b++)
 				{
-					byte[] emptyarr = new byte[0];
-					imgbean.setImage(emptyarr);
+					IngredientBean ingredBean = new IngredientBean();
+					ingredBean.setName(ingredsArray.get(b).toString());
+					ingredBean.setNote(notesArray.get(b).toString());
+					ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
+					ingredBean.setValue(valueArray.get(b).toString());
+					ingredBean.setUniqueid(ingredIdArray.get(b).toString());
+					ingredBeanList.add(ingredBean);
 				}
-				else
-				{
-					imgbean.setImage(Base64.decode(json.optString("image"), Base64.DEFAULT));
-				}
-				imgbean.setUniqueid(json.optString("imageid"));
-
-				CookbookModel cbmodel = new CookbookModel(context);
-				String cookingid = "";
-				//if(json.has("cookingid"))
-				//{
-
-				cookingid = json.optString("cookingid");
-				Log.v("recipe", "recipe " + recipe.getName() + " id " + cookingid);
-
-				recipe.setRecipeBook(cookingid);
-
-				ArrayList<IngredientBean> ingredBeanList = new ArrayList<IngredientBean>();
-				JSONArray ingredArray = (JSONArray) json.get("Ingredient");
-				for(int a = 0; a < ingredArray.length(); a++)
-				{
-					JSONObject ingredObject = ingredArray.getJSONObject(a);
-					JSONArray ingredsArray = (JSONArray) ingredObject.get("Ingredients");
-					JSONArray notesArray = (JSONArray) ingredObject.get("Notes");
-					JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
-					JSONArray valueArray = (JSONArray) ingredObject.get("Value");
-					JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
-					for(int b = 0; b < ingredsArray.length(); b++)
-					{
-						IngredientBean ingredBean = new IngredientBean();
-						ingredBean.setName(ingredsArray.get(b).toString());
-						ingredBean.setNote(notesArray.get(b).toString());
-						ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
-						ingredBean.setValue(valueArray.get(b).toString());
-						ingredBean.setUniqueid(ingredIdArray.get(b).toString());
-						ingredBeanList.add(ingredBean);
-					}
-				}
-
-				JSONArray preperationArray = (JSONArray) json.get("Preperation");
-				ArrayList<PreperationBean> prepBeanList = new ArrayList<PreperationBean>();
-				for(int c = 0; c < preperationArray.length(); c++)
-				{
-					JSONObject prepObject =  preperationArray.getJSONObject(c);
-					JSONArray prepArray = (JSONArray) prepObject.get("prep");
-					JSONArray numArray = (JSONArray) prepObject.get("prepNums");
-					JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
-					for(int d = 0; d < prepArray.length(); d++)
-					{
-						PreperationBean prepBean = new PreperationBean();
-						prepBean.setPreperation(prepArray.get(d).toString());
-						prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
-						prepBean.setUniqueid(idArray.get(d).toString());
-						prepBeanList.add(prepBean);
-					}
-				}
-				RecipeModel model = new RecipeModel(context);
-
-				if(update == true)
-				{
-					try
-					{
-						model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean,true);
-					}
-					catch(SQLException e)
-					{
-						throw e;
-					}
-				}
-				else
-				{
-					try
-					{
-						model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, imgbean);
-					}
-					catch(SQLException e)
-					{
-						throw e;
-					}
-				}
-
 			}
 
-
-
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-		catch(JSONException e)
-		{
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
-	/**
-	 * Sends json to the server
-	 * @param jsonArray
-	 * @throws IOException 
-	 */
-	public void sendJSONToServer(JSONArray jsonArray, boolean update) throws IOException
-	{
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = null;
-		if(update == true)
-		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm5.aspx"); 
-		}
-		else
-		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm3.aspx");
-		}
-		try 
-		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-
-
-			try 
+			JSONArray preperationArray = (JSONArray) json.get("Preperation");
+			ArrayList<PreperationBean> prepBeanList = new ArrayList<PreperationBean>();
+			for(int c = 0; c < preperationArray.length(); c++)
 			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
+				JSONObject prepObject =  preperationArray.getJSONObject(c);
+				JSONArray prepArray = (JSONArray) prepObject.get("prep");
+				JSONArray numArray = (JSONArray) prepObject.get("prepNums");
+				JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
+				for(int d = 0; d < prepArray.length(); d++)
 				{
-					throw new ClientProtocolException("Exception recipe error");
+					PreperationBean prepBean = new PreperationBean();
+					prepBean.setPreperation(prepArray.get(d).toString());
+					prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
+					prepBean.setUniqueid(idArray.get(d).toString());
+					prepBeanList.add(prepBean);
 				}
+			}
+			RecipeModel model = new RecipeModel(context);
 
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
+			if(update == true)
+			{
+				try
+				{
+					model.updateRecipe(recipe, prepBeanList, ingredBeanList, imgbean,true);
+				}
+				catch(SQLException e)
+				{
+					throw e;
+				}
+			}
+			else
+			{
+				try
+				{
+					model.insertRecipe(recipe, true, ingredBeanList, prepBeanList, imgbean);
+				}
+				catch(SQLException e)
+				{
+					throw e;
+				}
+			}
+
 		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
+
+
+
 
 	}
+
 
 
 }

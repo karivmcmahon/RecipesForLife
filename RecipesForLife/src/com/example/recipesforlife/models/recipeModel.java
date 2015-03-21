@@ -18,7 +18,7 @@ import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
- * Class handles recipe details relating to recipes
+ * Class handles database details relating to recipes
  * @author Kari
  *
  */
@@ -43,16 +43,17 @@ public class RecipeModel extends BaseDataSource {
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
-	/**
-	 * Updates a recipe
-	 * @param newRecipe
-	 * @param prepList
-	 * @param ingredList
-	 * @param image
-	 * @param server - if its came from server will affect timestamp
-	 */
-	public void updateRecipe(RecipeBean newRecipe, ArrayList<PreperationBean> prepList,  ArrayList<IngredientBean> ingredList, ImageBean image, boolean server)
-	{
+		/**
+		 * Updates a recipe in the database
+		 * 
+		 * @param newRecipe - recipe info contained in recipebean
+		 * @param prepList - prep info for recipe contained in prepbean
+		 * @param ingredList - ingred info for recipe contained in ingredbean
+		 * @param image - image for recipe
+		 * @param server - if request from server or application
+		 */
+		public void updateRecipe(RecipeBean newRecipe, ArrayList<PreperationBean> prepList,  ArrayList<IngredientBean> ingredList, ImageBean image, boolean server)
+		{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		ContentValues recipeUpdateVals = new ContentValues();
@@ -68,10 +69,12 @@ public class RecipeModel extends BaseDataSource {
 		recipeUpdateVals.put("tips", newRecipe.getTips());
 		if(server == true)
 		{
+			//Gets timestamp based on shared pref if from server
 			recipeUpdateVals.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
 		}
 		else
 		{
+			//Gets current timestamp if from application
 			recipeUpdateVals.put("changeTime", utils.getLastUpdated(false));
 		}
 		Cursor cursor = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] {newRecipe.getUniqueid()});
@@ -87,9 +90,9 @@ public class RecipeModel extends BaseDataSource {
 			try
 			{
 				database.update("Recipe", recipeUpdateVals, "uniqueid=?", args);
-				updateRecipePrep(prepList);
-				updateRecipeIngredient(ingredList);
-				updateRecipeImage(image);
+				updateRecipePrep(prepList); //updates preperation details for recipe
+				updateRecipeIngredient(ingredList); //updates ingred details for recipe
+				updateRecipeImage(image); //updates images for recipe
 				database.setTransactionSuccessful();
 				database.endTransaction(); 
 			}
@@ -103,8 +106,9 @@ public class RecipeModel extends BaseDataSource {
 		}
 	}
 
+
 	/**
-	 * Update recipe preperation details
+	 * Updates preperation details for the  recipe
 	 * @param prepList
 	 */
 	public void updateRecipePrep(ArrayList<PreperationBean> prepList)
@@ -136,7 +140,7 @@ public class RecipeModel extends BaseDataSource {
 
 
 	/**
-	 * Update recipe image details
+	 * Update recipe image for recipe
 	 * @param img - the img bean which is being updated
 	 */
 	public void updateRecipeImage(ImageBean img)
@@ -185,13 +189,17 @@ public class RecipeModel extends BaseDataSource {
 		cursor.close();
 	}
 
+
 	/**
-	 * Inserts recipeBean data into database
-	 * @param ingredList
-	 * @param prepList
-	 * @param img
-	 * @param server
-	 **/
+	 * Inserts recipe into the database 
+	 * 
+	 * @param recipe - recipe info from recipebean
+	 * @param server - if request from server or app
+	 * @param ingredList  - ingred info for recipe
+	 * @param prepList = prep info for recipe
+	 * @param img  - image for recipe
+	 * @return - String - the unique id of inserted recipeS
+	 */
 	public String insertRecipe(RecipeBean recipe, boolean server, ArrayList<IngredientBean> ingredList, ArrayList<PreperationBean> prepList, ImageBean img)
 	{
 		open();
@@ -213,11 +221,13 @@ public class RecipeModel extends BaseDataSource {
 		if(server == true)
 		{
 			uniqueid = recipe.getUniqueid();
+			//if from server get unique id and set to shared pref from db
 			values.put("uniqueid", uniqueid);
 			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
 		}
 		else
 		{
+			//generates uuid if from application and sets to current timestamp
 			uniqueid = utils.generateUUID(recipe.getAddedBy(), "Recipe", database);
 			values.put("uniqueid", uniqueid);
 			values.put("updateTime", utils.getLastUpdated(false)); 
@@ -246,9 +256,9 @@ public class RecipeModel extends BaseDataSource {
 
 	/**
 	 * Insert preperation information into database 
-	 * @param prepList
-	 * @param server
-	 * @param addedBy
+	 * @param prepList - prep info
+	 * @param server - if request from server or application
+	 * @param addedBy - who added the recipe
 	 */
 	public void insertPrep(ArrayList<PreperationBean> prepList, boolean server, String addedBy)
 	{
@@ -269,16 +279,16 @@ public class RecipeModel extends BaseDataSource {
 			prepvalues.put("updateTime", utils.getLastUpdated(false)); 
 			prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
 			prepID = database.insertOrThrow("Preperation", null, prepvalues);
-			insertPrepToRecipe(server);
+			insertPrepToRecipe();
 		}
 
 	}
 
 	/** 
 	 * Insert image into database for recipe
-	 * @param img
-	 * @param server
-	 * @param addedBy
+	 * @param img - image info
+	 * @param server - if request from server or application
+	 * @param addedBy - who added recipe
 	 */
 	public void insertImage(ImageBean img, boolean server, String addedBy)
 	{
@@ -303,7 +313,7 @@ public class RecipeModel extends BaseDataSource {
 
 	/**
 	 * Insert link between image and recipe
-	 * @param imageid
+	 * @param imageid - id of row when image was insertedd
 	 */
 	public void insertImageLink(long imageid)
 	{
@@ -318,8 +328,9 @@ public class RecipeModel extends BaseDataSource {
 	} 
 	/**
 	 * Insert link between prep and recipe
+	 * 
 	 */
-	public void insertPrepToRecipe(boolean server)
+	public void insertPrepToRecipe()
 	{
 
 		preptorecipevalues = new ContentValues();
@@ -333,14 +344,13 @@ public class RecipeModel extends BaseDataSource {
 
 	/**
 	 * Insert the link between cookbook and recipe
-	 * @param name
-	 * @param addedBy
+	 * @param uid - used  to get cookbooks row id
+	 * @param addedBy - user who inserted recipe
 	 */
-	public void insertCookbookRecipe(String name)
+	public void insertCookbookRecipe(String uid)
 	{
 		ContentValues value = new ContentValues();
-		int id = selectCookbooksIDByUnique(name);
-		Log.v("name ", "name " + name + "id " + id);
+		int id = selectCookbooksIDByUnique(uid);
 		value.put("Recipeid", recipeID);
 		value.put("Cookbookid", id);
 		value.put("updateTime", utils.getLastUpdated(false)); 
@@ -351,9 +361,9 @@ public class RecipeModel extends BaseDataSource {
 
 	/**
 	 * Insert ingredient information into database
-	 * @param ingredList
-	 * @param addedBy
-	 * @param server
+	 * @param ingredList - ingredient information
+	 * @param addedBy - user who inserted recipe
+	 * @param server -if request from server or application
 	 */
 	public void insertIngredient( boolean server, ArrayList<IngredientBean> ingredList, String addedBy)
 	{
@@ -370,10 +380,10 @@ public class RecipeModel extends BaseDataSource {
 			}
 			else
 			{
-				ingredID = id;
+				ingredID = id; // if it already exists return the id
 			}
-			insertIngredientDetails(i,ingredList,server, addedBy);
-			insertRecipeToIngredient();
+			insertIngredientDetails(i,ingredList,server, addedBy); //insert ingred details
+			insertRecipeToIngredient(); //insert recipe and ingred details
 			insertIngredToDetails();
 		}
 
@@ -381,9 +391,10 @@ public class RecipeModel extends BaseDataSource {
 
 	/**
 	 * Insert ingredient details into database
-	 * @param i
-	 * @param ingredList
-	 * @param addedBy
+	 * @param i - point in loop
+	 * @param ingredList - ingredient info
+	 * @param addedBy - who inserted recipe
+	 * @param server - if request from app or server
 	 */
 	public void insertIngredientDetails(int i, ArrayList<IngredientBean> ingredList, boolean server, String addedBy)
 	{
@@ -396,10 +407,12 @@ public class RecipeModel extends BaseDataSource {
 		ingredDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
 		if(server == true)
 		{
+			//if  from server - get unique id
 			ingredDetailsValues.put("uniqueid", ingredList.get(i).getUniqueid());
 		}
 		else
 		{
+			//generate uuid if request from application
 			ingredDetailsValues.put("uniqueid", utils.generateUUID(addedBy, "IngredientDetails", database));
 		}
 		ingredDetsID = database.insertOrThrow("IngredientDetails", null, ingredDetailsValues);
@@ -570,6 +583,12 @@ public class RecipeModel extends BaseDataSource {
 	}
 
 
+	/**
+	 * Select all recipes that the user can view
+	 * 
+	 * @param user
+	 * @return List of recipes
+	 */
 	public ArrayList<RecipeBean> selectAllRecipesUserCanAccess(String user)
 	{
 
@@ -587,6 +606,13 @@ public class RecipeModel extends BaseDataSource {
 		return rb;	
 	}
 
+	
+	/**
+	 * Sets info from database to recipe bean
+	 * 
+	 * @param cursor
+	 * @return recipe information
+	 */
 	public RecipeBean cursorToAllRecipes(Cursor cursor) 
 	{
 		RecipeBean rb = new RecipeBean();
@@ -602,9 +628,6 @@ public class RecipeModel extends BaseDataSource {
 		rb.setDifficulty(cursor.getString(getIndex("difficulty", cursor)));
 		rb.setTips(cursor.getString(getIndex("tips", cursor)));
 		rb.setDietary(cursor.getString(getIndex("dietary", cursor)));
-		//imageBean imgbean = selectImages(cursor.getInt(getIndex("idr",cursor)));
-		//rb.setImage(imgbean.getImage());
-		//rb.setRecipeBook(cursor.getString(getIndex("cname", cursor)));
 		return rb;
 	}
 
@@ -622,8 +645,6 @@ public class RecipeModel extends BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				prepList.add(cursorToPrep(cursor));
-
-
 			}
 		}
 		cursor.close();
@@ -635,6 +656,7 @@ public class RecipeModel extends BaseDataSource {
 	/**
 	 * Select images based on recipe id
 	 * @param id - recipe id
+	 * @return imageBean - information relating to the image
 	 **/
 	public ImageBean selectImages(int id)
 	{
@@ -656,7 +678,7 @@ public class RecipeModel extends BaseDataSource {
 	/**
 	 * Select ingredients info based on recipe id
 	 * @param id
-	 * @return ArrayList<ingredientBean>
+	 * @return ArrayList<ingredientBean> - ingredient information
 	 */
 	public ArrayList<IngredientBean> selectIngredients(int id)
 	{
@@ -718,8 +740,6 @@ public class RecipeModel extends BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				id = cursor.getInt(getIndex("id",cursor));
-
-
 			}
 		}
 		cursor.close(); 

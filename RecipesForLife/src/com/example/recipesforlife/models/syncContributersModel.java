@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import com.example.recipesforlife.controllers.ContributerBean;
 import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.util.Util;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import android.content.Context;
@@ -35,16 +37,18 @@ import android.widget.Toast;
 public class SyncContributersModel extends BaseDataSource {
 
 	Context context;
+	Utility util;
 
 
 	public SyncContributersModel(Context context) {
 		super(context);
 		this.context = context;
+		util = new Utility();
 	}
 
 	/**
 	 * Gets contributers within a specific date range
-	 * @param update
+	 * @param update - whether checking for updates or inserts
 	 * @return List of contributers
 	 */
 	public ArrayList<ContributerBean> getContribs(boolean update)
@@ -89,8 +93,8 @@ public class SyncContributersModel extends BaseDataSource {
 	} 
 
 	/**
-	 * Create a json of the contributers information
-	 * @param update
+	 * Create a json of the contributers information and sends to the server
+	 * @param update - whether the json is for update or insert
 	 * @throws JSONException
 	 * @throws IOException
 	 */
@@ -109,116 +113,40 @@ public class SyncContributersModel extends BaseDataSource {
 			contrib.put("progress", contribs.get(i).getProgress());
 			jsonArray.put(contrib);			
 		} 
-		sendJSONToServer(jsonArray, update);
-	} 
-
-	/**
-	 * Send json to the server
-	 * @param jsonArray
-	 * @param update
-	 * @throws IOException
-	 */
-	public void sendJSONToServer(JSONArray jsonArray, boolean update ) throws IOException
-	{
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = null;
 		if(update == true)
 		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm13.aspx");   
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm13.aspx");
 		}
 		else
 		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");   
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");
 		}
-
-		try 
-		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
+	} 
 
 
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception contributers error");
-				}
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-
-	}
 
 	/**
 	 * Get contributer json from server and either insert or update the contributer
-	 * @param update
+	 * @param update - whether the json is for update or insert
 	 * @throws JSONException
 	 * @throws IOException
 	 */
 	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		JSONObject date = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
+		String str = "";
 		JSONObject json;
 		if(update == true)
 		{
-			date.put("updateTime", sharedpreferences.getString("Contributers Update", "DEFAULT"));
-			date.put("change", "true");
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx", sharedpreferences.getString("Contributers Update", "DEFAULT"), false);
 		}
 		else
 		{
-			date.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
-			date.put("change", "false");
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx", sharedpreferences.getString("Contributers", "DEFAULT"), false);
 		}
 
-		jsonArray.put(date);
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = null;
-		myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx"); 
-
-		try 
+		try
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception contributers error");
-				}
-
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
 			JSONObject jObject = new JSONObject(str);
 			JSONArray jArray = (JSONArray) jObject.get("Contributer");
 
@@ -255,23 +183,21 @@ public class SyncContributersModel extends BaseDataSource {
 					}
 				}
 
-
-			} 
-
+			}
 
 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
+		} 
 		catch(JSONException e)
 		{
 			e.printStackTrace();
 			throw e;
 		}
-	} 
 
 
-}
+
+	}
+
+} 
+
+
+

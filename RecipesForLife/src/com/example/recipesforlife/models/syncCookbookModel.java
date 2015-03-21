@@ -23,6 +23,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -32,16 +33,19 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  */
 public class SyncCookbookModel extends BaseDataSource {
 	Context context;
+	Utility util;
 
 
 	public SyncCookbookModel(Context context) {
 		super(context);
 		this.context = context;
+		util = new Utility();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * Get cookbooks inserted within a certain time frame
+	 * Get cookbooks inserted or updated within a certain time frame
+	 * @param update - whether checking for updates or inserts
 	 * @return list of cookbook's
 	 */
 	public ArrayList<CookbookBean> getCookbook(boolean update)
@@ -90,6 +94,7 @@ public class SyncCookbookModel extends BaseDataSource {
 
 	/**
 	 * Builds a json with all the cookbook data to send to the server
+	 * @param - builds json and sends to server based on update or insert
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
@@ -112,167 +117,84 @@ public class SyncCookbookModel extends BaseDataSource {
 			book.put("image", image64);
 			jsonArray.put(book);			
 		} 
-		Log.v("JSON", "JSON cb " + jsonArray); 
-		sendJSONToServer(jsonArray, update);
-	}
-
-	/**
-	 * Sends cookbook data to server
-	 * @param jsonArray
-	 * @throws IOException
-	 */
-	public void sendJSONToServer(JSONArray jsonArray, boolean update ) throws IOException
-	{
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
-		HttpPost myConnection = null;
 		if(update == true)
 		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm9.aspx");      	   	
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm9.aspx");
 		}
 		else
 		{
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm7.aspx");      	   	
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm7.aspx");
 		}
-		try 
-		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-
-
-			try 
-			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
-				{
-					throw new ClientProtocolException("Exception cookbooks error");
-				}
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-
 	}
 
+
+
 	/**
-	 * Gets and decodes json from server and insert or update cookbook
+	 * Gets and decodes json from server and inserts or updates cookbook
+	 * @param update - whether the json is for update or insert
 	 * @throws JSONException
 	 * @throws IOException
 	 */
 	public void getJSONFromServer(boolean update) throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		JSONObject date = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		HttpPost myConnection = null;
+		String str = "";
 		if(update == true)
 		{
-			date.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx");      	   	
+
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx", sharedpreferences.getString("Cookbook Update", "DEFAULT"), true);
 		}
 		else
 		{
-			date.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT"));
-			myConnection = new HttpPost("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx");      	   	
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx", sharedpreferences.getString("Cookbook", "DEFAULT"), false);
 		}
-		jsonArray.put(date);
-		String str = "";
-		HttpResponse response = null;
-		HttpClient myClient = new DefaultHttpClient();
 
-		try 
+		JSONObject jObject = new JSONObject(str);
+		JSONArray jArray = (JSONArray) jObject.get("Cookbook");
+
+		for(int i = 0; i < jArray.length(); i++)
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
-			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
-			try 
+
+
+			json = jArray.getJSONObject(i);
+			CookbookBean book = new CookbookBean();
+			book.setName( json.getString("name"));
+			book.setDescription(json.getString("description"));
+			book.setPrivacy(json.getString("privacyOption"));
+			book.setUniqueid(json.getString("uniqueid"));
+			book.setCreator(json.getString("creator"));
+			book.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
+			book.setProgress(json.getString("progress"));
+			CookbookModel model = new CookbookModel(context);
+			if(update == true)
 			{
-				response = myClient.execute(myConnection);
-				str = EntityUtils.toString(response.getEntity(), "UTF-8");
-				Log.v("RESPONSE", "RESPONSE " + str);
-				if(str.startsWith("Error"))
+				try
 				{
-					throw new ClientProtocolException("Exception cookbooks error");
+					model.updateBook(book, true);
 				}
-
-
-			} 
-			catch (ClientProtocolException e) 
-			{							
-				e.printStackTrace();
-				throw e;
-			} 
-			JSONObject jObject = new JSONObject(str);
-			JSONArray jArray = (JSONArray) jObject.get("Cookbook");
-
-			for(int i = 0; i < jArray.length(); i++)
+				catch(SQLException e)
+				{
+					throw e;
+				}
+			}
+			else
 			{
-
-
-				json = jArray.getJSONObject(i);
-				CookbookBean book = new CookbookBean();
-				book.setName( json.getString("name"));
-				book.setDescription(json.getString("description"));
-				book.setPrivacy(json.getString("privacyOption"));
-				book.setUniqueid(json.getString("uniqueid"));
-				book.setCreator(json.getString("creator"));
-				book.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
-				book.setProgress(json.getString("progress"));
-				CookbookModel model = new CookbookModel(context);
-				if(update == true)
+				try
 				{
-					try
-					{
-						model.updateBook(book, true);
-					}
-					catch(SQLException e)
-					{
-						throw e;
-					}
+					model.insertBook(book, true);
+
 				}
-				else
+				catch(SQLException e)
 				{
-					try
-					{
-						model.insertBook(book, true);
-
-					}
-					catch(SQLException e)
-					{
-						throw e;
-					}
+					throw e;
 				}
+			}
 
-			} 
+		} 
 
-
-
-		}
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			throw e;
-		}
-		catch(JSONException e)
-		{
-			e.printStackTrace();
-			throw e;
-		}
 	}
 
 }
+
+

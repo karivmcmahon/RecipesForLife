@@ -1,14 +1,31 @@
 package com.example.recipesforlife.util;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.example.recipesforlife.views.SignUpSignInActivity;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Utility class handling common methods for multiple classes
@@ -93,4 +110,107 @@ public class Utility  {
 		return false;
 	}
 
+	/**
+	 * Send json to the server
+	 * @param jsonArray
+	 * @param update
+	 * @param url
+	 * @throws IOException
+	 */
+	public void sendJSONToServer(JSONArray jsonArray, boolean update, String url ) throws IOException
+	{
+		String str = "";
+		HttpResponse response = null;
+		HttpClient myClient = new DefaultHttpClient();
+		HttpPost myConnection = new HttpPost(url);
+
+
+		try 
+		{
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
+			myConnection.setEntity(new ByteArrayEntity(
+					jsonArray.toString().getBytes("UTF8")));
+
+
+			try 
+			{
+				response = myClient.execute(myConnection);
+				str = EntityUtils.toString(response.getEntity(), "UTF-8");
+				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception contributers error");
+				}
+
+			} 
+			catch (ClientProtocolException e) 
+			{							
+				e.printStackTrace();
+				throw e;
+			} 
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
+	public String retrieveFromServer(String url, String pref, boolean update) throws IOException, JSONException
+	{
+
+		JSONObject date = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+
+		if(update == true)
+		{
+			date.put("changeTime", pref);
+		}
+		else
+		{
+			date.put("updateTime", pref);
+		}
+
+		jsonArray.put(date);
+		String str = "";
+
+		HttpResponse response = null;
+		HttpClient myClient = new DefaultHttpClient();
+		HttpPost myConnection = null;
+		myConnection = new HttpPost(url); 
+
+		try 
+		{
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
+			myConnection.setEntity(new ByteArrayEntity(
+					jsonArray.toString().getBytes("UTF8")));
+			try 
+			{
+				response = myClient.execute(myConnection);
+				str = EntityUtils.toString(response.getEntity(), "UTF-8");
+				Log.v("RESPONSE", "RESPONSE " + str);
+				if(str.startsWith("Error"))
+				{
+					throw new ClientProtocolException("Exception contributers error");
+				}
+
+
+			} 
+			catch (ClientProtocolException e) 
+			{							
+				e.printStackTrace();
+				throw e;
+			} 
+		}
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+			throw e;
+		}
+		return str;
+
+	}
 }
