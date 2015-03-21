@@ -10,10 +10,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.util.Log;
 
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -21,7 +22,7 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
-public class recipeModel extends baseDataSource {
+public class RecipeModel extends BaseDataSource {
 
 	Context context;
 	ContentValues values,  prepvalues, preptorecipevalues, ingredValues, ingredToDetailsValues, ingredDetailsValues, ingredToRecipeValues;
@@ -30,15 +31,15 @@ public class recipeModel extends baseDataSource {
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 	SharedPreferences sharedpreferences;
-	syncRecipeModel sync;
-	utility utils;
+	SyncRecipeModel sync;
+	Utility utils;
 
-	public recipeModel(Context context) {
+	public RecipeModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.context = context;
-		sync = new syncRecipeModel(context);
-		utils = new utility();
+		sync = new SyncRecipeModel(context);
+		utils = new Utility();
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
@@ -50,7 +51,7 @@ public class recipeModel extends baseDataSource {
 	 * @param image
 	 * @param server - if its came from server will affect timestamp
 	 */
-	public void updateRecipe(recipeBean newRecipe, ArrayList<preperationBean> prepList,  ArrayList<ingredientBean> ingredList, imageBean image, boolean server)
+	public void updateRecipe(RecipeBean newRecipe, ArrayList<PreperationBean> prepList,  ArrayList<IngredientBean> ingredList, ImageBean image, boolean server)
 	{
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -106,7 +107,7 @@ public class recipeModel extends baseDataSource {
 	 * Update recipe preperation details
 	 * @param prepList
 	 */
-	public void updateRecipePrep(ArrayList<preperationBean> prepList)
+	public void updateRecipePrep(ArrayList<PreperationBean> prepList)
 	{
 		Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation WHERE PrepRecipe.recipeid=? AND Preperation.id = PrepRecipe.Preperationid", new String[] {Long.toString(recipeUpdateID)});
 		if (cursor != null && cursor.getCount() > 0) {
@@ -138,7 +139,7 @@ public class recipeModel extends baseDataSource {
 	 * Update recipe image details
 	 * @param img - the img bean which is being updated
 	 */
-	public void updateRecipeImage(imageBean img)
+	public void updateRecipeImage(ImageBean img)
 	{
 		ContentValues imageUpdateVals = new ContentValues();
 		imageUpdateVals.put("image", img.getImage());
@@ -156,7 +157,7 @@ public class recipeModel extends baseDataSource {
 	 * Update recipe ingredient details
 	 * @param ingredBeanList
 	 */
-	public void updateRecipeIngredient(ArrayList<ingredientBean> ingredBeanList)
+	public void updateRecipeIngredient(ArrayList<IngredientBean> ingredBeanList)
 	{
 		Cursor cursor = database.rawQuery("SELECT *, IngredientDetails.id AS ID FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = ?;", new String[] { Long.toString(recipeUpdateID) });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -191,7 +192,7 @@ public class recipeModel extends baseDataSource {
 	 * @param img
 	 * @param server
 	 **/
-	public String insertRecipe(recipeBean recipe, boolean server, ArrayList<ingredientBean> ingredList, ArrayList<preperationBean> prepList, imageBean img)
+	public String insertRecipe(RecipeBean recipe, boolean server, ArrayList<IngredientBean> ingredList, ArrayList<PreperationBean> prepList, ImageBean img)
 	{
 		open();
 		values = new ContentValues();
@@ -249,7 +250,7 @@ public class recipeModel extends baseDataSource {
 	 * @param server
 	 * @param addedBy
 	 */
-	public void insertPrep(ArrayList<preperationBean> prepList, boolean server, String addedBy)
+	public void insertPrep(ArrayList<PreperationBean> prepList, boolean server, String addedBy)
 	{
 
 		prepvalues = new ContentValues();
@@ -279,7 +280,7 @@ public class recipeModel extends baseDataSource {
 	 * @param server
 	 * @param addedBy
 	 */
-	public void insertImage(imageBean img, boolean server, String addedBy)
+	public void insertImage(ImageBean img, boolean server, String addedBy)
 	{
 		ContentValues imagevalues = new ContentValues();
 		imagevalues.put("image", img.getImage() );
@@ -354,7 +355,7 @@ public class recipeModel extends baseDataSource {
 	 * @param addedBy
 	 * @param server
 	 */
-	public void insertIngredient( boolean server, ArrayList<ingredientBean> ingredList, String addedBy)
+	public void insertIngredient( boolean server, ArrayList<IngredientBean> ingredList, String addedBy)
 	{
 		ingredValues = new ContentValues();
 		for(int i = 0; i < ingredList.size(); i++)
@@ -384,7 +385,7 @@ public class recipeModel extends baseDataSource {
 	 * @param ingredList
 	 * @param addedBy
 	 */
-	public void insertIngredientDetails(int i, ArrayList<ingredientBean> ingredList, boolean server, String addedBy)
+	public void insertIngredientDetails(int i, ArrayList<IngredientBean> ingredList, boolean server, String addedBy)
 	{
 		ingredDetailsValues = new ContentValues();
 		ingredDetailsValues.put("ingredientId", ingredID);
@@ -505,9 +506,9 @@ public class recipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return userBean
 	 */
-	public recipeBean cursorToRecipe(Cursor cursor) 
+	public RecipeBean cursorToRecipe(Cursor cursor) 
 	{
-		recipeBean rb = new recipeBean();
+		RecipeBean rb = new RecipeBean();
 		rb.setName(cursor.getString(getIndex("name",cursor)));
 		rb.setDesc(cursor.getString(getIndex("description",cursor)));
 		rb.setServes(cursor.getString(getIndex("serves", cursor)));
@@ -528,9 +529,9 @@ public class recipeModel extends baseDataSource {
 	 * @param uniqueid
 	 * @return recipBean
 	 */
-	public recipeBean selectRecipe2(String uniqueid)
+	public RecipeBean selectRecipe2(String uniqueid)
 	{		
-		recipeBean rb = new recipeBean();
+		RecipeBean rb = new RecipeBean();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE uniqueid=?", new String[] { uniqueid });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -551,10 +552,10 @@ public class recipeModel extends baseDataSource {
 	 * @param user
 	 * @return ArrayList<recipeBean>
 	 */
-	public ArrayList<recipeBean> selectRecipesByUser(String user)
+	public ArrayList<RecipeBean> selectRecipesByUser(String user)
 	{
 
-		ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
+		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE addedBy=?", new String[] {  user });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -567,12 +568,12 @@ public class recipeModel extends baseDataSource {
 		close();
 		return rb;	
 	}
-	
-	
-	public ArrayList<recipeBean> selectAllRecipesUserCanAccess(String user)
+
+
+	public ArrayList<RecipeBean> selectAllRecipesUserCanAccess(String user)
 	{
 
-		ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
+		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON CookbookRecipe.Recipeid = Recipe.id INNER JOIN Contributers ON Contributers.cookbookid = Cookbook.id WHERE Cookbook.progress = 'added' AND Recipe.progress = 'added' AND (Recipe.addedBy =? OR Contributers.accountid = ?)", new String[] {  user, user });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -585,10 +586,10 @@ public class recipeModel extends baseDataSource {
 		close();
 		return rb;	
 	}
-	
-	public recipeBean cursorToAllRecipes(Cursor cursor) 
+
+	public RecipeBean cursorToAllRecipes(Cursor cursor) 
 	{
-		recipeBean rb = new recipeBean();
+		RecipeBean rb = new RecipeBean();
 		rb.setName(cursor.getString(getIndex("rname",cursor)));
 		rb.setDesc(cursor.getString(getIndex("desc",cursor)));
 		rb.setServes(cursor.getString(getIndex("serves", cursor)));
@@ -612,9 +613,9 @@ public class recipeModel extends baseDataSource {
 	 * @param id
 	 * @return ArrayList<preperationBean>
 	 */
-	public ArrayList<preperationBean> selectPreperation(int id)
+	public ArrayList<PreperationBean> selectPreperation(int id)
 	{
-		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = ?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -635,9 +636,9 @@ public class recipeModel extends baseDataSource {
 	 * Select images based on recipe id
 	 * @param id - recipe id
 	 **/
-	public imageBean selectImages(int id)
+	public ImageBean selectImages(int id)
 	{
-		imageBean img = new imageBean();
+		ImageBean img = new ImageBean();
 		open();
 		Cursor cursor = database.rawQuery("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -657,9 +658,9 @@ public class recipeModel extends baseDataSource {
 	 * @param id
 	 * @return ArrayList<ingredientBean>
 	 */
-	public ArrayList<ingredientBean> selectIngredients(int id)
+	public ArrayList<IngredientBean> selectIngredients(int id)
 	{
-		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
+		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = ?;", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -678,8 +679,8 @@ public class recipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return ingredientBean
 	 */
-	public ingredientBean cursorToIngred(Cursor cursor) {
-		ingredientBean ib = new ingredientBean();
+	public IngredientBean cursorToIngred(Cursor cursor) {
+		IngredientBean ib = new IngredientBean();
 		ib.setName(cursor.getString(getIndex("name",cursor)));
 		ib.setAmount(cursor.getInt(getIndex("amount",cursor)));
 		ib.setValue(cursor.getString(getIndex("value", cursor)));
@@ -693,8 +694,8 @@ public class recipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return userBean
 	 */
-	public preperationBean cursorToPrep(Cursor cursor) {
-		preperationBean pb = new preperationBean();
+	public PreperationBean cursorToPrep(Cursor cursor) {
+		PreperationBean pb = new PreperationBean();
 		pb.setPreperation(cursor.getString(getIndex("instruction",cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
 		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));

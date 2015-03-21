@@ -32,14 +32,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.models.RecipeModel;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
 
 /**
  * Class to show a list of recipes belonging to a specific cookbook
@@ -47,12 +48,12 @@ import com.example.recipesforlife.models.util;
  *
  */
 public class RecipeListViewActivity extends ActionBarActivity {
-	util utils;	
+	Util utils;	
 	ListView listView;
 	String type = "";
 	String uniqueid = "";
-	ArrayList<recipeBean> recipeList;
-	cookbookModel model;
+	ArrayList<RecipeBean> recipeList;
+	CookbookModel model;
 	public static CustomRecipeListAdapter adapter;
 	NavigationDrawerCreation nav;
 	public static final String MyPREFERENCES = "MyPrefs";
@@ -69,13 +70,13 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.listview2);
+		setContentView(R.layout.recipe_listview);
 
 		//Setup
 		listView = (ListView) findViewById(R.id.list);
-		utils = new util(getApplicationContext(), this);
-		model = new cookbookModel(getApplicationContext());
-		recipeList = new ArrayList<recipeBean>();
+		utils = new Util(getApplicationContext(), this);
+		model = new CookbookModel(getApplicationContext());
+		recipeList = new ArrayList<RecipeBean>();
 		Intent intent = getIntent();
 		uniqueid = intent.getStringExtra("uniqueid");
 		type = intent.getStringExtra("type");
@@ -95,10 +96,10 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		recipenames = new ArrayList<String>();
 		recipeids = new ArrayList<String>();
 		recipeimages = new ArrayList<byte[]>();
-		
+
 		for(int a = 0; a < recipeList.size(); a++)
 		{
-			imageBean image = model.selectImage(recipeList.get(a).getId());
+			ImageBean image = model.selectImage(recipeList.get(a).getId());
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
 			recipeimages.add(image.getImage());
@@ -123,19 +124,19 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
 		SearchManager searchManager =
-		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
-		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		    searchView.setSearchableInfo(
-		            searchManager.getSearchableInfo(getComponentName()));
+				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(getComponentName()));
 		return true;
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {   
-	    return super.onPrepareOptionsMenu(menu);
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -148,11 +149,11 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		recipeList = model.selectRecipesByCookbook(uniqueid);
 		for(int a = 0; a < recipeList.size(); a++)
 		{
-			imageBean image = model.selectImage(recipeList.get(a).getId());
+			ImageBean image = model.selectImage(recipeList.get(a).getId());
 			recipenames.add(recipeList.get(a).getName());
 			recipeids.add(recipeList.get(a).getUniqueid());
 			recipeimages.add(image.getImage());
-			
+
 		}
 		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
@@ -198,22 +199,22 @@ public class RecipeListViewActivity extends ActionBarActivity {
 			Intent intent = getIntent();
 			add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid, intent.getStringExtra("bookname"));
 			add.addRecipe();
-			
+
 		}
 		else if(item.getItemId() ==  R.id.action_copy)
 		{
-			final Dialog cloneDialog = utils.createDialog(RecipeListViewActivity.this , R.layout.clonedialog);
+			final Dialog cloneDialog = utils.createDialog(RecipeListViewActivity.this , R.layout.recipe_clone);
 			utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
 			utils.setDialogText(R.id.currentRecipesView,cloneDialog,22);
 			utils.setDialogText(R.id.recipeNameView,cloneDialog,22);
-			
+
 			final TextView errorView = (TextView) cloneDialog.findViewById(R.id.errorView);
 			utils.setDialogText(R.id.errorView,cloneDialog,16);
 			errorView.setTextColor(Color.parseColor("#F70521"));
-			
-			final recipeModel model = new recipeModel(getApplicationContext());
+
+			final RecipeModel model = new RecipeModel(getApplicationContext());
 			final SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-			final ArrayList<recipeBean> rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
+			final ArrayList<RecipeBean> rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
 			List<String> spinnerArray =  new ArrayList<String>();
 			for(int i = 0; i < rbList.size(); i++)
 			{
@@ -221,12 +222,12 @@ public class RecipeListViewActivity extends ActionBarActivity {
 				//cookbookuids.add(cbList.get(i).getUniqueid());
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-					RecipeListViewActivity.this, R.layout.item, spinnerArray);
+					RecipeListViewActivity.this, R.layout.general_spinner_item, spinnerArray);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
 			final Spinner spinner = (Spinner) cloneDialog.findViewById(R.id.currentRecipesSpinner);
 			spinner.setAdapter(adapter);
 			spinner.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
-			
+
 			Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
 			addButton.setOnClickListener(new OnClickListener(){
 
@@ -237,10 +238,10 @@ public class RecipeListViewActivity extends ActionBarActivity {
 					rbList.get(namepos).setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
 					rbList.get(namepos).setAddedBy(sharedpreferences.getString(emailk, ""));
 					rbList.get(namepos).setRecipeBook(uniqueid);
-					ArrayList<preperationBean> prepList = model.selectPreperation(rbList.get(namepos).getId());
-					ArrayList<ingredientBean> ingredList = model.selectIngredients(rbList.get(namepos).getId());
-					imageBean imgBean = model.selectImages(rbList.get(namepos).getId());
-					
+					ArrayList<PreperationBean> prepList = model.selectPreperation(rbList.get(namepos).getId());
+					ArrayList<IngredientBean> ingredList = model.selectIngredients(rbList.get(namepos).getId());
+					ImageBean imgBean = model.selectImages(rbList.get(namepos).getId());
+
 					try
 					{
 						if(model.selectRecipe(rbList.get(namepos).getName(), uniqueid))
@@ -258,7 +259,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 							//Updates recipe list once inserted
 							recipenames.add(0, rbList.get(namepos).getName());
 							recipeids.add(0,  uid);
-						    recipeimages.add(0, imgBean.getImage());
+							recipeimages.add(0, imgBean.getImage());
 							RecipeListViewActivity.adapter.notifyDataSetChanged(); 
 							cloneDialog.dismiss();
 						}
@@ -267,11 +268,11 @@ public class RecipeListViewActivity extends ActionBarActivity {
 					{
 						Toast.makeText(getApplicationContext(), "Recipe was not cloned", Toast.LENGTH_LONG).show();
 					}
-					
-					
-					
+
+
+
 				}});
-			
+
 			cloneDialog.show();
 		}
 		return super.onOptionsItemSelected(item);

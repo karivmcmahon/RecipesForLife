@@ -4,12 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.RecipeModel;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -45,12 +46,12 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
-	util utils;
+	Util utils;
 	ImageLoader2 imgload;
 
 	public CustomRecipeListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages)
 	{
-		super(context, R.layout.recipelistsingle, recipenames);
+		super(context, R.layout.recipe_listitem, recipenames);
 		this.activity = activity;
 		this.context = context;
 		this.recipenames = recipenames;
@@ -59,7 +60,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 
 
 		imgload = new ImageLoader2(context);
-		utils = new util(this.context, activity);
+		utils = new Util(this.context, activity);
 
 	}
 
@@ -74,12 +75,12 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		//Shows empty row for layout reasons or a recipe based on the string
 		if(recipenames.get(position).toString().equals(""))
 		{
-			rowView= inflater.inflate(R.layout.emptyrow, null, true);
+			rowView= inflater.inflate(R.layout.general_listview_emptyrow, null, true);
 		}
 		else
 		{
 
-			rowView= inflater.inflate(R.layout.recipelistsingle, null, true);
+			rowView= inflater.inflate(R.layout.recipe_listitem, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
 			txtTitle.setText(recipenames.get(position));
 			utils.setRowText(R.id.myImageViewText, rowView, 22);
@@ -127,7 +128,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
+						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
 						utils.setDialogText(R.id.textView, dialog, 18);
 						TextView tv = (TextView) dialog.findViewById(R.id.textView);
 						tv.setText("Would you like to delete this recipe ?");
@@ -140,19 +141,19 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 
 							@Override
 							public void onClick(View arg0) {
-								recipeModel model = new recipeModel(context);
-								recipeBean recipebean = model.selectRecipe2(recipeids.get(position));
-								ArrayList<preperationBean> prepList = model.selectPreperation(recipebean.getId());
-								ArrayList<ingredientBean> ingredList = model.selectIngredients(recipebean.getId());
-							    imageBean imgBean = model.selectImages(recipebean.getId());
+								RecipeModel model = new RecipeModel(context);
+								RecipeBean recipebean = model.selectRecipe2(recipeids.get(position));
+								ArrayList<PreperationBean> prepList = model.selectPreperation(recipebean.getId());
+								ArrayList<IngredientBean> ingredList = model.selectIngredients(recipebean.getId());
+								ImageBean imgBean = model.selectImages(recipebean.getId());
 								recipebean.setProgress("deleted");
 								try
 								{
-								model.updateRecipe( recipebean, prepList, ingredList, imgBean, false);
-								recipeids.remove(position);
-								recipeimages.remove(position);
-								recipenames.remove(position);
-								notifyDataSetChanged();
+									model.updateRecipe( recipebean, prepList, ingredList, imgBean, false);
+									recipeids.remove(position);
+									recipeimages.remove(position);
+									recipenames.remove(position);
+									notifyDataSetChanged();
 								}catch(SQLiteException e)
 								{
 									Toast.makeText(context, "Recipe was not deleted", Toast.LENGTH_LONG).show();

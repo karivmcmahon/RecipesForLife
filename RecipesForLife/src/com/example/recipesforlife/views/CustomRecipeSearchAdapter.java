@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,21 +22,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomRecipeSearchAdapter extends ArrayAdapter<recipeBean> {
+public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 
 	private final Activity activity;
 	Context context;
-	util utils;
-	ArrayList<recipeBean> rb;
+	Util utils;
+	ArrayList<RecipeBean> rb;
 	ImageLoader2 imgload;
-	public CustomRecipeSearchAdapter(Context context, Activity activity, ArrayList<recipeBean> recipebean) {
-		super(context, R.layout.recipeindividsearch, recipebean);
+	public CustomRecipeSearchAdapter(Context context, Activity activity, ArrayList<RecipeBean> recipebean) {
+		super(context, R.layout.search_recipeview, recipebean);
 		this.activity = activity;
 		this.context = context;
 		rb = recipebean;
 		imgload = new ImageLoader2(this.context);
 		// TODO Auto-generated constructor stub
-		utils = new util(this.context, activity);
+		utils = new Util(this.context, activity);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -45,19 +46,19 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<recipeBean> {
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-		
+
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		if(rb.get(position).getName().equals("empty"))
 		{
-			rowView= inflater.inflate(R.layout.noresultsearch, null, true);
+			rowView= inflater.inflate(R.layout.search_noresultsview, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.noResults);
 			utils.setRowText(R.id.noResults, rowView, 26);
 			txtTitle.setTextColor(Color.parseColor("#F3216C"));
 		}
 		else
 		{
-			rowView= inflater.inflate(R.layout.recipeindividsearch, null, true);
+			rowView= inflater.inflate(R.layout.search_recipeview, null, true);
 
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.recipeName);
 			txtTitle.setText(rb.get(position).getName());

@@ -5,13 +5,14 @@ package com.example.recipesforlife.controllers;
  * @author Kari
  *
  */
-public class ingredientBean {
-	String name;
-	int ingredId; 
-	int amount;
-	String value;
-	String note;
-	String uniqueid;
+public class IngredientBean {
+	String name; //name of ingredient
+	int ingredId;  //id of row in db
+	int amount; //amount of this ingredient
+	String value; //ingredients unit
+	String note; //notes relating to ingred
+	String uniqueid; //ingreds uniqueid
+	
 	public String getUniqueid() {
 		return uniqueid;
 	}
@@ -49,6 +50,6 @@ public class ingredientBean {
 		this.note = note;
 	}
 
-	
+
 
 }

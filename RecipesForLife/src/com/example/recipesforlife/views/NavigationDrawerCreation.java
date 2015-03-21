@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.controllers.CookbookBean;
 
 
 /**
@@ -59,29 +59,29 @@ public class NavigationDrawerCreation   {
 		navBarTitles = new ArrayList<String>();
 		imageids = new ArrayList<Integer>();
 		navBarTitles.add("Home");
-		imageids.add(R.drawable.home168);
+		imageids.add(R.drawable.icon_home);
 		navBarTitles.add("Settings");
-		imageids.add(R.drawable.settings21);
+		imageids.add(R.drawable.icon_settings);
 		navBarTitles.add("Proffile");
-		imageids.add(R.drawable.user58);
+		imageids.add(R.drawable.icon_user2);
 		navBarTitles.add("Log Off");
-		imageids.add(R.drawable.power18);
+		imageids.add(R.drawable.icon_power);
 		drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
 		drawerList = (ListView) activity.findViewById(R.id.left_drawer);
-		
+
 		Context contexts = activity.getApplicationContext();
 		Log.v("image ", "image " + imageids.size());
 		Log.v("image ", "image " + navBarTitles.size());
 
 		// Set the adapter for the list view
 		drawerList.setAdapter(new CustomNavArrayAdapter(activity.getApplicationContext(),
-				R.layout.drawer_list_item, navBarTitles, activity, imageids));
+				R.layout.navbar_draweritem, navBarTitles, activity, imageids));
 
 
 		drawerToggle = new ActionBarDrawerToggle(
 				activity,                  /* host Activity */
 				drawerLayout,         /* DrawerLayout object */
-				R.drawable.menu,  /* nav drawer icon to replace 'Up' caret */
+				R.drawable.icon_menu,  /* nav drawer icon to replace 'Up' caret */
 				R.string.drawer_open,  /* "open drawer" description */
 				R.string.drawer_close  /* "close drawer" description */
 				) {

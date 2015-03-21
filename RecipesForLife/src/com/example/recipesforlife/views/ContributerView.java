@@ -16,9 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.accountModel;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.models.AccountModel;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.util.Util;
 
 /**
  * Displays the dialog showing a list of the cookbook contributers and the ability to add contributers
@@ -29,14 +29,14 @@ public class ContributerView {
 
 	Context context;
 	Activity activity;
-	util utils;
+	Util utils;
 	CustomCookbookListAdapter ccadapter;
 	int position;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Dialog addContribDialog;
 	TextView errorView;
-	cookbookModel model;
+	CookbookModel model;
 	Dialog contribDialog;
 	boolean isCreator = false;
 
@@ -46,8 +46,8 @@ public class ContributerView {
 		this.activity = activity;
 		ccadapter = adapter;
 		this.position = position;
-		utils = new util(context, activity);
-		model = new cookbookModel(context);
+		utils = new Util(context, activity);
+		model = new CookbookModel(context);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ContributerView {
 	 */
 	public void addContribDialogViewCreate()
 	{
-		addContribDialog = utils.createDialog(activity, R.layout.contributeradddialog);
+		addContribDialog = utils.createDialog(activity, R.layout.contributers_adddialog);
 		//Getting data
 		errorView = (TextView) addContribDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,addContribDialog,16);
@@ -128,7 +128,7 @@ public class ContributerView {
 	public void addContributer()
 	{
 		int id = 0;
-		accountModel am = new accountModel(context);
+		AccountModel am = new AccountModel(context);
 		boolean exists = am.checkEmail( utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
 		//Check for any errors
 		if (exists == false)
@@ -167,7 +167,7 @@ public class ContributerView {
 	 */
 	public void setContribView()
 	{
-		contribDialog = utils.createDialog(activity, R.layout.contributersdialog);
+		contribDialog = utils.createDialog(activity, R.layout.contributers_viewdialog);
 		utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
 		TextView tvTitle = (TextView) contribDialog.findViewById(R.id.contributerTitle);
 		//Depending on whether the user is the creator or not show a different title

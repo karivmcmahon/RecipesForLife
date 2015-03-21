@@ -17,13 +17,13 @@ import android.test.ProviderTestCase2;
 import android.test.RenamingDelegatingContext;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.baseDataSource;
-import com.example.recipesforlife.models.databaseConnection;
-import com.example.recipesforlife.models.recipeModel;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.BaseDataSource;
+import com.example.recipesforlife.models.DatabaseConnection;
+import com.example.recipesforlife.models.RecipeModel;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import junit.framework.Assert;
@@ -35,9 +35,9 @@ import junit.framework.TestCase;
  *
  */
 public class recipeTestCase extends AndroidTestCase{
-	recipeModel recipemodel;
+	RecipeModel recipemodel;
 	SignUpSignInActivity activity;
-	databaseConnection dbConnection;
+	DatabaseConnection dbConnection;
 	 RenamingDelegatingContext context;
 
 	protected void setUp() throws Exception {
@@ -45,7 +45,7 @@ public class recipeTestCase extends AndroidTestCase{
 	    context 
 	        = new RenamingDelegatingContext(getContext(), "test_");
 		
-		recipemodel = new recipeModel(context);
+		recipemodel = new RecipeModel(context);
 		copyDataBase();
 	
 		
@@ -89,9 +89,9 @@ public class recipeTestCase extends AndroidTestCase{
 public void testInsertRecipe()
 	{
 	
-		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
-		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-		recipeBean recipe = new recipeBean();
+		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+		RecipeBean recipe = new RecipeBean();
 		recipe.setName("Chicken Soup");
 		recipe.setDesc("Soothes the cold");
 		recipe.setServes("4");
@@ -99,28 +99,28 @@ public void testInsertRecipe()
 		recipe.setCooking("1:00");
 		recipe.setAddedBy("addison");
 		recipe.setRecipeBook("book1");
-		ingredientBean ingred = new ingredientBean();
+		IngredientBean ingred = new IngredientBean();
 		ingred.setName("stock");
 		ingred.setAmount(1);
 	    ingred.setValue("packet");
 		ingred.setNote("");
-	    preperationBean prep = new preperationBean();
+	    PreperationBean prep = new PreperationBean();
 	    prep.setPreperation("boil water");
 	    prep.setPrepNum(1);
 		prepList.add(prep);
 		ingredList.add(ingred);
 		
 		
-		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
+		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.image_default_recipe)).getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
-		imageBean imgbean = new imageBean();
+		ImageBean imgbean = new ImageBean();
 		imgbean.setImage(byteArray);
 		recipemodel.insertRecipe(recipe, false, ingredList, prepList, imgbean);
 		
 	   
-		ArrayList<recipeBean> exists = recipemodel.selectRecipesByUser("addison");
+		ArrayList<RecipeBean> exists = recipemodel.selectRecipesByUser("addison");
 		Assert.assertEquals("Chicken Soup", exists.get(0).getName().toString());
 		
 		
@@ -129,15 +129,15 @@ public void testInsertRecipe()
 public void editRecipe()
 {
 
-	ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
-	ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-	recipeBean recipe = new recipeBean();
+	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+	RecipeBean recipe = new RecipeBean();
 	recipe.setName("pizza");
 	recipe.setDesc("good food");
 	recipe.setUniqueid("doeRecipe");
 	recipe.setAddedBy("doe"); 
 	//recipemodel.updateRecipe(recipe, prepList, ingredList);	
-	recipeBean recipeSelect = new recipeBean();
+	RecipeBean recipeSelect = new RecipeBean();
 	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
 	Assert.assertEquals(recipeSelect.getDesc(), "good food");
 	
@@ -148,7 +148,7 @@ public void editRecipe()
 	
 	public void testSelectRecipe()
 	{
-		ArrayList<recipeBean> recipeSelect = new ArrayList<recipeBean>();
+		ArrayList<RecipeBean> recipeSelect = new ArrayList<RecipeBean>();
 		recipeSelect = recipemodel.selectRecipesByUser("doe");
 		Assert.assertEquals(recipeSelect.get(0).getName(), "pizza");
 		

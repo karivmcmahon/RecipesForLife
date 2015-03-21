@@ -5,9 +5,9 @@ package com.example.recipesforlife.controllers;
  * @author Kari
  *
  */
-public class imageBean {
-	byte[] image;
-	String uniqueid;
+public class ImageBean {
+	byte[] image; //byte array of image
+	String uniqueid; //images uniqueid
 
 	public String getUniqueid() {
 		return uniqueid;

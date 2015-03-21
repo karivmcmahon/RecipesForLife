@@ -12,53 +12,54 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.userBean;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
 
-public class CustomUserSearchAdapter extends ArrayAdapter<userBean> {
+public class CustomUserSearchAdapter extends ArrayAdapter<UserBean> {
 
 	private final Activity activity;
 	Context context;
-	util utils;
-	ArrayList<userBean> ub;
+	Util utils;
+	ArrayList<UserBean> ub;
 	ImageLoader2 imgload;
-	
-	public CustomUserSearchAdapter(Context context, Activity activity, ArrayList<userBean> userbean) {
-		super(context, R.layout.userindividsearch, userbean);
+
+	public CustomUserSearchAdapter(Context context, Activity activity, ArrayList<UserBean> userbean) {
+		super(context, R.layout.search_userview, userbean);
 		this.activity = activity;
 		this.context = context;
 		ub = userbean;
 		imgload = new ImageLoader2(this.context);
 		// TODO Auto-generated constructor stub
-		utils = new util(this.context, activity);
+		utils = new Util(this.context, activity);
 	}
-	
+
 	@Override
 	/**
 	 * Adapts list data 
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-		
+
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		if(ub.get(position).getName().equals("empty"))
 		{
-			rowView= inflater.inflate(R.layout.noresultsearch, null, true);
+			rowView= inflater.inflate(R.layout.search_noresultsview, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.noResults);
 			utils.setRowText(R.id.noResults, rowView, 26);
 			txtTitle.setTextColor(Color.parseColor("#F3216C"));
 		}
 		else
 		{
-			rowView= inflater.inflate(R.layout.userindividsearch, null, true);
-			
+			rowView= inflater.inflate(R.layout.search_userview, null, true);
+
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.userinfo);
 			txtTitle.setText(ub.get(position).getName() + " - " + ub.get(position).getCountry());
 			utils.setRowText(R.id.userinfo, rowView, 26);
 			txtTitle.setTextColor(Color.parseColor("#F3216C"));
-			
+
 			TextView bio = (TextView) rowView.findViewById(R.id.bio);
 			bio.setText(ub.get(position).getBio());
 			utils.setRowText(R.id.bio, rowView, 20);

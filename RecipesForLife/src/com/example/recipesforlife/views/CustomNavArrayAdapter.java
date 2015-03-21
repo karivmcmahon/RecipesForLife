@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.util.Util;
 
 /*
  * This class is used to handle the listview in the navigation  drawer
@@ -20,12 +20,12 @@ import com.example.recipesforlife.models.util;
  *
  */
 public class CustomNavArrayAdapter extends ArrayAdapter<String> {
-	
+
 	private final Activity activity;
 	private ArrayList<String> names;
 	private ArrayList<Integer> ids;
 	private Context context;
-	util utils;
+	Util utils;
 	public CustomNavArrayAdapter(Context context, int resource,
 			ArrayList<String> objects, Activity activity, ArrayList<Integer> ids) {
 		super(context, resource, objects);
@@ -33,11 +33,11 @@ public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 		this.activity = activity;
 		this.context = context;
 		names = objects;
-		utils = new util(context, activity);
+		utils = new Util(context, activity);
 		this.ids =ids;
-		
+
 	}
-	
+
 	@Override
 	/**
 	 * Adapts list data 
@@ -45,7 +45,7 @@ public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
-		View rowView = inflater.inflate(R.layout.drawer_list_item, null, true);
+		View rowView = inflater.inflate(R.layout.navbar_draweritem, null, true);
 		TextView title = (TextView) rowView.findViewById(R.id.textView);
 		//page name set
 		title.setText(names.get(position));
@@ -55,10 +55,10 @@ public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 		utils.setRowText(R.id.textView, rowView, 28);
 		return rowView;
 	}
-	
 
-	
-	
-	
+
+
+
+
 
 }

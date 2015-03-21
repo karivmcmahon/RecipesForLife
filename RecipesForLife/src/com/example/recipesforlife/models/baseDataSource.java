@@ -10,26 +10,26 @@ import android.database.sqlite.SQLiteDatabase;
  * @author Kari
  *
  */
-public abstract class baseDataSource {
-    protected SQLiteDatabase database;
-    public databaseConnection dbHelper;
+public abstract class BaseDataSource {
+	protected SQLiteDatabase database;
+	public DatabaseConnection dbHelper;
 
 
 
-    protected baseDataSource(Context context) {
-        dbHelper = new databaseConnection(context);
-    }
+	protected BaseDataSource(Context context) {
+		dbHelper = new DatabaseConnection(context);
+	}
 
-    public void open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
-    }
+	public void open() throws SQLException {
+		database = dbHelper.getWritableDatabase();
+	}
 
-    public void close() {
-        dbHelper.close();
-    }
+	public void close() {
+		dbHelper.close();
+	}
 
-    protected int getIndex(String columnName, Cursor cursor) {
-        int controlIndex = cursor.getColumnIndex(columnName);
-        return controlIndex;
-    }
+	protected int getIndex(String columnName, Cursor cursor) {
+		int controlIndex = cursor.getColumnIndex(columnName);
+		return controlIndex;
+	}
 }

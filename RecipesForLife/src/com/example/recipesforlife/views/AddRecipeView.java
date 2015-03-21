@@ -40,14 +40,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.models.RecipeModel;
+import com.example.recipesforlife.util.Util;
 
 /**
  * Creates and gets the data for displaying the add recipe dialog
@@ -58,9 +58,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 	ActionBarActivity activity;
 	Context context;
-	util utils;
-	ArrayList<ingredientBean> ingredBeanList;
-	ArrayList<preperationBean> prepBeanList;
+	Util utils;
+	ArrayList<IngredientBean> ingredBeanList;
+	ArrayList<PreperationBean> prepBeanList;
 	Dialog recipeAddDialog;
 	static Dialog recipeAddDialog2;
 	Dialog recipeIngredDialog;
@@ -127,7 +127,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		this.activity = activity;
 		this.uniqueid = uniqueid;
 		this.bookname = bookname;
-		utils = new util(context, activity);
+		utils = new Util(context, activity);
 	}
 
 	public void addRecipe()
@@ -151,19 +151,19 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void setUpInitialRecipeAddDialog()
 	{
-		ingredBeanList = new ArrayList<ingredientBean>();
-		prepBeanList = new ArrayList<preperationBean>();
+		ingredBeanList = new ArrayList<IngredientBean>();
+		prepBeanList = new ArrayList<PreperationBean>();
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		recipeAddDialog = utils.createDialog(activity , R.layout.recipe1dialog);
+		recipeAddDialog = utils.createDialog(activity , R.layout.recipe_add_dialog1);
 		//sets up styles
 		utils.setDialogText(R.id.recipeAddView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeBookView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);	
-		cookbookModel cbmodel = new cookbookModel(context);
+		CookbookModel cbmodel = new CookbookModel(context);
 
 		//Fills the spinner with users cookbooks
-		ArrayList<cookbookBean> cbList = cbmodel.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));	
+		ArrayList<CookbookBean> cbList = cbmodel.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));	
 		List<String> spinnerArray =  new ArrayList<String>();
 		for(int i = 0; i < cbList.size(); i++)
 		{
@@ -171,7 +171,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 			cookbookuids.add(cbList.get(i).getUniqueid());
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				activity, R.layout.item, spinnerArray);
+				activity, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		final Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		sItems.setAdapter(adapter);
@@ -185,7 +185,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void setUpSecondRecipeAddDialog()
 	{
-		recipeAddDialog2 = utils.createDialog(activity, R.layout.recipe2dialog);
+		recipeAddDialog2 = utils.createDialog(activity, R.layout.recipe_add_dialog2);
 		utils.setDialogText(R.id.recipeAddView2, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeIngredsView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeStepsView, recipeAddDialog2, 22);
@@ -212,7 +212,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		int pos = spinner.getSelectedItemPosition();
 		recipeBook = cookbookuids.get(pos);
-		recipeModel model = new recipeModel(context);
+		RecipeModel model = new RecipeModel(context);
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Error checking
 		if(model.selectRecipe(name, uniqueid) == true)
@@ -297,7 +297,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void setUpIngredAddDialog()
 	{
-		recipeIngredDialog = utils.createDialog(activity,R.layout.ingredsdialog);
+		recipeIngredDialog = utils.createDialog(activity,R.layout.recipe_add_dialog5);
 		utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.ingredsView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
@@ -324,7 +324,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		spinnerArray.add("other");
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				activity, R.layout.item, spinnerArray);
+				activity, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
 		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
@@ -337,7 +337,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void setUpStepAddDialog()
 	{
-		recipeAddStepDialog = utils.createDialog(activity, R.layout.methoddialog);		
+		recipeAddStepDialog = utils.createDialog(activity, R.layout.recipe_add_dialog4);		
 		utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
 		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
@@ -403,7 +403,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void setUpThirdRecipeAddDialog()
 	{
-		addRecipeDialog3 = utils.createDialog(activity, R.layout.recipe3dialog);		
+		addRecipeDialog3 = utils.createDialog(activity, R.layout.recipe_add_dialog3);		
 		utils.setDialogText(R.id.recipeImagesView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.browseButton, addRecipeDialog3, 22);
 
@@ -446,33 +446,33 @@ public class AddRecipeView extends RecipeListViewActivity {
 		spinnerArray.add("Medium");
 		spinnerArray.add("Hard");
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				activity, R.layout.item, spinnerArray);
+				activity, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 		addRecipeDialog3.show();
-		
+
 		//Fill spinner
-				List<String> cusineSpinnerArray =  new ArrayList<String>();
-				cusineSpinnerArray.add("Italian");
-				cusineSpinnerArray.add("Indian");
-				cusineSpinnerArray.add("Chinese");
-				cusineSpinnerArray.add("Thai");
-				cusineSpinnerArray.add("Spanish");
-				cusineSpinnerArray.add("French");
-				cusineSpinnerArray.add("American");
-				cusineSpinnerArray.add("English");
-				cusineSpinnerArray.add("African");
-				cusineSpinnerArray.add("Middle Eastern");
-				cusineSpinnerArray.add("Other");
-				ArrayAdapter<String> cusineAdapter = new ArrayAdapter<String>(
-						activity, R.layout.item, cusineSpinnerArray);
-				cusineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				Spinner cusineItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeCusineSpinner);
-				cusineItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
-				cusineItems.setAdapter(cusineAdapter);
-				addRecipeDialog3.show();
+		List<String> cusineSpinnerArray =  new ArrayList<String>();
+		cusineSpinnerArray.add("Italian");
+		cusineSpinnerArray.add("Indian");
+		cusineSpinnerArray.add("Chinese");
+		cusineSpinnerArray.add("Thai");
+		cusineSpinnerArray.add("Spanish");
+		cusineSpinnerArray.add("French");
+		cusineSpinnerArray.add("American");
+		cusineSpinnerArray.add("English");
+		cusineSpinnerArray.add("African");
+		cusineSpinnerArray.add("Middle Eastern");
+		cusineSpinnerArray.add("Other");
+		ArrayAdapter<String> cusineAdapter = new ArrayAdapter<String>(
+				activity, R.layout.general_spinner_item, cusineSpinnerArray);
+		cusineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner cusineItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeCusineSpinner);
+		cusineItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		cusineItems.setAdapter(cusineAdapter);
+		addRecipeDialog3.show();
 	}
 
 	/**
@@ -480,8 +480,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void getThirdDialogData()
 	{	
-		
-		
+
+
 		dietary = utils.getTextFromDialog(R.id.recipeDietaryEditText, addRecipeDialog3);
 		tips = utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
@@ -492,7 +492,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		if(utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3).equals(""))
 		{
 			//then set a default image
-			Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
+			Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.image_default_recipe)).getBitmap();
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			byte[] byteArray = stream.toByteArray();
@@ -525,7 +525,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		}
 		else
 		{
-			preperationBean prepBean = new preperationBean();
+			PreperationBean prepBean = new PreperationBean();
 			prepBean.setPreperation(step);
 			prepBean.setPrepNum(Integer.parseInt(stepNum));
 			prepBeanList.add(prepBean);
@@ -562,7 +562,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		}
 		else
 		{
-			ingredientBean ingredBean = new ingredientBean();
+			IngredientBean ingredBean = new IngredientBean();
 			ingredBean.setName(ingredient);
 			ingredBean.setAmount(Integer.parseInt(amount));
 			ingredBean.setNote(note);
@@ -589,7 +589,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	public void sendDataToModel()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		recipeBean recipe = new recipeBean();
+		RecipeBean recipe = new RecipeBean();
 		recipe.setName(name);
 		recipe.setDesc(desc);
 		recipe.setCooking(cooking);
@@ -601,9 +601,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 		recipe.setTips(tips);
 		recipe.setCusine(cusine);
 		recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
-		imageBean imgBean = new imageBean();
+		ImageBean imgBean = new ImageBean();
 		imgBean.setImage(array);
-		recipeModel model = new recipeModel(context);
+		RecipeModel model = new RecipeModel(context);
 		try
 		{
 			String uid = model.insertRecipe(recipe, false, ingredBeanList, prepBeanList, imgBean);

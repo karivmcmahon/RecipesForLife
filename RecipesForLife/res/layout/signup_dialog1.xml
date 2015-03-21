@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog2" >
+
+    <TextView
+        android:id="@+id/createView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Create Account" />
+
+    <TextView
+        android:id="@+id/nameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/createView"
+        android:layout_marginTop="22dp"
+        android:gravity="left"
+        android:text="Name:" />
+
+    <TextView
+        android:id="@+id/emailView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameView"
+        android:layout_marginTop="22dp"
+        android:gravity="left"
+        android:text="Email" />
+
+    <TextView
+        android:id="@+id/passwordView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailView"
+        android:layout_marginTop="22dp"
+        android:text="Password: " />
+
+    <TextView
+        android:id="@+id/errorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passwordView"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="22dp" />
+
+    <EditText
+        android:id="@+id/passwordEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/emailView"
+        android:layout_marginTop="22dp"
+        android:layout_toRightOf="@+id/passwordView"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textCursorDrawable="@drawable/drawable_cursor"
+        android:textSize="14dp" >
+    </EditText>
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/errorView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/drawable_button"
+        android:text="Next" />
+
+    <EditText
+        android:id="@+id/emailEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/passwordEdit"
+        android:layout_alignTop="@+id/emailView"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:textCursorDrawable="@drawable/drawable_cursor"
+        android:textSize="14dp" />
+
+    <EditText
+        android:id="@+id/nameEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignRight="@+id/emailEdit"
+        android:layout_alignTop="@+id/nameView"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textCursorDrawable="@drawable/drawable_cursor"
+        android:textSize="14dp" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>

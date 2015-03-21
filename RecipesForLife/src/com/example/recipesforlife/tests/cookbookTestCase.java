@@ -16,10 +16,10 @@ import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.RecipeBean;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -33,14 +33,14 @@ public class cookbookTestCase  extends AndroidTestCase {
 
 	Resources resources;
 	RenamingDelegatingContext context;
-	cookbookModel cookbookmodel;
+	CookbookModel cookbookmodel;
 
 	@SuppressLint("NewApi")
 	protected void setUp() throws Exception {
 		super.setUp();
 	     context 
 	        = new RenamingDelegatingContext(getContext(), "test_");
-		cookbookmodel = new cookbookModel(context);
+		cookbookmodel = new CookbookModel(context);
 	    copyDataBase();
 		
 	}
@@ -77,14 +77,14 @@ public class cookbookTestCase  extends AndroidTestCase {
 	
 	public void testSelectCookbook()
 	{
-		ArrayList<cookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
+		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
 		Assert.assertEquals(cblist.get(0).getName(), "book1");
 		Assert.assertEquals(cblist.get(0).getCreator(), "doe");
 	}
 	
 	public void testInsertCookbook()
 	{
-		cookbookBean cb = new cookbookBean();
+		CookbookBean cb = new CookbookBean();
 		cb.setName("cookbook");
 		cb.setCreator("doe");
 		cb.setChangeTime("2015-01-01 12:00:00");
@@ -92,20 +92,20 @@ public class cookbookTestCase  extends AndroidTestCase {
 		cb.setDescription("My personal cookbook");
 		cb.setPrivacy("public");
 		cb.setUniqueid("cookbookuniqueid2");
-		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.saladpic)).getBitmap();
+		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.image_default_recipe)).getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
 		cb.setImage(byteArray);
 		cookbookmodel.insertBook(cb, false);
 		
-		ArrayList<cookbookBean> cblist = cookbookmodel.selectCookbooksByCreator("doe");
+		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbooksByCreator("doe");
 		Assert.assertEquals(cblist.get(1).getName(), "cookbook");
 	}
 	
 	public void testUpdateCookbook()
 	{
-		cookbookBean cb = new cookbookBean();
+		CookbookBean cb = new CookbookBean();
 		cb.setName("Fun Foods");
 		cb.setDescription("fun");
 		cb.setChangeTime("2015-01-01 12:00:00");
@@ -113,13 +113,13 @@ public class cookbookTestCase  extends AndroidTestCase {
 		cb.setUniqueid("cookbookuniqueid1");
 		cookbookmodel.updateBook(cb, false);
 		
-		ArrayList<cookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
+		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
 		Assert.assertEquals(cblist.get(0).getName(), "Fun Foods");
 	}
 	
 	public void testCookbookRecipes()
 	{
-		ArrayList<recipeBean> rbList = cookbookmodel.selectRecipesByCookbook("cookbookuniqueid1");
+		ArrayList<RecipeBean> rbList = cookbookmodel.selectRecipesByCookbook("cookbookuniqueid1");
 		Assert.assertEquals(rbList.get(0).getName(), "pizza");
 	}
 	
@@ -152,9 +152,9 @@ public class cookbookTestCase  extends AndroidTestCase {
 	
 	public void testSelectCookbooksByUser()
 	{
-		ArrayList<cookbookBean> cblist = cookbookmodel.selectCookbooksByUser("doe");
+		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbooksByUser("doe");
 		Assert.assertEquals(cblist.get(0).getName(), "book1");
-		ArrayList<cookbookBean> cblist1 = cookbookmodel.selectCookbooksByUser("kimk@aol.co.uk");
+		ArrayList<CookbookBean> cblist1 = cookbookmodel.selectCookbooksByUser("kimk@aol.co.uk");
 		Assert.assertEquals(cblist1.get(0).getName(), "book1");
 		
 	}

@@ -2,26 +2,26 @@ package com.example.recipesforlife.models;
 
 import java.util.ArrayList;
 
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.userBean;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.UserBean;
 
 import android.content.Context;
 import android.database.Cursor;
 
-public class searchModel extends baseDataSource {
-	
+public class SearchModel extends BaseDataSource {
+
 	Context context;
-	public searchModel(Context context) {
+	public SearchModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.context = context;
 	}
-	
-	public ArrayList<recipeBean> selectRecipe(String word)
+
+	public ArrayList<RecipeBean> selectRecipe(String word)
 	{	
-		ArrayList<recipeBean> rb = new ArrayList<recipeBean>();
+		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND (Recipe.name LIKE ? OR Recipe.description LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -35,10 +35,10 @@ public class searchModel extends baseDataSource {
 		close();
 		return rb;
 	}
-	
-	public imageBean selectImages(int id)
+
+	public ImageBean selectImages(int id)
 	{
-		imageBean img = new imageBean();
+		ImageBean img = new ImageBean();
 		//open();
 		Cursor cursor2 = database.rawQuery("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
 		if (cursor2 != null && cursor2.getCount() > 0) {
@@ -52,15 +52,15 @@ public class searchModel extends baseDataSource {
 		//close();
 		return img;
 	}
-	
+
 	/**
 	 * Sets info from db to the controller
 	 * @param cursor
 	 * @return userBean
 	 */
-	public recipeBean cursorToRecipe(Cursor cursor) 
+	public RecipeBean cursorToRecipe(Cursor cursor) 
 	{
-		recipeBean rb = new recipeBean();
+		RecipeBean rb = new RecipeBean();
 		rb.setName(cursor.getString(getIndex("rname",cursor)));
 		rb.setDesc(cursor.getString(getIndex("desc",cursor)));
 		rb.setServes(cursor.getString(getIndex("serves", cursor)));
@@ -73,15 +73,15 @@ public class searchModel extends baseDataSource {
 		rb.setDifficulty(cursor.getString(getIndex("difficulty", cursor)));
 		rb.setTips(cursor.getString(getIndex("tips", cursor)));
 		rb.setDietary(cursor.getString(getIndex("dietary", cursor)));
-		imageBean imgbean = selectImages(cursor.getInt(getIndex("idr",cursor)));
+		ImageBean imgbean = selectImages(cursor.getInt(getIndex("idr",cursor)));
 		rb.setImage(imgbean.getImage());
 		rb.setRecipeBook(cursor.getString(getIndex("cname", cursor)));
 		return rb;
 	}
-	
-	public ArrayList<cookbookBean> selectCookbooks(String word)
+
+	public ArrayList<CookbookBean> selectCookbooks(String word)
 	{	
-		ArrayList<cookbookBean> cb = new ArrayList<cookbookBean>();
+		ArrayList<CookbookBean> cb = new ArrayList<CookbookBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook WHERE Cookbook.privacyOption='public' AND Cookbook.progress='added' AND (Cookbook.name LIKE ? OR Cookbook.description LIKE  ?)", new String[] { "%" + word + "%" , "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -95,9 +95,9 @@ public class searchModel extends baseDataSource {
 		close();
 		return cb;
 	}
-	
-	public cookbookBean cursorToCookbook(Cursor cursor) {
-		cookbookBean cb = new cookbookBean();
+
+	public CookbookBean cursorToCookbook(Cursor cursor) {
+		CookbookBean cb = new CookbookBean();
 		cb.setName(cursor.getString(getIndex("name",cursor)));
 		cb.setDescription(cursor.getString(getIndex("description",cursor)));
 		cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
@@ -109,10 +109,10 @@ public class searchModel extends baseDataSource {
 		cb.setProgress(cursor.getString(getIndex("progress",cursor)));
 		return cb;
 	}
-	
-	public ArrayList<userBean> selectUsers(String word)
+
+	public ArrayList<UserBean> selectUsers(String word)
 	{	
-		ArrayList<userBean> ub = new ArrayList<userBean>();
+		ArrayList<UserBean> ub = new ArrayList<UserBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT  * FROM Account INNER JOIN Users ON Account.id = Users.id WHERE Account.email LIKE ? OR Users.name LIKE ?", new String[] { "%" + word + "%" , "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -126,14 +126,14 @@ public class searchModel extends baseDataSource {
 		close();
 		return ub;
 	}
-	
+
 	/**
 	 * Sets info from db to the controller
 	 * @param cursor
 	 * @return userBean
 	 */
-	public userBean cursorToUsers(Cursor cursor) {
-		userBean ub = new userBean();      
+	public UserBean cursorToUsers(Cursor cursor) {
+		UserBean ub = new UserBean();      
 		ub.setName(cursor.getString(getIndex("name", cursor)));
 		ub.setBio(cursor.getString(getIndex("bio", cursor)));
 		ub.setCity(cursor.getString(getIndex("city", cursor)));

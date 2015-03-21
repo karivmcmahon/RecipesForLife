@@ -1,16 +1,16 @@
 package com.example.recipesforlife.controllers;
 
 /**
- * Controller for Account
+ * Controller for Account Details
  * @author Kari
  *
  */
-public class accountBean 
+public class AccountBean 
 {
-	private int id;
-	private String email;
-	private String password;
-	private String updateTime;
+	private int id; //row id in db
+	private String email; //users email
+	private String password; //users password - in hashed form
+	private String updateTime; //time it was added
 
 	public String getUpdateTime() {
 		return updateTime;

@@ -5,12 +5,12 @@ package com.example.recipesforlife.controllers;
  * @author Kari
  *
  */
-public class preperationBean  {
-	int id;
-	int prepNum;
-	String preperation;
-	String uniqueid;
-	
+public class PreperationBean  {
+	int id; //preps row id in db
+	int prepNum; //preps step number
+	String preperation; //preperation details
+	String uniqueid; //prep uniqueid
+
 	public String getUniqueid() {
 		return uniqueid;
 	}
@@ -35,11 +35,11 @@ public class preperationBean  {
 	public void setPreperation(String preperation) {
 		this.preperation = preperation;
 	}
-	
-	
-	
 
-	
-	
+
+
+
+
+
 
 }

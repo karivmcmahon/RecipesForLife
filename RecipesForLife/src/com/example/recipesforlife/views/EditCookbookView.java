@@ -28,9 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.util.Util;
 
 /**
  * Displays the edit cookbook dialog
@@ -41,27 +41,27 @@ public class EditCookbookView  {
 
 	Context context;
 	Activity activity;
-	util utils;
+	Util utils;
 	CustomCookbookListAdapter ccadapter;
 	int position;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Dialog editDialog;
 	TextView errorView;
-	cookbookModel model;
-	ArrayList<cookbookBean> cookbook;
+	CookbookModel model;
+	ArrayList<CookbookBean> cookbook;
 	byte[] byteArray;
 	String uid;
 	Spinner spinner;
 	private static final int SELECT_PHOTO = 101;
-	
+
 	public EditCookbookView(Context context, Activity activity, CustomCookbookListAdapter adapter, int position)
 	{
 		this.context = context;
 		this.activity = activity;
 		ccadapter = adapter;
 		this.position = position;
-		utils = new util(context, activity);
+		utils = new Util(context, activity);
 	}
 
 	/**
@@ -69,9 +69,9 @@ public class EditCookbookView  {
 	 */
 	public void editBook()
 	{
-		editDialog = utils.createDialog(activity, R.layout.cookbookeditdialog);
+		editDialog = utils.createDialog(activity, R.layout.cookbook_editdialog);
 		errorView = (TextView) editDialog.findViewById(R.id.errorView);
-		model = new cookbookModel(context);
+		model = new CookbookModel(context);
 		cookbook = model.selectCookbook(ccadapter.bookids.get(position));
 		fillSpinner();
 		setStyle();
@@ -142,10 +142,10 @@ public class EditCookbookView  {
 		spinnerArray.add("private");
 		uid = ccadapter.bookids.get(position);
 		ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(
-				activity, R.layout.item, spinnerArray);
+				activity, R.layout.general_spinner_item, spinnerArray);
 		spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinneradapter);
-		 spinner.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		spinner.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		spinner.setSelection(utils.getIndex(spinner, cookbook.get(0).getPrivacy()));
 	}
 
@@ -164,7 +164,7 @@ public class EditCookbookView  {
 	 */
 	public void edit()
 	{
-		cookbookBean cb = new cookbookBean();
+		CookbookBean cb = new CookbookBean();
 		//Error checking
 		if(utils.getTextFromDialog(R.id.bookNameEditText, editDialog).equals(""))
 		{
@@ -186,11 +186,11 @@ public class EditCookbookView  {
 			try
 			{
 				model.updateBook(cb, false);
-				
+
 				//updates list after book update
 				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-				cookbookModel model = new cookbookModel(context);
-				ArrayList<cookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+				CookbookModel model = new CookbookModel(context);
+				ArrayList<CookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 				CookbookListActivity.values.clear();
 				CookbookListActivity.ids.clear();
 				CookbookListActivity.images.clear();
@@ -214,7 +214,7 @@ public class EditCookbookView  {
 				}
 				CookbookListActivity.adapter.notifyDataSetChanged();
 			}
-				
+
 			catch(SQLException e)
 			{
 				Toast.makeText(context, "Cookbook was not edited", Toast.LENGTH_LONG).show();
@@ -258,7 +258,7 @@ public class EditCookbookView  {
 
 	}
 
-	
+
 }
 
 

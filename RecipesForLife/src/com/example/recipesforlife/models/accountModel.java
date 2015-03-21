@@ -11,8 +11,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.util.Log;
 
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.controllers.userBean;
+import com.example.recipesforlife.controllers.AccountBean;
+import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.util.Utility;
+import com.example.recipesforlife.util.PasswordHashing;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -20,25 +22,25 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
-public class accountModel extends baseDataSource
+public class AccountModel extends BaseDataSource
 {
 	long id;
 	String str;
 	ContentValues values;
 	ContentValues accountValues;
 	Context context;
-	syncModel sync;
-	utility utils;
+	SyncModel sync;
+	Utility utils;
 	SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 
-	public accountModel(Context context) {
+	public AccountModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor st
 		this.context = context;
-		sync = new syncModel(context);
-		utils = new utility();
+		sync = new SyncModel(context);
+		utils = new Utility();
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
@@ -46,7 +48,7 @@ public class accountModel extends baseDataSource
 	 * Code to insert sign up information into sqlite database
 	 * @param accountInfo
 	 */
-	public void insertAccount(accountBean account, userBean user, boolean server) 
+	public void insertAccount(AccountBean account, UserBean user, boolean server) 
 	{
 		open();
 		database.beginTransaction();
@@ -70,10 +72,10 @@ public class accountModel extends baseDataSource
 	 * @param password
 	 * @return A list of accounts
 	 */
-	public ArrayList<accountBean> selectAccount(String email, String password)
+	public ArrayList<AccountBean> selectAccount(String email, String password)
 	{
 		open();
-		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
+		ArrayList<AccountBean> accountList = new ArrayList<AccountBean>();
 		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password  });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -91,10 +93,10 @@ public class accountModel extends baseDataSource
 	 * @param id
 	 * @return A list of users
 	 */
-	public ArrayList<userBean> selectUser(int id)
+	public ArrayList<UserBean> selectUser(int id)
 	{
 		open();
-		ArrayList<userBean> userList = new ArrayList<userBean>();
+		ArrayList<UserBean> userList = new ArrayList<UserBean>();
 		Cursor cursor = database.rawQuery("SELECT * FROM Users WHERE id=?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -112,8 +114,8 @@ public class accountModel extends baseDataSource
 	 * @param cursor
 	 * @return userBean
 	 */
-	public userBean cursorToUser(Cursor cursor) {
-		userBean ub = new userBean();
+	public UserBean cursorToUser(Cursor cursor) {
+		UserBean ub = new UserBean();
 		ub.setId(cursor.getInt(getIndex("id",cursor)));       
 		ub.setName(cursor.getString(getIndex("name", cursor)));
 		ub.setBio(cursor.getString(getIndex("bio", cursor)));
@@ -136,7 +138,7 @@ public class accountModel extends baseDataSource
 		boolean valid = false;
 		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=?", new String[] { email });
 		if (cursor != null && cursor.getCount() > 0) {
-			passwordHashing ph = new passwordHashing();
+			PasswordHashing ph = new PasswordHashing();
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				try {
@@ -149,8 +151,8 @@ public class accountModel extends baseDataSource
 					e.printStackTrace();
 				}
 			}
-			   
-			
+
+
 			cursor.close();
 			close();
 			return valid;
@@ -189,7 +191,7 @@ public class accountModel extends baseDataSource
 	 * Insert user info into the user sqlite table
 	 * @param accountInfo
 	 */
-	public void insertUserData(accountBean account, userBean user, boolean server)
+	public void insertUserData(AccountBean account, UserBean user, boolean server)
 	{
 		//User values
 		values = new ContentValues();
@@ -224,13 +226,13 @@ public class accountModel extends baseDataSource
 	 * @param accountInfo
 	 * @param id
 	 */
-	public void insertAccountData(accountBean account, long id, boolean server)
+	public void insertAccountData(AccountBean account, long id, boolean server)
 	{
 		//Account values
 		accountValues = new ContentValues();
 		accountValues.put("id", (int)id);
 		accountValues.put("email", account.getEmail());
-		passwordHashing ph = new passwordHashing();
+		PasswordHashing ph = new PasswordHashing();
 		accountValues.put("password", account.getPassword());
 		if(server == true)
 		{			
@@ -240,7 +242,7 @@ public class accountModel extends baseDataSource
 		{
 			accountValues.put("updateTime", utils.getLastUpdated(false));
 		}
-		
+
 		try
 		{
 			database.insertOrThrow("Account", null, accountValues);

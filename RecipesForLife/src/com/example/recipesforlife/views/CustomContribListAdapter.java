@@ -20,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.util.Util;
 
 /**
  * List adapter for contributers as well as the ability to add and remove contributers
@@ -34,7 +34,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 	Context context;
 	String cookbookuid;
 	boolean isCreator;
-	util utils;
+	Util utils;
 
 	/** 
 	 * Gets list data
@@ -45,13 +45,13 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 	 */
 	public CustomContribListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid, boolean isCreator)
 	{
-		super(context, R.layout.contriblistsingle, users);
+		super(context, R.layout.contributers_listitem, users);
 		this.activity = activity;
 		this.context = context;
 		this.users = users;
 		this.cookbookuid = cookbookuid;
 		this.isCreator = isCreator;
-		utils = new util(this.context, activity);
+		utils = new Util(this.context, activity);
 
 	}
 
@@ -62,7 +62,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
-		View rowView= inflater.inflate(R.layout.contriblistsingle, null, true);
+		View rowView= inflater.inflate(R.layout.contributers_listitem, null, true);
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
 		utils.setRowText(R.id.txt, rowView, 22);
 
@@ -76,32 +76,32 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 		else
 		{
 			imageView.setOnTouchListener(new OnTouchListener(){
-	
+
 				@Override
 				public boolean onTouch(View arg0, MotionEvent arg1) {
 					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
+						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
 						utils.setDialogText(R.id.textView, dialog, 18);
 						TextView tv = (TextView) dialog.findViewById(R.id.textView);
 						tv.setText("Would you like to delete this user ?");
 						// Show dialog
 						dialog.show();
-						
+
 						//Deletes users and dismiss dialog
 						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
 						yesButton.setOnClickListener(new OnClickListener() {
-	
+
 							@Override
 							public void onClick(View arg0) {
-								cookbookModel model = new cookbookModel(context);
+								CookbookModel model = new CookbookModel(context);
 								int id = model.selectCookbooksIDByUnique(cookbookuid);
 								try
 								{
-								model.updateContributers( users.get(position), id, "deleted", false);
-								users.remove(position);
-								notifyDataSetChanged();
+									model.updateContributers( users.get(position), id, "deleted", false);
+									users.remove(position);
+									notifyDataSetChanged();
 								}
 								catch(SQLiteException e)
 								{
@@ -110,18 +110,18 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 								dialog.dismiss(); 
 							}
 						});
-						
+
 						//If user selects no - dismiss dialog
 						Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
 						noButton.setOnClickListener(new OnClickListener() {
-	
+
 							@Override
 							public void onClick(View arg0) {
 								dialog.dismiss();
 							}
 						});
 					}		
-				
+
 					return false;
 				}
 			});

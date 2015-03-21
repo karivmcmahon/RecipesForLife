@@ -19,7 +19,7 @@ import android.util.Log;
  * @author Kari
  *
  */
-public class databaseConnection extends SQLiteOpenHelper {
+public class DatabaseConnection extends SQLiteOpenHelper {
 
 	private static String DB_PATH;
 	public static String DB_NAME = "dv.sqlite";
@@ -31,7 +31,7 @@ public class databaseConnection extends SQLiteOpenHelper {
 	 * Stores database connection path
 	 * @param context
 	 */
-	public databaseConnection(Context context) 
+	public DatabaseConnection(Context context) 
 	{
 		super(context, DB_NAME, null, 1);
 		this.myContext = context;

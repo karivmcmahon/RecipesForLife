@@ -1,12 +1,17 @@
 package com.example.recipesforlife.controllers;
 
-public class reviewBean {
-	
-	String comment;
-	String user;
-	int recipeid;
-	String recipeuniqueid;
-	String updateTime;
+/**
+ * This controller stores review information for recipes
+ * @author Kari
+ *
+ */
+public class ReviewBean {
+
+	String comment; //the review comment
+	String user; //who the review is by
+	int recipeid; //row id of recipe in db
+	String recipeuniqueid; //recipe the review relates to - unique id
+	String updateTime; //time review was added
 
 	public String getUpdateTime() {
 		return updateTime;
@@ -38,5 +43,5 @@ public class reviewBean {
 	public void setRecipeid(int recipeid) {
 		this.recipeid = recipeid;
 	}
-	
+
 }

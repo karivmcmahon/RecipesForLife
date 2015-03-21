@@ -10,9 +10,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.util.Log;
 
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -20,30 +21,26 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
-public class cookbookModel extends baseDataSource {
+public class CookbookModel extends BaseDataSource {
 
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
-	recipeModel recipemodel;
+	RecipeModel recipemodel;
 	Context context;
-	utility utils;
+	Utility utils;
 	SharedPreferences sharedpreferences;
 
-	public cookbookModel(Context context) {
+	public CookbookModel(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.context = context;
-		utils = new utility();
-		recipemodel = new recipeModel(context);
+		utils = new Utility();
+		recipemodel = new RecipeModel(context);
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
-	/**
-	 * Inserts a cookbook into the database
-	 * @param book
-	 * @param server
-	 */
-	public String insertBook(cookbookBean book, boolean server)
+
+	public String insertBook(CookbookBean book, boolean server)
 	{
 
 		open();
@@ -91,7 +88,7 @@ public class cookbookModel extends baseDataSource {
 	 * Updates a cookbook in the database
 	 * @param cookbook
 	 */
-	public void updateBook(cookbookBean cookbook, boolean server)
+	public void updateBook(CookbookBean cookbook, boolean server)
 	{
 
 		open();
@@ -261,10 +258,10 @@ public class cookbookModel extends baseDataSource {
 	 * @param user
 	 * @return ArrayList<cookbookBean> - List of cookbooks
 	 */
-	public ArrayList<cookbookBean> selectCookbooksByUser(String user)
+	public ArrayList<CookbookBean> selectCookbooksByUser(String user)
 	{
 
-		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
+		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook LEFT JOIN Contributers ON Cookbook.id=Contributers.cookbookid WHERE creator=? AND Cookbook.progress=? OR Contributers.accountid=? AND Cookbook.progress=?  GROUP BY uniqueid ", new String[] { user, "added", user, "added"});
 		if (cursor != null && cursor.getCount() > 0) {
@@ -283,10 +280,10 @@ public class cookbookModel extends baseDataSource {
 	 * @param user
 	 * @return ArrayList<cookbookBean> - List of cookbooks
 	 */
-	public ArrayList<cookbookBean> selectCookbooksByCreator(String user)
+	public ArrayList<CookbookBean> selectCookbooksByCreator(String user)
 	{
 
-		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
+		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook WHERE creator=?", new String[] { user });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -327,9 +324,9 @@ public class cookbookModel extends baseDataSource {
 	 * @param uniqueid
 	 * @return List of cookbooks
 	 */
-	public ArrayList<cookbookBean> selectCookbook(String uniqueid)
+	public ArrayList<CookbookBean> selectCookbook(String uniqueid)
 	{		
-		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
+		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook   WHERE uniqueid=?", new String[] { uniqueid });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -417,10 +414,10 @@ public class cookbookModel extends baseDataSource {
 	 * @param uniqueid
 	 * @return List of recipes
 	 */
-	public ArrayList<recipeBean> selectRecipesByCookbook(String uniqueid)
+	public ArrayList<RecipeBean> selectRecipesByCookbook(String uniqueid)
 	{
 		open();
-		ArrayList<recipeBean> names = new ArrayList<recipeBean>();
+		ArrayList<RecipeBean> names = new ArrayList<RecipeBean>();
 		Cursor cursor = database.rawQuery("SELECT Recipe.id AS recipeid, Recipe.name AS recipename, Recipe.uniqueid AS rid FROM Recipe INNER JOIN Cookbook INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.uniqueid = ?  AND CookbookRecipe.Cookbookid=Cookbook.id AND Recipe.progress=?", new String[] { uniqueid, "added" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -440,8 +437,8 @@ public class cookbookModel extends baseDataSource {
 	 * @param cursor
 	 * @return cookbookBean
 	 */
-	public cookbookBean cursorToCookbook(Cursor cursor) {
-		cookbookBean cb = new cookbookBean();
+	public CookbookBean cursorToCookbook(Cursor cursor) {
+		CookbookBean cb = new CookbookBean();
 		cb.setName(cursor.getString(getIndex("name",cursor)));
 		cb.setDescription(cursor.getString(getIndex("description",cursor)));
 		cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
@@ -459,8 +456,8 @@ public class cookbookModel extends baseDataSource {
 	 * @param cursor
 	 * @return recipeBean - recipe info
 	 */
-	public recipeBean cursorToRecipe(Cursor cursor) {
-		recipeBean rb = new recipeBean();
+	public RecipeBean cursorToRecipe(Cursor cursor) {
+		RecipeBean rb = new RecipeBean();
 		rb.setId(cursor.getInt(getIndex("recipeid",cursor)));
 		rb.setName(cursor.getString(getIndex("recipename",cursor)));   
 		rb.setUniqueid(cursor.getString(getIndex("rid", cursor)));
@@ -473,9 +470,9 @@ public class cookbookModel extends baseDataSource {
 	 * @param id
 	 * @return
 	 */
-	public imageBean selectImage(int id)
+	public ImageBean selectImage(int id)
 	{
-		imageBean img = new imageBean();
+		ImageBean img = new ImageBean();
 		open();
 		Cursor cursor = database.rawQuery("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = ?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {

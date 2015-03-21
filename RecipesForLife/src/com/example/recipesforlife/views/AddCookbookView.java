@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.util.Util;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -44,7 +44,7 @@ public class AddCookbookView extends CookbookListActivity {
 
 	ActionBarActivity activity;
 	Context context;
-	util utils;
+	Util utils;
 	Dialog bookAddDialog;
 	TextView errorView;
 	public static final String MyPREFERENCES = "MyPrefs";
@@ -53,14 +53,14 @@ public class AddCookbookView extends CookbookListActivity {
 	ArrayList<String> bookDetails;
 	int finished = 0;
 	private static final int SELECT_PHOTO = 100;
-	imageBean imgBean;
+	ImageBean imgBean;
 	byte[] byteArray;
 
 	public AddCookbookView(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
-		utils = new util(context, activity);
+		utils = new Util(context, activity);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class AddCookbookView extends CookbookListActivity {
 	public void addCookbook()
 	{
 
-		bookAddDialog = utils.createDialog(activity , R.layout.addcookbookdialog);
+		bookAddDialog = utils.createDialog(activity , R.layout.cookbook_adddialog);
 		errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
 		bookDetails = new ArrayList<String>();
 		//sets up the dialog style
@@ -92,9 +92,9 @@ public class AddCookbookView extends CookbookListActivity {
 				Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
 				chooserIntent.putExtra
 				(
-					Intent.EXTRA_INITIAL_INTENTS, 
-					new Intent[] { takePhotoIntent }
-				); 
+						Intent.EXTRA_INITIAL_INTENTS, 
+						new Intent[] { takePhotoIntent }
+						); 
 				activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
 			}
 
@@ -138,7 +138,7 @@ public class AddCookbookView extends CookbookListActivity {
 		spinnerArray.add("public");
 		spinnerArray.add("private");
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				activity, R.layout.item, spinnerArray);
+				activity, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner sItems = (Spinner) bookAddDialog.findViewById(R.id.privacySpinner);
 		//makes spinner triangle white
@@ -153,8 +153,8 @@ public class AddCookbookView extends CookbookListActivity {
 	{
 		// Retrieves data and inserts into database
 		SharedPreferences sharedpreferences =  context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-		cookbookBean book = new cookbookBean();
-		cookbookModel model = new cookbookModel(context);
+		CookbookBean book = new CookbookBean();
+		CookbookModel model = new CookbookModel(context);
 		int id = model.selectCookbooksID(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog), sharedpreferences.getString(emailk, "DEFAULT"));
 		//Check for errors
 		if(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog).equals(""))
@@ -180,15 +180,15 @@ public class AddCookbookView extends CookbookListActivity {
 			//if an image is not set - then set a default
 			if(utils.getTextFromDialog(R.id.cookbookImageEditText, bookAddDialog).equals(""))
 			{
-				Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.books)).getBitmap();
+				Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.image_default_cookbook)).getBitmap();
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				byte[] array = stream.toByteArray();
 				byteArray = array;
 			}  
 			book.setImage(byteArray);
-			
-			cookbookModel cbmodel = new cookbookModel(context);
+
+			CookbookModel cbmodel = new CookbookModel(context);
 			try
 			{
 				//insert book - once inserted add to list

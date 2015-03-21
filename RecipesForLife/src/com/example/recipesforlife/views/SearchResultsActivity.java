@@ -3,12 +3,14 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.userBean;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.searchModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.models.SearchModel;
+import com.example.recipesforlife.util.SampleRecentSuggestionsProvider;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -35,16 +37,16 @@ import android.widget.TextView;
 public class SearchResultsActivity extends ActionBarActivity {
 
 	NavigationDrawerCreation nav;
-	util utils;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
+	Util utils;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.searchlistview);
-		
-		utils = new util(getApplicationContext(), this);
+		setContentView(R.layout.search_listview);
+
+		utils = new Util(getApplicationContext(), this);
 		//Sets up nav bar
 		nav = new NavigationDrawerCreation(SearchResultsActivity.this, "Search");
 		nav.createDrawer();
@@ -55,28 +57,28 @@ public class SearchResultsActivity extends ActionBarActivity {
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
-		
-		 
-       handleIntent(getIntent());
-    }
 
-    @Override
+
+		handleIntent(getIntent());
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.plain, menu);
-		
+		getMenuInflater().inflate(R.menu.menu_plain, menu);
+
 		SearchManager searchManager =
-		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
-		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		 
+				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+
 		searchView.setSearchableInfo(
-		            searchManager.getSearchableInfo(getComponentName()));
-		    
+				searchManager.getSearchableInfo(getComponentName()));
+
 		return true;
 	}
-    
-    @Override
+
+	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
@@ -88,7 +90,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//handles nav drawer clicks
@@ -96,7 +98,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 
 		switch (item.getItemId()) {
 
-		
+
 		default:
 			result = false;
 		}
@@ -106,41 +108,41 @@ public class SearchResultsActivity extends ActionBarActivity {
 	}
 
 	@Override
-	 protected void onNewIntent(Intent intent) {
-	  
-	  handleIntent(intent);
-	 }
+	protected void onNewIntent(Intent intent) {
 
-    private void handleIntent(Intent intent) {
+		handleIntent(intent);
+	}
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            SearchRecentSuggestions suggestions = 
-            		   new SearchRecentSuggestions(this, 
-            		      SampleRecentSuggestionsProvider.AUTHORITY, 
-            		      SampleRecentSuggestionsProvider.MODE); 
-            		suggestions.saveRecentQuery(query, null);
-            searchModel sm = new searchModel(getApplicationContext());
-            final ArrayList<recipeBean> rb = sm.selectRecipe(query);
-            final ArrayList<cookbookBean> cb = sm.selectCookbooks(query);
-            final ArrayList<userBean> ub = sm.selectUsers(query);
-            TextView tv = (TextView) findViewById(R.id.recipeheader);
-            tv.setText("Recipes that feature '" + query + "' :");
-            utils.setText(R.id.recipeheader, 30);
-            utils.setText(R.id.cookbookheader, 30);
-            utils.setText(R.id.userheader, 30);
-           
-            ListView listView = (ListView) findViewById(R.id.list);
-            if(rb.size() == 0)
-            {
-            	recipeBean recipebean = new recipeBean();
-            	recipebean.setName("empty");
-            	rb.add(recipebean);
-            }
-    		CustomRecipeSearchAdapter adapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
-    		listView.setAdapter(adapter); 
-    		
-    		listView.setOnItemClickListener(new OnItemClickListener() {
+	private void handleIntent(Intent intent) {
+
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			SearchRecentSuggestions suggestions = 
+					new SearchRecentSuggestions(this, 
+							SampleRecentSuggestionsProvider.AUTHORITY, 
+							SampleRecentSuggestionsProvider.MODE); 
+			suggestions.saveRecentQuery(query, null);
+			SearchModel sm = new SearchModel(getApplicationContext());
+			final ArrayList<RecipeBean> rb = sm.selectRecipe(query);
+			final ArrayList<CookbookBean> cb = sm.selectCookbooks(query);
+			final ArrayList<UserBean> ub = sm.selectUsers(query);
+			TextView tv = (TextView) findViewById(R.id.recipeheader);
+			tv.setText("Recipes that feature '" + query + "' :");
+			utils.setText(R.id.recipeheader, 30);
+			utils.setText(R.id.cookbookheader, 30);
+			utils.setText(R.id.userheader, 30);
+
+			ListView listView = (ListView) findViewById(R.id.list);
+			if(rb.size() == 0)
+			{
+				RecipeBean recipebean = new RecipeBean();
+				recipebean.setName("empty");
+				rb.add(recipebean);
+			}
+			CustomRecipeSearchAdapter adapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
+			listView.setAdapter(adapter); 
+
+			listView.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
@@ -149,23 +151,23 @@ public class SearchResultsActivity extends ActionBarActivity {
 					i.putExtra("uniqueidr", rb.get(position).getUniqueid());
 					i.putExtra("name", rb.get(position).getName());
 					startActivity(i);
-					
+
 				}                 
-    		});
-    		
-    		TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
-            cookbooktv.setText("Cookbooks that feature '" + query + "' :");
-            ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
-            if(cb.size() == 0)
-            {
-            	cookbookBean cookbookbean = new cookbookBean();
-            	cookbookbean.setName("empty");
-            	cb.add(cookbookbean);
-            } 
-    		CustomCookbookSearchAdapter cookbookadapter = new CustomCookbookSearchAdapter( getApplicationContext(), this,  cb);
-    		cookbooklistView.setAdapter(cookbookadapter); 
-    		
-    		cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
+			});
+
+			TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
+			cookbooktv.setText("Cookbooks that feature '" + query + "' :");
+			ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
+			if(cb.size() == 0)
+			{
+				CookbookBean cookbookbean = new CookbookBean();
+				cookbookbean.setName("empty");
+				cb.add(cookbookbean);
+			} 
+			CustomCookbookSearchAdapter cookbookadapter = new CustomCookbookSearchAdapter( getApplicationContext(), this,  cb);
+			cookbooklistView.setAdapter(cookbookadapter); 
+
+			cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
@@ -176,33 +178,33 @@ public class SearchResultsActivity extends ActionBarActivity {
 					i.putExtra("type", "view");
 					i.putExtra("bookname", cb.get(position).getName());
 					startActivity(i);
-					
+
 				}                 
-    		});
-    		
-    		
-    		TextView usertv = (TextView) findViewById(R.id.userheader);
-            usertv.setText("Accounts that feature '" + query + "' :");
-            ListView userlistView = (ListView) findViewById(R.id.userlist);
-            if(ub.size() == 0)
-            {
-            	userBean userbean = new userBean();
-            	userbean.setName("empty");
-            	ub.add(userbean);
-            } 
-    		CustomUserSearchAdapter useradapter = new CustomUserSearchAdapter( getApplicationContext(), this,  ub);
-    		userlistView.setAdapter(useradapter); 
-    		
-    		userlistView.setOnItemClickListener(new OnItemClickListener() {
+			});
+
+
+			TextView usertv = (TextView) findViewById(R.id.userheader);
+			usertv.setText("Accounts that feature '" + query + "' :");
+			ListView userlistView = (ListView) findViewById(R.id.userlist);
+			if(ub.size() == 0)
+			{
+				UserBean userbean = new UserBean();
+				userbean.setName("empty");
+				ub.add(userbean);
+			} 
+			CustomUserSearchAdapter useradapter = new CustomUserSearchAdapter( getApplicationContext(), this,  ub);
+			userlistView.setAdapter(useradapter); 
+
+			userlistView.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					// TODO Auto-generated method stub
-				
+
 				}                 
-    		});
-           
-        }
-    }
-    
+			});
+
+		}
+	}
+
 }

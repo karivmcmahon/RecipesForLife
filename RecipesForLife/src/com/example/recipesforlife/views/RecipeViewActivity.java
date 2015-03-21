@@ -40,14 +40,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.reviewBean;
-import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.reviewModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.ReviewBean;
+import com.example.recipesforlife.models.RecipeModel;
+import com.example.recipesforlife.models.ReviewModel;
+import com.example.recipesforlife.util.ImageLoader;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
 
 
 /**
@@ -56,7 +58,7 @@ import com.example.recipesforlife.models.util;
  *
  */
 public class RecipeViewActivity extends ActionBarActivity {
-	util utils;
+	Util utils;
 	NavigationDrawerCreation nav;
 	int counter = 0;
 	int fullScreenCounter = 0;
@@ -64,20 +66,20 @@ public class RecipeViewActivity extends ActionBarActivity {
 	String recipeName = "";
 	int recipeFont = 22;
 	int recipeFontHeader = 26;
-	recipeBean recipe;
+	RecipeBean recipe;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 	SharedPreferences sharedpreferences;
-	ArrayList<reviewBean> rbs;
-	 CustomReviewAdapter adapter;
-	 ImageView img;
+	ArrayList<ReviewBean> rbs;
+	CustomReviewAdapter adapter;
+	ImageView img;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.recipeview);
-		utils = new util(getApplicationContext(), this);
+		setContentView(R.layout.recipe_view);
+		utils = new Util(getApplicationContext(), this);
 		setStyle();
 		setTextForLayout();
 		nav = new NavigationDrawerCreation(this, recipeName );
@@ -89,28 +91,28 @@ public class RecipeViewActivity extends ActionBarActivity {
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
-		
-		final reviewModel reviewmodel = new reviewModel(getApplicationContext());
-		 rbs = reviewmodel.selectReviews(recipe.getId());
-		 Log.v("RBS ", "RBS " + rbs.size());
+
+		final ReviewModel reviewmodel = new ReviewModel(getApplicationContext());
+		rbs = reviewmodel.selectReviews(recipe.getId());
+		Log.v("RBS ", "RBS " + rbs.size());
 		ListView listView = (ListView) findViewById(R.id.reviewlist);
-	//	listView.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
-	    adapter = new CustomReviewAdapter( getApplicationContext(), this,  rbs);
+		//	listView.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
+		adapter = new CustomReviewAdapter( getApplicationContext(), this,  rbs);
 		listView.setAdapter(adapter); 
-		
-        utils.setButtonText(R.id.sumbitButton, 22);
-        final TextView errorView = (TextView) findViewById(R.id.errorView);
+
+		utils.setButtonText(R.id.sumbitButton, 22);
+		final TextView errorView = (TextView) findViewById(R.id.errorView);
 		utils.setText(R.id.errorView,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
-        Button submitbutton = (Button) findViewById(R.id.sumbitButton);
-        submitbutton.setOnClickListener(new OnClickListener(){
+		Button submitbutton = (Button) findViewById(R.id.sumbitButton);
+		submitbutton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				errorView.setText("");
 				sharedpreferences = getApplicationContext().getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-				reviewBean rb = new reviewBean();
+				ReviewBean rb = new ReviewBean();
 				rb.setComment(utils.getText(R.id.reviewBox));
 				rb.setRecipeid(recipe.getId());
 				rb.setUser(sharedpreferences.getString(emailk, "DEFAULT"));
@@ -122,22 +124,22 @@ public class RecipeViewActivity extends ActionBarActivity {
 					}
 					else
 					{
-					
-					reviewmodel.insertReview(rb, false);
-					rbs.add(0, rb);
-					adapter.notifyDataSetChanged();
-					utils.setTextString(R.id.reviewBox, "");
+
+						reviewmodel.insertReview(rb, false);
+						rbs.add(0, rb);
+						adapter.notifyDataSetChanged();
+						utils.setTextString(R.id.reviewBox, "");
 					}
 				}catch(SQLException e)
 				{
 					Toast.makeText(getApplicationContext(), "Review was not added", Toast.LENGTH_LONG).show();
 				}
-				
-				
+
+
 			}});
-        
-        
-        
+
+
+
 
 
 	}
@@ -225,7 +227,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.recipe, menu);
+		getMenuInflater().inflate(R.menu.menu_recipe_view, menu);
 
 		SearchManager searchManager =
 				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -243,7 +245,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 			String shareBody = "Check out my recipe for " + recipeName +  " on the android app Recipes For Life" ;
 			sharingIntent.setType("image/jpeg");
 			sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-		    sharingIntent.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(img));
+			sharingIntent.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(img));
 			mShareActionProvider.setShareIntent(sharingIntent);
 		}
 
@@ -289,11 +291,11 @@ public class RecipeViewActivity extends ActionBarActivity {
 	 */
 	public void setTextForLayout()
 	{
-		recipeModel model = new recipeModel(getApplicationContext());
-		recipe = new recipeBean();
-		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
-		ArrayList<ingredientBean> ingredList = new ArrayList<ingredientBean>();
-		imageBean imgBean = new imageBean();
+		RecipeModel model = new RecipeModel(getApplicationContext());
+		recipe = new RecipeBean();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+		ImageBean imgBean = new ImageBean();
 		Intent intent = getIntent();
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr") );
 		prepList = model.selectPreperation(recipe.getId());
@@ -301,16 +303,16 @@ public class RecipeViewActivity extends ActionBarActivity {
 		imgBean = model.selectImages(recipe.getId());
 
 
-	     img = (ImageView) findViewById(R.id.foodImage);
+		img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
 		task.execute();
 
 
 
 		TextView instructions = (TextView) findViewById(R.id.methodList);
-		Collections.sort(prepList, new Comparator<preperationBean>() {
+		Collections.sort(prepList, new Comparator<PreperationBean>() {
 			@Override 
-			public int compare(preperationBean p1, preperationBean p2) {
+			public int compare(PreperationBean p1, PreperationBean p2) {
 				return p1.getPrepNum() - p2.getPrepNum(); // Ascending
 			}});
 		for(int i = 0; i < prepList.size(); i++)
@@ -335,32 +337,32 @@ public class RecipeViewActivity extends ActionBarActivity {
 		utils.setTextString(R.id.cusineVal, recipe.getCusine());
 
 	}
-	
-	
+
+
 	// from here https://guides.codepath.com/android/Sharing-Content-with-Intents
 	public Uri getLocalBitmapUri(ImageView imageView) {
-	    // Extract Bitmap from ImageView drawable
-	    Drawable drawable = imageView.getDrawable();
-	    Bitmap bmp = null;
-	    if (drawable instanceof BitmapDrawable){
-	       bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-	    } else {
-	       return null;
-	    }
-	    // Store image to default external storage directory
-	    Uri bmpUri = null;
-	    try {
-	        File file =  new File(Environment.getExternalStoragePublicDirectory(  
-		        Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
-	        file.getParentFile().mkdirs();
-	        FileOutputStream out = new FileOutputStream(file);
-	        bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-	        out.close();
-	        bmpUri = Uri.fromFile(file);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	    return bmpUri;
+		// Extract Bitmap from ImageView drawable
+		Drawable drawable = imageView.getDrawable();
+		Bitmap bmp = null;
+		if (drawable instanceof BitmapDrawable){
+			bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+		} else {
+			return null;
+		}
+		// Store image to default external storage directory
+		Uri bmpUri = null;
+		try {
+			File file =  new File(Environment.getExternalStoragePublicDirectory(  
+					Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
+			file.getParentFile().mkdirs();
+			FileOutputStream out = new FileOutputStream(file);
+			bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+			out.close();
+			bmpUri = Uri.fromFile(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bmpUri;
 	}
 
 }

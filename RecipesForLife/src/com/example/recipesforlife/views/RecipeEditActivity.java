@@ -46,12 +46,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.models.recipeModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.RecipeModel;
+import com.example.recipesforlife.util.ImageLoader;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
 
 /**
  * Class to show edit view for recipes
@@ -60,17 +62,17 @@ import com.example.recipesforlife.models.util;
  */
 public class RecipeEditActivity extends ActionBarActivity {
 
-	util utils;
-	recipeBean recipe;
+	Util utils;
+	RecipeBean recipe;
 	public static final String MyPREFERENCES = "MyPrefs";
 	Dialog titleDialog, servesDialog, imageDialog;
 	static Dialog timeDialog;
 	Dialog prepDialog;
 	Dialog ingredDialog;
 	public static final String emailk = "emailKey";
-	ArrayList<preperationBean> prepList, modifiedPrepList;
-	ArrayList<ingredientBean> ingredList, modifiedIngredList;
-	imageBean imgBean;
+	ArrayList<PreperationBean> prepList, modifiedPrepList;
+	ArrayList<IngredientBean> ingredList, modifiedIngredList;
+	ImageBean imgBean;
 	ArrayList<Integer> prepNumEditIds, prepEditIds, amountEditIds, valueEditIds, ingredEditIds, noteEditIds;
 	int id = 1;
 	NavigationDrawerCreation nav;
@@ -126,9 +128,9 @@ public class RecipeEditActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.recipeeditview);
-		utils = new util(getApplicationContext(), this);
-		recipe = new recipeBean();
+		setContentView(R.layout.recipe_view_edit);
+		utils = new Util(getApplicationContext(), this);
+		recipe = new RecipeBean();
 		setStyle();
 		setTextForLayout();
 		String recipename = utils.getTextView(R.id.recipeTitle);
@@ -163,7 +165,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					//set image dialog style
-					imageDialog = utils.createDialog(RecipeEditActivity.this, R.layout.imagedialog);
+					imageDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog7);
 					final TextView errorView = (TextView) imageDialog.findViewById(R.id.errorView);
 					utils.setDialogText(R.id.errorView,imageDialog,16);
 					errorView.setTextColor(Color.parseColor("#F70521"));
@@ -268,7 +270,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				}
 				return false;
 			}});
-		
+
 		ImageView tipsButton = (ImageView) findViewById(R.id.tipsEditImage);
 		tipsButton.setOnTouchListener(new OnTouchListener(){
 
@@ -279,7 +281,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				}
 				return false;
 			}});
-		
+
 		ImageView chefEditButton = (ImageView) findViewById(R.id.chefEditImage);
 		chefEditButton.setOnTouchListener(new OnTouchListener(){
 
@@ -301,7 +303,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					saveRecipe();
-					
+
 				}
 				return false;
 			}});
@@ -340,13 +342,13 @@ public class RecipeEditActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.plain, menu);
+		getMenuInflater().inflate(R.menu.menu_plain, menu);
 		SearchManager searchManager =
-		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
-		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		    searchView.setSearchableInfo(
-		            searchManager.getSearchableInfo(getComponentName()));
+				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(getComponentName()));
 		return true;
 	}
 	@Override
@@ -357,8 +359,8 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-	    
-	    return super.onPrepareOptionsMenu(menu);
+
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	/**
@@ -367,7 +369,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	@Override
 	public void onBackPressed() {
 		//Reminds user to save before leaving page
-		final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.savedialog);
+		final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.general_savedialog);
 		utils.setDialogText(R.id.textView, dialog, 18);
 		// Show dialog
 		dialog.show();
@@ -396,7 +398,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void setStyle()
 	{
-	    utils.setTextPink(R.id.recipeTitle, 26);
+		utils.setTextPink(R.id.recipeTitle, 26);
 		utils.setTextBlackItalic(R.id.recipeDesc, 22);
 		utils.setTextPink(R.id.serves, 22);
 		utils.setTextBlack(R.id.servesVal, 20);
@@ -416,7 +418,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setTextPink(R.id.cusine, 22);
 		utils.setTextBlack(R.id.dietaryVal, 22);
 		utils.setTextPink(R.id.dietary, 22); 
-		
+
 	}
 
 	/**
@@ -424,24 +426,24 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void setTextForLayout()
 	{
-		recipeModel model = new recipeModel(getApplicationContext());
+		RecipeModel model = new RecipeModel(getApplicationContext());
 
-		prepList = new ArrayList<preperationBean>();
-		ingredList = new ArrayList<ingredientBean>();
+		prepList = new ArrayList<PreperationBean>();
+		ingredList = new ArrayList<IngredientBean>();
 		Intent intent = getIntent();
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr"));
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
-	   imgBean = model.selectImages(recipe.getId());
+		imgBean = model.selectImages(recipe.getId());
 		ImageView img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
 		task.execute();
 
 		//Orders instructions in order
 		TextView instructions = (TextView) findViewById(R.id.methodList);
-		Collections.sort(prepList, new Comparator<preperationBean>() {
+		Collections.sort(prepList, new Comparator<PreperationBean>() {
 			@Override 
-			public int compare(preperationBean p1, preperationBean p2) {
+			public int compare(PreperationBean p1, PreperationBean p2) {
 				return p1.getPrepNum() - p2.getPrepNum(); // Ascending
 			}});
 
@@ -472,7 +474,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void getTimeDialog()
 	{
-		timeDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe3editdialog);
+		timeDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog3);
 		utils.setDialogText(R.id.recipeEditView, timeDialog, 22);
 		utils.setDialogText(R.id.recipePrepView, timeDialog, 22);
 		utils.setDialogText(R.id.recipeCookingView, timeDialog, 22);
@@ -498,7 +500,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void getServesDialog()
 	{
-		servesDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe2editdialog);
+		servesDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog2);
 		final TextView errorView = (TextView) servesDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,servesDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -506,19 +508,19 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.recipeServesView, servesDialog, 22);
 		utils.setDialogTextString(R.id.recipeServesEditText, servesDialog, recipe.getServes());
 		utils.setDialogText(R.id.recipeDifficultyView, servesDialog, 22);
-		
+
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("Easy");
 		spinnerArray.add("Medium");
 		spinnerArray.add("Hard");
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				this, R.layout.item, spinnerArray);
+				this, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		final Spinner sItems = (Spinner) servesDialog.findViewById(R.id.recipeDifficultySpinner);
 		sItems.getBackground().setColorFilter(this.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 		sItems.setSelection(utils.getIndex(sItems, recipe.getDifficulty()));
-		
+
 		Button servesButton = utils.setButtonTextDialog(R.id.saveButton, 22, servesDialog);
 		servesButton.setOnClickListener(new OnClickListener(){
 
@@ -544,7 +546,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void getTitleDialog()
 	{
-		titleDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe1editdialog);
+		titleDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog1);
 		final TextView errorView = (TextView) titleDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,titleDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -576,13 +578,13 @@ public class RecipeEditActivity extends ActionBarActivity {
 			}});
 		titleDialog.show();
 	}
-	
+
 	/**
 	 * Creates a title dialog where the user can edit the title dialog
 	 */
 	public void getTipsDialog()
 	{
-		final Dialog tipsDialog = utils.createDialog(RecipeEditActivity.this, R.layout.tipseditdialog);
+		final Dialog tipsDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog6);
 		final TextView errorView = (TextView) tipsDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,tipsDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -594,11 +596,11 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				
-					utils.setTextString(R.id.tips, utils.getTextFromDialog(R.id.recipeTipsEditText, tipsDialog));
-					
-					tipsDialog.dismiss();
-				
+
+				utils.setTextString(R.id.tips, utils.getTextFromDialog(R.id.recipeTipsEditText, tipsDialog));
+
+				tipsDialog.dismiss();
+
 
 			}});
 		tipsDialog.show(); 
@@ -606,7 +608,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 	public void getChefDialog()
 	{
-		final Dialog cusineDialog = utils.createDialog(RecipeEditActivity.this, R.layout.dietarycusinedialog);
+		final Dialog cusineDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog8);
 		final TextView errorView = (TextView) cusineDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,cusineDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -614,7 +616,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.recipeCusineView, cusineDialog, 22);
 		utils.setDialogTextString(R.id.recipeDietaryEditText, cusineDialog, recipe.getDietary());
 		utils.setDialogText(R.id.recipeDietaryView, cusineDialog, 22);
-		
+
 		List<String> cusineSpinnerArray =  new ArrayList<String>();
 		cusineSpinnerArray.add("Italian");
 		cusineSpinnerArray.add("Indian");
@@ -628,23 +630,23 @@ public class RecipeEditActivity extends ActionBarActivity {
 		cusineSpinnerArray.add("Middle Eastern");
 		cusineSpinnerArray.add("Other");
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				this, R.layout.item, cusineSpinnerArray);
+				this, R.layout.general_spinner_item, cusineSpinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		final Spinner sItems = (Spinner) cusineDialog.findViewById(R.id.recipeCusineSpinner);
 		sItems.getBackground().setColorFilter(this.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 		sItems.setSelection(utils.getIndex(sItems, recipe.getCusine()));
-		
+
 		Button cusineButton = utils.setButtonTextDialog(R.id.saveButton, 22, cusineDialog);
 		cusineButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				
-					utils.setTextString(R.id.dietaryVal, utils.getTextFromDialog(R.id.recipeDietaryEditText, cusineDialog));
-					utils.setTextString(R.id.cusineVal, sItems.getSelectedItem().toString());
-					cusineDialog.dismiss();
-				
+
+				utils.setTextString(R.id.dietaryVal, utils.getTextFromDialog(R.id.recipeDietaryEditText, cusineDialog));
+				utils.setTextString(R.id.cusineVal, sItems.getSelectedItem().toString());
+				cusineDialog.dismiss();
+
 
 			}});
 		cusineDialog.show();
@@ -658,7 +660,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	public void getAndCreatePrepDialog()
 	{
 		//Build dialog in linear layout
-		prepDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe4editdialog);
+		prepDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog4);
 		utils.setDialogText(R.id.recipeEditView, prepDialog, 22);
 		prepNumEditIds = new ArrayList<Integer>();
 		prepEditIds = new ArrayList<Integer>();
@@ -721,7 +723,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		okButton.setText("Ok");
 		params.gravity = Gravity.CENTER;
 		okButton.setLayoutParams(params);
-		okButton.setBackgroundResource(R.drawable.button);
+		okButton.setBackgroundResource(R.drawable.drawable_button);
 		prepDialogLinearLayout.addView(okButton);
 		okButton = utils.setButtonTextDialog(buttonId, 16, prepDialog);
 
@@ -739,13 +741,13 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				modifiedPrepList = new ArrayList<preperationBean>();
+				modifiedPrepList = new ArrayList<PreperationBean>();
 				boolean dismissed = false;
 				int a = 0;
 				for(int i = 0; i < prepList.size(); i++)
 				{
 
-					preperationBean prep = new preperationBean();
+					PreperationBean prep = new PreperationBean();
 					if(utils.getTextFromDialog(prepEditIds.get(i), prepDialog).equals(""))
 					{
 						errorView.setText("Please input text into all the textboxes");
@@ -777,9 +779,9 @@ public class RecipeEditActivity extends ActionBarActivity {
 					TextView instructions = (TextView) findViewById(R.id.methodList);
 					instructions.setText("");
 					//Order list
-					Collections.sort(modifiedPrepList, new Comparator<preperationBean>() {
+					Collections.sort(modifiedPrepList, new Comparator<PreperationBean>() {
 						@Override 
-						public int compare(preperationBean p1, preperationBean p2) {
+						public int compare(PreperationBean p1, PreperationBean p2) {
 							return p1.getPrepNum() - p2.getPrepNum(); // Ascending
 						}});
 					//Set on edit page
@@ -802,7 +804,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	@SuppressLint("NewApi")
 	public void getAndCreateIngredDialog()
 	{
-		ingredDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipeingrededitdialog);
+		ingredDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog5);
 		utils.setDialogText(R.id.recipeEditView, ingredDialog, 22);
 		utils.setDialogText(R.id.amountTitleView, ingredDialog, 22);
 		utils.setDialogText(R.id.valueTitleView, ingredDialog, 22);
@@ -854,11 +856,11 @@ public class RecipeEditActivity extends ActionBarActivity {
 			spinnerArray.add(" ");
 
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-					RecipeEditActivity.this, R.layout.item, spinnerArray);
+					RecipeEditActivity.this, R.layout.general_spinner_item, spinnerArray);
 
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			Spinner sItems = new Spinner(RecipeEditActivity.this);
-			 sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+			sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 			sItems.setAdapter(adapter);
 			sItems.setLayoutParams(params);
 
@@ -904,7 +906,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		int buttonId = findId();
 		okButton.setId(buttonId);
 		okButton.setText("Ok");
-		okButton.setBackgroundResource(R.drawable.button);
+		okButton.setBackgroundResource(R.drawable.drawable_button);
 		params.gravity = Gravity.CENTER;
 		okButton.setLayoutParams(params);
 		ingredDialogLinearLayout.addView(okButton);
@@ -924,12 +926,12 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				modifiedIngredList = new ArrayList<ingredientBean>();
+				modifiedIngredList = new ArrayList<IngredientBean>();
 				boolean dismissed = false;
 				int b = 0;
 				for(int i = 0; i < ingredList.size(); i++)
 				{
-					ingredientBean ingred = new ingredientBean();
+					IngredientBean ingred = new IngredientBean();
 					if(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog).equals(""))
 					{
 						errorView.setText("Please input text into all the textboxes");
@@ -980,7 +982,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void saveRecipe()
 	{
-		recipeBean recipechange = new recipeBean();
+		RecipeBean recipechange = new RecipeBean();
 		recipechange.setName(utils.getTextView(R.id.recipeTitle));
 		recipechange.setDesc(utils.getTextView(R.id.recipeDesc));
 		recipechange.setServes(utils.getTextView(R.id.servesVal));
@@ -992,11 +994,11 @@ public class RecipeEditActivity extends ActionBarActivity {
 		recipechange.setDietary(utils.getTextView(R.id.dietaryVal));
 		recipechange.setDifficulty(utils.getTextView(R.id.diffVal));
 		recipechange.setCusine(utils.getTextView(R.id.cusineVal));
-		recipeModel rm = new recipeModel(getApplicationContext());
+		RecipeModel rm = new RecipeModel(getApplicationContext());
 		try
 		{
 			rm.updateRecipe(recipechange, prepList, ingredList, imgBean, false );	
-			final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.textviewdialog);
+			final Dialog dialog = utils.createDialog(RecipeEditActivity.this, R.layout.general_dialog);
 			utils.setDialogText(R.id.textView, dialog, 18);
 			TextView txtView = (TextView) dialog.findViewById(R.id.textView);
 			txtView.setText("Recipe has been saved");
@@ -1052,7 +1054,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 	}
 
-	
+
 
 	/**
 	 * Finds current available id's - found online

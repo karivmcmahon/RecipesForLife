@@ -13,40 +13,41 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.reviewBean;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.ReviewBean;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
 
-public class CustomReviewAdapter extends ArrayAdapter<reviewBean> {
+public class CustomReviewAdapter extends ArrayAdapter<ReviewBean> {
 
 
 	private final Activity activity;
 	Context context;
-	util utils;
-	ArrayList<reviewBean> rb;
+	Util utils;
+	ArrayList<ReviewBean> rb;
 	ImageLoader2 imgload;
-	
-	public CustomReviewAdapter(Context context, Activity activity, ArrayList<reviewBean> reviewbean) {
-		super(context, R.layout.individreview, reviewbean);
+
+	public CustomReviewAdapter(Context context, Activity activity, ArrayList<ReviewBean> reviewbean) {
+		super(context, R.layout.recipe_individreview, reviewbean);
 		this.activity = activity;
 		this.context = context;
 		rb = reviewbean;
 		imgload = new ImageLoader2(this.context);
 		// TODO Auto-generated constructor stub
-		utils = new util(this.context, activity);
+		utils = new Util(this.context, activity);
 	}
-	
+
 	@Override
 	/**
 	 * Adapts list data 
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-		
+
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
-		rowView= inflater.inflate(R.layout.individreview, null, true);
-		
+		rowView= inflater.inflate(R.layout.recipe_individreview, null, true);
+
 
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.comment);
 		txtTitle.setText(rb.get(position).getComment());

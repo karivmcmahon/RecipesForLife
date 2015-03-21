@@ -23,10 +23,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -34,12 +34,12 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
-public class syncRecipeModel extends baseDataSource {
+public class SyncRecipeModel extends BaseDataSource {
 	Context context;
-	recipeModel rm;
+	RecipeModel rm;
 
 
-	public syncRecipeModel(Context context) {
+	public SyncRecipeModel(Context context) {
 		super(context);
 		this.context = context;
 
@@ -50,11 +50,11 @@ public class syncRecipeModel extends baseDataSource {
 	 * Gets recipe to send to server based on date they were added using shared preferecnes
 	 * @return ArrayList<recipeBean> recipeList
 	 */
-	public ArrayList<recipeBean> getRecipe(boolean update)
+	public ArrayList<RecipeBean> getRecipe(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-		ArrayList<recipeBean> recipeList = new ArrayList<recipeBean>();
+		ArrayList<RecipeBean> recipeList = new ArrayList<RecipeBean>();
 		Cursor cursor = null;
 		if(update == true)
 		{
@@ -80,8 +80,8 @@ public class syncRecipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return recipeBean
 	 */
-	public recipeBean cursorToRecipe(Cursor cursor) {
-		recipeBean rb = new recipeBean();
+	public RecipeBean cursorToRecipe(Cursor cursor) {
+		RecipeBean rb = new RecipeBean();
 		rb.setId(cursor.getInt(getIndex("id",cursor)));       
 		rb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		rb.setChangeTime(cursor.getString(getIndex("changeTime", cursor)));
@@ -105,10 +105,10 @@ public class syncRecipeModel extends baseDataSource {
 	 * @param id
 	 * @return ArrayList<IngredientBean>
 	 */
-	public ArrayList<ingredientBean> getIngred(int id)
+	public ArrayList<IngredientBean> getIngred(int id)
 	{
 		open();
-		ArrayList<ingredientBean> ingredientList = new ArrayList<ingredientBean>();
+		ArrayList<IngredientBean> ingredientList = new ArrayList<IngredientBean>();
 		Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ? ", new String[] {   Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -156,9 +156,9 @@ public class syncRecipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return recipeBean
 	 */
-	public ingredientBean cursorToIngredientDetails(Cursor cursor)
+	public IngredientBean cursorToIngredientDetails(Cursor cursor)
 	{
-		ingredientBean ib = new ingredientBean();
+		IngredientBean ib = new IngredientBean();
 		ib.setAmount(cursor.getInt(getIndex("amount", cursor)));
 		ib.setValue(cursor.getString(getIndex("value",cursor)));
 		ib.setNote(cursor.getString(getIndex("note", cursor)));
@@ -172,11 +172,11 @@ public class syncRecipeModel extends baseDataSource {
 	 * @param id
 	 * @return ArrayList<preperationBean>
 	 */
-	public ArrayList<preperationBean> getPrep(int id)
+	public ArrayList<PreperationBean> getPrep(int id)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-		ArrayList<preperationBean> prepList = new ArrayList<preperationBean>();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
 		Cursor cursor = database.rawQuery("SELECT Preperationid FROM PrepRecipe WHERE recipeId = ?", new String[] {   Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -204,9 +204,9 @@ public class syncRecipeModel extends baseDataSource {
 	 * @param cursor
 	 * @return preperationBean
 	 */
-	public preperationBean cursorToPreperation(Cursor cursor)
+	public PreperationBean cursorToPreperation(Cursor cursor)
 	{
-		preperationBean pb = new preperationBean();
+		PreperationBean pb = new PreperationBean();
 		pb.setPreperation(cursor.getString(getIndex("instruction", cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
 		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
@@ -220,9 +220,9 @@ public class syncRecipeModel extends baseDataSource {
 	 */
 	public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	{
-		ArrayList<recipeBean> recipeList = getRecipe(update);
+		ArrayList<RecipeBean> recipeList = getRecipe(update);
 		JSONArray jsonArray = new JSONArray();
-		rm = new recipeModel(context);
+		rm = new RecipeModel(context);
 		for(int i = 0; i < recipeList.size(); i++)
 		{
 			JSONObject recipe = new JSONObject();		
@@ -235,10 +235,10 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			recipe.put("changeTime", recipeList.get(i).getChangeTime());
 			recipe.put("uniqueid", recipeList.get(i).getUniqueid());
-			cookbookModel model = new cookbookModel(context);
+			CookbookModel model = new CookbookModel(context);
 			String id = model.selectCookbooksUniqueID(recipeList.get(i).getId());
 			recipe.put("cookbookid", id);
-			imageBean image = rm.selectImages(recipeList.get(i).getId());
+			ImageBean image = rm.selectImages(recipeList.get(i).getId());
 			String stringToStore = new String(Base64.encode(image.getImage(), Base64.DEFAULT));
 			recipe.put("image", stringToStore);
 			recipe.put("imageid", image.getUniqueid());
@@ -248,7 +248,7 @@ public class syncRecipeModel extends baseDataSource {
 			recipe.put("tips", recipeList.get(i).getTips());
 			recipe.put("cusine", recipeList.get(i).getCusine());
 
-			ArrayList<preperationBean> prepList = getPrep(recipeList.get(i).getId());
+			ArrayList<PreperationBean> prepList = getPrep(recipeList.get(i).getId());
 			JSONArray prepStepArray = new JSONArray();
 			JSONArray prepNumArray = new JSONArray();
 			JSONArray prepIdArray = new JSONArray();
@@ -269,7 +269,7 @@ public class syncRecipeModel extends baseDataSource {
 			newObj.put("uniqueid", prepIdArray);
 			recipe.accumulate("Preperation", newObj );
 
-			ArrayList<ingredientBean> ingredList = getIngred(recipeList.get(i).getId());
+			ArrayList<IngredientBean> ingredList = getIngred(recipeList.get(i).getId());
 
 			JSONArray ingredarray = new JSONArray();
 			JSONArray valuearray = new JSONArray();
@@ -361,7 +361,7 @@ public class syncRecipeModel extends baseDataSource {
 
 
 				json = jArray.getJSONObject(i);
-				recipeBean recipe = new recipeBean();
+				RecipeBean recipe = new RecipeBean();
 				recipe.setName( json.getString("name"));
 				recipe.setDesc(json.getString("description"));
 				recipe.setServes(json.getString("serves"));
@@ -374,7 +374,7 @@ public class syncRecipeModel extends baseDataSource {
 				recipe.setDietary(json.getString("dietary"));
 				recipe.setTips(json.getString("tips"));
 				recipe.setCusine(json.getString("cusine"));
-				imageBean imgbean = new imageBean();
+				ImageBean imgbean = new ImageBean();
 				if(json.optString("image").equals(""))
 				{
 					byte[] emptyarr = new byte[0];
@@ -386,17 +386,17 @@ public class syncRecipeModel extends baseDataSource {
 				}
 				imgbean.setUniqueid(json.optString("imageid"));
 
-				cookbookModel cbmodel = new cookbookModel(context);
+				CookbookModel cbmodel = new CookbookModel(context);
 				String cookingid = "";
 				//if(json.has("cookingid"))
 				//{
-				
+
 				cookingid = json.optString("cookingid");
 				Log.v("recipe", "recipe " + recipe.getName() + " id " + cookingid);
-				
+
 				recipe.setRecipeBook(cookingid);
 
-				ArrayList<ingredientBean> ingredBeanList = new ArrayList<ingredientBean>();
+				ArrayList<IngredientBean> ingredBeanList = new ArrayList<IngredientBean>();
 				JSONArray ingredArray = (JSONArray) json.get("Ingredient");
 				for(int a = 0; a < ingredArray.length(); a++)
 				{
@@ -408,7 +408,7 @@ public class syncRecipeModel extends baseDataSource {
 					JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
 					for(int b = 0; b < ingredsArray.length(); b++)
 					{
-						ingredientBean ingredBean = new ingredientBean();
+						IngredientBean ingredBean = new IngredientBean();
 						ingredBean.setName(ingredsArray.get(b).toString());
 						ingredBean.setNote(notesArray.get(b).toString());
 						ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
@@ -419,7 +419,7 @@ public class syncRecipeModel extends baseDataSource {
 				}
 
 				JSONArray preperationArray = (JSONArray) json.get("Preperation");
-				ArrayList<preperationBean> prepBeanList = new ArrayList<preperationBean>();
+				ArrayList<PreperationBean> prepBeanList = new ArrayList<PreperationBean>();
 				for(int c = 0; c < preperationArray.length(); c++)
 				{
 					JSONObject prepObject =  preperationArray.getJSONObject(c);
@@ -428,14 +428,14 @@ public class syncRecipeModel extends baseDataSource {
 					JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
 					for(int d = 0; d < prepArray.length(); d++)
 					{
-						preperationBean prepBean = new preperationBean();
+						PreperationBean prepBean = new PreperationBean();
 						prepBean.setPreperation(prepArray.get(d).toString());
 						prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
 						prepBean.setUniqueid(idArray.get(d).toString());
 						prepBeanList.add(prepBean);
 					}
 				}
-				recipeModel model = new recipeModel(context);
+				RecipeModel model = new RecipeModel(context);
 
 				if(update == true)
 				{

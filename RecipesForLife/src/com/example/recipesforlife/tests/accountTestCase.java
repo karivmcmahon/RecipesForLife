@@ -19,12 +19,12 @@ import java.util.List;
 
 
 
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.controllers.userBean;
-import com.example.recipesforlife.models.accountModel;
-import com.example.recipesforlife.models.baseDataSource;
-import com.example.recipesforlife.models.databaseConnection;
-import com.example.recipesforlife.models.syncModel;
+import com.example.recipesforlife.controllers.AccountBean;
+import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.models.AccountModel;
+import com.example.recipesforlife.models.BaseDataSource;
+import com.example.recipesforlife.models.DatabaseConnection;
+import com.example.recipesforlife.models.SyncModel;
 
 import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
@@ -44,9 +44,9 @@ import junit.framework.TestCase;
  *
  */
 public class accountTestCase extends AndroidTestCase  {
-	syncModel sync;
-	accountModel accountmodel;
-	databaseConnection dbConnection;
+	SyncModel sync;
+	AccountModel accountmodel;
+	DatabaseConnection dbConnection;
 	Resources resources;
 	RenamingDelegatingContext context;
 
@@ -55,7 +55,7 @@ public class accountTestCase extends AndroidTestCase  {
 		super.setUp();
 		context 
 		= new RenamingDelegatingContext(getContext(), "test_");
-		accountmodel = new accountModel(context);
+		accountmodel = new AccountModel(context);
 		copyDataBase();
 
 	}
@@ -105,13 +105,13 @@ public class accountTestCase extends AndroidTestCase  {
 
 	public void testAccountInsert() throws Exception
 	{
-		List<accountBean> account = new ArrayList<accountBean>();
-		List<userBean> user = new ArrayList<userBean>();
+		List<AccountBean> account = new ArrayList<AccountBean>();
+		List<UserBean> user = new ArrayList<UserBean>();
 
-		accountBean anAccount = new accountBean();
+		AccountBean anAccount = new AccountBean();
 		anAccount.setEmail("hilz@aol.co.uk");
 		anAccount.setPassword("whisk");
-		userBean anUser = new userBean();
+		UserBean anUser = new UserBean();
 		anUser.setName("Hilary");
 		anUser.setCity("Edinburgh");
 		anUser.setCookingInterest("Home cook");
@@ -129,10 +129,10 @@ public class accountTestCase extends AndroidTestCase  {
 		Throwable caught = null;
 		try
 		{
-			List<accountBean> account = new ArrayList<accountBean>();
-			List<userBean> user = new ArrayList<userBean>();
-			accountBean anAccount = new accountBean();
-			userBean anUser = new userBean();
+			List<AccountBean> account = new ArrayList<AccountBean>();
+			List<UserBean> user = new ArrayList<UserBean>();
+			AccountBean anAccount = new AccountBean();
+			UserBean anUser = new UserBean();
 			anAccount.setEmail("hilz@aol.co.uk");
 			anAccount.setPassword("whisk");
 			anUser.setName(null);
@@ -155,7 +155,7 @@ public class accountTestCase extends AndroidTestCase  {
 
 	public void testGetUser() throws Exception
 	{
-		List<userBean> user = new ArrayList<userBean>();
+		List<UserBean> user = new ArrayList<UserBean>();
 		user = accountmodel.selectUser(1);
 		Assert.assertEquals(user.get(0).getName(), "doe");
 		user = accountmodel.selectUser(10000000);
@@ -165,7 +165,7 @@ public class accountTestCase extends AndroidTestCase  {
 
 	public void testGetAccount() throws Exception
 	{
-		List<accountBean> account = new ArrayList<accountBean>();
+		List<AccountBean> account = new ArrayList<AccountBean>();
 		account = accountmodel.selectAccount("doe", "doe");
 		Assert.assertEquals(account.get(0).getEmail(), "doe");
 		account = accountmodel.selectAccount("danny", "vause");

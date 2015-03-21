@@ -15,9 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.recipesforlife.controllers.contributerBean;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.recipeBean;
+import com.example.recipesforlife.controllers.ContributerBean;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import android.content.Context;
@@ -32,12 +32,12 @@ import android.widget.Toast;
  * @author Kari
  *
  */
-public class syncContributersModel extends baseDataSource {
+public class SyncContributersModel extends BaseDataSource {
 
 	Context context;
 
 
-	public syncContributersModel(Context context) {
+	public SyncContributersModel(Context context) {
 		super(context);
 		this.context = context;
 	}
@@ -47,11 +47,11 @@ public class syncContributersModel extends baseDataSource {
 	 * @param update
 	 * @return List of contributers
 	 */
-	public ArrayList<contributerBean> getContribs(boolean update)
+	public ArrayList<ContributerBean> getContribs(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-		ArrayList<contributerBean> contribList = new ArrayList<contributerBean>();
+		ArrayList<ContributerBean> contribList = new ArrayList<ContributerBean>();
 		Cursor cursor = null;
 		if(update == true)
 		{
@@ -71,9 +71,9 @@ public class syncContributersModel extends baseDataSource {
 				String change = cursor.getString(getIndex("changeTime", cursor));
 				String progress = cursor.getString(getIndex("progress", cursor));
 
-				cookbookModel bookmodel = new cookbookModel(context);
+				CookbookModel bookmodel = new CookbookModel(context);
 				String uid = bookmodel.selectCookbooksByRowID(cookbookid);
-				contributerBean contrib = new contributerBean();
+				ContributerBean contrib = new ContributerBean();
 				contrib.setAccount(account);
 				contrib.setBookUniqId(uid);
 				contrib.setChangeTime(change);
@@ -96,7 +96,7 @@ public class syncContributersModel extends baseDataSource {
 	 */
 	public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	{
-		ArrayList<contributerBean> contribs = getContribs(update);
+		ArrayList<ContributerBean> contribs = getContribs(update);
 		JSONArray jsonArray = new JSONArray();
 
 		for(int i = 0; i < contribs.size(); i++)
@@ -230,7 +230,7 @@ public class syncContributersModel extends baseDataSource {
 				String uniqid  = json.getString("bookid");
 				String email = json.getString("email");
 				String progress = json.getString("progress");
-				cookbookModel model = new cookbookModel(context);
+				CookbookModel model = new CookbookModel(context);
 				int id = model.selectCookbooksIDByUnique(uniqid);
 				if(update == true)
 				{

@@ -29,13 +29,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.controllers.userBean;
-import com.example.recipesforlife.models.PostTask;
-import com.example.recipesforlife.models.accountModel;
-import com.example.recipesforlife.models.databaseConnection;
-import com.example.recipesforlife.models.util;
-import com.example.recipesforlife.models.passwordHashing;
+import com.example.recipesforlife.controllers.AccountBean;
+import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.models.AccountModel;
+import com.example.recipesforlife.models.DatabaseConnection;
+import com.example.recipesforlife.util.PostTask;
+import com.example.recipesforlife.util.Util;
+import com.example.recipesforlife.util.PasswordHashing;
 
 /**
  * Class that handles the sign in/sign up page that is showed initially
@@ -48,15 +48,15 @@ public class SignUpSignInActivity extends Activity {
 	String email, name, password, country, city, interest, bio;
 	// List to store account information
 	List<String> account;
-	accountBean accountBean;
-	userBean userBean;
+	AccountBean accountBean;
+	UserBean userBean;
 	// Typeface to change to custom font
 	Typeface typeFace;
 	// Shared prefs to store log in data
 	public static final String MyPREFERENCES = "MyPrefs";
 	public static final String emailk = "emailKey";
 	public static final String pass = "passwordKey";
-	util utils;
+	Util utils;
 	int counter;
 	SharedPreferences sharedpreferences;
 	Context context;
@@ -68,10 +68,10 @@ public class SignUpSignInActivity extends Activity {
 		.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		counter = 0;
-		setContentView(R.layout.signupsigninactivity);
-		utils = new util(getApplicationContext(), this);
-		accountBean = new accountBean();
-		userBean = new userBean();
+		setContentView(R.layout.signup_view);
+		utils = new Util(getApplicationContext(), this);
+		accountBean = new AccountBean();
+		userBean = new UserBean();
 		context = getApplicationContext();
 		// Get shared pref
 		sharedpreferences = getSharedPreferences(MyPREFERENCES,
@@ -85,31 +85,31 @@ public class SignUpSignInActivity extends Activity {
 			//Dates for account syncing
 			editor2.putString("Account Date", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			//Dates for recipe syncing
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			editor2.putString("Change", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			//Dates for cookbook syncing
 			editor2.putString("Cookbook", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			editor2.putString("Cookbook Update", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			//Dates for contribs syncing
 			editor2.putString("Contributers", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			editor2.putString("Contributers Update", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			editor2.putString("Review", "2015-01-01 12:00:00");
 			editor2.commit();
-			
+
 			buildDatabase();
 			new PostTask(utils, context, false).execute();
 		} else {
@@ -145,7 +145,7 @@ public class SignUpSignInActivity extends Activity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					account = new ArrayList<String>();
 					// Creates a custom dialog
-					final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.signupcustomdialog);
+					final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.signup_dialog1);
 
 					// Set dialogs style
 					utils.setDialogText(R.id.nameView, dialog, 22);
@@ -166,7 +166,7 @@ public class SignUpSignInActivity extends Activity {
 							if (show == true) {
 								// Show another dialog
 								final Dialog nextDialog = utils.createDialog(
-										SignUpSignInActivity.this, R.layout.signupnextcustomdialog);
+										SignUpSignInActivity.this, R.layout.signup_dialog2);
 
 								// Set style
 								utils.setDialogText(R.id.additionalView,
@@ -205,7 +205,7 @@ public class SignUpSignInActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
 		return true;
 	}
 
@@ -231,7 +231,7 @@ public class SignUpSignInActivity extends Activity {
 	 * Build database
 	 */
 	public void buildDatabase() {
-		databaseConnection dbConnection = new databaseConnection(this);
+		DatabaseConnection dbConnection = new DatabaseConnection(this);
 		dbConnection.deleteDatabase();
 		try {
 			dbConnection.createDataBase();
@@ -245,14 +245,14 @@ public class SignUpSignInActivity extends Activity {
 	 * Checks the details entered is a valid account and logs them in
 	 */
 	public void checkLogin() {
-		passwordHashing ph = new passwordHashing();
-		
+		PasswordHashing ph = new PasswordHashing();
+
 		String email = utils.getText(R.id.editText1);
 		String password =  utils.getText(R.id.editText2);
 
 		// Check if these details are correct
 		Context t = getApplicationContext();
-		accountModel accountmodel = new accountModel(t);
+		AccountModel accountmodel = new AccountModel(t);
 		boolean access = accountmodel.logIn(email, password);
 		// If allowed access save pref
 		if (access == true) {
@@ -265,7 +265,7 @@ public class SignUpSignInActivity extends Activity {
 			Intent i = new Intent(SignUpSignInActivity.this, CookbookListActivity.class);
 			startActivity(i);
 		} else {
-			final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.textviewdialog);
+			final Dialog dialog = utils.createDialog(SignUpSignInActivity.this, R.layout.general_dialog);
 
 			// Set dialogs style
 			utils.setDialogText(R.id.textView, dialog, 18);
@@ -293,24 +293,24 @@ public class SignUpSignInActivity extends Activity {
 	 */
 	public boolean getInitialDialogInfo(Dialog dialog) {
 
-		passwordHashing ph = new passwordHashing();
+		PasswordHashing ph = new PasswordHashing();
 		TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView, dialog, 16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
 
 		email = utils.getTextFromDialog(R.id.emailEdit, dialog);
 		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
-	
+
 		name = utils.getTextFromDialog(R.id.nameEdit, dialog);
 		//http://www.mkyong.com/regular-expressions/how-to-validate-password-with-regular-expression/
-        String passwordregex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%-_]).{6,12})";
-        //http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
-        String emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"	+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	
-        
-        Context t = getApplicationContext();
-		accountModel accountmodel = new accountModel(t);
-	
+		String passwordregex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%-_]).{6,12})";
+		//http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
+		String emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"	+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+
+		Context t = getApplicationContext();
+		AccountModel accountmodel = new AccountModel(t);
+
 		if (accountmodel.checkEmail(email) == true) {
 			errorView.setText("Email already in use \n");
 		} else if (email.equals("")) {
@@ -321,7 +321,7 @@ public class SignUpSignInActivity extends Activity {
 		} else if (password.equals("")) {
 			errorView.setText("Please enter a password \n");
 		}
-		 else if(!password.matches(passwordregex))
+		else if(!password.matches(passwordregex))
 		{
 			errorView.setText("The password should contain 1 uppercase, 1 lowercase, 1 special characters and a digit. \n The password should be between 6-12 characters");
 		} else if (name.equals("")) {
@@ -357,7 +357,7 @@ public class SignUpSignInActivity extends Activity {
 		} else {
 			// Add info to list
 			accountBean.setEmail(email);
-			passwordHashing ph = new passwordHashing();
+			PasswordHashing ph = new PasswordHashing();
 			try {
 				accountBean.setPassword(ph.createHash(password));
 			} catch (NoSuchAlgorithmException e1) {
@@ -374,7 +374,7 @@ public class SignUpSignInActivity extends Activity {
 			userBean.setCookingInterest(interest);
 			// Insert to db
 			try {
-				accountModel accountmodel = new accountModel(getApplicationContext());
+				AccountModel accountmodel = new AccountModel(getApplicationContext());
 				accountmodel.insertAccount(accountBean, userBean, false);
 				nextDialog.dismiss();
 

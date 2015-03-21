@@ -7,21 +7,24 @@ import java.util.ArrayList;
  * @author Kari
  *
  */
-public class recipeBean {
-	String name;
-	int id;
-	String desc;
-	String recipeBook;
-	String prep;
-	String serves;
-	String cooking;
-	String changeTime;
-	String uniqueid;
-	ArrayList<String> ingredIdList;
-	String cookbookId;
-	byte image[];
-	String progress;
-	String cusine;
+public class RecipeBean {
+	String name; //name of recipe
+	int id; //recipes id in db
+	String desc; //description of recipe
+	String recipeBook; //unique id of recipe book which contains this recipe
+	String prep; //recipe preparation time
+	String serves; //recipe serves number
+	String cooking; //recipe cooking time
+	String changeTime; //time when recipe was updated 
+	String uniqueid; //recipe unique id
+	byte image[]; //image relating to recipe
+	String progress; //progress of recipe e.g. added, deleted
+	String cusine; //cuisine type of recipe
+	String difficulty;  //difficulty of recipe
+	String tips; //recipe tips
+	String dietary; //recipe dietary requirements
+
+	
 	public String getCusine() {
 		return cusine;
 	}
@@ -46,11 +49,7 @@ public class recipeBean {
 	public void setDietary(String dietary) {
 		this.dietary = dietary;
 	}
-	String difficulty;
-	String tips;
-	String dietary;
-	
-	
+
 	public String getProgress() {
 		return progress;
 	}
@@ -63,18 +62,7 @@ public class recipeBean {
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
-	public String getCookbookId() {
-		return cookbookId;
-	}
-	public void setCookbookId(String cookbookId) {
-		this.cookbookId = cookbookId;
-	}
-	public ArrayList<String> getIngredIdList() {
-		return ingredIdList;
-	}
-	public void setIngredIdList(ArrayList<String> ingredIdList) {
-		this.ingredIdList = ingredIdList;
-	}
+
 	public ArrayList<String> getPrepIdList() {
 		return prepIdList;
 	}
@@ -82,7 +70,7 @@ public class recipeBean {
 		this.prepIdList = prepIdList;
 	}
 	ArrayList<String> prepIdList;
-	
+
 	public String getUniqueid() {
 		return uniqueid;
 	}
@@ -115,7 +103,7 @@ public class recipeBean {
 		this.updateTime = updateTime;
 	}
 	String updateTime;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -152,6 +140,6 @@ public class recipeBean {
 	public void setCooking(String cooking) {
 		this.cooking = cooking;
 	}
-	
+
 
 }

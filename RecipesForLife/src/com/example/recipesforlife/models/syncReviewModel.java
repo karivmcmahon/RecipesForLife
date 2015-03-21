@@ -22,28 +22,28 @@ import android.database.SQLException;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.reviewBean;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.ReviewBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
-public class syncReviewModel  extends baseDataSource {
+public class SyncReviewModel  extends BaseDataSource {
 	Context context;
 
 
-	public syncReviewModel(Context context) {
+	public SyncReviewModel(Context context) {
 		super(context);
 		this.context = context;
 		// TODO Auto-generated constructor stub
 	}
 
 
-	public ArrayList<reviewBean> getReviews()
+	public ArrayList<ReviewBean> getReviews()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		Cursor cursor;
-		ArrayList<reviewBean> rbList = new ArrayList<reviewBean>();
+		ArrayList<ReviewBean> rbList = new ArrayList<ReviewBean>();
 		cursor = database.rawQuery("SELECT * FROM Review WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Review", "DEFAULT") });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -73,8 +73,8 @@ public class syncReviewModel  extends baseDataSource {
 		return uniqueid;
 	}
 
-	public reviewBean cursorToReview(Cursor cursor) {
-		reviewBean rb = new reviewBean();
+	public ReviewBean cursorToReview(Cursor cursor) {
+		ReviewBean rb = new ReviewBean();
 		rb.setComment(cursor.getString(getIndex("review", cursor)));
 		rb.setUser(cursor.getString(getIndex("accountid", cursor)));
 		rb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
@@ -86,7 +86,7 @@ public class syncReviewModel  extends baseDataSource {
 
 	public void getAndCreateJSON() throws JSONException, IOException
 	{
-		ArrayList<reviewBean> reviewList = getReviews();
+		ArrayList<ReviewBean> reviewList = getReviews();
 		JSONArray jsonArray = new JSONArray();
 		for(int i = 0; i < reviewList.size(); i++)
 		{
@@ -186,13 +186,13 @@ public class syncReviewModel  extends baseDataSource {
 
 
 				json = jArray.getJSONObject(i);
-				reviewBean review = new reviewBean();
+				ReviewBean review = new ReviewBean();
 				review.setComment(json.getString("comment"));
 				review.setUser(json.getString("user"));
-				recipeModel rm = new recipeModel(context);
-				recipeBean recipebean = rm.selectRecipe2(json.getString("recipeuniqueid"));
+				RecipeModel rm = new RecipeModel(context);
+				RecipeBean recipebean = rm.selectRecipe2(json.getString("recipeuniqueid"));
 				review.setRecipeid(recipebean.getId());
-				reviewModel model = new reviewModel(context);
+				ReviewModel model = new ReviewModel(context);
 				try
 				{
 					model.insertReview(review, true);

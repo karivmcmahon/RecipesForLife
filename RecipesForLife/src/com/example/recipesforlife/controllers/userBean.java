@@ -5,15 +5,16 @@ package com.example.recipesforlife.controllers;
  * @author Kari
  *
  */
-public class userBean {
-	String name;
-	String country;
-	String city;
-	String bio;
-	int id;
-	String cookingInterest;
-	String email;
+public class UserBean {
 	
+	String name; //name of the user
+	String country; //country they are in
+	String city; //city they are in
+	String bio; //something about themselves
+	int id; //row id in db
+	String cookingInterest; //users cooking interest
+	String email; //users email
+
 	public String getEmail() {
 		return email;
 	}
@@ -56,8 +57,8 @@ public class userBean {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
-	
+
+
+
 
 }

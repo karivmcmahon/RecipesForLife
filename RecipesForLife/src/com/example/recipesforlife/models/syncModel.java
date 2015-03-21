@@ -21,8 +21,8 @@ import android.database.SQLException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.recipesforlife.controllers.accountBean;
-import com.example.recipesforlife.controllers.userBean;
+import com.example.recipesforlife.controllers.AccountBean;
+import com.example.recipesforlife.controllers.UserBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -30,10 +30,10 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
-public class syncModel extends baseDataSource
+public class SyncModel extends BaseDataSource
 {
 	Context context;
-	public syncModel(Context context) {
+	public SyncModel(Context context) {
 		super(context);
 		this.context = context;
 		// TODO Auto-generated constructor stub
@@ -43,11 +43,11 @@ public class syncModel extends baseDataSource
 	 * Gets	the users that have been added after last sync datetime
 	 * @return the list of users
 	 */
-	public ArrayList<userBean> getUsers()
+	public ArrayList<UserBean> getUsers()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
-		ArrayList<userBean> userList = new ArrayList<userBean>();
+		ArrayList<UserBean> userList = new ArrayList<UserBean>();
 		Cursor cursor;
 		cursor = database.rawQuery("SELECT * FROM Users WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Account Date", "DEFAULT")});
 		if (cursor != null && cursor.getCount() > 0) {
@@ -65,12 +65,12 @@ public class syncModel extends baseDataSource
 	 * Gets the accounts that have been added after last sync datetime
 	 * @return the list of accounts
 	 */
-	public ArrayList<accountBean> getAccount()
+	public ArrayList<AccountBean> getAccount()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		///	Log.v("Date server ", "Date server " + sharedpreferences.getString("Date Server", "DEFAULT"), sharedpreferences.getString("Date", "DEFAULT"));
 		open();
-		ArrayList<accountBean> accountList = new ArrayList<accountBean>();
+		ArrayList<AccountBean> accountList = new ArrayList<AccountBean>();
 		Cursor cursor;
 		cursor = database.rawQuery("SELECT * FROM Account WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Account Date", "DEFAULT") });        
 		if (cursor != null && cursor.getCount() > 0) {
@@ -89,8 +89,8 @@ public class syncModel extends baseDataSource
 	 * @param cursor
 	 * @return accountBean
 	 */
-	public accountBean cursorToAccount(Cursor cursor) {
-		accountBean ab = new accountBean();
+	public AccountBean cursorToAccount(Cursor cursor) {
+		AccountBean ab = new AccountBean();
 		ab.setId(cursor.getInt(getIndex("id",cursor)));       
 		ab.setEmail(cursor.getString(getIndex("email", cursor)));
 		ab.setPassword(cursor.getString(getIndex("password", cursor)));
@@ -103,8 +103,8 @@ public class syncModel extends baseDataSource
 	 * @param cursor
 	 * @return userBean
 	 */
-	public userBean cursorToUser(Cursor cursor) {
-		userBean ub = new userBean();
+	public UserBean cursorToUser(Cursor cursor) {
+		UserBean ub = new UserBean();
 		ub.setId(cursor.getInt(getIndex("id",cursor)));       
 		ub.setName(cursor.getString(getIndex("name", cursor)));
 		ub.setBio(cursor.getString(getIndex("bio", cursor)));
@@ -121,8 +121,8 @@ public class syncModel extends baseDataSource
 	 */
 	public void getAndCreateAccountJSON() throws JSONException, IOException
 	{
-		ArrayList<userBean> userList = getUsers();
-		ArrayList<accountBean> accountList = getAccount();
+		ArrayList<UserBean> userList = getUsers();
+		ArrayList<AccountBean> accountList = getAccount();
 		JSONArray jsonArray = new JSONArray();
 
 		for(int i = 0; i < accountList.size(); i++)
@@ -233,8 +233,8 @@ public class syncModel extends baseDataSource
 				json = jArray.getJSONObject(0);
 				for (int i = 0; i < jArray.length(); i++) 
 				{
-					accountBean account = new accountBean();
-					userBean user = new userBean();
+					AccountBean account = new AccountBean();
+					UserBean user = new UserBean();
 					json = jArray.getJSONObject(i);
 					account.setEmail(json.getString("email"));
 					account.setPassword(json.getString("password"));
@@ -243,7 +243,7 @@ public class syncModel extends baseDataSource
 					user.setCity(json.getString("city"));
 					user.setCookingInterest(json.getString("cookingInterest"));
 					user.setCountry(json.getString("country"));
-					accountModel accountmodel = new accountModel(context);
+					AccountModel accountmodel = new AccountModel(context);
 					try
 					{
 						accountmodel.insertAccount(account, user, true);

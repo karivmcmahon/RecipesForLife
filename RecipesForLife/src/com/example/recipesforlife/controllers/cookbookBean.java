@@ -5,15 +5,15 @@ package com.example.recipesforlife.controllers;
  * @author Kari
  *
  */
-public class cookbookBean {
-	String name;
-	String description;
-	String privacy;
-	String creator;
-	String uniqueid;
-	byte[] image;
-	String progress;
-	
+public class CookbookBean {
+	String name; //cookbooks name
+	String description; //cookbooks description
+	String privacy; //cookbooks privacy setting
+	String creator; // who created the cookbook
+	String uniqueid; //cookbooks uniqueid
+	byte[] image; //cookbooks image
+	String progress; //cookbooks progress e.g. added, deleted
+
 	public String getProgress() {
 		return progress;
 	}
@@ -40,7 +40,7 @@ public class cookbookBean {
 	}
 	String updateTime;
 	String changeTime;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -71,6 +71,6 @@ public class cookbookBean {
 	public void setUniqueid(String uniqueid) {
 		this.uniqueid = uniqueid;
 	}
-	
+
 
 }

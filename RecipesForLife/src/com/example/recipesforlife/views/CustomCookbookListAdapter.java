@@ -28,10 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.models.accountModel;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.models.AccountModel;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
 
 public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	private final Activity activity;
@@ -41,10 +42,10 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
-	util utils;
+	Util utils;
 	CustomContribListAdapter adapter2;
 	boolean isCreator = false;
-	cookbookModel model;
+	CookbookModel model;
 	ImageLoader2 imgload;
 	EditCookbookView edit;
 
@@ -57,14 +58,14 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	 */
 	public CustomCookbookListAdapter(Activity activity , ArrayList<String> booknames, Context context, ArrayList<String> bookids, ArrayList<byte[]> bookimages)
 	{
-		super(context, R.layout.contriblistsingle, booknames);
+		super(context, R.layout.contributers_listitem, booknames);
 		this.activity = activity;
 		this.context = context;
 		this.booknames = booknames;
 		this.bookids = bookids;
 		this.bookimages = bookimages;
-		utils = new util(this.context, activity);
-		model = new cookbookModel(context);
+		utils = new Util(this.context, activity);
+		model = new CookbookModel(context);
 		imgload = new ImageLoader2(context);
 
 	}
@@ -76,7 +77,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-		
+
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Gets cookbook creator and checks if their creator - determines what images are shown
 		String creator = model.creatorForCookbook(bookids.get(position));
@@ -93,11 +94,11 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 		//Depending on if the bookname is empty or not display an empty row or a cookbook row
 		if(booknames.get(position).toString().equals(""))
 		{
-			rowView= inflater.inflate(R.layout.emptyrow, null, true);
+			rowView= inflater.inflate(R.layout.general_listview_emptyrow, null, true);
 		}
 		else
 		{
-			rowView= inflater.inflate(R.layout.cookbooklistsingle, null, true);
+			rowView= inflater.inflate(R.layout.cookbook_display, null, true);
 
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
 			txtTitle.setText(booknames.get(position));
@@ -111,18 +112,18 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 			}
 			else
 			{
-			editButton.setOnTouchListener(new OnTouchListener(){
+				editButton.setOnTouchListener(new OnTouchListener(){
 
-				@Override
-				public boolean onTouch(View arg0, MotionEvent arg1) {
-					// TODO Auto-generated method stub
-					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
-					{
-						edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
-						edit.editBook();
-					}
-					return false;
-				}});
+					@Override
+					public boolean onTouch(View arg0, MotionEvent arg1) {
+						// TODO Auto-generated method stub
+						if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
+						{
+							edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
+							edit.editBook();
+						}
+						return false;
+					}});
 			}
 
 			//Show contributors dialog
@@ -156,12 +157,12 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 						i.putExtra("type", "view");
 						i.putExtra("bookname", booknames.get(position));
 						imgload.clearCache();
-			            notifyDataSetChanged();
+						notifyDataSetChanged();
 						activity.startActivity(i);
 					}
 					return false;
 				}});
-			
+
 			//Show edit cookbook dialog
 			ImageView delButton = (ImageView) rowView.findViewById(R.id.delView);
 			if(isCreator == false)
@@ -174,55 +175,55 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-					// TODO Auto-generated method stub
-					final Dialog dialog = utils.createDialog(activity, R.layout.savedialog);
-					utils.setDialogText(R.id.textView, dialog, 18);
-					TextView tv = (TextView) dialog.findViewById(R.id.textView);
-					tv.setText("Would you like to delete this cookbook ?");
-					// Show dialog
-					dialog.show();
-					
-					//Deletes users and dismiss dialog
-					Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
-					yesButton.setOnClickListener(new OnClickListener() {
+						// TODO Auto-generated method stub
+						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
+						utils.setDialogText(R.id.textView, dialog, 18);
+						TextView tv = (TextView) dialog.findViewById(R.id.textView);
+						tv.setText("Would you like to delete this cookbook ?");
+						// Show dialog
+						dialog.show();
 
-						@Override
-						public void onClick(View arg0) {
-							cookbookModel model = new cookbookModel(context);
-							ArrayList<cookbookBean> cbBean = model.selectCookbook(bookids.get(position));
-							cbBean.get(0).setProgress("deleted");
-							try
-							{
-							model.updateBook( cbBean.get(0), false);
-							booknames.remove(position);
-							bookids.remove(position);
-							bookimages.remove(position);
-							notifyDataSetChanged();
-							}
-							catch(SQLiteException e)
-							{
-								Toast.makeText(context, "Cookbook was not deleted", Toast.LENGTH_LONG).show();
-							}
-							dialog.dismiss();
-						}
-					});
-					
-					//If user selects no - dismiss dialog
-					Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
-					noButton.setOnClickListener(new OnClickListener() {
+						//Deletes users and dismiss dialog
+						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+						yesButton.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View arg0) {
-							dialog.dismiss();
-						}
-					});
+							@Override
+							public void onClick(View arg0) {
+								CookbookModel model = new CookbookModel(context);
+								ArrayList<CookbookBean> cbBean = model.selectCookbook(bookids.get(position));
+								cbBean.get(0).setProgress("deleted");
+								try
+								{
+									model.updateBook( cbBean.get(0), false);
+									booknames.remove(position);
+									bookids.remove(position);
+									bookimages.remove(position);
+									notifyDataSetChanged();
+								}
+								catch(SQLiteException e)
+								{
+									Toast.makeText(context, "Cookbook was not deleted", Toast.LENGTH_LONG).show();
+								}
+								dialog.dismiss();
+							}
+						});
+
+						//If user selects no - dismiss dialog
+						Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+						noButton.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View arg0) {
+								dialog.dismiss();
+							}
+						});
 					}
 					return false;
 				}});
 		}
 		return rowView;
 	}
-	
+
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 		edit.resultRecieved( requestCode,  resultCode, imageReturnedIntent);

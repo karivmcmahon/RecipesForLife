@@ -22,7 +22,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.recipesforlife.controllers.cookbookBean;
+import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 /**
@@ -30,11 +30,11 @@ import com.example.recipesforlife.views.SignUpSignInActivity;
  * @author Kari
  *
  */
-public class syncCookbookModel extends baseDataSource {
+public class SyncCookbookModel extends BaseDataSource {
 	Context context;
 
 
-	public syncCookbookModel(Context context) {
+	public SyncCookbookModel(Context context) {
 		super(context);
 		this.context = context;
 		// TODO Auto-generated constructor stub
@@ -44,12 +44,12 @@ public class syncCookbookModel extends baseDataSource {
 	 * Get cookbooks inserted within a certain time frame
 	 * @return list of cookbook's
 	 */
-	public ArrayList<cookbookBean> getCookbook(boolean update)
+	public ArrayList<CookbookBean> getCookbook(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		Cursor cursor;
-		ArrayList<cookbookBean> cbList = new ArrayList<cookbookBean>();
+		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
 		if(update == true)
 		{
 			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Cookbook Update", "DEFAULT")  });
@@ -74,8 +74,8 @@ public class syncCookbookModel extends baseDataSource {
 	 * @param cursor
 	 * @return cookbookBean
 	 */
-	public cookbookBean cursorToCookbook(Cursor cursor) {
-		cookbookBean cb = new cookbookBean();
+	public CookbookBean cursorToCookbook(Cursor cursor) {
+		CookbookBean cb = new CookbookBean();
 		cb.setName(cursor.getString(getIndex("name",cursor)));
 		cb.setDescription(cursor.getString(getIndex("description",cursor)));
 		cb.setUniqueid(cursor.getString(getIndex("uniqueid", cursor)));
@@ -95,7 +95,7 @@ public class syncCookbookModel extends baseDataSource {
 	 */
 	public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	{
-		ArrayList<cookbookBean> bookList = getCookbook(update);
+		ArrayList<CookbookBean> bookList = getCookbook(update);
 		JSONArray jsonArray = new JSONArray();
 		for(int i = 0; i < bookList.size(); i++)
 		{
@@ -225,7 +225,7 @@ public class syncCookbookModel extends baseDataSource {
 
 
 				json = jArray.getJSONObject(i);
-				cookbookBean book = new cookbookBean();
+				CookbookBean book = new CookbookBean();
 				book.setName( json.getString("name"));
 				book.setDescription(json.getString("description"));
 				book.setPrivacy(json.getString("privacyOption"));
@@ -233,7 +233,7 @@ public class syncCookbookModel extends baseDataSource {
 				book.setCreator(json.getString("creator"));
 				book.setImage(Base64.decode(json.getString("image"), Base64.DEFAULT));
 				book.setProgress(json.getString("progress"));
-				cookbookModel model = new cookbookModel(context);
+				CookbookModel model = new CookbookModel(context);
 				if(update == true)
 				{
 					try

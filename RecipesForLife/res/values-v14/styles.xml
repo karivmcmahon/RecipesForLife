@@ -25,10 +25,10 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar"
            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/fadedbar3</item>
+        <item name="android:background">@drawable/background_actionbar</item>
 
         <!-- Support library compatibility -->
-        <item name="background">@drawable/fadedbar3</item>
+        <item name="background">@drawable/background_actionbar</item>
     </style>
    
 </resources>

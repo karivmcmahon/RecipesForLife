@@ -34,10 +34,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.cookbookBean;
-import com.example.recipesforlife.models.PostTask;
-import com.example.recipesforlife.models.cookbookModel;
-import com.example.recipesforlife.models.util;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.models.CookbookModel;
+import com.example.recipesforlife.util.PostTask;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
 
 /**
  * Class to display a list of cookbooks involving the users
@@ -48,17 +49,17 @@ public class CookbookListActivity extends ActionBarActivity {
 
 	ListView listView;
 	public static final String MyPREFERENCES = "MyPrefs";
-	static ArrayList<cookbookBean> cookbookList;
+	static ArrayList<CookbookBean> cookbookList;
 	public static final String pass = "passwordKey"; 
 	String type = "";
-	util utils;
+	Util utils;
 	public static CustomCookbookListAdapter adapter;
 	public static ArrayList<String> values;
 	public static  ArrayList<String> ids;
 	public static ArrayList<byte[]> images;
 	AddCookbookView add;
 	private Handler mHandler = new Handler();
-	static cookbookModel model;
+	static CookbookModel model;
 	static Context context;
 
 
@@ -71,8 +72,8 @@ public class CookbookListActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		setContentView(R.layout.listview);
-		
+		setContentView(R.layout.cookbook_list);
+
 		context = getApplicationContext();
 
 		//Sets up nav bar
@@ -86,38 +87,38 @@ public class CookbookListActivity extends ActionBarActivity {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
 
-		utils = new util(getApplicationContext(), this);
+		utils = new Util(getApplicationContext(), this);
 		Intent intent = getIntent();
 		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
-		
-		
-		model = new cookbookModel(getApplicationContext());
+
+
+		model = new CookbookModel(getApplicationContext());
 		//Gets list of cookbooks and displays them
-		cookbookList = new ArrayList<cookbookBean>();
+		cookbookList = new ArrayList<CookbookBean>();
 		updateCookbookList(false);
 		adapter = new CustomCookbookListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-	 
-	    return super.onPrepareOptionsMenu(menu);
+
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.addmenu, menu);
-		
+		getMenuInflater().inflate(R.menu.menu, menu);
+
 		SearchManager searchManager =
-		           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
-		    		(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-		    searchView.setSearchableInfo(
-		            searchManager.getSearchableInfo(getComponentName()));
-		    
+				(android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+		searchView.setSearchableInfo(
+				searchManager.getSearchableInfo(getComponentName()));
+
 		return true;
 	}
 
@@ -134,7 +135,7 @@ public class CookbookListActivity extends ActionBarActivity {
 
 
 	}
-	
+
 	/**
 	 * Updates the cookbook list - called when data has changed in database
 	 * @param update
@@ -165,7 +166,7 @@ public class CookbookListActivity extends ActionBarActivity {
 				images.add(emptyarr);
 			}
 		}
-		
+
 	}
 
 	@Override

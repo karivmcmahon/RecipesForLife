@@ -8,37 +8,38 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 
-import com.example.recipesforlife.controllers.imageBean;
-import com.example.recipesforlife.controllers.ingredientBean;
-import com.example.recipesforlife.controllers.preperationBean;
-import com.example.recipesforlife.controllers.recipeBean;
-import com.example.recipesforlife.controllers.reviewBean;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.ReviewBean;
+import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
-public class reviewModel extends baseDataSource  {
-	
+public class ReviewModel extends BaseDataSource  {
+
 	Context context;
 	ContentValues values;
 	public static final String MyPREFERENCES = "MyPrefs" ;
 	public static final String emailk = "emailKey"; 
 	SharedPreferences sharedpreferences;
-	utility utils;
+	Utility utils;
 	long reviewID;
-	
-	public reviewModel(Context context)  {
+
+	public ReviewModel(Context context)  {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.context = context;
-		utils = new utility();
+		utils = new Utility();
 		sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 	}
-	
-	public void insertReview(reviewBean review, boolean server)
+
+	public void insertReview(ReviewBean review, boolean server)
 	{
 		open();
 		values = new ContentValues();
 		values.put("review", review.getComment());
-		
+
 		if(server == true)
 		{
 			values.put("accountid", review.getUser());
@@ -52,8 +53,8 @@ public class reviewModel extends baseDataSource  {
 		database.beginTransaction();
 		try
 		{
-		    reviewID = database.insertOrThrow("Review", null, values);
-		    insertReviewLink(review, server);
+			reviewID = database.insertOrThrow("Review", null, values);
+			insertReviewLink(review, server);
 			database.setTransactionSuccessful();
 			database.endTransaction(); 
 			close();    	
@@ -65,32 +66,32 @@ public class reviewModel extends baseDataSource  {
 			throw e;
 		} 
 		close(); 
-		
+
 	}
-	
-	public void insertReviewLink(reviewBean review, boolean server)
+
+	public void insertReviewLink(ReviewBean review, boolean server)
 	{
-		
+
 		ContentValues value = new ContentValues();
 		value.put("ReviewId", reviewID);
 		value.put("Recipeid", review.getRecipeid());
 		if(server == true)
 		{
-			
+
 			value.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
 		}
 		else
 		{
-			
+
 			value.put("updateTime", utils.getLastUpdated(false)); 
 		}
 		database.insertOrThrow("ReviewRecipe", null, value);		
 	}
-	
 
-	public ArrayList<reviewBean> selectReviews(int recipeid)
+
+	public ArrayList<ReviewBean> selectReviews(int recipeid)
 	{	
-		ArrayList<reviewBean> rb = new ArrayList<reviewBean>();
+		ArrayList<ReviewBean> rb = new ArrayList<ReviewBean>();
 		open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Review INNER JOIN ReviewRecipe ON Review.reviewId = ReviewRecipe.ReviewId WHERE ReviewRecipe.Recipeid =? ", new String[] { Integer.toString(recipeid) });
 		if (cursor != null && cursor.getCount() > 0) {
@@ -103,11 +104,11 @@ public class reviewModel extends baseDataSource  {
 		cursor.close();
 		close();
 		return rb;
-	
+
 	}
-	
-	public reviewBean cursorToReview(Cursor cursor) {
-		reviewBean rb = new reviewBean();
+
+	public ReviewBean cursorToReview(Cursor cursor) {
+		ReviewBean rb = new ReviewBean();
 		rb.setComment(cursor.getString(getIndex("review", cursor)));
 		rb.setUser(cursor.getString(getIndex("accountid", cursor)));
 		return rb;
