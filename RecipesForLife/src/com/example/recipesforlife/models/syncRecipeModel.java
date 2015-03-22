@@ -61,7 +61,7 @@ public class SyncRecipeModel extends BaseDataSource {
 		Cursor cursor = null;
 		if(update == true)
 		{
-			cursor = database.rawQuery("SELECT * FROM Recipe WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Change", "DEFAULT")  });
+			cursor = database.rawQuery("SELECT * FROM Recipe WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
 		}
 		else
 		{
@@ -331,7 +331,7 @@ public class SyncRecipeModel extends BaseDataSource {
 		if(update == true)
 		{
 
-			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx", sharedpreferences.getString("Change", "DEFAULT"), true);
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm6.aspx", sharedpreferences.getString("Date", "DEFAULT"), true);
 		}
 		else
 		{

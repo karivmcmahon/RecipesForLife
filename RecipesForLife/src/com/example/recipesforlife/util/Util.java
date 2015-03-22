@@ -359,83 +359,46 @@ public class Util  {
 				//INSERTS SYNC 
 				sync.getJSONFromServer();
 				sync.getAndCreateAccountJSON();
-				editor.putString("Account Date", getLastUpdated(true));
-				editor.commit();
-
 				syncCookbook.getJSONFromServer(false);
 				syncCookbook.getAndCreateJSON(false);
-				editor.putString("Cookbook", getLastUpdated(true));
-				editor.commit();
-
 				syncRecipe.getJSONFromServer(false);
 				syncRecipe.getAndCreateJSON(false);
-				editor.putString("Date", getLastUpdated(true));
-				editor.commit();
-
 				syncContributer.getJSONFromServer(false);
 				syncContributer.getAndCreateJSON(false);
-				editor.putString("Contributers", getLastUpdated(true));
-				editor.commit();
-
-				//UPDATES SYNC
-
-				syncRecipe.getJSONFromServer(true);
-				syncRecipe.getAndCreateJSON(true);
-				editor.putString("Change", getLastUpdated(true));
-				editor.commit(); 
-
-				syncCookbook.getJSONFromServer(true);
-				syncCookbook.getAndCreateJSON(true);
-				editor.putString("Cookbook Update", getLastUpdated(true));
-				editor.commit();
-
-
-
-				syncContributer.getJSONFromServer(true);
-				syncContributer.getAndCreateJSON(true);
-				editor.putString("Contributers Update", getLastUpdated(true));
-				editor.commit();
-
 				syncReview.getJSONFromServer();
 				syncReview.getAndCreateJSON();
-				editor.putString("Review", getLastUpdated(true));
+			
+				//UPDATES SYNC
+				syncRecipe.getJSONFromServer(true);
+				syncRecipe.getAndCreateJSON(true);
+				syncCookbook.getJSONFromServer(true);
+				syncCookbook.getAndCreateJSON(true);
+				syncContributer.getJSONFromServer(true);
+				syncContributer.getAndCreateJSON(true);
+				
+				//Update timestamp
+				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
-
-
-
-				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Cookbook", "DEFAULT"));
-
+				
+				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				return "success";
-
-				/*Toast.makeText(context, 
-						"App synced", Toast.LENGTH_LONG).show();*/
 			} catch (JSONException e) {
-				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Cookbook Date", "DEFAULT"));
-
+				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				e.printStackTrace();
 				return "fail";
-				/*Toast.makeText(context, 
-						"App sync failed", Toast.LENGTH_LONG).show();*/
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Cookbook Date", "DEFAULT"));
-
+				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				e.printStackTrace();
 				return "fail";
-				/*Toast.makeText(context, 
-						"App sync failed", Toast.LENGTH_LONG).show();*/
 
 			}
 			catch (SQLException e) {
-				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Cookbook Date", "DEFAULT"));
-
+				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return "fail";
-				/*Toast.makeText(context, 
-					"App sync failed", Toast.LENGTH_LONG).show();*/
-
 			}
 		}
 		return "fail";

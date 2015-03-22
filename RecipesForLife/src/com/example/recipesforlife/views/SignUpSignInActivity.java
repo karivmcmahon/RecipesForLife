@@ -82,34 +82,10 @@ public class SignUpSignInActivity extends Activity {
 			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();
-			//Dates for account syncing
-			editor2.putString("Account Date", "2015-01-01 12:00:00");
-			editor2.commit();
-
+			
 			//Dates for recipe syncing
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
-
-			editor2.putString("Change", "2015-01-01 12:00:00");
-			editor2.commit();
-
-			//Dates for cookbook syncing
-			editor2.putString("Cookbook", "2015-01-01 12:00:00");
-			editor2.commit();
-
-			editor2.putString("Cookbook Update", "2015-01-01 12:00:00");
-			editor2.commit();
-
-			//Dates for contribs syncing
-			editor2.putString("Contributers", "2015-01-01 12:00:00");
-			editor2.commit();
-
-			editor2.putString("Contributers Update", "2015-01-01 12:00:00");
-			editor2.commit();
-
-			editor2.putString("Review", "2015-01-01 12:00:00");
-			editor2.commit();
-
 			buildDatabase();
 			new PostTask(utils, context, false).execute();
 		} else {

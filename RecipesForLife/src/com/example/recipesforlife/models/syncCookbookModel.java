@@ -56,11 +56,11 @@ public class SyncCookbookModel extends BaseDataSource {
 		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
 		if(update == true)
 		{
-			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Cookbook Update", "DEFAULT")  });
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
 		}
 		else
 		{	
-			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Cookbook", "DEFAULT") });
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Date", "DEFAULT") });
 		}
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -143,11 +143,11 @@ public class SyncCookbookModel extends BaseDataSource {
 		if(update == true)
 		{
 
-			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx", sharedpreferences.getString("Cookbook Update", "DEFAULT"), true);
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm10.aspx", sharedpreferences.getString("Date", "DEFAULT"), true);
 		}
 		else
 		{
-			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx", sharedpreferences.getString("Cookbook", "DEFAULT"), false);
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm8.aspx", sharedpreferences.getString("Date", "DEFAULT"), false);
 		}
 
 		JSONObject jObject = new JSONObject(str);

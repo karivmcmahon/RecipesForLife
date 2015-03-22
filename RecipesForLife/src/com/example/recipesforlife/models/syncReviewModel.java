@@ -55,7 +55,7 @@ public class SyncReviewModel  extends BaseDataSource {
 		open();
 		Cursor cursor;
 		ArrayList<ReviewBean> rbList = new ArrayList<ReviewBean>();
-		cursor = database.rawQuery("SELECT * FROM Review WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Review", "DEFAULT") });
+		cursor = database.rawQuery("SELECT * FROM Review WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Date", "DEFAULT") });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -140,7 +140,7 @@ public class SyncReviewModel  extends BaseDataSource {
 		String str= "";
 
 
-		str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm15.aspx", sharedpreferences.getString("Review", "DEFAULT"), false);
+		str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm15.aspx", sharedpreferences.getString("Date", "DEFAULT"), false);
 
 
 		JSONObject jObject = new JSONObject(str);

@@ -52,7 +52,7 @@ public class SyncModel extends BaseDataSource
 		open();
 		ArrayList<UserBean> userList = new ArrayList<UserBean>();
 		Cursor cursor;
-		cursor = database.rawQuery("SELECT * FROM Users WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Account Date", "DEFAULT")});
+		cursor = database.rawQuery("SELECT * FROM Users WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -74,7 +74,7 @@ public class SyncModel extends BaseDataSource
 		open();
 		ArrayList<AccountBean> accountList = new ArrayList<AccountBean>();
 		Cursor cursor;
-		cursor = database.rawQuery("SELECT * FROM Account WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Account Date", "DEFAULT") });        
+		cursor = database.rawQuery("SELECT * FROM Account WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });        
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -156,7 +156,7 @@ public class SyncModel extends BaseDataSource
 
 		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
-		String str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx", sharedpreferences.getString("Account Date", "DEFAULT") , false);
+		String str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx", sharedpreferences.getString("Date", "DEFAULT") , false);
 
 		JSONArray jArray = new JSONArray(str);
 		if (jArray.length() != 0) 

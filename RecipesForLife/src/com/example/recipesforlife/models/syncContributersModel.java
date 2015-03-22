@@ -59,11 +59,11 @@ public class SyncContributersModel extends BaseDataSource {
 		Cursor cursor = null;
 		if(update == true)
 		{
-			cursor = database.rawQuery("SELECT * FROM Contributers WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Contributers Update", "DEFAULT")   });
+			cursor = database.rawQuery("SELECT * FROM Contributers WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")   });
 		}
 		else
 		{
-			cursor = database.rawQuery("SELECT * FROM Contributers WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Contributers", "DEFAULT") });
+			cursor = database.rawQuery("SELECT * FROM Contributers WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT") });
 		}
 
 		if (cursor != null && cursor.getCount() > 0) {
@@ -138,11 +138,11 @@ public class SyncContributersModel extends BaseDataSource {
 		JSONObject json;
 		if(update == true)
 		{
-			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx", sharedpreferences.getString("Contributers Update", "DEFAULT"), false);
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx", sharedpreferences.getString("Date", "DEFAULT"), false);
 		}
 		else
 		{
-			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx", sharedpreferences.getString("Contributers", "DEFAULT"), false);
+			str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm12.aspx", sharedpreferences.getString("Date", "DEFAULT"), false);
 		}
 
 		try
