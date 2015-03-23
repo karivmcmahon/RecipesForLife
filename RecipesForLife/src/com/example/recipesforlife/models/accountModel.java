@@ -85,11 +85,11 @@ public class AccountModel extends BaseDataSource
 	 * @param password
 	 * @return a list of accounts in the form of accountbean controller
 	 */
-	public ArrayList<AccountBean> selectAccount(String email, String password)
+	public ArrayList<AccountBean> selectAccount(String email)
 	{
 		open();
 		ArrayList<AccountBean> accountList = new ArrayList<AccountBean>();
-		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? AND password=?", new String[] { email, password  });
+		Cursor cursor = database.rawQuery("SELECT * FROM Account WHERE email=? ", new String[] { email  });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

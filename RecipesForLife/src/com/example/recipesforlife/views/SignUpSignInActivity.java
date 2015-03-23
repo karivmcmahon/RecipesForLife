@@ -286,7 +286,8 @@ public class SignUpSignInActivity extends Activity {
 
 		Context t = getApplicationContext();
 		AccountModel accountmodel = new AccountModel(t);
-
+		
+		//checks for errors
 		if (accountmodel.checkEmail(email) == true) {
 			errorView.setText("Email already in use \n");
 		} else if (email.equals("")) {

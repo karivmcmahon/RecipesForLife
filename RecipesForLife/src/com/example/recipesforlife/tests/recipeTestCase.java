@@ -21,9 +21,11 @@ import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.ReviewBean;
 import com.example.recipesforlife.models.BaseDataSource;
 import com.example.recipesforlife.models.DatabaseConnection;
 import com.example.recipesforlife.models.RecipeModel;
+import com.example.recipesforlife.models.ReviewModel;
 import com.example.recipesforlife.views.SignUpSignInActivity;
 
 import junit.framework.Assert;
@@ -34,8 +36,10 @@ import junit.framework.TestCase;
  * @author Kari
  *
  */
+
 public class recipeTestCase extends AndroidTestCase{
 	RecipeModel recipemodel;
+	ReviewModel reviewmodel;
 	SignUpSignInActivity activity;
 	DatabaseConnection dbConnection;
 	 RenamingDelegatingContext context;
@@ -46,6 +50,7 @@ public class recipeTestCase extends AndroidTestCase{
 	        = new RenamingDelegatingContext(getContext(), "test_");
 		
 		recipemodel = new RecipeModel(context);
+		reviewmodel = new ReviewModel(context);
 		copyDataBase();
 	
 		
@@ -99,6 +104,7 @@ public void testInsertRecipe()
 		recipe.setCooking("1:00");
 		recipe.setAddedBy("addison");
 		recipe.setRecipeBook("book1");
+		recipe.setProgress("added");
 		IngredientBean ingred = new IngredientBean();
 		ingred.setName("stock");
 		ingred.setAmount(1);
@@ -126,23 +132,50 @@ public void testInsertRecipe()
 		
 	} 
 
-public void editRecipe()
+public void testEditRecipe()
 {
 
 	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
 	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+
+	
+	
+	
+	ImageBean imgbean = new ImageBean();
+	
 	RecipeBean recipe = new RecipeBean();
 	recipe.setName("pizza");
 	recipe.setDesc("good food");
-	recipe.setUniqueid("doeRecipe");
+	recipe.setUniqueid("uniqueidrecip1");
 	recipe.setAddedBy("doe"); 
-	//recipemodel.updateRecipe(recipe, prepList, ingredList);	
+	recipe.setProgress("added");
+	recipemodel.updateRecipe(recipe, prepList, ingredList, imgbean, false);	
 	RecipeBean recipeSelect = new RecipeBean();
 	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
 	Assert.assertEquals(recipeSelect.getDesc(), "good food");
 	
 	
 } 
+
+public void testDeleteRecipe()
+{
+	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+	ImageBean imgbean = new ImageBean();
+
+	
+	RecipeBean recipe = new RecipeBean();
+	recipe.setName("pizza");
+	recipe.setDesc("good food");
+	recipe.setUniqueid("uniqueidrecip1");
+	recipe.setAddedBy("doe"); 
+	recipe.setProgress("deleted"); 
+	
+	recipemodel.updateRecipe(recipe, prepList, ingredList, imgbean, false);	
+	RecipeBean recipeSelect = new RecipeBean();
+	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
+	Assert.assertEquals(recipeSelect.getName(), null);
+}
 	
 
 	
@@ -152,6 +185,24 @@ public void editRecipe()
 		recipeSelect = recipemodel.selectRecipesByUser("doe");
 		Assert.assertEquals(recipeSelect.get(0).getName(), "pizza");
 		
+	}
+	
+	public void testRecipeReviews()
+	{
+		ArrayList<ReviewBean> reviews = reviewmodel.selectReviews(1);
+		Assert.assertEquals(reviews.get(0).getComment(), "good food");
+	}
+	
+	public void testReviewInsert()
+	{
+		ReviewBean review = new ReviewBean();
+		review.setComment("I like this recipe");
+		review.setUser("doe");
+		review.setRecipeid(1);
+		reviewmodel.insertReview(review, false);
+		ArrayList<ReviewBean> reviews = reviewmodel.selectReviews(1);
+		Assert.assertEquals(reviews.get(1).getComment(), "I like this recipe");
+				
 	}
 
 }

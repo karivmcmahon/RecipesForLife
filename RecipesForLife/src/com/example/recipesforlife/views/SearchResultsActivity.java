@@ -34,6 +34,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * Class to handle retrieiving and diplaying search results
+ * @author Kari
+ *
+ */
 public class SearchResultsActivity extends ActionBarActivity {
 
 	NavigationDrawerCreation nav;
@@ -116,6 +121,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 			suggestions.saveRecentQuery(query, null);
 			SearchModel sm = new SearchModel(getApplicationContext());
 			
+			//Gets results for search
 			final ArrayList<RecipeBean> rb = sm.selectRecipe(query);
 			final ArrayList<CookbookBean> cb = sm.selectCookbooks(query);
 			final ArrayList<UserBean> ub = sm.selectUsers(query);

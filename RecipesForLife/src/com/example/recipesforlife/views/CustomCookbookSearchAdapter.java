@@ -19,6 +19,11 @@ import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * The listview adapter to display cookbooks that have been searched for
+ * @author Kari
+ *
+ */
 public class CustomCookbookSearchAdapter extends ArrayAdapter<CookbookBean> {
 
 	private final Activity activity;
@@ -33,7 +38,6 @@ public class CustomCookbookSearchAdapter extends ArrayAdapter<CookbookBean> {
 		this.context = context;
 		cb = cookbookbean;
 		imgload = new ImageLoader2(this.context);
-		// TODO Auto-generated constructor stub
 		utils = new Util(this.context, activity);
 	}
 
@@ -46,9 +50,12 @@ public class CustomCookbookSearchAdapter extends ArrayAdapter<CookbookBean> {
 
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+		//If no results
 		if(cb.get(position).getName().equals("empty"))
 		{
+			//Display no results layout
 			rowView= inflater.inflate(R.layout.search_noresultsview, null, true);
+			//Set text style
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.noResults);
 			utils.setRowText(R.id.noResults, rowView, 26);
 			txtTitle.setTextColor(Color.parseColor("#F3216C"));
@@ -57,6 +64,7 @@ public class CustomCookbookSearchAdapter extends ArrayAdapter<CookbookBean> {
 		{
 			rowView= inflater.inflate(R.layout.search_cookbookview, null, true);
 
+			//Set results from database to listview and set there text style
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.cookbookName);
 			txtTitle.setText(cb.get(position).getName());
 			utils.setRowText(R.id.cookbookName, rowView, 26);
@@ -72,6 +80,7 @@ public class CustomCookbookSearchAdapter extends ArrayAdapter<CookbookBean> {
 			utils.setRowText(R.id.cookbookCreator, rowView, 20);
 			cookbookCreator.setTextColor(Color.parseColor("#000000"));
 
+			// Display image using image loader
 			ImageView cookbookImage = (ImageView) rowView.findViewById(R.id.icon);
 			imgload.DisplayImage(cookbookImage, cb.get(position).getImage(), Base64.encodeToString(cb.get(position).getImage(), Base64.DEFAULT) + cb.get(position).getUniqueid());
 		}

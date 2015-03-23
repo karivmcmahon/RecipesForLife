@@ -118,7 +118,7 @@ public class accountTestCase extends AndroidTestCase  {
 		anUser.setBio("Home cook");
 		anUser.setCountry("Scotland");
 		accountmodel.insertAccount(anAccount, anUser, false);
-		account = accountmodel.selectAccount("hilz@aol.co.uk", "whisk");
+		account = accountmodel.selectAccount("hilz@aol.co.uk");
 		user = accountmodel.selectUser(account.get(0).getId());
 		Assert.assertEquals(account.get(0).getEmail(), "hilz@aol.co.uk");
 		Assert.assertEquals(user.get(0).getName(), "Hilary");
@@ -141,7 +141,7 @@ public class accountTestCase extends AndroidTestCase  {
 			anUser.setBio("Home cook");
 			anUser.setCountry("Scotland");
 			accountmodel.insertAccount(anAccount, anUser, false);
-			account = accountmodel.selectAccount("hils@aol.co.uk", "whisk");
+			account = accountmodel.selectAccount("hils@aol.co.uk");
 			Assert.assertEquals(account.size(),0);
 		}
 		catch(Throwable t)
@@ -166,9 +166,9 @@ public class accountTestCase extends AndroidTestCase  {
 	public void testGetAccount() throws Exception
 	{
 		List<AccountBean> account = new ArrayList<AccountBean>();
-		account = accountmodel.selectAccount("doe", "doe");
+		account = accountmodel.selectAccount("doe");
 		Assert.assertEquals(account.get(0).getEmail(), "doe");
-		account = accountmodel.selectAccount("danny", "vause");
+		account = accountmodel.selectAccount("danny");
 		Assert.assertEquals(account.size(), 0);
 	}
 

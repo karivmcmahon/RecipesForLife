@@ -17,6 +17,11 @@ import com.example.recipesforlife.controllers.UserBean;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
+/***
+ * Adapts the list data to layout for users for search results
+ * @author Kari
+ *
+ */
 public class CustomUserSearchAdapter extends ArrayAdapter<UserBean> {
 
 	private final Activity activity;
@@ -31,7 +36,6 @@ public class CustomUserSearchAdapter extends ArrayAdapter<UserBean> {
 		this.context = context;
 		ub = userbean;
 		imgload = new ImageLoader2(this.context);
-		// TODO Auto-generated constructor stub
 		utils = new Util(this.context, activity);
 	}
 
@@ -46,6 +50,7 @@ public class CustomUserSearchAdapter extends ArrayAdapter<UserBean> {
 		View rowView = null;
 		if(ub.get(position).getName().equals("empty"))
 		{
+			//Displays no results layout if no results
 			rowView= inflater.inflate(R.layout.search_noresultsview, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.noResults);
 			utils.setRowText(R.id.noResults, rowView, 26);
@@ -54,12 +59,18 @@ public class CustomUserSearchAdapter extends ArrayAdapter<UserBean> {
 		else
 		{
 			rowView= inflater.inflate(R.layout.search_userview, null, true);
-
+			//sets style and adapts data for row
 			rowView = setListStyle(rowView, position);
 		}
 		return rowView;
 	}
 	
+	/**
+	 * Sets the style of row and adapts the data for the row
+	 * @param rowView
+	 * @param position
+	 * @return rowView - rowView
+	 */
 	public View setListStyle(View rowView, int position)
 	{
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.userinfo);

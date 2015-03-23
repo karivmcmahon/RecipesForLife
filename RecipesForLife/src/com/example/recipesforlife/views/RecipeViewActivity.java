@@ -92,18 +92,19 @@ public class RecipeViewActivity extends ActionBarActivity {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
 
+		//Gets and dispalys the reviews for the recipes
 		final ReviewModel reviewmodel = new ReviewModel(getApplicationContext());
 		rbs = reviewmodel.selectReviews(recipe.getId());
-		Log.v("RBS ", "RBS " + rbs.size());
 		ListView listView = (ListView) findViewById(R.id.reviewlist);
-		//	listView.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_bg));
 		adapter = new CustomReviewAdapter( getApplicationContext(), this,  rbs);
 		listView.setAdapter(adapter); 
 
+		//Sets review comment style
 		utils.setButtonText(R.id.sumbitButton, 22);
 		final TextView errorView = (TextView) findViewById(R.id.errorView);
 		utils.setText(R.id.errorView,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
+		//when review submited
 		Button submitbutton = (Button) findViewById(R.id.sumbitButton);
 		submitbutton.setOnClickListener(new OnClickListener(){
 
@@ -118,6 +119,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 				rb.setUser(sharedpreferences.getString(emailk, "DEFAULT"));
 				try
 				{
+					//checks for errors and then submits review
 					if(rb.getComment().equals(""))
 					{
 						errorView.setText("Please enter a comment");
@@ -169,7 +171,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 
 		nav.drawerToggle(item);
 
-		//These choices increae or decrease font size
+		//These choices increase or decrease font size
 		if(item.getItemId() ==  R.id.action_fontdown)
 		{
 			recipeFont--;
@@ -339,7 +341,12 @@ public class RecipeViewActivity extends ActionBarActivity {
 	}
 
 
-	// from here https://guides.codepath.com/android/Sharing-Content-with-Intents
+	/**
+	 * Gets the local bitmap URI - this is ued for sharing image
+	 * Code from here https://guides.codepath.com/android/Sharing-Content-with-Intents
+	 * @param imageView
+	 * @return Uri 
+	 */
 	public Uri getLocalBitmapUri(ImageView imageView) {
 		// Extract Bitmap from ImageView drawable
 		Drawable drawable = imageView.getDrawable();

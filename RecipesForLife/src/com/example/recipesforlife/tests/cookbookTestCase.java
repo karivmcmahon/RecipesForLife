@@ -92,6 +92,7 @@ public class cookbookTestCase  extends AndroidTestCase {
 		cb.setDescription("My personal cookbook");
 		cb.setPrivacy("public");
 		cb.setUniqueid("cookbookuniqueid2");
+		cb.setProgress("added");
 		Bitmap bitmap = ((BitmapDrawable) context.getResources().getDrawable(R.drawable.image_default_recipe)).getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -111,10 +112,26 @@ public class cookbookTestCase  extends AndroidTestCase {
 		cb.setChangeTime("2015-01-01 12:00:00");
 		cb.setPrivacy("public");
 		cb.setUniqueid("cookbookuniqueid1");
+		cb.setProgress("added");
 		cookbookmodel.updateBook(cb, false);
 		
 		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
 		Assert.assertEquals(cblist.get(0).getName(), "Fun Foods");
+	}
+	
+	public void testDeleteCookbook()
+	{
+		CookbookBean cb = new CookbookBean();
+		cb.setName("Fun Foods");
+		cb.setDescription("fun");
+		cb.setChangeTime("2015-01-01 12:00:00");
+		cb.setPrivacy("public");
+		cb.setUniqueid("cookbookuniqueid1");
+		cb.setProgress("delte");
+		cookbookmodel.updateBook(cb, false);
+		
+		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbook("cookbookuniqueid1");
+		Assert.assertEquals(cblist.size(), 0);
 	}
 	
 	public void testCookbookRecipes()

@@ -54,8 +54,7 @@ public class CookbookListActivity extends ActionBarActivity {
 	String type = "";
 	Util utils;
 	public static CustomCookbookListAdapter adapter;
-	public static ArrayList<String> values;
-	public static  ArrayList<String> ids;
+	public static ArrayList<String> values, ids;
 	public static ArrayList<byte[]> images;
 	AddCookbookView add;
 	private Handler mHandler = new Handler();
@@ -111,7 +110,7 @@ public class CookbookListActivity extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu, menu);
-
+		//sets up search
 		utils.setUpSearch(menu);
 
 		return true;

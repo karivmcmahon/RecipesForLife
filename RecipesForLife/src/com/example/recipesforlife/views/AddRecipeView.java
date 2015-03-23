@@ -61,21 +61,15 @@ public class AddRecipeView extends RecipeListViewActivity {
 	Util utils;
 	ArrayList<IngredientBean> ingredBeanList;
 	ArrayList<PreperationBean> prepBeanList;
-	Dialog recipeAddDialog;
 	static Dialog recipeAddDialog2;
-	Dialog recipeIngredDialog;
-	Dialog recipeAddStepDialog;
-	Dialog addRecipeDialog3;
+	Dialog recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3, recipeAddDialog;
 	Button nextButton, nextButton2, addIngredButton, addRecipeButton;
-	String name, desc,recipeBook, serves, prep, cooking, cusine, difficulty, tips, dietary;
+	String name, desc,recipeBook, serves, prep, cooking, cusine, difficulty, tips, dietary, uniqueid, imageName, bookname;
 	public static final String MyPREFERENCES = "MyPrefs";
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
-	String uniqueid = "";
 	private static final int SELECT_PHOTO = 100;
-	String imageName = "";
 	byte[] array;
-	String bookname;
 	ArrayList<String> cookbookuids = new ArrayList<String>();
 
 	// Handles message from time dialog 1 - preptime
@@ -199,7 +193,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	}
 
 	/**
-	 * Get data from the first dialog - does some error checking before getting date
+	 * Get data from the first dialog - does some error checking before getting the data
 	 */
 	public void getInitialRecipeAddDialogData()
 	{
@@ -232,7 +226,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 			recipeAddDialog.dismiss();
 			//Set up second dialog
 			setUpSecondRecipeAddDialog();
-			//setUpThirdRecipeAddDialog();
+
 			//If ingredient plus button is pressed - show a dialog to add an ingredient
 			ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						
 			ingredsPlusButton.setOnClickListener(new OnClickListener() {
@@ -323,6 +317,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		spinnerArray.add("pinch");
 		spinnerArray.add("other");
 
+		//Fill spinner
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -403,10 +398,18 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void setUpThirdRecipeAddDialog()
 	{
+		//create and set up style
 		addRecipeDialog3 = utils.createDialog(activity, R.layout.recipe_add_dialog3);		
 		utils.setDialogText(R.id.recipeImagesView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.browseButton, addRecipeDialog3, 22);
+		utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
+		utils.setDialogText(R.id.recipeCusineView, addRecipeDialog3, 22);
+		utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
+		utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
+		utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
+		addRecipeButton = utils.setButtonTextDialog(R.id.addRecipeButton, 22, addRecipeDialog3);
 
+		//Gets image from phone when browse pressed
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, addRecipeDialog3);
 		browseButton.setOnTouchListener(new OnTouchListener(){
 
@@ -422,14 +425,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 
 			}});
 
-		utils.setDialogText(R.id.recipeAddView3, addRecipeDialog3, 22);
-		utils.setDialogText(R.id.recipeCusineView, addRecipeDialog3, 22);
-		utils.setDialogText(R.id.recipeDifficultyView, addRecipeDialog3, 22);
-		utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
-		utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
-		addRecipeButton = utils.setButtonTextDialog(R.id.addRecipeButton, 22, addRecipeDialog3);
 
-		//Fill spinner
+		//Fill spinner for diffculty
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("Easy");
 		spinnerArray.add("Medium");
@@ -440,9 +437,9 @@ public class AddRecipeView extends RecipeListViewActivity {
 		Spinner sItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
-		addRecipeDialog3.show();
 
-		//Fill spinner
+
+		//Fill spinner for cuisine
 		List<String> cusineSpinnerArray =  new ArrayList<String>();
 		cusineSpinnerArray.add("Italian");
 		cusineSpinnerArray.add("Indian");
@@ -487,7 +484,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 			byte[] byteArray = stream.toByteArray();
 			array = byteArray;
 		}  
-		sendDataToModel();
+		sendDataToModel(); //sends all the data thats been stored and sends to the model
 		addRecipeDialog3.dismiss();
 	}
 
@@ -496,7 +493,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	 */
 	public void getRecipeStep()
 	{
-		//Getting 
+		//Getting  data from the text boxes
 		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -514,6 +511,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		}
 		else
 		{
+			//Sets the details to a prep bean
 			PreperationBean prepBean = new PreperationBean();
 			prepBean.setPreperation(step);
 			prepBean.setPrepNum(Integer.parseInt(stepNum));
@@ -551,6 +549,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		}
 		else
 		{
+			//Sets details to ingredient bean
 			IngredientBean ingredBean = new IngredientBean();
 			ingredBean.setName(ingredient);
 			ingredBean.setAmount(Integer.parseInt(amount));
@@ -558,6 +557,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 			ingredBean.setValue(value);
 			ingredBeanList.add(ingredBean);
 			recipeIngredDialog.dismiss();
+			//How ingredients are displayed in the edit text box
 			EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
 			if(note.equals(""))
 			{
@@ -573,7 +573,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	}
 
 	/**
-	 * Prepare the data to send to the model
+	 * Prepare the data to send to the model where the data will be inserted 
 	 */
 	public void sendDataToModel()
 	{

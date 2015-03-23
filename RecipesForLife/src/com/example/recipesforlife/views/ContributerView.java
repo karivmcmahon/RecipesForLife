@@ -34,10 +34,9 @@ public class ContributerView {
 	int position;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
-	Dialog addContribDialog;
+	Dialog addContribDialog, contribDialog;
 	TextView errorView;
 	CookbookModel model;
-	Dialog contribDialog;
 	boolean isCreator = false;
 
 	public ContributerView(Context context, Activity activity, CustomCookbookListAdapter adapter, int position)
@@ -109,7 +108,7 @@ public class ContributerView {
 	}
 
 	/**
-	 * Sets up the add a contrib dialog
+	 * Sets up the add a contrib dialog style
 	 */
 	public void addContribDialogViewCreate()
 	{
@@ -129,6 +128,7 @@ public class ContributerView {
 	{
 		int id = 0;
 		AccountModel am = new AccountModel(context);
+		//checks if the email entered exists
 		boolean exists = am.checkEmail( utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
 		//Check for any errors
 		if (exists == false)
@@ -143,7 +143,7 @@ public class ContributerView {
 		{
 
 			id = model.selectCookbooksIDByUnique(ccadapter.bookids.get(position));
-			//If it exists either update or insert contributer
+			//If it exists either update or insert contributer - may be able to update as they might not have been deleted yet
 			boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 			if(contribExists == true)
 			{
@@ -182,6 +182,7 @@ public class ContributerView {
 		ArrayList<String> contribs = new ArrayList<String>();
 		//Show list of contributers
 		ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
+		//select the contributers and dispaly in a listview
 		contribs = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");
 		ccadapter.adapter2 = new
 				CustomContribListAdapter(activity, contribs, context, ccadapter.bookids.get(position), isCreator);

@@ -77,6 +77,7 @@ public class EditCookbookView  {
 		setStyle();
 		setText();
 
+		//Starts intent to get image from phone if selected
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, editDialog);
 		browseButton.setOnClickListener(new OnClickListener()
 		{
@@ -89,6 +90,7 @@ public class EditCookbookView  {
 			}
 
 		});
+		//edits cookbook if selected
 		Button btn = utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
 		btn.setOnClickListener(new OnClickListener(){
 
@@ -199,6 +201,7 @@ public class EditCookbookView  {
 						CookbookListActivity.images.add(emptyarr);
 					}
 				}
+				//notifys list change
 				CookbookListActivity.adapter.notifyDataSetChanged();
 			}
 

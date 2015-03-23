@@ -99,6 +99,7 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 								int id = model.selectCookbooksIDByUnique(cookbookuid);
 								try
 								{
+									//updates contributer to deleted and removes from list if sucessful
 									model.updateContributers( users.get(position), id, "deleted", false);
 									users.remove(position);
 									notifyDataSetChanged();
@@ -126,7 +127,9 @@ public class CustomContribListAdapter extends ArrayAdapter<String>{
 				}
 			});
 		}
-		//Sets the users name in the row
+
+
+		//Sets the users name in the lost row
 		txtTitle.setText(users.get(position));
 		return rowView;
 	}

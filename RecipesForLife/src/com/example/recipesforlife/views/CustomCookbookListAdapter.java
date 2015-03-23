@@ -34,10 +34,14 @@ import com.example.recipesforlife.models.CookbookModel;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * List adapter for displaying the cookbooks
+ * @author Kari
+ *
+ */
 public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 	private final Activity activity;
-	public ArrayList<String> booknames;
-	public  ArrayList<String> bookids;
+	public ArrayList<String> booknames, bookids;
 	public  ArrayList<byte[]> bookimages;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
@@ -100,6 +104,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 		{
 			rowView= inflater.inflate(R.layout.cookbook_display, null, true);
 
+			//Sets up text style
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
 			txtTitle.setText(booknames.get(position));
 			utils.setRowText(R.id.myImageViewText, rowView, 22);		
@@ -108,6 +113,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 			ImageView editButton = (ImageView) rowView.findViewById(R.id.editView);
 			if(isCreator == false)
 			{
+				//if not creator then set edit button to invisible
 				editButton.setVisibility(View.INVISIBLE);
 			}
 			else
@@ -119,6 +125,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 						// TODO Auto-generated method stub
 						if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 						{
+							//Show edit dialog
 							edit = new EditCookbookView(context, activity, CustomCookbookListAdapter.this, position);
 							edit.editBook();
 						}
@@ -135,15 +142,18 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
+						//Show contrib dialog
 						ContributerView contrib = new ContributerView(context, activity, CustomCookbookListAdapter.this, position);
 						contrib.manageContribs();
 					}
 					return false;
 				}});
 
-			//Show a list of recipes based on the cookbook selected
+			//Loads image for the listview
 			ImageView bookButton = (ImageView) rowView.findViewById(R.id.myImageView);
 			imgload.DisplayImage(bookButton, bookimages.get(position), Base64.encodeToString(bookimages.get(position), Base64.DEFAULT) + bookids.get(position));
+			
+			//if cookbook clicked move on to recipe view to show a list of recipes 
 			bookButton.setOnTouchListener(new OnTouchListener(){
 
 				@Override
@@ -163,7 +173,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 					return false;
 				}});
 
-			//Show edit cookbook dialog
+			//Show delete cookbook dialog
 			ImageView delButton = (ImageView) rowView.findViewById(R.id.delView);
 			if(isCreator == false)
 			{
@@ -175,15 +185,15 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						// TODO Auto-generated method stub
 						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
 						utils.setDialogText(R.id.textView, dialog, 18);
 						TextView tv = (TextView) dialog.findViewById(R.id.textView);
+						//confirms with user
 						tv.setText("Would you like to delete this cookbook ?");
 						// Show dialog
 						dialog.show();
 
-						//Deletes users and dismiss dialog
+						//Deletes cookbook and dismiss dialog
 						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
 						yesButton.setOnClickListener(new OnClickListener() {
 
@@ -194,6 +204,7 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 								cbBean.get(0).setProgress("deleted");
 								try
 								{
+									//updates book to deleted and if successful removes from list
 									model.updateBook( cbBean.get(0), false);
 									booknames.remove(position);
 									bookids.remove(position);
@@ -224,6 +235,12 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 		return rowView;
 	}
 
+	/**
+	 * Handles result recievedd for edit dialog
+	 * @param requestCode
+	 * @param resultCode
+	 * @param imageReturnedIntent
+	 */
 	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 		edit.resultRecieved( requestCode,  resultCode, imageReturnedIntent);

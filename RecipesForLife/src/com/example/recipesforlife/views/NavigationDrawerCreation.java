@@ -68,11 +68,7 @@ public class NavigationDrawerCreation   {
 		imageids.add(R.drawable.icon_power);
 		drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
 		drawerList = (ListView) activity.findViewById(R.id.left_drawer);
-
-		Context contexts = activity.getApplicationContext();
-		Log.v("image ", "image " + imageids.size());
-		Log.v("image ", "image " + navBarTitles.size());
-
+		
 		// Set the adapter for the list view
 		drawerList.setAdapter(new CustomNavArrayAdapter(activity.getApplicationContext(),
 				R.layout.navbar_draweritem, navBarTitles, activity, imageids));
@@ -102,7 +98,7 @@ public class NavigationDrawerCreation   {
 		drawerLayout.setDrawerListener(drawerToggle);
 
 		activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		//  getSupportActionBar().setHomeButtonEnabled(true);
+		
 		drawerList.setOnItemClickListener(new DrawerItemClickListener());
 	}
 
@@ -135,22 +131,23 @@ public class NavigationDrawerCreation   {
 		public void onItemClick(AdapterView parent, View view, int position, long id) {
 			if(position == 0)
 			{
+				//Goes to homepage
 				Intent i = new Intent(activity, CookbookListActivity.class);
 				activity.startActivity(i);
 			}
 			else if(position == 3)
 			{
+				//Clears shared prefs and logs out
 				SharedPreferences sharedpreferences = activity.getSharedPreferences
 						(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 				Editor editor = sharedpreferences.edit();
 				editor.remove(emailk);
 				editor.remove(pass);
-				// editor.clear();
 				editor.commit();
 				Intent i = new Intent(activity, SignUpSignInActivity.class);
 				activity.startActivity(i);
 			}
-			// Toast.makeText(activity, ((TextView)view).getText(), Toast.LENGTH_LONG).show();
+			//closes drawer
 			drawerLayout.closeDrawer(drawerList);
 
 		}

@@ -22,6 +22,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * This class handles the layout adapting of recipes for search results
+ * @author Kari
+ *
+ */
 public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 
 	private final Activity activity;
@@ -49,6 +54,7 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+		//If no results then display the no results layout
 		if(rb.get(position).getName().equals("empty"))
 		{
 			rowView= inflater.inflate(R.layout.search_noresultsview, null, true);
@@ -58,11 +64,13 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 		}
 		else
 		{
+			//display the recipe layout
 			rowView= inflater.inflate(R.layout.search_recipeview, null, true);
+			//set the styles for the layout with the data from the search
 			rowView = setListStyle(rowView, position);
 			
 
-
+			//Calculate the total cooking time - prep + cooking
 			SimpleDateFormat  format = new SimpleDateFormat("HH:mm");  
 			int hours = 0;
 			int minutes = 0;
@@ -79,11 +87,13 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 				e.printStackTrace();
 			}
 
+			//Display time
 			TextView time = (TextView) rowView.findViewById(R.id.cookTime);
 			time.setText( hours + ":" + minutes );
 			utils.setRowText(R.id.cookTime, rowView, 18);
 			time.setTextColor(Color.parseColor("#000000")); 
 
+			//Display recipe image
 			ImageView recipeImage = (ImageView) rowView.findViewById(R.id.icon);
 			imgload.DisplayImage(recipeImage, rb.get(position).getImage(), Base64.encodeToString(rb.get(position).getImage(), Base64.DEFAULT) + rb.get(position).getUniqueid());
 		}
@@ -92,6 +102,12 @@ public class CustomRecipeSearchAdapter extends ArrayAdapter<RecipeBean> {
 
 	}
 	
+	/**
+	 * Set the layout with correct styles and data thats being adapated
+	 * @param rowView
+	 * @param position - position of list
+	 * @return rowView - updated rowView
+	 */
 	public View setListStyle(View rowView, int position)
 	{
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.recipeName);

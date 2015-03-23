@@ -79,9 +79,10 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		}
 		else
 		{
-
+			//Show recipe if recipes exist
 			rowView= inflater.inflate(R.layout.recipe_listitem, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
+			//set text style
 			txtTitle.setText(recipenames.get(position));
 			utils.setRowText(R.id.myImageViewText, rowView, 22);
 			//If recipe selected view the recipe
@@ -121,6 +122,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 
 			});
 
+			//If delete button selected - delete recipe
 			ImageView delRecipeImage = (ImageView) rowView.findViewById(R.id.delView);
 			delRecipeImage.setOnTouchListener(new OnTouchListener() {
 
@@ -141,6 +143,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 
 							@Override
 							public void onClick(View arg0) {
+								//Gets the recipe details and updates the recipe to be deleted
 								RecipeModel model = new RecipeModel(context);
 								RecipeBean recipebean = model.selectRecipe2(recipeids.get(position));
 								ArrayList<PreperationBean> prepList = model.selectPreperation(recipebean.getId());
@@ -149,6 +152,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 								recipebean.setProgress("deleted");
 								try
 								{
+									//updates recipe to be deleted and removes from list
 									model.updateRecipe( recipebean, prepList, ingredList, imgBean, false);
 									recipeids.remove(position);
 									recipeimages.remove(position);

@@ -18,6 +18,11 @@ import com.example.recipesforlife.controllers.ReviewBean;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * Adapts a list of review to the layout
+ * @author Kari
+ *
+ */
 public class CustomReviewAdapter extends ArrayAdapter<ReviewBean> {
 
 
@@ -47,13 +52,21 @@ public class CustomReviewAdapter extends ArrayAdapter<ReviewBean> {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		rowView= inflater.inflate(R.layout.recipe_individreview, null, true);
+		//sets style for each row in list
 		rowView = setListStyle(rowView, position);
 
 		return rowView;
 	}
 	
+	/**
+	 * Sets the style of row in list and adapts the data for that row
+	 * @param rowView
+	 * @param position
+	 * @return rowView - updated row
+	 */
 	public View setListStyle(View rowView, int position)
 	{
+		//Sets data to text views and sets the style
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.comment);
 		txtTitle.setText(rb.get(position).getComment());
 		utils.setRowText(R.id.comment, rowView, 26);

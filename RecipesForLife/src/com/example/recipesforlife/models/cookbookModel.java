@@ -348,7 +348,7 @@ public class CookbookModel extends BaseDataSource {
 	{		
 		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook   WHERE uniqueid=?", new String[] { uniqueid });
+		Cursor cursor = database.rawQuery("SELECT * FROM Cookbook   WHERE uniqueid=? AND progress='added'", new String[] { uniqueid });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

@@ -50,8 +50,7 @@ import com.example.recipesforlife.util.Util;
 public class RecipeListViewActivity extends ActionBarActivity {
 	Util utils;	
 	ListView listView;
-	String type = "";
-	String uniqueid = "";
+	String type, uniqueid = "";
 	ArrayList<RecipeBean> recipeList;
 	CookbookModel model;
 	public static CustomRecipeListAdapter adapter;
@@ -59,8 +58,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public static final String MyPREFERENCES = "MyPrefs";
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
-	public  static ArrayList<String> recipenames;
-	public static ArrayList<String> recipeids, recipeimagesid;
+	public static ArrayList<String> recipeids, recipeimagesid, recipenames;
 	public static ArrayList<byte[]> recipeimages;
 	AddRecipeView add;
 	ArrayList<RecipeBean> rbList;
@@ -81,6 +79,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		model = new CookbookModel(getApplicationContext());
 		recipeList = new ArrayList<RecipeBean>();
 		Intent intent = getIntent();
+		//gets details from intent
 		uniqueid = intent.getStringExtra("uniqueid");
 		type = intent.getStringExtra("type");
 		String bookname = intent.getStringExtra("bookname");
@@ -119,6 +118,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 				recipeimages.add(arr);
 			}
 		}
+		//sets list details to adapter
 		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids, recipeimages);
 		listView.setAdapter(adapter); 
 
@@ -191,7 +191,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//Checks for nav drawer selection
 		nav.drawerToggle(item);
-
+		//If add icons selected - displays dialog to add a new recipe
 		if(item.getItemId() ==  R.id.action_bookadd)
 		{
 			Intent intent = getIntent();
@@ -199,7 +199,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 			add.addRecipe();
 
 		}
-		else if(item.getItemId() ==  R.id.action_copy)
+		else if(item.getItemId() ==  R.id.action_copy) //if copy icon selected displays clone dialog
 		{
 			createCloneDialog();
 		}
@@ -218,6 +218,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	 */
 	public void createCloneDialog()
 	{
+		//creates clone style
 		cloneDialog = utils.createDialog(RecipeListViewActivity.this , R.layout.recipe_clone);
 		setCloneDialogStyle();
 
@@ -225,7 +226,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		final SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
 		
-		final Spinner spinner = fillSpinner();
+		final Spinner spinner = fillSpinner(); //fills spinner
 
 		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
 		addButton.setOnClickListener(new OnClickListener(){

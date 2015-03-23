@@ -52,6 +52,7 @@ public class CustomNavArrayAdapter extends ArrayAdapter<String> {
 		//icons relating to page
 		ImageView imageView =(ImageView) rowView.findViewById(R.id.myImageView);
 		imageView.setImageResource(ids.get(position));
+		//set text style
 		utils.setRowText(R.id.textView, rowView, 28);
 		return rowView;
 	}

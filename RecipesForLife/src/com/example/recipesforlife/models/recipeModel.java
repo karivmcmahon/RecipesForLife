@@ -546,7 +546,7 @@ public class RecipeModel extends BaseDataSource {
 	{		
 		RecipeBean rb = new RecipeBean();
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE uniqueid=?", new String[] { uniqueid });
+		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE uniqueid=? AND progress='added'", new String[] { uniqueid });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -570,7 +570,7 @@ public class RecipeModel extends BaseDataSource {
 
 		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE addedBy=?", new String[] {  user });
+		Cursor cursor = database.rawQuery("SELECT * FROM Recipe WHERE addedBy=? AND progress='added'", new String[] {  user });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);

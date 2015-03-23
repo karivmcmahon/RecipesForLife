@@ -77,6 +77,7 @@ public class AddCookbookView extends CookbookListActivity {
 		//fills the spinner
 		fillSpinner();
 
+		//When clicked starts intent to get a photo from the phone
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, bookAddDialog);
 		browseButton.setOnClickListener(new OnClickListener()
 		{
