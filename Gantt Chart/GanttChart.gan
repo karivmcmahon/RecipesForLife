@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2015-01-05" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2015-03-01" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="en_GB">
     <description/>
-    <view zooming-state="default:6" id="gantt-chart">
+    <view zooming-state="default:8" id="gantt-chart">
         <field id="tpd3" name="Name" width="56" order="0"/>
         <field id="tpd4" name="Begin date" width="21" order="1"/>
         <field id="tpd5" name="End date" width="21" order="2"/>
@@ -36,7 +36,7 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="129" name="Project" meeting="false" start="2014-10-06" duration="207" complete="56" expand="true">
+        <task id="129" name="Project" meeting="false" start="2014-10-06" duration="207" complete="65" expand="true">
             <task id="0" name="Background Reading" color="#8cb6ce" meeting="true" start="2014-10-06" duration="0" complete="100" expand="true">
                 <task id="7" name="Research into history of cookbooks and recipes" color="#8cb6ce" meeting="false" start="2014-10-06" duration="14" complete="100" expand="true"/>
                 <task id="28" name="Idea Development" color="#8cb6ce" meeting="false" start="2014-10-06" duration="5" complete="100" expand="true"/>
@@ -79,21 +79,21 @@
                 </task>
             </task>
             <task id="145" name="Survey" color="#8cb6ce" meeting="false" start="2014-11-17" duration="33" complete="100" expand="true"/>
-            <task id="69" name="Development" color="#8cb6ce" meeting="false" start="2014-12-23" duration="99" complete="50" expand="true"/>
+            <task id="69" name="Development" color="#8cb6ce" meeting="false" start="2014-12-23" duration="99" complete="75" expand="true"/>
             <task id="68" name="Report" meeting="false" start="2015-01-20" duration="94" complete="25" expand="true">
                 <task id="97" name="Abstract" color="#8cb6ce" meeting="false" start="2015-03-30" duration="6" complete="60" expand="true"/>
                 <task id="98" name="Intro" color="#8cb6ce" meeting="false" start="2015-03-30" duration="6" complete="60" expand="true"/>
                 <task id="99" name="Specification" color="#8cb6ce" meeting="false" start="2015-04-02" duration="6" complete="0" expand="true"/>
                 <task id="100" name="Design" color="#8cb6ce" meeting="false" start="2015-03-30" duration="6" complete="60" expand="true"/>
                 <task id="134" name="Mid Proj Report" color="#8cb6ce" meeting="false" start="2015-01-20" duration="11" complete="100" expand="true"/>
-                <task id="101" name="Implementation" meeting="false" start="2015-02-15" duration="8" complete="0" expand="true"/>
+                <task id="101" name="Implementation" color="#8cb6ce" meeting="false" start="2015-03-16" duration="8" complete="0" expand="true"/>
                 <task id="102" name="Evaluation" color="#8cb6ce" meeting="false" start="2015-04-08" duration="8" complete="0" expand="true"/>
                 <task id="103" name="Conclusion" color="#8cb6ce" meeting="false" start="2015-04-13" duration="7" complete="0" expand="true"/>
                 <task id="104" name="Appendix Build up" color="#8cb6ce" meeting="false" start="2015-04-20" duration="1" complete="0" expand="true"/>
                 <task id="118" name="Redrafting and finalising" color="#8cb6ce" meeting="false" start="2015-03-27" duration="28" complete="0" expand="true"/>
             </task>
-            <task id="70" name="User Tesiting" color="#8cb6ce" meeting="false" start="2015-03-18" duration="14" complete="40" expand="true"/>
-            <task id="71" name="Evaluation" color="#8cb6ce" meeting="false" start="2015-03-18" duration="14" complete="0" expand="true"/>
+            <task id="70" name="User Tesiting" color="#8cb6ce" meeting="false" start="2015-03-18" duration="14" complete="100" expand="true"/>
+            <task id="71" name="Evaluation" color="#8cb6ce" meeting="false" start="2015-04-03" duration="10" complete="0" expand="true"/>
             <task id="72" name="Demo Prep" color="#8cb6ce" meeting="false" start="2015-04-20" duration="11" complete="0" expand="true"/>
         </task>
     </tasks>
