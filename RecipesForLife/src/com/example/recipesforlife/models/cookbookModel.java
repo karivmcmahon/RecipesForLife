@@ -62,7 +62,7 @@ public class CookbookModel extends BaseDataSource {
 		String uid = "";
 		if(server == true)
 		{
-			values.put("updateTime", sharedpreferences.getString("Cookbook", "DEFAULT")); //if server use shared pref time
+			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); //if server use shared pref time
 			values.put("uniqueid", book.getUniqueid()); //gets unique id if from server
 			uid = book.getUniqueid();
 		}
@@ -109,7 +109,7 @@ public class CookbookModel extends BaseDataSource {
 		if(server == true)
 		{
 			//Get timestamp based on shared pref if request from server
-			updateVals.put("changeTime", sharedpreferences.getString("Cookbook Update", "DEFAULT"));
+			updateVals.put("changeTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		else
 		{
@@ -151,7 +151,7 @@ public class CookbookModel extends BaseDataSource {
 		if(server == true)
 		{
 			//Get timestamp based on the shared pref if request from the server
-			values.put("updateTime", sharedpreferences.getString("Contributers", "DEFAULT"));
+			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		else
 		{
@@ -198,7 +198,7 @@ public class CookbookModel extends BaseDataSource {
 		if(server == true)
 		{
 			//Get timestamp based on the shared pref if request from server
-			values.put("changeTime", sharedpreferences.getString("Contributers Update", "DEFAULT"));
+			values.put("changeTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		else
 		{

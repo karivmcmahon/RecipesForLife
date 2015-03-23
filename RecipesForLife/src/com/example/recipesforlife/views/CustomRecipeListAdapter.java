@@ -8,6 +8,7 @@ import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.CookbookModel;
 import com.example.recipesforlife.models.RecipeModel;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
@@ -16,6 +17,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,13 +45,16 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 	private ArrayList<String> recipenames;
 	private ArrayList<String> recipeids;
 	private ArrayList<byte[]> recipeimages;
+	String bookid;
 	public static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
 	Context context;
 	Util utils;
 	ImageLoader2 imgload;
+	RecipeModel model;
+	boolean isCreator;
 
-	public CustomRecipeListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages)
+	public CustomRecipeListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages, String bookid)
 	{
 		super(context, R.layout.recipe_listitem, recipenames);
 		this.activity = activity;
@@ -57,8 +62,8 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 		this.recipenames = recipenames;
 		this.recipeids = recipeids;
 		this.recipeimages = recipeimages;
-
-
+		this.bookid = bookid;
+		model = new RecipeModel(context);
 		imgload = new ImageLoader2(context);
 		utils = new Util(this.context, activity);
 
@@ -82,6 +87,10 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 			//Show recipe if recipes exist
 			rowView= inflater.inflate(R.layout.recipe_listitem, null, true);
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.myImageViewText);
+			SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+			
+			boolean access = model.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), bookid);
+	       
 			//set text style
 			txtTitle.setText(recipenames.get(position));
 			utils.setRowText(R.id.myImageViewText, rowView, 22);
@@ -104,8 +113,17 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 				}
 
 			});
+			
+			
 			//If edit button selected, then take the user to edit recipe page
 			ImageView editRecipeImage = (ImageView) rowView.findViewById(R.id.editView);
+			if(access == false)
+			{
+				//if not creator then set edit button to invisible
+				editRecipeImage.setVisibility(View.INVISIBLE);
+			}
+			else
+			{
 			editRecipeImage.setOnTouchListener(new OnTouchListener() {
 
 				@Override
@@ -121,9 +139,16 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 				}
 
 			});
-
+			}
 			//If delete button selected - delete recipe
 			ImageView delRecipeImage = (ImageView) rowView.findViewById(R.id.delView);
+			if(access == false)
+			{
+				//if not creator then set edit button to invisible
+				delRecipeImage.setVisibility(View.INVISIBLE);
+			}
+			else
+			{
 			delRecipeImage.setOnTouchListener(new OnTouchListener() {
 
 				@Override
@@ -181,6 +206,7 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 				}
 
 			});
+			}
 		}
 		return rowView;		
 	}

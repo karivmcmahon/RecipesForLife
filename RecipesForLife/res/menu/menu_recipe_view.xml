@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" 
   xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
     
+     <item android:id="@+id/action_copy"
+          android:icon="@drawable/icon_copy"
+          android:title="@string/action_copy"
+          yourapp:showAsAction="always"  />
+     
      <item android:id="@+id/action_fontup"
           android:icon="@drawable/icon_fontup"
           android:title="@string/action_fontup"

@@ -70,7 +70,7 @@ public class RecipeModel extends BaseDataSource {
 		if(server == true)
 		{
 			//Gets timestamp based on shared pref if from server
-			recipeUpdateVals.put("changeTime", sharedpreferences.getString("Change", "DEFAULT"));
+			recipeUpdateVals.put("changeTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		else
 		{
@@ -606,6 +606,23 @@ public class RecipeModel extends BaseDataSource {
 		return rb;	
 	}
 
+	public boolean doesUserHaveAccess(String user, String uid)
+	{
+
+		boolean access;
+		open();
+		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook LEFT JOIN Contributers ON Contributers.cookbookid = Cookbook.id WHERE  Cookbook.uniqueid = ? AND ( Contributers.accountid = ? OR Cookbook.creator=?)", new String[] { uid,  user, user });
+		if (cursor != null && cursor.getCount() > 0) {
+			access = true;
+		}
+		else
+		{
+			access = false;
+		}
+		cursor.close();
+		close();
+		return access;
+	}
 	
 	/**
 	 * Sets info from database to recipe bean

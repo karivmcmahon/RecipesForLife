@@ -53,7 +53,7 @@ public class ReviewModel extends BaseDataSource  {
 		if(server == true)
 		{
 			values.put("accountid", review.getUser());
-			values.put("updateTime", sharedpreferences.getString("Review", "DEFAULT")); 
+			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
 		}
 		else
 		{

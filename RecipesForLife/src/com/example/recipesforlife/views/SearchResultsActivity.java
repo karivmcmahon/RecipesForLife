@@ -112,20 +112,21 @@ public class SearchResultsActivity extends ActionBarActivity {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			//Get query
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			
+
 			//Save query with recent suggestions
 			SearchRecentSuggestions suggestions = 
 					new SearchRecentSuggestions(this, 
 							SampleRecentSuggestionsProvider.AUTHORITY, 
 							SampleRecentSuggestionsProvider.MODE); 
 			suggestions.saveRecentQuery(query, null);
+
 			SearchModel sm = new SearchModel(getApplicationContext());
-			
+
 			//Gets results for search
 			final ArrayList<RecipeBean> rb = sm.selectRecipe(query);
 			final ArrayList<CookbookBean> cb = sm.selectCookbooks(query);
 			final ArrayList<UserBean> ub = sm.selectUsers(query);
-			
+
 			//Creates listviews for the different searches 
 			getRecipesBasedOnQuery(query, rb);
 			getCookbooksBasedOnQuery(query, cb);
@@ -133,7 +134,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 
 		}
 	}
-	
+
 	/**
 	 * Gets users based on the search query and places them in listview
 	 * @param query - string search
@@ -153,7 +154,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 		CustomUserSearchAdapter useradapter = new CustomUserSearchAdapter( getApplicationContext(), this,  ub);
 		userlistView.setAdapter(useradapter); 
 	}
-	
+
 	/**
 	 * Gets cookbooks based on search query and places them in listview
 	 * @param query - string seach
@@ -161,6 +162,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 	 */
 	public void getCookbooksBasedOnQuery(String query, final ArrayList<CookbookBean> cb)
 	{
+		boolean empty = false;
 		TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
 		cookbooktv.setText("Cookbooks that feature '" + query + "' :");
 		ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
@@ -168,11 +170,14 @@ public class SearchResultsActivity extends ActionBarActivity {
 		{
 			CookbookBean cookbookbean = new CookbookBean();
 			cookbookbean.setName("empty");
-			cb.add(cookbookbean);
+			cb.add(cookbookbean); 
+			empty = true;
 		} 
 		CustomCookbookSearchAdapter cookbookadapter = new CustomCookbookSearchAdapter( getApplicationContext(), this,  cb);
 		cookbooklistView.setAdapter(cookbookadapter); 
 
+		if(empty == false)
+		{
 		cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -187,8 +192,9 @@ public class SearchResultsActivity extends ActionBarActivity {
 
 			}                 
 		});
+		}
 	}
-	
+
 	/**
 	 * Gets recipes based on the search query and places them in a listview
 	 * @param query - search query string
@@ -196,6 +202,7 @@ public class SearchResultsActivity extends ActionBarActivity {
 	 */
 	public void getRecipesBasedOnQuery(String query, final ArrayList<RecipeBean> rb)
 	{
+		boolean empty = false;
 		TextView tv = (TextView) findViewById(R.id.recipeheader);
 		tv.setText("Recipes that feature '" + query + "' :");
 		utils.setText(R.id.recipeheader, 30);
@@ -208,22 +215,26 @@ public class SearchResultsActivity extends ActionBarActivity {
 			RecipeBean recipebean = new RecipeBean();
 			recipebean.setName("empty");
 			rb.add(recipebean);
+			empty = true;
 		}
 		CustomRecipeSearchAdapter adapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
 		listView.setAdapter(adapter); 
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				Intent i = new Intent(SearchResultsActivity.this, RecipeViewActivity.class);
-				i.putExtra("uniqueidr", rb.get(position).getUniqueid());
-				i.putExtra("name", rb.get(position).getName());
-				startActivity(i);
+		if(empty == false)
+		{
+			listView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					Intent i = new Intent(SearchResultsActivity.this, RecipeViewActivity.class);
+					i.putExtra("uniqueidr", rb.get(position).getUniqueid());
+					i.putExtra("name", rb.get(position).getName());
+					startActivity(i);
 
-			}                 
-		});
+				}                 
+			});
+		}
 
 	}
 

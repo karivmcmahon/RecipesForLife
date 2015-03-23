@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,19 +34,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.controllers.ReviewBean;
+import com.example.recipesforlife.models.CookbookModel;
 import com.example.recipesforlife.models.RecipeModel;
 import com.example.recipesforlife.models.ReviewModel;
 import com.example.recipesforlife.util.ImageLoader;
@@ -73,7 +79,13 @@ public class RecipeViewActivity extends ActionBarActivity {
 	ArrayList<ReviewBean> rbs;
 	CustomReviewAdapter adapter;
 	ImageView img;
-
+	Dialog cloneDialog;
+	TextView errorView;
+	ArrayList<CookbookBean> cbList;
+	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+	ImageBean imgBean = new ImageBean();
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -219,6 +231,10 @@ public class RecipeViewActivity extends ActionBarActivity {
 				counter = 0;
 			}
 		}
+		if(item.getItemId() == R.id.action_copy)
+		{
+			createCloneDialog();
+		}
 		setStyle(); 
 		return super.onOptionsItemSelected(item);
 
@@ -295,9 +311,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 	{
 		RecipeModel model = new RecipeModel(getApplicationContext());
 		recipe = new RecipeBean();
-		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
-		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
-		ImageBean imgBean = new ImageBean();
+		
 		Intent intent = getIntent();
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr") );
 		prepList = model.selectPreperation(recipe.getId());
@@ -370,6 +384,100 @@ public class RecipeViewActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 		return bmpUri;
+	}
+	
+	/**
+	 * Creates the clone dialog - to clone recipes into cookbook
+	 */
+	public void createCloneDialog()
+	{
+		//creates clone style
+		cloneDialog = utils.createDialog(RecipeViewActivity.this , R.layout.recipe_clone_forview);
+		setCloneDialogStyle();
+
+		final CookbookModel model = new CookbookModel(getApplicationContext());
+		final SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		cbList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));	
+		
+		final Spinner spinner = fillSpinner(); //fills spinner
+
+		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
+		addButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				//gets a position of select item
+				int namepos = spinner.getSelectedItemPosition();
+				RecipeBean cloneRecipe = recipe;
+				recipe.setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
+				recipe.setRecipeBook(cbList.get(namepos).getUniqueid());
+				recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
+
+				try
+				{
+					RecipeModel rmodel = new RecipeModel(getApplicationContext());
+					//check for errors
+					if(rmodel.selectRecipe( recipe.getName(), cbList.get(namepos).getUniqueid()))
+					{
+						errorView.setText("You already have a recipe with that name");
+					}
+					else if(recipe.getName().equals(""))
+					{
+						errorView.setText("Please enter a recipe name");
+					}
+					else
+					{
+						//clone recipe
+						String uid = rmodel.insertRecipe(recipe, false, ingredList, prepList, imgBean);
+						RecipeListViewActivity.adapter.notifyDataSetChanged(); 
+						cloneDialog.dismiss();
+					}
+
+				}catch(SQLException e)
+				{
+					Toast.makeText(getApplicationContext(), "Recipe was not cloned", Toast.LENGTH_LONG).show();
+				}
+
+
+
+			}}); 
+
+		cloneDialog.show();
+	}
+	
+	/**
+	 * Fills spinner for cloning
+	 * @return filled spinner
+	 */
+	public Spinner fillSpinner()
+	{
+		//Fill with a list of recipes the user owns
+		List<String> spinnerArray =  new ArrayList<String>();
+		for(int i = 0; i < cbList.size(); i++)
+		{
+			spinnerArray.add(cbList.get(i).getName());
+			
+		}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				RecipeViewActivity.this, R.layout.general_spinner_item, spinnerArray);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+		final Spinner spinner = (Spinner) cloneDialog.findViewById(R.id.currentCookbooksSpinner);
+		spinner.setAdapter(adapter);
+		spinner.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		return spinner;
+	}
+	
+	/**
+	 * Set up a clone dialog style
+	 */
+	public void setCloneDialogStyle()
+	{
+		utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
+		utils.setDialogText(R.id.currentCookbooksView,cloneDialog,22);
+		utils.setDialogText(R.id.recipeNameView,cloneDialog,22);
+		errorView = (TextView) cloneDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,cloneDialog,16);
+		errorView.setTextColor(Color.parseColor("#F70521"));
 	}
 
 }

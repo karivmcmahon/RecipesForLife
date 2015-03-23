@@ -125,7 +125,8 @@
                 android:id="@+id/cusineVal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/forkImage"
+                 android:layout_marginTop="20dp"
+                android:layout_below="@+id/difficulty"
                 android:layout_toRightOf="@+id/cusine"
                 android:text="" />
 

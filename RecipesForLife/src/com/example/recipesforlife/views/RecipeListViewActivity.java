@@ -53,6 +53,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	String type, uniqueid = "";
 	ArrayList<RecipeBean> recipeList;
 	CookbookModel model;
+	RecipeModel rmodel;
 	public static CustomRecipeListAdapter adapter;
 	NavigationDrawerCreation nav;
 	public static final String MyPREFERENCES = "MyPrefs";
@@ -77,6 +78,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		listView = (ListView) findViewById(R.id.list);
 		utils = new Util(getApplicationContext(), this);
 		model = new CookbookModel(getApplicationContext());
+		rmodel = new RecipeModel(getApplicationContext());
 		recipeList = new ArrayList<RecipeBean>();
 		Intent intent = getIntent();
 		//gets details from intent
@@ -119,7 +121,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 			}
 		}
 		//sets list details to adapter
-		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids, recipeimages);
+		adapter = new CustomRecipeListAdapter(this, recipenames, getApplicationContext(), recipeids, recipeimages, uniqueid);
 		listView.setAdapter(adapter); 
 
 	}
@@ -127,13 +129,37 @@ public class RecipeListViewActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
+		menu.clear();
+		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		Intent intent = getIntent();
+		boolean access = rmodel.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), intent.getStringExtra("uniqueid"));
+		if(access == true)
+		{
+			getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
+		}
+		else
+		{
+			getMenuInflater().inflate(R.menu.menu_plain, menu);
+		}
 		utils.setUpSearch(menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {   
+	public boolean onPrepareOptionsMenu(Menu menu) { 
+		menu.clear();
+		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		Intent intent = getIntent();
+		boolean access = rmodel.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), intent.getStringExtra("uniqueid"));
+		if(access == true)
+		{
+			getMenuInflater().inflate(R.menu.menu_recipe_list, menu);
+		}
+		else
+		{
+			getMenuInflater().inflate(R.menu.menu_plain, menu);
+		}
+		utils.setUpSearch(menu);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -163,7 +189,6 @@ public class RecipeListViewActivity extends ActionBarActivity {
 				recipenames.add("");
 				recipeids.add("");
 				recipeimages.add(arr);
-				Log.v("add","add");
 			}
 		}
 		//Updates the list view
@@ -192,7 +217,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		//Checks for nav drawer selection
 		nav.drawerToggle(item);
 		//If add icons selected - displays dialog to add a new recipe
-		if(item.getItemId() ==  R.id.action_bookadd)
+	if(item.getItemId() ==  R.id.action_bookadd)
 		{
 			Intent intent = getIntent();
 			add = new AddRecipeView(getApplicationContext(), RecipeListViewActivity.this, uniqueid, intent.getStringExtra("bookname"));
@@ -202,7 +227,7 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		else if(item.getItemId() ==  R.id.action_copy) //if copy icon selected displays clone dialog
 		{
 			createCloneDialog();
-		}
+		} 
 		return super.onOptionsItemSelected(item);
 	}
 
