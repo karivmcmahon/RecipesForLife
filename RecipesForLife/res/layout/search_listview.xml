@@ -24,15 +24,13 @@
         android:divider="#FFFFFF"
         android:dividerHeight="0.5dp" />
 
-    <com.example.recipesforlife.util.VerticalScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
 
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical" 
+            android:background="@drawable/background_search">
 
             <TextView
                 android:id="@+id/recipeheader"
@@ -46,9 +44,10 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/background_search" >
+              android:divider="#F3216C"
+                    android:dividerHeight="1px" >
             </ListView>
 
             <TextView
@@ -64,9 +63,11 @@
             <ListView
                 android:id="@+id/cookbooklist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/background_search" >
+               android:divider="#F3216C"
+                    android:dividerHeight="1px"
+              >
             </ListView>
 
             <TextView
@@ -82,11 +83,12 @@
             <ListView
                 android:id="@+id/userlist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/background_search" >
+                android:divider="#F3216C"
+                 android:dividerHeight="1px" >
             </ListView>
         </LinearLayout>
-    </com.example.recipesforlife.util.VerticalScrollView>
+
 
 </android.support.v4.widget.DrawerLayout>

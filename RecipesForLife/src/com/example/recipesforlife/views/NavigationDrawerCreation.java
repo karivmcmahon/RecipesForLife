@@ -60,8 +60,8 @@ public class NavigationDrawerCreation   {
 		imageids = new ArrayList<Integer>();
 		navBarTitles.add("Home");
 		imageids.add(R.drawable.icon_home);
-		navBarTitles.add("Settings");
-		imageids.add(R.drawable.icon_settings);
+		navBarTitles.add("Explore");
+		imageids.add(R.drawable.icon_explore);
 		navBarTitles.add("Proffile");
 		imageids.add(R.drawable.icon_user2);
 		navBarTitles.add("Log Off");
@@ -133,6 +133,11 @@ public class NavigationDrawerCreation   {
 			{
 				//Goes to homepage
 				Intent i = new Intent(activity, CookbookListActivity.class);
+				activity.startActivity(i);
+			}
+			else if(position == 1)
+			{
+				Intent i = new Intent(activity, ExploreActivity.class);
 				activity.startActivity(i);
 			}
 			else if(position == 3)
