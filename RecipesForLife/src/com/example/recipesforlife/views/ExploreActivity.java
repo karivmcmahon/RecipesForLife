@@ -46,12 +46,13 @@ public class ExploreActivity  extends ActionBarActivity {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
 		TextView headertv = (TextView) findViewById(R.id.exploreheader);
-		headertv.setText("Explore Recipes");
+		headertv.setText("Explore");
 		utils.setText(R.id.exploreheader, 26);
 		ArrayList<String> categories = new ArrayList<String>();
-		categories.add("By Difficulty");
-		categories.add("By Cuisine");
-		categories.add("By Dietary requirements");
+		categories.add("Recipes By Difficulty");
+		categories.add("Recipes By Cuisine");
+		categories.add("Recipes By Dietary requirements");
+		categories.add("Cookbooks");
 		ListView categorieslistView = (ListView) findViewById(R.id.list);
 	
 		CustomExploreAdapter exploreadapter = new CustomExploreAdapter( getApplicationContext(), this,  categories);
@@ -66,6 +67,21 @@ public class ExploreActivity  extends ActionBarActivity {
 				if(position == 0)
 				{
 					Intent i = new Intent(ExploreActivity.this, ExploreDifficultyActivity.class);
+					startActivity(i);
+				}
+				if(position == 1)
+				{
+					Intent i = new Intent(ExploreActivity.this, ExploreCusineActivity.class);
+					startActivity(i);
+				}
+				if(position == 2)
+				{
+					Intent i = new Intent(ExploreActivity.this, ExploreDietaryActivity.class);
+					startActivity(i);
+				}
+				if(position == 3)
+				{
+					Intent i = new Intent(ExploreActivity.this, ExploreCookbookActivity.class);
 					startActivity(i);
 				}
 				

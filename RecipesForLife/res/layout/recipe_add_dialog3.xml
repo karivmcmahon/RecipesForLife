@@ -112,14 +112,14 @@
             android:gravity="left"
             android:text="Dietary:" />
 
-        <EditText
-            android:id="@+id/recipeDietaryEditText"
+        <Spinner
+            android:id="@+id/recipeDietarySpinner"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:layout_toRightOf="@+id/recipeDietaryView"
-            android:background="#FFFFFF"
             android:ems="10"
+            android:textColor="#FFFFFF"
             android:textSize="14dp" />
     </LinearLayout>
 

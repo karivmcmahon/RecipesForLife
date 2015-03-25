@@ -33,7 +33,58 @@ public class SearchModel extends BaseDataSource {
 	{	
 		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND (Recipe.name LIKE ? OR Recipe.description LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" });
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId INNER JOIN IngredientDetails ON IngredientDetails.id = RecipeIngredient.ingredientDetailsID INNER JOIN RecipeIngredient ON  RecipeIngredient.Recipeid  = Recipe.id WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND (Recipe.name LIKE ? OR Recipe.description LIKE ? OR Ingredient.name LIKE ?) GROUP BY Recipe.uniqueid ", new String[] { "%" + word + "%" , "%" + word + "%" , "%" + word + "%" });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				rb.add(cursorToRecipe(cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return rb;
+	}
+	
+	public ArrayList<RecipeBean> selectRecipeByDiff(String word)
+	{	
+		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND Recipe.difficulty LIKE ?  ORDER BY RANDOM() LIMIT 10; ", new String[] { "%" + word + "%" });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				rb.add(cursorToRecipe(cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return rb;
+	}
+	
+	public ArrayList<RecipeBean> selectRecipeByCuisine(String word)
+	{	
+		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND Recipe.cusine LIKE ?  ORDER BY RANDOM() LIMIT 10; ", new String[] { "%" + word + "%" });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				rb.add(cursorToRecipe(cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return rb;
+	}
+	
+	public ArrayList<RecipeBean> selectRecipeByDietary(String word)
+	{	
+		ArrayList<RecipeBean> rb = new ArrayList<RecipeBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT Recipe.name AS rname, Recipe.description AS desc, Recipe.uniqueid AS rid, Recipe.id AS idr, Cookbook.name AS cname, * FROM Recipe INNER JOIN Cookbook ON Cookbook.id = CookbookRecipe.Cookbookid INNER JOIN CookbookRecipe ON Recipe.id = CookbookRecipe.Recipeid WHERE Cookbook.privacyOption='public' AND Recipe.progress='added' AND Cookbook.progress='added' AND Recipe.dietary LIKE ?  ORDER BY RANDOM() LIMIT 10; ", new String[] { "%" + word + "%" });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -97,6 +148,23 @@ public class SearchModel extends BaseDataSource {
 	 * @param word
 	 * @return List of cookbooks
 	 */
+	public ArrayList<CookbookBean> selectRandomCookbooks()
+	{	
+		ArrayList<CookbookBean> cb = new ArrayList<CookbookBean>();
+		open();
+		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook WHERE Cookbook.privacyOption='public' AND Cookbook.progress='added' ORDER BY RANDOM() LIMIT 10;", new String[] {  });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				cb.add(cursorToCookbook(cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return cb;
+	}
+
 	public ArrayList<CookbookBean> selectCookbooks(String word)
 	{	
 		ArrayList<CookbookBean> cb = new ArrayList<CookbookBean>();
@@ -113,7 +181,6 @@ public class SearchModel extends BaseDataSource {
 		close();
 		return cb;
 	}
-
 	/**
 	 * Sets info from database to cookbook bean
 	 * @param cursor

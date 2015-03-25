@@ -1766,7 +1766,6 @@ containing a value of this type.
         public static final int dialog=0x7f060010;
         public static final int dietary=0x7f0600ba;
         public static final int dietaryVal=0x7f0600bb;
-        public static final int diffSpinner=0x7f060067;
         public static final int diffVal=0x7f0600b6;
         public static final int difficulty=0x7f0600b5;
         public static final int difficultyTitle=0x7f0600df;
@@ -1856,7 +1855,7 @@ containing a value of this type.
         public static final int recipeDescEdit=0x7f060074;
         public static final int recipeDescView=0x7f060073;
         public static final int recipeDescription=0x7f0600dd;
-        public static final int recipeDietaryEditText=0x7f06008a;
+        public static final int recipeDietarySpinner=0x7f06008a;
         public static final int recipeDietaryView=0x7f060089;
         public static final int recipeDifficultySpinner=0x7f060088;
         public static final int recipeDifficultyView=0x7f060087;
@@ -1907,6 +1906,7 @@ containing a value of this type.
         public static final int showTitle=0x7f060008;
         public static final int signUpButton=0x7f0600f6;
         public static final int signUpView=0x7f0600fc;
+        public static final int spinner=0x7f060067;
         public static final int split_action_bar=0x7f060019;
         public static final int stepEditText=0x7f060092;
         public static final int stepNumEditText=0x7f060090;

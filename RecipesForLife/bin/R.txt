@@ -466,7 +466,6 @@ int id delView 0x7f060059
 int id dialog 0x7f060010
 int id dietary 0x7f0600ba
 int id dietaryVal 0x7f0600bb
-int id diffSpinner 0x7f060067
 int id diffVal 0x7f0600b6
 int id difficulty 0x7f0600b5
 int id difficultyTitle 0x7f0600df
@@ -556,7 +555,7 @@ int id recipeDesc 0x7f0600b0
 int id recipeDescEdit 0x7f060074
 int id recipeDescView 0x7f060073
 int id recipeDescription 0x7f0600dd
-int id recipeDietaryEditText 0x7f06008a
+int id recipeDietarySpinner 0x7f06008a
 int id recipeDietaryView 0x7f060089
 int id recipeDifficultySpinner 0x7f060088
 int id recipeDifficultyView 0x7f060087
@@ -607,6 +606,7 @@ int id showHome 0x7f060006
 int id showTitle 0x7f060008
 int id signUpButton 0x7f0600f6
 int id signUpView 0x7f0600fc
+int id spinner 0x7f060067
 int id split_action_bar 0x7f060019
 int id stepEditText 0x7f060092
 int id stepNumEditText 0x7f060090

@@ -458,6 +458,21 @@ public class AddRecipeView extends RecipeListViewActivity {
 		Spinner cusineItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeCusineSpinner);
 		cusineItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		cusineItems.setAdapter(cusineAdapter);
+		
+		
+		List<String> dietarySpinnerArray =  new ArrayList<String>();
+		dietarySpinnerArray.add("Nut free");
+		dietarySpinnerArray.add("Gluten free");
+		dietarySpinnerArray.add("Vegeterian");
+		dietarySpinnerArray.add("Vegan");
+		dietarySpinnerArray.add("N/A");
+		
+		ArrayAdapter<String> dietaryAdapter = new ArrayAdapter<String>(
+				activity, R.layout.general_spinner_item, dietarySpinnerArray);
+		dietaryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner dietaryItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDietarySpinner);
+		dietaryItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		dietaryItems.setAdapter(dietaryAdapter);
 		addRecipeDialog3.show();
 	}
 
@@ -467,8 +482,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 	public void getThirdDialogData()
 	{	
 
-
-		dietary = utils.getTextFromDialog(R.id.recipeDietaryEditText, addRecipeDialog3);
+		Spinner dietaryspinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDietarySpinner);
+		dietary = dietaryspinner.getSelectedItem().toString();
 		tips = utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);
 		Spinner spinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDifficultySpinner);
 		difficulty = spinner.getSelectedItem().toString();

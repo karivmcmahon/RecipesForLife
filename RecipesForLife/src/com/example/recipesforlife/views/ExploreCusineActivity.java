@@ -1,17 +1,9 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.RecipeBean;
-import com.example.recipesforlife.models.SearchModel;
-import com.example.recipesforlife.util.TypefaceSpan;
-import com.example.recipesforlife.util.Util;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
@@ -22,13 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ExploreDifficultyActivity extends ActionBarActivity {
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.SearchModel;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
+
+public class ExploreCusineActivity extends ActionBarActivity {
 	
 	NavigationDrawerCreation nav;
 	Util utils;
@@ -42,9 +38,9 @@ public class ExploreDifficultyActivity extends ActionBarActivity {
 
 		utils = new Util(getApplicationContext(), this);
 		//Sets up nav bar
-		nav = new NavigationDrawerCreation(ExploreDifficultyActivity.this, "Explore By Difficulty");
+		nav = new NavigationDrawerCreation(ExploreCusineActivity.this, "Explore By Cuisine");
 		nav.createDrawer();
-		SpannableString s = new SpannableString("Explore By Difficulty");
+		SpannableString s = new SpannableString("Explore By Cuisine");
 		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -52,16 +48,24 @@ public class ExploreDifficultyActivity extends ActionBarActivity {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
 		utils.setTextString(R.id.exploreheader, "Explore recipes by ");
-		utils.setTextString(R.id.exploreheadercont, "difficulty ");
+		utils.setTextString(R.id.exploreheadercont, "cuisine ");
 		utils.setText(R.id.exploreheader, 26);
 		utils.setText(R.id.exploreheadercont, 26);
 		
-		ArrayList<String> spinnerArray =  new ArrayList<String>();
-		spinnerArray.add("Easy");
-		spinnerArray.add("Medium");
-		spinnerArray.add("Hard");
+		ArrayList<String> cusineSpinnerArray =  new ArrayList<String>();
+		cusineSpinnerArray.add("Italian");
+		cusineSpinnerArray.add("Indian");
+		cusineSpinnerArray.add("Chinese");
+		cusineSpinnerArray.add("Thai");
+		cusineSpinnerArray.add("Spanish");
+		cusineSpinnerArray.add("French");
+		cusineSpinnerArray.add("American");
+		cusineSpinnerArray.add("English");
+		cusineSpinnerArray.add("African");
+		cusineSpinnerArray.add("Middle Eastern");
+		cusineSpinnerArray.add("Other");
 		CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getApplicationContext(), this,
-                R.layout.general_spinner_item2, spinnerArray);
+                R.layout.general_spinner_item2, cusineSpinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		final Spinner sItems = (Spinner) findViewById(R.id.spinner);
 		
@@ -74,7 +78,7 @@ public class ExploreDifficultyActivity extends ActionBarActivity {
 		    	boolean empty = false;
 		        Log.v("SPINNER", "SPINNER" + sItems.getSelectedItem().toString());
 		        SearchModel sm = new SearchModel(getApplicationContext());
-				final ArrayList<RecipeBean> rb = sm.selectRecipeByDiff(sItems.getSelectedItem().toString());
+				final ArrayList<RecipeBean> rb = sm.selectRecipeByCuisine(sItems.getSelectedItem().toString());
 				ListView listView = (ListView) findViewById(R.id.list);
 				if(rb.size() == 0)
 				{
@@ -83,7 +87,7 @@ public class ExploreDifficultyActivity extends ActionBarActivity {
 					rb.add(recipebean);
 					empty = true;
 				}
-				CustomRecipeSearchAdapter recipeadapter = new CustomRecipeSearchAdapter( getApplicationContext(), ExploreDifficultyActivity.this,  rb);
+				CustomRecipeSearchAdapter recipeadapter = new CustomRecipeSearchAdapter( getApplicationContext(), ExploreCusineActivity.this,  rb);
 				listView.setAdapter(recipeadapter);
 				
 				if(empty == false)
@@ -93,7 +97,7 @@ public class ExploreDifficultyActivity extends ActionBarActivity {
 						public void onItemClick(AdapterView<?> parent, View view,
 								int position, long id) {
 							// TODO Auto-generated method stub
-							Intent i = new Intent(ExploreDifficultyActivity.this, RecipeViewActivity.class);
+							Intent i = new Intent(ExploreCusineActivity.this, RecipeViewActivity.class);
 							i.putExtra("uniqueidr", rb.get(position).getUniqueid());
 							i.putExtra("name", rb.get(position).getName());
 							startActivity(i);
@@ -158,3 +162,4 @@ public class ExploreDifficultyActivity extends ActionBarActivity {
 	}
 
 }
+

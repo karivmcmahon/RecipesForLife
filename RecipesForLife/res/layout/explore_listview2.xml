@@ -25,13 +25,11 @@
         android:dividerHeight="0.5dp" />
 
 
-     <RelativeLayout
-            android:id="@+id/rl"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+       <LinearLayout
             
-            >
-            
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
            <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="50dp"
@@ -44,12 +42,12 @@
                     android:layout_height="50dp"
                     android:gravity="center"
                  
-                    android:layout_toLeftOf="@+id/diffSpinner"
+                   
                     android:padding="5dp"
-                    android:text="Explore Recipes By  " />
+                   />
 
                 <Spinner
-                    android:id="@+id/diffSpinner"
+                    android:id="@+id/spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:ems="10"
@@ -57,17 +55,18 @@
                      android:padding="5dp"
                     android:theme="@android:style/Theme.Holo"
                   
-                     android:layout_centerHorizontal="true"
+                     android:layout_toRightOf="@+id/exploreheader"
                      android:gravity="center" />
                 
                  <TextView
                     android:id="@+id/exploreheadercont"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-     				 android:layout_toRightOf="@+id/diffSpinner" 
+     				 android:layout_toRightOf="@+id/spinner" 
                  	android:gravity="center"
                     android:padding="5dp"
-                    android:text="Difficulty " />
+                  />
+                 </RelativeLayout>
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
@@ -85,6 +84,6 @@
                 android:dividerHeight="1px" >
             </ListView>
         </LinearLayout>
-        </RelativeLayout>
-</RelativeLayout>
+       
+</LinearLayout>
 </android.support.v4.widget.DrawerLayout>

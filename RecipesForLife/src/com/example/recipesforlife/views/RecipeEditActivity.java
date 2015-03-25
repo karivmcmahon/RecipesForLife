@@ -596,7 +596,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		errorView.setTextColor(Color.parseColor("#F70521"));
 		utils.setDialogText(R.id.recipeEditView, cusineDialog, 22);
 		utils.setDialogText(R.id.recipeCusineView, cusineDialog, 22);
-		utils.setDialogTextString(R.id.recipeDietaryEditText, cusineDialog, recipe.getDietary());
+		
 		utils.setDialogText(R.id.recipeDietaryView, cusineDialog, 22);
 
 		List<String> cusineSpinnerArray =  new ArrayList<String>();
@@ -618,14 +618,30 @@ public class RecipeEditActivity extends ActionBarActivity {
 		sItems.getBackground().setColorFilter(this.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
 		sItems.setSelection(utils.getIndex(sItems, recipe.getCusine()));
-
+		
+		List<String> dietarySpinnerArray =  new ArrayList<String>();
+		dietarySpinnerArray.add("Nut free");
+		dietarySpinnerArray.add("Gluten free");
+		dietarySpinnerArray.add("Vegeterian");
+		dietarySpinnerArray.add("Vegan");
+		dietarySpinnerArray.add("N/A");
+		
+		
+		ArrayAdapter<String> dietaryAdapter = new ArrayAdapter<String>(
+				this, R.layout.general_spinner_item, dietarySpinnerArray);
+		dietaryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		final Spinner dietaryItems = (Spinner) cusineDialog.findViewById(R.id.recipeDietarySpinner);
+		dietaryItems.getBackground().setColorFilter(this.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		dietaryItems.setAdapter(dietaryAdapter);
+		dietaryItems.setSelection(utils.getIndex(sItems, recipe.getDietary()));
+		
 		Button cusineButton = utils.setButtonTextDialog(R.id.saveButton, 22, cusineDialog);
 		cusineButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 
-				utils.setTextString(R.id.dietaryVal, utils.getTextFromDialog(R.id.recipeDietaryEditText, cusineDialog));
+				utils.setTextString(R.id.dietaryVal, dietaryItems.getSelectedItem().toString());
 				utils.setTextString(R.id.cusineVal, sItems.getSelectedItem().toString());
 				cusineDialog.dismiss();
 
