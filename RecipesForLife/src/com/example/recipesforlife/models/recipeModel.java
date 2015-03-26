@@ -126,6 +126,7 @@ public class RecipeModel extends BaseDataSource {
 					{               	
 						prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
 						prepUpdateVals.put("instructionNum", prepList.get(i).getPrepNum());
+						prepUpdateVals.put("progress", prepList.get(i).getProgress());
 						prepUpdateVals.put("changeTime", utils.getLastUpdated(false));
 						String[] args = new String[]{prepid};
 						database.update("Preperation", prepUpdateVals, "uniqueid=?", args);				
@@ -177,6 +178,7 @@ public class RecipeModel extends BaseDataSource {
 						ingredVals.put("amount", ingredBeanList.get(i).getAmount() );
 						ingredVals.put("value", ingredBeanList.get(i).getValue());
 						ingredVals.put("note", ingredBeanList.get(i).getNote());
+						ingredVals.put("progress", ingredBeanList.get(i).getProgress());
 						ingredVals.put("changeTime", utils.getLastUpdated(false));
 						ingredVals.put("ingredientId", id);
 						String[] args = new String[]{detsId};
@@ -268,6 +270,7 @@ public class RecipeModel extends BaseDataSource {
 		{
 			prepvalues.put("instruction", prepList.get(i).getPreperation().toString());
 			prepvalues.put("instructionNum", prepList.get(i).getPrepNum());
+			prepvalues.put("progress", "added");
 			if(server == true)
 			{
 				prepvalues.put("uniqueid", prepList.get(i).getUniqueid());
@@ -376,6 +379,7 @@ public class RecipeModel extends BaseDataSource {
 				ingredValues.put("name", ingredList.get(i).getName());
 				ingredValues.put("updateTime", utils.getLastUpdated(false)); 
 				ingredValues.put("changeTime", "2015-01-01 12:00:00.000");
+				
 				ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
 			}
 			else
@@ -403,6 +407,7 @@ public class RecipeModel extends BaseDataSource {
 		ingredDetailsValues.put("amount", ingredList.get(i).getAmount());
 		ingredDetailsValues.put("note", ingredList.get(i).getNote());
 		ingredDetailsValues.put("value", ingredList.get(i).getValue());
+		ingredDetailsValues.put("progress", "added");
 		ingredDetailsValues.put("updateTime", utils.getLastUpdated(false)); 
 		ingredDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
 		if(server == true)
@@ -657,7 +662,7 @@ public class RecipeModel extends BaseDataSource {
 	{
 		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
 		open();
-		Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = ?", new String[] { Integer.toString(id) });
+		Cursor cursor = database.rawQuery("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid, Preperation.progress FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = ?", new String[] { Integer.toString(id) });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -725,6 +730,7 @@ public class RecipeModel extends BaseDataSource {
 		ib.setValue(cursor.getString(getIndex("value", cursor)));
 		ib.setNote(cursor.getString(getIndex("note",cursor)));
 		ib.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
+		ib.setProgress(cursor.getString(getIndex("progress", cursor)));
 		return ib;
 	}
 
@@ -738,6 +744,7 @@ public class RecipeModel extends BaseDataSource {
 		pb.setPreperation(cursor.getString(getIndex("instruction",cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
 		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
+		pb.setProgress(cursor.getString(getIndex("progress",cursor)));
 		return pb;
 	}
 

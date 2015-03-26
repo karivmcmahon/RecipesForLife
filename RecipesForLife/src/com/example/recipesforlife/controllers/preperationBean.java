@@ -10,7 +10,14 @@ public class PreperationBean  {
 	int prepNum; //preps step number
 	String preperation; //preperation details
 	String uniqueid; //prep uniqueid
+	String progress;
 
+	public String getProgress() {
+		return progress;
+	}
+	public void setProgress(String progress) {
+		this.progress = progress;
+	}
 	public String getUniqueid() {
 		return uniqueid;
 	}
@@ -35,6 +42,8 @@ public class PreperationBean  {
 	public void setPreperation(String preperation) {
 		this.preperation = preperation;
 	}
+	
+	
 
 
 

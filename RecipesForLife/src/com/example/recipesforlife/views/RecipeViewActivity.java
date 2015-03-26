@@ -333,14 +333,21 @@ public class RecipeViewActivity extends ActionBarActivity {
 			}});
 		for(int i = 0; i < prepList.size(); i++)
 		{
+			if(prepList.get(i).getProgress().equals("added"))
+			{
 			instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n");
+		
+			}
 		}
 
 		TextView ingredients = (TextView) findViewById(R.id.ingredientList);
 		for(int i = 0; i < ingredList.size(); i++)
 		{
+			if(ingredList.get(i).getProgress().equals("added"))
+			{
 			ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue() + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
-		}			
+			}	
+		}
 		recipeName =  recipe.getName();
 		utils.setTextString(R.id.recipeTitle, recipe.getName());
 		utils.setTextString(R.id.recipeDesc, recipe.getDesc());

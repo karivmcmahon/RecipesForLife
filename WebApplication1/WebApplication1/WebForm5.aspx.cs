@@ -81,11 +81,12 @@ namespace WebApplication1
 		{
 			for (int y = 0; y < recipe[i].Preperation[0].prep.Count(); y++)
 			{
-				SqlCommand updatePreperation = new SqlCommand("UPDATE Preperation SET instruction=@prep, instructionNum=@prepNums, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
+				SqlCommand updatePreperation = new SqlCommand("UPDATE Preperation SET instruction=@prep, instructionNum=@prepNums, changeTime=@changeTime, progress=@progress WHERE uniqueid=@uniqueid", connection);
 				updatePreperation.Parameters.AddWithValue("@prep", recipe[i].Preperation[0].prep[y]);
 				updatePreperation.Parameters.AddWithValue("@prepNums", recipe[i].Preperation[1].prepNums[y]);
 				updatePreperation.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 				updatePreperation.Parameters.AddWithValue("@uniqueid", recipe[i].Preperation[2].uniqueid[y]);
+				updatePreperation.Parameters.AddWithValue("@progress", recipe[i].Preperation[3].prepprogress[y]);
 				
 				SqlDataReader rdrPrep = updatePreperation.ExecuteReader();
 				rdrPrep.Close();
@@ -111,7 +112,7 @@ namespace WebApplication1
 		//Updates ingredient details
 		public void updateIngredDetails(int i,int  a)
 		{
-			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection);
+			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime, progress=@progress WHERE uniqueid=@uniqueid", connection);
 			updateDets.Parameters.AddWithValue("@id", ingredId);
 			updateDets.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
 			updateDets.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
@@ -119,6 +120,7 @@ namespace WebApplication1
 
 			updateDets.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 			updateDets.Parameters.AddWithValue("@uniqueid", recipe[i].Ingredient[4].uniqueid[a]);
+			updateDets.Parameters.AddWithValue("@progress", recipe[i].Ingredient[5].ingredprogress[a]);
 			try
 			{
 
@@ -231,6 +233,7 @@ namespace WebApplication1
 			public  List<String> prep { get; set; }
 			public List<String> prepNums { get; set; }
 			public List<String> uniqueid { get; set;  }
+			public List<String> prepprogress { get; set; }
 			//  public int prepNums { get; set; }
 		}
 
@@ -242,6 +245,7 @@ namespace WebApplication1
 			public List<String> Amount { get; set; }
 			public List<String> Notes { get; set; }
 			public List<String> uniqueid {get;set;}
+			public List<String> ingredprogress { get; set; }
 		}
 	}
 }

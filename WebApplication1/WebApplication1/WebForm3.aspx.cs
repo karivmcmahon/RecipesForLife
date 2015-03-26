@@ -96,12 +96,13 @@ namespace WebApplication1
 		{
 			for (int y = 0; y < recipe[i].Preperation[0].prep.Count(); y++)
 			{
-				SqlCommand insertPrep = new SqlCommand(" INSERT INTO Preperation(instruction, instructionNum, updateTime, changeTime, uniqueid) OUTPUT INSERTED.id VALUES (@prep, @prepNums, @updateTime, @changeTime, @uniqueid)", connn);
+				SqlCommand insertPrep = new SqlCommand(" INSERT INTO Preperation(instruction, instructionNum, updateTime, changeTime, uniqueid, progress) OUTPUT INSERTED.id VALUES (@prep, @prepNums, @updateTime, @changeTime, @uniqueid, @progress)", connn);
 				insertPrep.Parameters.AddWithValue("@prep", recipe[i].Preperation[0].prep[y]);
 				insertPrep.Parameters.AddWithValue("@prepNums", recipe[i].Preperation[1].prepNums[y]);
 				insertPrep.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 				insertPrep.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 				insertPrep.Parameters.AddWithValue("@uniqueid", recipe[i].Preperation[2].uniqueid[y]);
+				insertPrep.Parameters.AddWithValue("@progress", recipe[i].Preperation[3].prepprogress[y]);
 				try
 				{
 					Int32 prepId = (Int32)insertPrep.ExecuteScalar();
@@ -176,7 +177,7 @@ namespace WebApplication1
 						ingredId = (Int32)insertIngred.ExecuteScalar();
 					}
 					
-					SqlCommand insertIngredDet = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime, uniqueid)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime, @uniqueid)", connn);
+					SqlCommand insertIngredDet = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime, uniqueid, progress)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime, @uniqueid, @progress)", connn);
 					insertIngredDet.Parameters.AddWithValue("@id", ingredId);
 					insertIngredDet.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
 					insertIngredDet.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
@@ -184,6 +185,7 @@ namespace WebApplication1
 					insertIngredDet.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 					insertIngredDet.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 					insertIngredDet.Parameters.AddWithValue("@uniqueid", recipe[i].Ingredient[4].uniqueid[a]);
+					insertIngredDet.Parameters.AddWithValue("@progress", recipe[i].Ingredient[5].ingredprogress[a]);
 					try
 					{
 
@@ -356,6 +358,7 @@ namespace WebApplication1
 			public  List<String> prep { get; set; }
 			public List<String> prepNums { get; set; }
 			public List<String> uniqueid { get; set;  }
+			public List<String> prepprogress { get; set; }
 		}
 
 		/**
@@ -368,6 +371,7 @@ namespace WebApplication1
 			public List<String> Amount { get; set; }
 			public List<String> Notes { get; set; }
 			public List<String> uniqueid {get;set;}
+			public List<String> ingredprogress {get;set;}
 		}
 	}
 	

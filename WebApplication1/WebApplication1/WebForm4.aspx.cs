@@ -120,7 +120,7 @@ namespace WebApplication1
 		**/
 		public void selectPrep(List<Preperation> recipeprep, Recipe recipe)
 		{
-			SqlCommand selectPreperation = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection1);
+			SqlCommand selectPreperation = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid, Preperation.progress FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection1);
 			selectPreperation.Parameters.AddWithValue("@recipe", recipe.id);
 			var selectPreperationReader = selectPreperation.ExecuteReader();
 			while (selectPreperationReader.Read())
@@ -129,9 +129,11 @@ namespace WebApplication1
 				preps.prep = new List<string>();
 				preps.uniqueid = new List<string>();
 				preps.prepNums = new List<Int32>();
+				preps.prepprogress = new List<string>();
 				preps.prep.Add((string)selectPreperationReader["instruction"]);
 				preps.uniqueid.Add((string)selectPreperationReader["uniqueid"]);
 				preps.prepNums.Add((Int32)selectPreperationReader["instructionNum"]);
+				preps.prepprogress.Add((string)selectPreperationReader["progress"]);
 				recipeprep.Add(preps);
 			}
 		}
@@ -152,11 +154,13 @@ namespace WebApplication1
 				ingreds.Amount = new List<Int32>();
 				ingreds.Notes = new List<string>();
 				ingreds.uniqueid = new List<string>();
+				ingreds.ingredprogress = new List<string>();
 				ingreds.Ingredients.Add((string)selectIngredReader["name"]);
 				ingreds.Amount.Add((Int32)selectIngredReader["amount"]);
 				ingreds.Value.Add((string)selectIngredReader["value"]);
 				ingreds.Notes.Add((string)selectIngredReader["note"]);
-				ingreds.uniqueid.Add((string)selectIngredReader["uniqueid"]);			
+				ingreds.uniqueid.Add((string)selectIngredReader["uniqueid"]);	
+				ingreds.ingredprogress.Add((string)selectIngredReader["progress"]);				
 				recipeingred.Add(ingreds); 			
 			}
 		}
@@ -237,6 +241,7 @@ namespace WebApplication1
 			public List<String> prep { get; set; }
 			public List<Int32> prepNums { get; set; }
 			public List<String> uniqueid { get; set; }
+			public List<String> prepprogress { get; set; }
 			
 		}
 
@@ -248,6 +253,7 @@ namespace WebApplication1
 			public List<Int32> Amount { get; set; }
 			public List<String> Notes { get; set; }
 			public List<String> uniqueid { get; set; }
+			public List<String> ingredprogress { get; set; }
 		}
 	}
 }

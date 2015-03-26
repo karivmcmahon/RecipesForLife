@@ -12,6 +12,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.SQLException;
@@ -27,6 +29,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +41,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -289,7 +293,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					saveRecipe();
+					saveRecipe(false);
 
 				}
 				return false;
@@ -360,9 +364,10 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View arg0) {
-				saveRecipe();
+				saveRecipe(true);
 				dialog.dismiss();
-				finish();
+			
+				
 			}
 		});
 		Button button2 = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
@@ -431,15 +436,22 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 		for(int i = 0; i < prepList.size(); i++)
 		{
+			if(prepList.get(i).getProgress().equals("added"))
+			{
 			instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n");
+		
+			}
 		}
 
 		TextView ingredients = (TextView) findViewById(R.id.ingredientList);
 		for(int i = 0; i < ingredList.size(); i++)
 		{
+			if(ingredList.get(i).getProgress().equals("added"))
+			{
 			ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue() + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
-		}
-
+	
+			}
+		}		
 		utils.setTextString(R.id.recipeTitle, recipe.getName());
 		utils.setTextString(R.id.recipeDesc, recipe.getDesc());
 		utils.setTextString(R.id.servesVal, recipe.getServes());
@@ -670,41 +682,55 @@ public class RecipeEditActivity extends ActionBarActivity {
 		//Set the text view and edit text data for a linear layout
 		for(int i = 0; i < prepList.size(); i++)
 		{
+			if(prepList.get(i).getProgress().equals("added"))
+			{
+			final int point = i;
 			LinearLayout linearLayoutInDialog = new LinearLayout(RecipeEditActivity.this);
 			linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
 			params.setMargins(5,5,5,5);
-			TextView prepView = new TextView(RecipeEditActivity.this);
+			final TextView prepView = new TextView(RecipeEditActivity.this);
 			prepView.setText("Preperation");
 			int prepviewid = findId();
 			prepView.setId(prepviewid);
 			prepView.setLayoutParams(params);
 
-			TextView prepNumView = new TextView(RecipeEditActivity.this);
+			final TextView prepNumView = new TextView(RecipeEditActivity.this);
 			prepNumView.setText("Preperation Num");
 			int prepNumViewId = findId();
 			prepNumView.setId(prepNumViewId);
 			prepNumView.setLayoutParams(params);
 
 
-			EditText prepEdit = new EditText(RecipeEditActivity.this);
+			final EditText prepEdit = new EditText(RecipeEditActivity.this);
 			int prepEditId = findId();
 			prepEditIds.add(prepEditId);
 			prepEdit.setId(prepEditId);
 			prepEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-			prepEdit.setLayoutParams(params);
+			LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(150, LayoutParams.WRAP_CONTENT);
+			lparams.setMargins(5,5,5,5);
+			prepEdit.setLayoutParams(lparams);
 
-			EditText prepNumEdit = new EditText(RecipeEditActivity.this);
+			final EditText prepNumEdit = new EditText(RecipeEditActivity.this);
 			int ids = findId();
 			prepNumEditIds.add(ids);
 			prepNumEdit.setId(ids);
 			prepNumEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
 			prepNumEdit.setLayoutParams(params);
-
+			
+			ImageButton img = new ImageButton(RecipeEditActivity.this);
+			int imgid = findId();
+			img.setId(imgid);
+			img.setBackgroundDrawable(getResources().getDrawable(R.drawable.icon_delete));
+			LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(40, 40);
+			lparams.setMargins(5,5,5,5);
+			img.setLayoutParams(lparams2);
+			
 			linearLayoutInDialog.addView(prepNumView);
 			linearLayoutInDialog.addView(prepNumEdit);
 			linearLayoutInDialog.addView(prepView);
 			linearLayoutInDialog.addView(prepEdit);
+			linearLayoutInDialog.addView(img);
 			prepDialogLinearLayout.addView(linearLayoutInDialog);
 
 			//Create styles
@@ -713,6 +739,26 @@ public class RecipeEditActivity extends ActionBarActivity {
 			prepEdit.setWidth(400);
 			utils.setDialogText(prepNumViewId, prepDialog, 22);
 			prepNumEdit.setText(Integer.toString(prepList.get(i).getPrepNum()));
+			
+			
+			img.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Log.v("POINT", "POINT " + point);
+					prepList.get(point).setProgress("deleted");
+					prepNumEdit.setVisibility(View.INVISIBLE);
+					prepEdit.setVisibility(View.INVISIBLE);
+					prepNumView.setVisibility(View.INVISIBLE);
+					prepView.setVisibility(View.INVISIBLE);
+				
+					
+				}});
+			
+			}
+			
+			
 		}
 		//Create a button and when on click change prep list to what was set in the dialog box
 		Button okButton = new Button(RecipeEditActivity.this);
@@ -760,7 +806,10 @@ public class RecipeEditActivity extends ActionBarActivity {
 						prep.setPreperation(utils.getTextFromDialog(prepEditIds.get(i), prepDialog));
 						prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
 						prep.setUniqueid(prepList.get(i).getUniqueid());
-						modifiedPrepList.add(prep);
+						prep.setProgress(prepList.get(i).getProgress());
+					
+							modifiedPrepList.add(prep);
+						
 						a += 2;
 						if(a == (prepList.size() * 2))
 						{
@@ -785,8 +834,12 @@ public class RecipeEditActivity extends ActionBarActivity {
 					//Set on edit page
 					for(int i = 0; i < modifiedPrepList.size(); i++)
 					{
+						if(modifiedPrepList.get(i).getProgress().equals("added"))
+						{
 						instructions.append(Integer.toString(modifiedPrepList.get(i).getPrepNum()) + ". " +modifiedPrepList.get(i).getPreperation().toString() + "\n");
-					} 
+					
+						} 
+					}
 				}
 
 
@@ -821,13 +874,16 @@ public class RecipeEditActivity extends ActionBarActivity {
 		//Create dialog with textviews and edit text from the database
 		for(int i = 0; i < ingredList.size(); i++)
 		{
+			final int point = i;
+			if(ingredList.get(i).getProgress().equals("added"))
+			{
 			LinearLayout linearLayoutInDialog = new LinearLayout(RecipeEditActivity.this);
 			linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
 
 			params.setMargins(5,5,5,5);
 
-			EditText amountEdit = new EditText(RecipeEditActivity.this);
+			final EditText amountEdit = new EditText(RecipeEditActivity.this);
 			int amountEditId = findId();
 			amountEditIds.add(amountEditId);
 			amountEdit.setId(amountEditId);
@@ -857,7 +913,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 					RecipeEditActivity.this, R.layout.general_spinner_item, spinnerArray);
 
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			Spinner sItems = new Spinner(RecipeEditActivity.this);
+			final Spinner sItems = new Spinner(RecipeEditActivity.this);
 			sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 			sItems.setAdapter(adapter);
 			sItems.setLayoutParams(params);
@@ -866,7 +922,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			valueEditIds.add(valueEditId);
 			sItems.setId(valueEditId); 
 
-			EditText ingredEdit = new EditText(RecipeEditActivity.this);
+			final EditText ingredEdit = new EditText(RecipeEditActivity.this);
 			int ingredEditId = findId();
 			ingredEditIds.add(ingredEditId);
 			ingredEdit.setId(ingredEditId);
@@ -874,24 +930,33 @@ public class RecipeEditActivity extends ActionBarActivity {
 			ingredEdit.setLayoutParams(params);
 			ingredEdit.setWidth(200);
 
-			TextView view = new TextView(RecipeEditActivity.this);
+			final TextView view = new TextView(RecipeEditActivity.this);
 			int viewid = findId();
 			view.setText(" - ");
 			view.setId(viewid);
 
-			EditText noteEdit = new EditText(RecipeEditActivity.this);
+			final EditText noteEdit = new EditText(RecipeEditActivity.this);
 			int noteEditId = findId();
 			noteEditIds.add(noteEditId);
 			noteEdit.setId(noteEditId);
 			noteEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
 			noteEdit.setLayoutParams(params);
 			noteEdit.setWidth(160);
+			
+			ImageButton img = new ImageButton(RecipeEditActivity.this);
+			int imgid = findId();
+			img.setId(imgid);
+			img.setBackgroundDrawable(getResources().getDrawable(R.drawable.icon_delete));
+			LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(40, 40);
+			lparams2.setMargins(5,5,5,5);
+			img.setLayoutParams(lparams2);
 
 			linearLayoutInDialog.addView(amountEdit);
 			linearLayoutInDialog.addView(sItems);
 			linearLayoutInDialog.addView(ingredEdit);
 			linearLayoutInDialog.addView(view);
 			linearLayoutInDialog.addView(noteEdit);
+			linearLayoutInDialog.addView(img);
 
 			ingredDialogLinearLayout.addView(linearLayoutInDialog);
 			amountEdit.setText(Integer.toString(ingredList.get(i).getAmount()));
@@ -899,6 +964,23 @@ public class RecipeEditActivity extends ActionBarActivity {
 			noteEdit.setText(ingredList.get(i).getNote());
 			sItems.setSelection(utils.getIndex(sItems, ingredList.get(i).getValue()));
 			utils.setDialogText(viewid, ingredDialog, 22);
+			
+			img.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Log.v("POINT", "POINT " + point);
+					ingredList.get(point).setProgress("deleted");
+					amountEdit.setVisibility(View.INVISIBLE);
+					ingredEdit.setVisibility(View.INVISIBLE);
+					sItems.setVisibility(View.INVISIBLE);
+					view.setVisibility(View.INVISIBLE);
+					noteEdit.setVisibility(View.INVISIBLE);
+				
+					
+				}});
+			}
 		}
 		Button okButton = new Button(RecipeEditActivity.this);
 		int buttonId = findId();
@@ -944,6 +1026,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 						ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
 						ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
 						ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
+						ingred.setProgress(ingredList.get(i).getProgress());
 						Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
 						String value = spinner.getSelectedItem().toString();
 						ingred.setValue(value);			
@@ -965,7 +1048,11 @@ public class RecipeEditActivity extends ActionBarActivity {
 					ingredients.setText("");
 					for(int i = 0; i < modifiedIngredList.size(); i++)
 					{
+						if(modifiedIngredList.get(i).getProgress().equals("added"))
+						{
 						ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue() + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
+					
+						}
 					}
 				}
 
@@ -978,7 +1065,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	/**
 	 * Saves recipe by updating in the database
 	 */
-	public void saveRecipe()
+	public void saveRecipe(final boolean close)
 	{
 		RecipeBean recipechange = new RecipeBean();
 		recipechange.setName(utils.getTextView(R.id.recipeTitle));
@@ -1008,6 +1095,10 @@ public class RecipeEditActivity extends ActionBarActivity {
 				@Override
 				public void onClick(View arg0) {
 					dialog.dismiss();
+					if(close == true)
+					{
+						finish();
+					}
 				}
 			});
 		}catch(SQLException e)

@@ -108,7 +108,7 @@ namespace WebApplication1
 		//Selects related preperation to recipe
 		public void selectPrep(Recipe recipe, List<Preperation> preprecipe)
 		{		
-			SqlCommand selectprep = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection);
+			SqlCommand selectprep = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid, Preperation.progress FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection);
 			selectprep.Parameters.AddWithValue("@recipe", recipe.id);
 			var selectprepReader = selectprep.ExecuteReader();
 			// int i = 0;
@@ -119,9 +119,11 @@ namespace WebApplication1
 				preps.prep = new List<string>();
 				preps.uniqueid = new List<string>();
 				preps.prepNums = new List<Int32>();
+				preps.prepprogress = new List<string>();
 				preps.prep.Add((string)selectprepReader["instruction"]);
 				preps.uniqueid.Add((string)selectprepReader["uniqueid"]);
 				preps.prepNums.Add((Int32)selectprepReader["instructionNum"]);
+				preps.prepprogress.Add((string)selectprepReader["progress"]);
 				preprecipe.Add(preps);			
 			}
 		}
@@ -140,10 +142,12 @@ namespace WebApplication1
 				ingreds.Amount = new List<Int32>();
 				ingreds.Notes = new List<string>();
 				ingreds.uniqueid = new List<string>();
+				ingreds.ingredprogress = new List<string>();
 				ingreds.Ingredients.Add((string)selectingredReader["name"]);
 				ingreds.Amount.Add((Int32)selectingredReader["amount"]);
 				ingreds.Value.Add((string)selectingredReader["value"]);
 				ingreds.Notes.Add((string)selectingredReader["note"]);
+				ingreds.ingredprogress.Add((string)selectingredReader["progress"]);
 				ingreds.uniqueid.Add((string)selectingredReader["uniqueid"]);
 				ingredrecipe.Add(ingreds); 
 			}
@@ -203,6 +207,7 @@ namespace WebApplication1
 			public List<String> prep { get; set; }
 			public List<Int32> prepNums { get; set; }
 			public List<String> uniqueid { get; set; }
+			public List<String> prepprogress { get; set; }
 			
 		}
 		//Class to store ingredient dets
@@ -213,6 +218,7 @@ namespace WebApplication1
 			public List<Int32> Amount { get; set; }
 			public List<String> Notes { get; set; }
 			public List<String> uniqueid { get; set; }
+			public List<String> ingredprogress { get; set; }
 		}
 	}
 }

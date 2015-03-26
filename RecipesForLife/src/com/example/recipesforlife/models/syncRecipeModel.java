@@ -167,6 +167,7 @@ public class SyncRecipeModel extends BaseDataSource {
 		ib.setNote(cursor.getString(getIndex("note", cursor)));
 		ib.setIngredId(cursor.getInt(getIndex("ingredientId", cursor)));	
 		ib.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
+		ib.setProgress(cursor.getString(getIndex("progress", cursor)));
 		return ib;
 	}
 
@@ -213,6 +214,7 @@ public class SyncRecipeModel extends BaseDataSource {
 		pb.setPreperation(cursor.getString(getIndex("instruction", cursor)));
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
 		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
+		pb.setProgress(cursor.getString(getIndex("progress", cursor)));
 		return pb;
 	}
 
@@ -256,11 +258,13 @@ public class SyncRecipeModel extends BaseDataSource {
 			JSONArray prepStepArray = new JSONArray();
 			JSONArray prepNumArray = new JSONArray();
 			JSONArray prepIdArray = new JSONArray();
+			JSONArray prepProgressArray = new JSONArray();
 			for(int x = 0; x < prepList.size(); x++)
 			{
 				prepStepArray.put(prepList.get(x).getPreperation().toString());
 				prepNumArray.put(Integer.toString(prepList.get(x).getPrepNum()));
 				prepIdArray.put(prepList.get(x).getUniqueid().toString());
+				prepProgressArray.put(prepList.get(x).getProgress().toString());
 			}
 
 			JSONObject newObj = new JSONObject();			
@@ -272,6 +276,9 @@ public class SyncRecipeModel extends BaseDataSource {
 			newObj = new JSONObject();
 			newObj.put("uniqueid", prepIdArray);
 			recipe.accumulate("Preperation", newObj );
+			newObj = new JSONObject();
+			newObj.put("prepprogress", prepProgressArray);
+			recipe.accumulate("Preperation", newObj );
 
 			ArrayList<IngredientBean> ingredList = getIngred(recipeList.get(i).getId());
 
@@ -280,12 +287,14 @@ public class SyncRecipeModel extends BaseDataSource {
 			JSONArray amountarray = new JSONArray();
 			JSONArray notearray = new JSONArray();
 			JSONArray ingredidarray = new JSONArray();
+			JSONArray ingredprogressarray = new JSONArray();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
 				amountarray.put(Integer.toString(ingredList.get(y).getAmount()));
 				valuearray.put(ingredList.get(y).getValue());
 				notearray.put(ingredList.get(y).getNote());
 				ingredidarray.put(ingredList.get(y).getUniqueid());
+				ingredprogressarray.put(ingredList.get(y).getProgress());
 				String name = getIngredName(ingredList.get(y).getIngredId());
 				ingredarray.put(name);
 			}
@@ -302,7 +311,10 @@ public class SyncRecipeModel extends BaseDataSource {
 			newObj.put("Notes", notearray);	
 			recipe.accumulate("Ingredient", newObj);
 			newObj = new JSONObject();
-			newObj.put("uniqueid", ingredidarray);						
+			newObj.put("uniqueid", ingredidarray);	
+			recipe.accumulate("Ingredient", newObj);
+			newObj = new JSONObject();
+			newObj.put("ingredprogress", ingredprogressarray);		
 			recipe.accumulate("Ingredient", newObj);			
 			jsonArray.put(recipe);			
 		} 
@@ -387,6 +399,7 @@ public class SyncRecipeModel extends BaseDataSource {
 				JSONArray amountArray = (JSONArray) ingredObject.get("Amount");
 				JSONArray valueArray = (JSONArray) ingredObject.get("Value");
 				JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
+				JSONArray ingredProgressArray = (JSONArray) ingredObject.get("ingredprogress");
 				for(int b = 0; b < ingredsArray.length(); b++)
 				{
 					IngredientBean ingredBean = new IngredientBean();
@@ -395,6 +408,7 @@ public class SyncRecipeModel extends BaseDataSource {
 					ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
 					ingredBean.setValue(valueArray.get(b).toString());
 					ingredBean.setUniqueid(ingredIdArray.get(b).toString());
+					ingredBean.setProgress(ingredProgressArray.get(b).toString());
 					ingredBeanList.add(ingredBean);
 				}
 			}
@@ -407,12 +421,14 @@ public class SyncRecipeModel extends BaseDataSource {
 				JSONArray prepArray = (JSONArray) prepObject.get("prep");
 				JSONArray numArray = (JSONArray) prepObject.get("prepNums");
 				JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
+				JSONArray progressArray = (JSONArray) prepObject.get("prepprogress");
 				for(int d = 0; d < prepArray.length(); d++)
 				{
 					PreperationBean prepBean = new PreperationBean();
 					prepBean.setPreperation(prepArray.get(d).toString());
 					prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
 					prepBean.setUniqueid(idArray.get(d).toString());
+					prepBean.setProgress(progressArray.getString(d).toString());
 					prepBeanList.add(prepBean);
 				}
 			}

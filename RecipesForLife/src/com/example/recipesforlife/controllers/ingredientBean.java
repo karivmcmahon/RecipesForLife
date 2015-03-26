@@ -12,7 +12,14 @@ public class IngredientBean {
 	String value; //ingredients unit
 	String note; //notes relating to ingred
 	String uniqueid; //ingreds uniqueid
+	String progress;
 	
+	public String getProgress() {
+		return progress;
+	}
+	public void setProgress(String progress) {
+		this.progress = progress;
+	}
 	public String getUniqueid() {
 		return uniqueid;
 	}
