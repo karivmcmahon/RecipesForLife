@@ -83,6 +83,7 @@ public class Utility  {
 		//   final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		final String uuid = UUID.randomUUID().toString();
 		String uniqueid = addedBy + table + uuid;
+		Log.v("Uniqueid", "Uniqueid" + uniqueid);
 		boolean exists = selectUUID(table, uniqueid,database);
 		if(exists == true)
 		{

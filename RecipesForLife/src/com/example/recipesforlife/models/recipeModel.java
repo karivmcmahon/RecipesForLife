@@ -238,8 +238,8 @@ public class RecipeModel extends BaseDataSource {
 		try
 		{
 			recipeID = database.insertOrThrow("Recipe", null, values);
-			insertIngredient(server, ingredList, recipe.getAddedBy());
-			insertPrep(prepList, server, recipe.getAddedBy());
+			insertIngredient(server, ingredList, recipe.getAddedBy(), false);
+			insertPrep(prepList, server, false, recipe.getAddedBy());
 			insertCookbookRecipe(recipe.getRecipeBook());
 			insertImage(img, server, recipe.getAddedBy());
 			database.setTransactionSuccessful();
@@ -262,7 +262,7 @@ public class RecipeModel extends BaseDataSource {
 	 * @param server - if request from server or application
 	 * @param addedBy - who added the recipe
 	 */
-	public void insertPrep(ArrayList<PreperationBean> prepList, boolean server, String addedBy)
+	public void insertPrep(ArrayList<PreperationBean> prepList, boolean server, boolean edit, String addedBy)
 	{
 
 		prepvalues = new ContentValues();
@@ -271,7 +271,7 @@ public class RecipeModel extends BaseDataSource {
 			prepvalues.put("instruction", prepList.get(i).getPreperation().toString());
 			prepvalues.put("instructionNum", prepList.get(i).getPrepNum());
 			prepvalues.put("progress", "added");
-			if(server == true)
+			if(server == true || edit == true)
 			{
 				prepvalues.put("uniqueid", prepList.get(i).getUniqueid());
 			}
@@ -282,9 +282,17 @@ public class RecipeModel extends BaseDataSource {
 			prepvalues.put("updateTime", utils.getLastUpdated(false)); 
 			prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
 			prepID = database.insertOrThrow("Preperation", null, prepvalues);
-			insertPrepToRecipe();
+			insertPrepToRecipe(server);
 		}
 
+	}
+	
+	public String generateuuid(String addedby, String table)
+	{
+		open();
+		String uuid = utils.generateUUID(addedby, table, database);
+		close();
+		return uuid;
 	}
 
 	/** 
@@ -333,13 +341,20 @@ public class RecipeModel extends BaseDataSource {
 	 * Insert link between prep and recipe
 	 * 
 	 */
-	public void insertPrepToRecipe()
+	public void insertPrepToRecipe(boolean server)
 	{
-
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		preptorecipevalues = new ContentValues();
 		preptorecipevalues.put("recipeId", recipeID);
 		preptorecipevalues.put("Preperationid", prepID);
-		preptorecipevalues.put("updateTime", utils.getLastUpdated(false)); 
+		if(server == true)
+		{
+			preptorecipevalues.put("updateTime", sharedpreferences.getString("DATE", "DEFAULT"));
+		}
+		else
+		{
+			preptorecipevalues.put("updateTime", utils.getLastUpdated(false));
+		}
 		preptorecipevalues.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("PrepRecipe", null, preptorecipevalues);
 
@@ -368,7 +383,7 @@ public class RecipeModel extends BaseDataSource {
 	 * @param addedBy - user who inserted recipe
 	 * @param server -if request from server or application
 	 */
-	public void insertIngredient( boolean server, ArrayList<IngredientBean> ingredList, String addedBy)
+	public void insertIngredient( boolean server, ArrayList<IngredientBean> ingredList, String addedBy, boolean edit)
 	{
 		ingredValues = new ContentValues();
 		for(int i = 0; i < ingredList.size(); i++)
@@ -386,12 +401,51 @@ public class RecipeModel extends BaseDataSource {
 			{
 				ingredID = id; // if it already exists return the id
 			}
-			insertIngredientDetails(i,ingredList,server, addedBy); //insert ingred details
-			insertRecipeToIngredient(); //insert recipe and ingred details
+			insertIngredientDetails(i,ingredList,server,edit, addedBy); //insert ingred details
+			insertRecipeToIngredient(server); //insert recipe and ingred details
 			insertIngredToDetails();
 		}
 
 	}
+	
+	public void insertIngredFromEdit( boolean server, ArrayList<IngredientBean> ingredList, RecipeBean recipe)
+	{
+		open();
+		recipeID = recipe.getId();
+		database.beginTransaction();
+		try
+		{
+			insertIngredient(server, ingredList,recipe.getAddedBy(), true);
+			database.setTransactionSuccessful();
+			database.endTransaction(); 
+		}
+		catch(SQLException e)
+		{
+			database.endTransaction();
+			throw e;
+		}
+		close();
+	}
+	
+	public void insertPrepFromEdit( boolean server, ArrayList<PreperationBean> prepList, RecipeBean recipe)
+	{
+		open();
+		recipeID = recipe.getId();
+		database.beginTransaction();
+		try
+		{
+			insertPrep(prepList,server,true, recipe.getAddedBy());
+			database.setTransactionSuccessful();
+			database.endTransaction(); 
+		}
+		catch(SQLException e)
+		{
+			database.endTransaction();
+			throw e;
+		}
+		close();
+	}
+
 
 	/**
 	 * Insert ingredient details into database
@@ -400,7 +454,7 @@ public class RecipeModel extends BaseDataSource {
 	 * @param addedBy - who inserted recipe
 	 * @param server - if request from app or server
 	 */
-	public void insertIngredientDetails(int i, ArrayList<IngredientBean> ingredList, boolean server, String addedBy)
+	public void insertIngredientDetails(int i, ArrayList<IngredientBean> ingredList, boolean server, boolean edit, String addedBy)
 	{
 		ingredDetailsValues = new ContentValues();
 		ingredDetailsValues.put("ingredientId", ingredID);
@@ -410,7 +464,7 @@ public class RecipeModel extends BaseDataSource {
 		ingredDetailsValues.put("progress", "added");
 		ingredDetailsValues.put("updateTime", utils.getLastUpdated(false)); 
 		ingredDetailsValues.put("changeTime", "2015-01-01 12:00:00.000");
-		if(server == true)
+		if(server == true || edit == true)
 		{
 			//if  from server - get unique id
 			ingredDetailsValues.put("uniqueid", ingredList.get(i).getUniqueid());
@@ -441,12 +495,20 @@ public class RecipeModel extends BaseDataSource {
 	/**
 	 * Insert connected ingred details id and recipe id into database
 	 */
-	public void insertRecipeToIngredient()
+	public void insertRecipeToIngredient(boolean server)
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		ingredToRecipeValues = new ContentValues();
 		ingredToRecipeValues.put("Recipeid",recipeID);
 		ingredToRecipeValues.put("ingredientDetailsId", ingredDetsID);
-		ingredToRecipeValues.put("updateTime", utils.getLastUpdated(false));
+		if(server == true)
+		{
+			ingredToRecipeValues.put("updateTime", sharedpreferences.getString("DATE", "DEFAULT"));
+		}
+		else
+		{
+			ingredToRecipeValues.put("updateTime", utils.getLastUpdated(false));
+		}
 		ingredToRecipeValues.put("changeTime", "2015-01-01 12:00:00.000");
 		database.insertOrThrow("RecipeIngredient", null, ingredToRecipeValues);
 	}
