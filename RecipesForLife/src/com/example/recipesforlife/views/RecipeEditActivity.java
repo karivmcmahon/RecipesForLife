@@ -224,6 +224,28 @@ public class RecipeEditActivity extends ActionBarActivity {
 				}
 				return false;
 			}});
+		
+		ImageView methodAddButton = (ImageView) findViewById(R.id.methodAddImage);
+		methodAddButton.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					setUpStepAddDialog();
+				}
+				return false;
+			}});
+		
+		ImageView ingredAddButton = (ImageView) findViewById(R.id.ingredAddImage);
+		ingredAddButton.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					setUpIngredAddDialog();
+				}
+				return false;
+			}});
 
 		//If edit time icon  selected display the times dialog
 		ImageView timeButton = (ImageView) findViewById(R.id.timeEditImage);
@@ -1107,6 +1129,154 @@ public class RecipeEditActivity extends ActionBarActivity {
 		}
 
 	}
+	
+	public void setUpStepAddDialog()
+	{
+		final Dialog recipeAddStepDialog = utils.createDialog(this, R.layout.recipe_add_dialog4);		
+		utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
+		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
+		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
+		Button addButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
+		addButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getRecipeStep(recipeAddStepDialog);
+			}});
+		recipeAddStepDialog.show();
+	}
+	
+	public void setUpIngredAddDialog()
+	{
+		final Dialog recipeIngredDialog = utils.createDialog(this,R.layout.recipe_add_dialog5);
+		utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.ingredsView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.valueView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
+		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
+		Button addButton = utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
+
+		//Spinner set up with varying measurement amounts
+		List<String> spinnerArray =  new ArrayList<String>();
+		spinnerArray.add("teaspoon");
+		spinnerArray.add("tablespoon");
+		spinnerArray.add("cup");
+		spinnerArray.add("kg");
+		spinnerArray.add("g");
+		spinnerArray.add("l");
+		spinnerArray.add("ml");
+		spinnerArray.add("oz");
+		spinnerArray.add("pint");
+		spinnerArray.add("quart");
+		spinnerArray.add("gallon");
+		spinnerArray.add("lb");
+		spinnerArray.add("ounces");
+		spinnerArray.add("pinch");
+		spinnerArray.add("other");
+
+		//Fill spinner
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				this, R.layout.general_spinner_item, spinnerArray);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner sItems = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
+		sItems.getBackground().setColorFilter(getApplicationContext().getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		sItems.setAdapter(adapter);
+		addButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getIngredient(recipeIngredDialog);
+				
+			}}); 
+		recipeIngredDialog.show();
+	}
+	
+	
+	public void getRecipeStep(Dialog recipeAddStepDialog)
+	{
+		//Getting  data from the text boxes
+		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
+		errorView.setTextColor(Color.parseColor("#FFFFFF"));
+		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
+		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
+
+		//Error catching before moving to next dialog stage
+		if(stepNum.equals(""))
+		{
+			errorView.setText("Please enter a step number");
+		}
+		else if(step.equals(""))
+		{
+			errorView.setText("Please enter a step");
+		}
+		else
+		{
+			recipeAddStepDialog.dismiss();
+			//Sets the details to a prep bean
+		/**	PreperationBean prepBean = new PreperationBean();
+			prepBean.setPreperation(step);
+			prepBean.setPrepNum(Integer.parseInt(stepNum));
+			prepBeanList.add(prepBean);
+			//Append steps to edit text box
+			EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
+			stepsEdit.append(stepNum +  ". " + step +  ", ");
+			recipeAddStepDialog.dismiss(); **/
+		}
+	}
+
+	/**
+	 * Get information from ingredient dialogs
+	 */
+	public void getIngredient(Dialog recipeIngredDialog)
+	{
+		//Getting text
+		String ingredient = utils.getTextFromDialog(R.id.ingredEditText, recipeIngredDialog);
+		String amount = utils.getTextFromDialog(R.id.amountEditText, recipeIngredDialog);
+		String note = utils.getTextFromDialog(R.id.noteEditText, recipeIngredDialog);
+		Spinner spinner = (Spinner) recipeIngredDialog.findViewById(R.id.valueSpinner);
+		String value = spinner.getSelectedItem().toString();
+
+		TextView errorView = (TextView) recipeIngredDialog.findViewById(R.id.errorView);
+		utils.setDialogText(R.id.errorView,recipeIngredDialog,16);
+		errorView.setTextColor(Color.parseColor("#FFFFFF"));
+		//Error catching before moving onto next stage
+		if(ingredient.equals(""))
+		{
+			errorView.setText("Please enter an ingredient name");
+		}
+		else if(amount.equals(""))
+		{
+			errorView.setText("Please enter an amount");
+		}
+		else
+		{
+			recipeIngredDialog.dismiss();
+			//Sets details to ingredient bean
+		/**	IngredientBean ingredBean = new IngredientBean();
+			ingredBean.setName(ingredient);
+			ingredBean.setAmount(Integer.parseInt(amount));
+			ingredBean.setNote(note);
+			ingredBean.setValue(value);
+			ingredBeanList.add(ingredBean);
+			recipeIngredDialog.dismiss();
+			//How ingredients are displayed in the edit text box
+			EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
+			if(note.equals(""))
+			{
+				ingredsEdit.append(  amount + " " + value + " " + ingredient + " ,");
+			}
+			else
+			{
+				ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + " ,");
+			} **/
+		}
+
+
+	}
+
 
 	/**
 	 * Retrieves result from activity intent
