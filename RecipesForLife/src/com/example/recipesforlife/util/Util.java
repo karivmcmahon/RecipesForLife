@@ -56,6 +56,7 @@ import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.SyncContributersModel;
 import com.example.recipesforlife.models.SyncCookbookModel;
 import com.example.recipesforlife.models.SyncModel;
+import com.example.recipesforlife.models.SyncRecipeDetails;
 import com.example.recipesforlife.models.SyncRecipeModel;
 import com.example.recipesforlife.models.SyncReviewModel;
 import com.example.recipesforlife.views.SignUpSignInActivity;
@@ -350,6 +351,7 @@ public class Util  {
 			SyncCookbookModel syncCookbook = new SyncCookbookModel(context);
 			SyncContributersModel syncContributer = new SyncContributersModel(context);
 			SyncReviewModel syncReview = new SyncReviewModel(context);
+			SyncRecipeDetails syncRecipeDetails = new SyncRecipeDetails(context);
 			try {
 
 				//Get json from server for inserts
@@ -357,6 +359,7 @@ public class Util  {
 				Editor editor = sharedpreferences.edit();
 
 				//INSERTS SYNC 
+				syncRecipeDetails.getAndCreateJSON(false);
 				sync.getJSONFromServer();
 				sync.getAndCreateAccountJSON();
 				syncCookbook.getJSONFromServer(false);

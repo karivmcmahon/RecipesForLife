@@ -13,7 +13,14 @@ public class IngredientBean {
 	String note; //notes relating to ingred
 	String uniqueid; //ingreds uniqueid
 	String progress;
+	int recipeid;
 	
+	public int getRecipeid() {
+		return recipeid;
+	}
+	public void setRecipeid(int recipeid) {
+		this.recipeid = recipeid;
+	}
 	public String getProgress() {
 		return progress;
 	}

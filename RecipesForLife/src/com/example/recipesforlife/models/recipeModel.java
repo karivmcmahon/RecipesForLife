@@ -264,7 +264,7 @@ public class RecipeModel extends BaseDataSource {
 	 */
 	public void insertPrep(ArrayList<PreperationBean> prepList, boolean server, boolean edit, String addedBy)
 	{
-
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		prepvalues = new ContentValues();
 		for(int i = 0; i < prepList.size(); i++)
 		{
@@ -279,7 +279,14 @@ public class RecipeModel extends BaseDataSource {
 			{
 				prepvalues.put("uniqueid", utils.generateUUID(addedBy, "Preperation", database));
 			}
-			prepvalues.put("updateTime", utils.getLastUpdated(false)); 
+			if(server == true)
+			{
+				prepvalues.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
+			}
+			else
+			{
+				prepvalues.put("updateTime", utils.getLastUpdated(false)); 
+			}
 			prepvalues.put("changeTime", "2015-01-01 12:00:00.000");
 			prepID = database.insertOrThrow("Preperation", null, prepvalues);
 			insertPrepToRecipe(server);
@@ -349,7 +356,7 @@ public class RecipeModel extends BaseDataSource {
 		preptorecipevalues.put("Preperationid", prepID);
 		if(server == true)
 		{
-			preptorecipevalues.put("updateTime", sharedpreferences.getString("DATE", "DEFAULT"));
+			preptorecipevalues.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		else
 		{
@@ -385,6 +392,7 @@ public class RecipeModel extends BaseDataSource {
 	 */
 	public void insertIngredient( boolean server, ArrayList<IngredientBean> ingredList, String addedBy, boolean edit)
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		ingredValues = new ContentValues();
 		for(int i = 0; i < ingredList.size(); i++)
 		{
@@ -392,7 +400,15 @@ public class RecipeModel extends BaseDataSource {
 			if(id == 0)
 			{
 				ingredValues.put("name", ingredList.get(i).getName());
+				if(server == true)
+				{
+					ingredValues.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
+
+				}
+				else
+				{
 				ingredValues.put("updateTime", utils.getLastUpdated(false)); 
+				}
 				ingredValues.put("changeTime", "2015-01-01 12:00:00.000");
 				
 				ingredID = database.insertOrThrow("Ingredient", null, ingredValues);
@@ -456,6 +472,7 @@ public class RecipeModel extends BaseDataSource {
 	 */
 	public void insertIngredientDetails(int i, ArrayList<IngredientBean> ingredList, boolean server, boolean edit, String addedBy)
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		ingredDetailsValues = new ContentValues();
 		ingredDetailsValues.put("ingredientId", ingredID);
 		ingredDetailsValues.put("amount", ingredList.get(i).getAmount());
@@ -473,6 +490,14 @@ public class RecipeModel extends BaseDataSource {
 		{
 			//generate uuid if request from application
 			ingredDetailsValues.put("uniqueid", utils.generateUUID(addedBy, "IngredientDetails", database));
+		}
+		if(server == true)
+		{
+			ingredDetailsValues.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
+		}
+		else
+		{
+			ingredDetailsValues.put("updateTime", utils.getLastUpdated(false)); 
 		}
 		ingredDetsID = database.insertOrThrow("IngredientDetails", null, ingredDetailsValues);
 
@@ -503,7 +528,7 @@ public class RecipeModel extends BaseDataSource {
 		ingredToRecipeValues.put("ingredientDetailsId", ingredDetsID);
 		if(server == true)
 		{
-			ingredToRecipeValues.put("updateTime", sharedpreferences.getString("DATE", "DEFAULT"));
+			ingredToRecipeValues.put("updateTime", sharedpreferences.getString("Date", "DEFAULT"));
 		}
 		else
 		{
@@ -625,6 +650,28 @@ public class RecipeModel extends BaseDataSource {
 		cursor.close();
 		close();
 		return rb;	
+	}
+	
+	public String selectRecipeByID(int id)
+	{	
+		Log.v("UID ", "UID ");
+		String uid = "";
+		open();
+		Log.v("UID ", "UID " + uid);
+		Cursor cursors = database.rawQuery("SELECT uniqueid FROM Recipe WHERE id=?", new String[] { Integer.toString(id) });
+		Log.v("UID ", "UID " + uid);
+		if (cursors != null && cursors.getCount() > 0) {
+			for (int i = 0; i < cursors.getCount(); i++) {
+				Log.v("UID ", "UID " + uid);
+				cursors.moveToPosition(i);
+				uid = cursors.getString(getIndex("uniqueid",cursors)); 
+
+				Log.v("UID ", "UID " + uid);
+			}
+		}
+		cursors.close();
+		close();
+		return uid;	
 	}
 
 	/**

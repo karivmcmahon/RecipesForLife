@@ -836,8 +836,6 @@ public class RecipeEditActivity extends ActionBarActivity {
 							modifiedPrepList.add(prep);
 
 							a += 2;
-							Log.v("A A A ", " A A A " + a);
-							Log.v("A A A ", " A A A " + prepList.size() * 2);
 							if(a == (prepList.size() * 2))
 							{
 								prepList = modifiedPrepList;
