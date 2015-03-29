@@ -124,9 +124,9 @@ public class RecipeModel extends BaseDataSource {
 
 					if(prepid.equals(prepList.get(a).getUniqueid().toString()))
 					{               	
-						prepUpdateVals.put("instruction", prepList.get(i).getPreperation());
-						prepUpdateVals.put("instructionNum", prepList.get(i).getPrepNum());
-						prepUpdateVals.put("progress", prepList.get(i).getProgress());
+						prepUpdateVals.put("instruction", prepList.get(a).getPreperation());
+						prepUpdateVals.put("instructionNum", prepList.get(a).getPrepNum());
+						prepUpdateVals.put("progress", prepList.get(a).getProgress());
 						prepUpdateVals.put("changeTime", utils.getLastUpdated(false));
 						String[] args = new String[]{prepid};
 						database.update("Preperation", prepUpdateVals, "uniqueid=?", args);				
@@ -173,12 +173,12 @@ public class RecipeModel extends BaseDataSource {
 				{
 					if(detsId.equals(ingredBeanList.get(i).getUniqueid()))
 					{
-						long id = selectIngredientByName(ingredBeanList.get(i).getName());
+						long id = selectIngredientByName(ingredBeanList.get(a).getName());
 						ContentValues ingredVals = new ContentValues();
-						ingredVals.put("amount", ingredBeanList.get(i).getAmount() );
-						ingredVals.put("value", ingredBeanList.get(i).getValue());
-						ingredVals.put("note", ingredBeanList.get(i).getNote());
-						ingredVals.put("progress", ingredBeanList.get(i).getProgress());
+						ingredVals.put("amount", ingredBeanList.get(a).getAmount() );
+						ingredVals.put("value", ingredBeanList.get(a).getValue());
+						ingredVals.put("note", ingredBeanList.get(a).getNote());
+						ingredVals.put("progress", ingredBeanList.get(a).getProgress());
 						ingredVals.put("changeTime", utils.getLastUpdated(false));
 						ingredVals.put("ingredientId", id);
 						String[] args = new String[]{detsId};
@@ -461,6 +461,62 @@ public class RecipeModel extends BaseDataSource {
 		}
 		close();
 	}
+	
+	public void insertIngredExtras( boolean server, ArrayList<IngredientBean> ingredList)
+	{
+		open();
+		for(int i = 0; i < ingredList.size(); i++)
+		{
+			ArrayList<IngredientBean> tempList = new ArrayList<IngredientBean>();
+			recipeID = selectRecipeID(ingredList.get(i).getRecipeid());
+			boolean exists = ingredientExists(ingredList.get(i).getUniqueid());
+			if(exists == false)
+			{
+				tempList.add(ingredList.get(i));
+				database.beginTransaction();
+				try
+				{
+					insertIngredient(server, tempList,"", false);
+					database.setTransactionSuccessful();
+					database.endTransaction(); 
+				}
+				catch(SQLException e)
+				{
+					database.endTransaction();
+					throw e;
+				}
+			}
+		}
+		close();
+	}
+	
+	public void insertPrepExtras( boolean server, ArrayList<PreperationBean> prepList)
+	{
+		open();
+		for(int i = 0; i < prepList.size(); i++)
+		{
+			ArrayList<PreperationBean> tempList = new ArrayList<PreperationBean>();
+			recipeID = selectRecipeID(prepList.get(i).getRecipeid());
+			boolean exists = preperationExists(prepList.get(i).getUniqueid());
+			if(exists == false)
+			{
+				tempList.add(prepList.get(i));
+				database.beginTransaction();
+				try
+				{
+					insertPrep(tempList,server, false,"");
+					database.setTransactionSuccessful();
+					database.endTransaction(); 
+				}
+				catch(SQLException e)
+				{
+					database.endTransaction();
+					throw e;
+				}
+			}
+		}
+		close();
+	}
 
 
 	/**
@@ -654,24 +710,36 @@ public class RecipeModel extends BaseDataSource {
 	
 	public String selectRecipeByID(int id)
 	{	
-		Log.v("UID ", "UID ");
+		
 		String uid = "";
 		open();
-		Log.v("UID ", "UID " + uid);
 		Cursor cursors = database.rawQuery("SELECT uniqueid FROM Recipe WHERE id=?", new String[] { Integer.toString(id) });
-		Log.v("UID ", "UID " + uid);
 		if (cursors != null && cursors.getCount() > 0) {
 			for (int i = 0; i < cursors.getCount(); i++) {
-				Log.v("UID ", "UID " + uid);
 				cursors.moveToPosition(i);
 				uid = cursors.getString(getIndex("uniqueid",cursors)); 
-
-				Log.v("UID ", "UID " + uid);
 			}
 		}
 		cursors.close();
 		close();
 		return uid;	
+	}
+	
+	public int selectRecipeID(String uid)
+	{	
+		
+		int id = 0;
+		//open();
+		Cursor cursors = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] { uid });
+		if (cursors != null && cursors.getCount() > 0) {
+			for (int i = 0; i < cursors.getCount(); i++) {
+				cursors.moveToPosition(i);
+				id = cursors.getInt(getIndex("id",cursors)); 
+			}
+		}
+		cursors.close();
+		//close();
+		return id;	
 	}
 
 	/**
@@ -825,6 +893,46 @@ public class RecipeModel extends BaseDataSource {
 		cursor.close();
 		close();
 		return ingredList;
+	}
+	
+	public boolean ingredientExists(String uid)
+	{
+		boolean exists = false;
+		//open();
+		Cursor cursors = database.rawQuery("SELECT * FROM IngredientDetails WHERE uniqueid=?", new String[] { uid });
+		Log.v("INGRED UID", "I UID "+ uid);
+		if (cursors != null && cursors.getCount() > 0) {
+			exists = true;
+			Log.v("TRUE", "I TRUE");
+		}
+		else
+		{
+			exists = false;
+			Log.v("TRUE", "I FALSE");
+		}
+		cursors.close();
+		//close();
+		return exists;
+	}
+	
+	public boolean preperationExists(String uid)
+	{
+		boolean exists = false;
+		//open();
+		Cursor cursor = database.rawQuery("SELECT * FROM Preperation WHERE uniqueid=?", new String[] { uid });
+		Log.v("PREP UID", "P UID "+ uid);
+		if (cursor != null && cursor.getCount() > 0) {
+			Log.v("TRUE", "P TRUE");
+			exists = true;
+		}
+		else
+		{
+			Log.v("TRUE", "P FALSE");
+			exists = false;
+		}
+		cursor.close();
+		//close();
+		return exists;
 	}
 
 	/**

@@ -56,7 +56,7 @@ namespace WebApplication1
 			recipes.Recipe = new List<Recipe>();
 			Recipe recipe = new Recipe();
 			recipe.Preperation = new List<Preperation>();
-			recipe.Ingredient - new List<Ingredient();
+			recipe.Ingredient = new List<Ingredient>();
 			recipe.Preperation = selectPrep(recipe.Preperation, recipe);
 			recipe.Ingredient =	selectIngredient(recipe.Ingredient, recipe);
 			recipes.Recipe.Add(recipe); 		
@@ -65,12 +65,25 @@ namespace WebApplication1
 			Response.Write(json);
 		}
 		
+		public String selectRecipe(int id)
+		{
+			String uniqueid = "";
+			SqlCommand selectrecipe = new SqlCommand(" SELECT uniqueid FROM Recipe WHERE id=@id", connection1);
+			selectrecipe.Parameters.AddWithValue("@id", id);
+			var recipeReader = selectrecipe.ExecuteReader();
+			while (recipeReader.Read())
+			{
+				uniqueid = (string)recipeReader["uniqueid"];
+			}
+			return uniqueid;
+		}
+		
 		/**
 		* Select prep info from database
 		**/
 		public List<Preperation> selectPrep(List<Preperation> recipeprep, Recipe recipe)
 		{
-			SqlCommand selectPreperation = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid, Preperation.progress FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE updateTime > @lastUpdated", connection1);
+			SqlCommand selectPreperation = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid, Preperation.progress, PrepRecipe.recipeId FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.updateTime > @lastUpdated", connection1);
 			selectPreperation.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 			var selectPreperationReader = selectPreperation.ExecuteReader();
 			while (selectPreperationReader.Read())
@@ -80,10 +93,12 @@ namespace WebApplication1
 				preps.uniqueid = new List<string>();
 				preps.prepNums = new List<Int32>();
 				preps.prepprogress = new List<string>();
+				preps.preprecipe = new List<string>();
 				preps.prep.Add((string)selectPreperationReader["instruction"]);
 				preps.uniqueid.Add((string)selectPreperationReader["uniqueid"]);
 				preps.prepNums.Add((Int32)selectPreperationReader["instructionNum"]);
 				preps.prepprogress.Add((string)selectPreperationReader["progress"]);
+				preps.preprecipe.Add(selectRecipe((Int32)selectPreperationReader["recipeId"]));
 				recipeprep.Add(preps);
 			}
 			return recipeprep;
@@ -94,7 +109,7 @@ namespace WebApplication1
 		**/
 		public List<Ingredient> selectIngredient(List<Ingredient> recipeingred, Recipe recipe)
 		{
-			SqlCommand selectIngred = new SqlCommand("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE updateTime > @lastUpdated;", connection1);
+			SqlCommand selectIngred = new SqlCommand("SELECT IngredientDetails.uniqueid AS uid, * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.updateTime > @lastUpdated;", connection1);
 			selectIngred.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 			var selectIngredReader = selectIngred.ExecuteReader();
 			while (selectIngredReader.Read())
@@ -106,48 +121,20 @@ namespace WebApplication1
 				ingreds.Notes = new List<string>();
 				ingreds.uniqueid = new List<string>();
 				ingreds.ingredprogress = new List<string>();
+				ingreds.ingredrecipe = new List<string>();
 				ingreds.Ingredients.Add((string)selectIngredReader["name"]);
 				ingreds.Amount.Add((Int32)selectIngredReader["amount"]);
 				ingreds.Value.Add((string)selectIngredReader["value"]);
 				ingreds.Notes.Add((string)selectIngredReader["note"]);
-				ingreds.uniqueid.Add((string)selectIngredReader["uniqueid"]);	
-				ingreds.ingredprogress.Add((string)selectIngredReader["progress"]);				
+				ingreds.uniqueid.Add((string)selectIngredReader["uid"]);	
+				ingreds.ingredprogress.Add((string)selectIngredReader["progress"]);			
+				ingreds.ingredrecipe.Add(selectRecipe((Int32)selectIngredReader["Recipeid"]));
 				recipeingred.Add(ingreds); 			
 			}
 			return recipeingred;
 		}
 		
-		/**
-		* Select cookbook recipe info from database
-		**/
-		public Recipe selectBook(Recipe recipe)
-		{
-			SqlCommand selectCookbook = new SqlCommand("SELECT uniqueid FROM Cookbook INNER JOIN CookbookRecipe ON Cookbook.id=CookbookRecipe.Cookbookid WHERE CookbookRecipe.Recipeid=@id", connection1);
-			selectCookbook.Parameters.AddWithValue("@id", recipeID);
-			var selectCookbookReader = selectCookbook.ExecuteReader();
-			recipe.cookingid = "";
-			while(selectCookbookReader.Read())
-			{
-				recipe.cookingid = (string)selectCookbookReader["uniqueid"];
-			}
-			return recipe;
-		}
 		
-		public Recipe selectImage(Recipe recipe)
-		{
-			SqlCommand selectImage = new SqlCommand("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON Images.imageid=RecipeImages.imageid WHERE RecipeImages.Recipeid=@id", connection1);
-			selectImage.Parameters.AddWithValue("@id", recipeID);
-			var selectImageReader = selectImage.ExecuteReader();
-			recipe.image = "";
-			recipe.imageid = "";
-			while(selectImageReader.Read())
-			{
-				byte[] image = (byte[])selectImageReader["image"];
-				recipe.image = Convert.ToBase64String(image);
-				recipe.imageid = (string)selectImageReader["uniqueid"];
-			}
-			return recipe;
-		}
 		
 		public class RecipeDate
 		{
@@ -178,6 +165,7 @@ namespace WebApplication1
 			public List<Int32> prepNums { get; set; }
 			public List<String> uniqueid { get; set; }
 			public List<String> prepprogress { get; set; }
+			public List<String> preprecipe { get; set; }
 			
 		}
 
@@ -190,6 +178,7 @@ namespace WebApplication1
 			public List<String> Notes { get; set; }
 			public List<String> uniqueid { get; set; }
 			public List<String> ingredprogress { get; set; }
+			public List<String> ingredrecipe { get; set; }
 		}
 	}
 }

@@ -359,17 +359,19 @@ public class Util  {
 				Editor editor = sharedpreferences.edit();
 
 				//INSERTS SYNC 
-				syncRecipeDetails.getAndCreateJSON(false);
+				
 				sync.getJSONFromServer();
 				sync.getAndCreateAccountJSON();
 				syncCookbook.getJSONFromServer(false);
 				syncCookbook.getAndCreateJSON(false);
 				syncRecipe.getJSONFromServer(false);
-				syncRecipe.getAndCreateJSON(false);
+				syncRecipe.getAndCreateJSON(false); 
+				syncRecipeDetails.getJSONFromServer();
+				syncRecipeDetails.getAndCreateJSON(false);
 				syncContributer.getJSONFromServer(false);
 				syncContributer.getAndCreateJSON(false);
 				syncReview.getJSONFromServer();
-				syncReview.getAndCreateJSON();
+				syncReview.getAndCreateJSON(); 
 			
 				//UPDATES SYNC
 				syncRecipe.getJSONFromServer(true);

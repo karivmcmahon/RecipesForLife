@@ -11,12 +11,12 @@ public class PreperationBean  {
 	String preperation; //preperation details
 	String uniqueid; //prep uniqueid
 	String progress;
-	int recipeid;
+	String recipeid;
 
-	public int getRecipeid() {
+	public String getRecipeid() {
 		return recipeid;
 	}
-	public void setRecipeid(int recipeid) {
+	public void setRecipeid(String recipeid) {
 		this.recipeid = recipeid;
 	}
 	public String getProgress() {

@@ -255,13 +255,13 @@ public class SyncRecipeDetails extends BaseDataSource {
 		
 	}
 
-	public void getJSONFromServer(boolean update) throws JSONException, IOException
+	public void getJSONFromServer() throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 
 		JSONObject json;
 		String str = "";
-		str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm17.aspx", sharedpreferences.getString("Date", "DEFAULT"), true);
+		str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm17.aspx", sharedpreferences.getString("Date", "DEFAULT"), false);
 		
 		JSONObject jObject = new JSONObject(str);
 		JSONArray jArray = (JSONArray) jObject.get("Recipe");
@@ -280,6 +280,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 				JSONArray valueArray = (JSONArray) ingredObject.get("Value");
 				JSONArray ingredIdArray = (JSONArray) ingredObject.get("uniqueid");
 				JSONArray ingredProgressArray = (JSONArray) ingredObject.get("ingredprogress");
+				JSONArray ingredrecipeArray = (JSONArray) ingredObject.get("ingredrecipe");
 				for(int b = 0; b < ingredsArray.length(); b++)
 				{
 					IngredientBean ingredBean = new IngredientBean();
@@ -289,6 +290,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 					ingredBean.setValue(valueArray.get(b).toString());
 					ingredBean.setUniqueid(ingredIdArray.get(b).toString());
 					ingredBean.setProgress(ingredProgressArray.get(b).toString());
+					ingredBean.setRecipeid(ingredrecipeArray.get(b).toString());
 					ingredBeanList.add(ingredBean);
 				}
 			}
@@ -302,6 +304,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 				JSONArray numArray = (JSONArray) prepObject.get("prepNums");
 				JSONArray idArray = (JSONArray) prepObject.get("uniqueid");
 				JSONArray progressArray = (JSONArray) prepObject.get("prepprogress");
+				JSONArray preprecipeArray = (JSONArray) prepObject.get("preprecipe");
 				for(int d = 0; d < prepArray.length(); d++)
 				{
 					PreperationBean prepBean = new PreperationBean();
@@ -309,14 +312,17 @@ public class SyncRecipeDetails extends BaseDataSource {
 					prepBean.setPrepNum(Integer.parseInt(numArray.get(d).toString()));
 					prepBean.setUniqueid(idArray.get(d).toString());
 					prepBean.setProgress(progressArray.getString(d).toString());
+					prepBean.setRecipeid(preprecipeArray.getString(d).toString());
 					prepBeanList.add(prepBean);
 				}
 			}
-			RecipeModel model = new RecipeModel(context);
+			//RecipeModel model = new RecipeModel(context);
 		
 			try
 			{
-				model.insertRecipe(recipe, true, ingredBeanList, prepBeanList );
+				rm.insertIngredExtras(true, ingredBeanList);
+				rm.insertPrepExtras(true, prepBeanList);
+				//model.insertRecipe(recipe, true, ingredBeanList, prepBeanList );
 			}
 			catch(SQLException e)
 			{
