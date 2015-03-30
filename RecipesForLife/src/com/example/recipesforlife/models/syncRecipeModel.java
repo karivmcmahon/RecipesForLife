@@ -113,7 +113,7 @@ public class SyncRecipeModel extends BaseDataSource {
 		SharedPreferences sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
 		ArrayList<IngredientBean> ingredientList = new ArrayList<IngredientBean>();
-		Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ?   ", new String[] {   Integer.toString(id) });
+		Cursor cursor = database.rawQuery("SELECT ingredientDetailsId From RecipeIngredient WHERE  Recipeid = ?  AND updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?) ", new String[] {   Integer.toString(id), sharedpreferences.getString("DATE", "DEFAULT") });
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
@@ -299,8 +299,7 @@ public class SyncRecipeModel extends BaseDataSource {
 				String name = getIngredName(ingredList.get(y).getIngredId());
 				ingredarray.put(name);
 			}
-			newObj = new JSONObject();
-			Log.v("RESPONSE IN ", "RESPONSE IN " + ingredarray);
+
 			newObj.put("Ingredients", ingredarray);
 			recipe.put("Ingredient", newObj);
 			newObj = new JSONObject();

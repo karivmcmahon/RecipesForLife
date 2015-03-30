@@ -85,7 +85,6 @@ public class RecipeViewActivity extends ActionBarActivity {
 	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
 	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
 	ImageBean imgBean = new ImageBean();
-	File file;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -381,21 +380,18 @@ public class RecipeViewActivity extends ActionBarActivity {
 		// Store image to default external storage directory
 		Uri bmpUri = null;
 		try {
-			file =  new File(Environment.getExternalStoragePublicDirectory(  
+			File file =  new File(Environment.getExternalStoragePublicDirectory(  
 					Environment.DIRECTORY_DOWNLOADS), "share_image_" + System.currentTimeMillis() + ".png");
 			file.getParentFile().mkdirs();
 			FileOutputStream out = new FileOutputStream(file);
 			bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
 			out.close();
 			bmpUri = Uri.fromFile(file);
-			file.deleteOnExit();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return bmpUri;
 	}
-	
-	
 	
 	/**
 	 * Creates the clone dialog - to clone recipes into cookbook

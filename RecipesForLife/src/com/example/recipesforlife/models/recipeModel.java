@@ -91,7 +91,7 @@ public class RecipeModel extends BaseDataSource {
 			{
 				database.update("Recipe", recipeUpdateVals, "uniqueid=?", args);
 				updateRecipePrep(prepList); //updates preperation details for recipe
-				updateRecipeIngredient(ingredList, server); //updates ingred details for recipe
+				updateRecipeIngredient(ingredList); //updates ingred details for recipe
 				updateRecipeImage(image); //updates images for recipe
 				database.setTransactionSuccessful();
 				database.endTransaction(); 
@@ -162,50 +162,34 @@ public class RecipeModel extends BaseDataSource {
 	 * Update recipe ingredient details
 	 * @param ingredBeanList
 	 */
-	public void updateRecipeIngredient(ArrayList<IngredientBean> ingredBeanList, boolean server)
+	public void updateRecipeIngredient(ArrayList<IngredientBean> ingredBeanList)
 	{
-		long ingredid = 0; 
-		
+		Cursor cursor = database.rawQuery("SELECT *, IngredientDetails.id AS ID FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = ?;", new String[] { Long.toString(recipeUpdateID) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				String detsId =  (cursor.getString(getIndex("uniqueid",cursor)));
 				for (int a = 0; a < ingredBeanList.size(); a++)
 				{
-					
-						int id = selectIngredient(ingredBeanList.get(a).getName());
-						if(id == 0)
-						{
-							ingredValues.put("name", ingredBeanList.get(a).getName());
-							if(server == true)
-							{
-								ingredValues.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
-
-							}
-							else
-							{
-							ingredValues.put("updateTime", utils.getLastUpdated(false)); 
-							}
-							ingredValues.put("changeTime", "2015-01-01 12:00:00.000");
-							
-							ingredid = database.insertOrThrow("Ingredient", null, ingredValues);
-						}
-						else
-						{
-							ingredid = id; // if it already exists return the id
-						}
+					if(detsId.equals(ingredBeanList.get(i).getUniqueid()))
+					{
+						long id = selectIngredientByName(ingredBeanList.get(a).getName());
 						ContentValues ingredVals = new ContentValues();
 						ingredVals.put("amount", ingredBeanList.get(a).getAmount() );
 						ingredVals.put("value", ingredBeanList.get(a).getValue());
 						ingredVals.put("note", ingredBeanList.get(a).getNote());
 						ingredVals.put("progress", ingredBeanList.get(a).getProgress());
 						ingredVals.put("changeTime", utils.getLastUpdated(false));
-						ingredVals.put("ingredientId", ingredid);
-						String[] args = new String[]{ingredBeanList.get(a).getUniqueid()};
+						ingredVals.put("ingredientId", id);
+						String[] args = new String[]{detsId};
 						database.update("IngredientDetails", ingredVals, "uniqueid=?", args);
 					}
 				}
 
-			
-		
-	
-	
+			}
+		}
+		cursor.close();
+	}
 
 
 	/**

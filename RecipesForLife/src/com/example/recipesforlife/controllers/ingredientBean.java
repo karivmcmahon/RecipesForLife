@@ -14,14 +14,7 @@ public class IngredientBean {
 	String uniqueid; //ingreds uniqueid
 	String progress;
 	String recipeid;
-	String updateTime;
 	
-	public String getUpdateTime() {
-		return updateTime;
-	}
-	public void setUpdateTime(String updateTime) {
-		this.updateTime = updateTime;
-	}
 	public String getRecipeid() {
 		return recipeid;
 	}

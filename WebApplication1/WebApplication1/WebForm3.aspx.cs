@@ -155,9 +155,6 @@ namespace WebApplication1
 							ingredId= rdr.GetInt32(0);
 						}
 					}
-					else{
-				ingredId = 0;
-				}
 					rdr.Close();
 
 				}
