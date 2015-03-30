@@ -304,6 +304,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		spinnerArray.add("teaspoon");
 		spinnerArray.add("tablespoon");
 		spinnerArray.add("cup");
+		spinnerArray.add("");
 		spinnerArray.add("kg");
 		spinnerArray.add("g");
 		spinnerArray.add("l");

@@ -112,7 +112,7 @@ namespace WebApplication1
 		//Updates ingredient details
 		public void updateIngredDetails(int i,int  a)
 		{
-			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime, progress=@progress WHERE uniqueid=@uniqueid", connection);
+			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime, progress=@progress, ingredientId = @id WHERE uniqueid=@uniqueid", connection);
 			updateDets.Parameters.AddWithValue("@id", ingredId);
 			updateDets.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
 			updateDets.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
@@ -164,7 +164,7 @@ namespace WebApplication1
 			selectIngId.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
 			try
 			{
-
+				Response.Write("INGRED ID " +  recipe[i].Ingredient[0].Ingredients[a]);
 				SqlDataReader selectIngIdReader = selectIngId.ExecuteReader();
 				if(selectIngIdReader.HasRows)
 				{
@@ -172,7 +172,12 @@ namespace WebApplication1
 					{
 						// read a row, for example:
 						ingredId= selectIngIdReader.GetInt32(0);
+						Response.Write("INGRED ID " + ingredId);
 					}
+					
+				}
+				else{
+				ingredId = 0;
 				}
 				selectIngIdReader.Close();
 

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -353,13 +354,19 @@ public class SignUpSignInActivity extends Activity {
 			try {
 				AccountModel accountmodel = new AccountModel(getApplicationContext());
 				accountmodel.insertAccount(accountBean, userBean, false);
-				nextDialog.dismiss();
+				Editor editor = sharedpreferences.edit();
+				editor.putString(emailk, email);
+				editor.putString(pass, password);
+				editor.commit();
+				// Start activity
+				Intent i = new Intent(SignUpSignInActivity.this, CookbookListActivity.class);
+				startActivity(i);
 
 			} catch (Exception e) {
 				Log.v("Error ", "Error with account insert. Exception " + e);
 				errorView.setText("Error creating account");
 
-			}
+			} 
 		}
 	}
 
