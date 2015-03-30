@@ -108,6 +108,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 		ib.setIngredId(cursor.getInt(getIndex("ingredientId", cursor)));	
 		ib.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		ib.setProgress(cursor.getString(getIndex("progress", cursor)));
+		ib.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		return ib;
 	}
 
@@ -157,7 +158,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 		pb.setPrepNum(cursor.getInt(getIndex("instructionNum", cursor)));
 		pb.setUniqueid(cursor.getString(getIndex("uniqueid",cursor)));
 		pb.setProgress(cursor.getString(getIndex("progress", cursor)));
-
+		pb.setUpdateTime(cursor.getString(getIndex("updateTime", cursor)));
 		return pb;
 	}
 
@@ -173,7 +174,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 		JSONArray jsonArray = new JSONArray();
 		
 			JSONObject recipe = new JSONObject();		
-			recipe.put("updateTime", util.getLastUpdated(false));
+			//recipe.put("updateTime", util.getLastUpdated(false));
 			recipe.put("changeTime", "2015-01-01 12:00:00");
 			
 
@@ -183,6 +184,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 			JSONArray prepIdArray = new JSONArray();
 			JSONArray prepProgressArray = new JSONArray();
 			JSONArray prepRecipeArray = new JSONArray();
+			JSONArray prepUpdateArray = new JSONArray();
 			for(int x = 0; x < prepList.size(); x++)
 			{
 				prepStepArray.put(prepList.get(x).getPreperation().toString());
@@ -190,6 +192,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 				prepIdArray.put(prepList.get(x).getUniqueid().toString());
 				prepProgressArray.put(prepList.get(x).getProgress().toString());
 				prepRecipeArray.put(recipeprepid);
+				prepUpdateArray.put(prepList.get(x).getUpdateTime().toString());
 			}
 
 			JSONObject newObj = new JSONObject();			
@@ -207,6 +210,9 @@ public class SyncRecipeDetails extends BaseDataSource {
 			newObj = new JSONObject();
 			newObj.put("preprecipeid", prepRecipeArray);
 			recipe.accumulate("Preperation", newObj );
+			newObj = new JSONObject();
+			newObj.put("updateTime", prepUpdateArray);
+			recipe.accumulate("Preperation", newObj );
 		
 			ArrayList<IngredientBean> ingredList = getIngred();
 
@@ -217,6 +223,7 @@ public class SyncRecipeDetails extends BaseDataSource {
 			JSONArray ingredidarray = new JSONArray();
 			JSONArray ingredprogressarray = new JSONArray();
 			JSONArray ingredrecipearray = new JSONArray();
+			JSONArray ingredupdatearray = new JSONArray();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
 				amountarray.put(Integer.toString(ingredList.get(y).getAmount()));
@@ -225,10 +232,12 @@ public class SyncRecipeDetails extends BaseDataSource {
 				ingredidarray.put(ingredList.get(y).getUniqueid());
 				ingredprogressarray.put(ingredList.get(y).getProgress());
 				ingredrecipearray.put(recipeingredid);
+				ingredupdatearray.put(ingredList.get(y).getUpdateTime().toString());
 				String name = getIngredName(ingredList.get(y).getIngredId());
 				ingredarray.put(name);
 			}
-
+			
+			
 			newObj.put("Ingredients", ingredarray);
 			recipe.put("Ingredient", newObj);
 			newObj = new JSONObject();
@@ -245,8 +254,12 @@ public class SyncRecipeDetails extends BaseDataSource {
 			recipe.accumulate("Ingredient", newObj);
 			newObj = new JSONObject();
 			newObj.put("ingredprogress", ingredprogressarray);		
-			recipe.accumulate("Ingredient", newObj);	
+			recipe.accumulate("Ingredient", newObj);
+			newObj = new JSONObject();
 			newObj.put("ingredrecipeid", ingredrecipearray);		
+			recipe.accumulate("Ingredient", newObj);
+			newObj = new JSONObject();
+			newObj.put("updateTime", ingredupdatearray);		
 			recipe.accumulate("Ingredient", newObj);	
 			jsonArray.put(recipe);			
 		
