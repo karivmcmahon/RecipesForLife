@@ -336,7 +336,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		{
 			if(prepList.get(i).getProgress().equals("added"))
 			{
-			instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n");
+			instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n \n");
 		
 			}
 		}

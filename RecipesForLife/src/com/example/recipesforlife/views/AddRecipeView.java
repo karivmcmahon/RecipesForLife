@@ -71,6 +71,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 	private static final int SELECT_PHOTO = 100;
 	byte[] array;
 	ArrayList<String> cookbookuids = new ArrayList<String>();
+	int prepnumcount = 1;
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -367,6 +368,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
 		utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
+		EditText stepEditText = (EditText) recipeAddStepDialog.findViewById(R.id.stepNumEditText);
+		stepEditText.setText(Integer.toString(prepnumcount));
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddStepDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -563,7 +566,7 @@ public class AddRecipeView extends RecipeListViewActivity {
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
 		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
 		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
-
+		prepnumcount = Integer.parseInt(stepNum) + 1;
 		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
 		{

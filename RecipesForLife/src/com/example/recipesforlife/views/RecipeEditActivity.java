@@ -472,7 +472,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		{
 			if(prepList.get(i).getProgress().equals("added"))
 			{
-				instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n");
+				instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n \n");
 
 			}
 		}
@@ -755,6 +755,8 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.recipeEditView, prepDialog, 22);
 		prepNumEditIds = new ArrayList<Integer>();
 		prepEditIds = new ArrayList<Integer>();
+		
+				
 		LinearLayout prepDialogLinearLayout = (LinearLayout)prepDialog.findViewById(R.id.editdialog);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT,      
@@ -788,7 +790,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				prepEditIds.add(prepEditId);
 				prepEdit.setId(prepEditId);
 				prepEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-				LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(150, LayoutParams.WRAP_CONTENT);
+				LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(200, 300);
 				lparams.setMargins(5,5,5,5);
 				prepEdit.setLayoutParams(lparams);
 
@@ -919,7 +921,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 					{
 						if(modifiedPrepList.get(i).getProgress().equals("added"))
 						{
-							instructions.append(Integer.toString(modifiedPrepList.get(i).getPrepNum()) + ". " +modifiedPrepList.get(i).getPreperation().toString() + "\n");
+							instructions.append(Integer.toString(modifiedPrepList.get(i).getPrepNum()) + ". " +modifiedPrepList.get(i).getPreperation().toString() + "\n \n");
 
 						} 
 					}
@@ -1249,6 +1251,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		spinnerArray.add("teaspoon");
 		spinnerArray.add("tablespoon");
 		spinnerArray.add("cup");
+		spinnerArray.add("");
 		spinnerArray.add("kg");
 		spinnerArray.add("g");
 		spinnerArray.add("l");
@@ -1323,7 +1326,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			{
 				if(prepList.get(i).getProgress().equals("added"))
 				{
-					instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n");
+					instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n \n");
 
 				}
 			}
