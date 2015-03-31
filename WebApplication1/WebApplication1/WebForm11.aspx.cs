@@ -42,7 +42,10 @@ namespace WebApplication1
 									id = rdr.GetInt32(0);
 								}
 							}
+							Response.Write("Cookbook id " + id);
 							rdr.Close();
+							if(id != 0)
+							{
 							SqlCommand insert = new SqlCommand("INSERT INTO Contributers(Cookbookid,usersId,updateTime,changeTime, progress) VALUES(@bookid, @usersid, @updateTime, @changeTime, @progress)", connn);
 							insert.Parameters.AddWithValue("@bookid", id);
 							insert.Parameters.AddWithValue("@usersid", contribs[i].email);
@@ -60,6 +63,7 @@ namespace WebApplication1
 
 								Response.Write("Error ");
 								Response.Write(ex);
+							}
 							}
 						}
 						catch (Exception ex)
