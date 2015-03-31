@@ -175,6 +175,16 @@ public class RecipeEditActivity extends ActionBarActivity {
 					errorView.setTextColor(Color.parseColor("#F70521"));
 					utils.setDialogText(R.id.recipeEditImageView, imageDialog, 22);
 					utils.setDialogText(R.id.recipeImagesView, imageDialog, 22);
+					
+					Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, imageDialog);
+					closeButton.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							imageDialog.dismiss();
+							
+						}});
 
 					Button imageSaveButton = utils.setButtonTextDialog(R.id.saveImageButton, 22, imageDialog);
 					final Button browseButton = utils.setButtonTextDialog(R.id.bButton, 22, imageDialog);
@@ -500,6 +510,15 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogTextString(R.id.recipeCookingEditText, timeDialog, recipe.getCooking());
 		utils.setTimePickerFrag(timeDialog, R.id.recipePrepEditText, mHandler);
 		utils.setTimePickerFrag(timeDialog, R.id.recipeCookingEditText, mHandler2);
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, timeDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				timeDialog.dismiss();
+				
+			}});
 		Button timeButton = utils.setButtonTextDialog(R.id.saveButton, 22, timeDialog);
 		timeButton.setOnClickListener(new OnClickListener(){
 
@@ -527,6 +546,16 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogTextString(R.id.recipeServesEditText, servesDialog, recipe.getServes());
 		utils.setDialogText(R.id.recipeDifficultyView, servesDialog, 22);
 
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, servesDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				servesDialog.dismiss();
+				
+			}});
+		
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("Easy");
 		spinnerArray.add("Medium");
@@ -573,6 +602,15 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.recipeDescView, titleDialog, 22);
 		utils.setDialogTextString(R.id.recipenameEditText, titleDialog, recipe.getName());
 		utils.setDialogTextString(R.id.recipeDescEdit, titleDialog, recipe.getDesc());
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, titleDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				titleDialog.dismiss();
+				
+			}});
 		Button titleButton = utils.setButtonTextDialog(R.id.saveButton, 22, titleDialog);
 		titleButton.setOnClickListener(new OnClickListener(){
 
@@ -608,6 +646,15 @@ public class RecipeEditActivity extends ActionBarActivity {
 		errorView.setTextColor(Color.parseColor("#F70521"));
 		utils.setDialogText(R.id.recipeEditView, tipsDialog, 22);
 		utils.setDialogText(R.id.recipeTipsView, tipsDialog, 22);
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, tipsDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				tipsDialog.dismiss();
+				
+			}});
 		utils.setDialogTextString(R.id.recipeTipsEditText, tipsDialog, recipe.getTips());
 		Button tipsButton = utils.setButtonTextDialog(R.id.saveButton, 22, tipsDialog);
 		tipsButton.setOnClickListener(new OnClickListener(){
@@ -635,6 +682,16 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 		utils.setDialogText(R.id.recipeDietaryView, cusineDialog, 22);
 
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, cusineDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				cusineDialog.dismiss();
+				
+			}});
+		
 		List<String> cusineSpinnerArray =  new ArrayList<String>();
 		cusineSpinnerArray.add("Italian");
 		cusineSpinnerArray.add("Indian");
@@ -1145,6 +1202,17 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
 		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddStepDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				recipeAddStepDialog.dismiss();
+				
+			}});
+		
 		Button addButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
 		addButton.setOnClickListener(new OnClickListener() {
 
@@ -1165,6 +1233,16 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
 		Button addButton = utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeIngredDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				recipeIngredDialog.dismiss();
+				
+			}});
 
 		//Spinner set up with varying measurement amounts
 		List<String> spinnerArray =  new ArrayList<String>();

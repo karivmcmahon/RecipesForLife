@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -63,6 +64,17 @@ public class ContributerView {
 		}
 		//Sets up the dialog to show a list of contributers
 		setContribView();
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, contribDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				contribDialog.dismiss();
+				
+			}});
+		
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
 		if(isCreator == false)
 		{
@@ -81,6 +93,17 @@ public class ContributerView {
 					{
 						//Set up the add contributer dialog
 						addContribDialogViewCreate();
+						
+						Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, addContribDialog);
+						closeButton.setOnClickListener(new OnClickListener(){
+
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								addContribDialog.dismiss();
+								
+							}});
+						
 						//If they press add
 						Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
 						addContribButton.setOnTouchListener(new OnTouchListener()

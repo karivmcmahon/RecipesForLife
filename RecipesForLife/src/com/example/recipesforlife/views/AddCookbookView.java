@@ -91,6 +91,16 @@ public class AddCookbookView extends CookbookListActivity {
 			}
 
 		});
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, bookAddDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				bookAddDialog.dismiss();
+				
+			}});
 
 		//Clicks to add the data
 		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, bookAddDialog);

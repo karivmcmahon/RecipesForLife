@@ -300,7 +300,7 @@ public class SyncRecipeModel extends BaseDataSource {
 				ingredarray.put(name);
 			}
 			newObj = new JSONObject();
-			Log.v("RESPONSE IN ", "RESPONSE IN " + ingredarray);
+			
 			newObj.put("Ingredients", ingredarray);
 			recipe.put("Ingredient", newObj);
 			newObj = new JSONObject();

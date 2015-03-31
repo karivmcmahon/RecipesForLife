@@ -252,6 +252,16 @@ public class RecipeListViewActivity extends ActionBarActivity {
 		rbList = model.selectAllRecipesUserCanAccess(sharedpreferences.getString(emailk, ""));	
 		
 		final Spinner spinner = fillSpinner(); //fills spinner
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, cloneDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				cloneDialog.dismiss();
+				
+			}});
 
 		Button addButton = utils.setButtonTextDialog(R.id.addButton, 22, cloneDialog);
 		addButton.setOnClickListener(new OnClickListener(){

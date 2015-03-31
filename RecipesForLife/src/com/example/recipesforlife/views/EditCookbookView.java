@@ -77,6 +77,16 @@ public class EditCookbookView  {
 		setStyle();
 		setText();
 
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, editDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				editDialog.dismiss();
+				
+			}});
+		
 		//Starts intent to get image from phone if selected
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, editDialog);
 		browseButton.setOnClickListener(new OnClickListener()

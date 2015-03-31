@@ -155,6 +155,16 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);	
 		CookbookModel cbmodel = new CookbookModel(context);
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				recipeAddDialog.dismiss();
+				
+			}});
 
 		//Fills the spinner with users cookbooks
 		ArrayList<CookbookBean> cbList = cbmodel.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));	
@@ -180,6 +190,15 @@ public class AddRecipeView extends RecipeListViewActivity {
 	public void setUpSecondRecipeAddDialog()
 	{
 		recipeAddDialog2 = utils.createDialog(activity, R.layout.recipe_add_dialog2);
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddDialog2);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				recipeAddDialog2.dismiss();
+				
+			}});
 		utils.setDialogText(R.id.recipeAddView2, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeIngredsView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeStepsView, recipeAddDialog2, 22);
@@ -298,6 +317,16 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
 		utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeIngredDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				recipeIngredDialog.dismiss();
+				
+			}});
 
 		//Spinner set up with varying measurement amounts
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -338,6 +367,15 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
 		utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddStepDialog);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				recipeAddStepDialog.dismiss();
+				
+			}});
 		recipeAddStepDialog.show();
 	}
 
@@ -409,6 +447,16 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
 		addRecipeButton = utils.setButtonTextDialog(R.id.addRecipeButton, 22, addRecipeDialog3);
+		
+		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, addRecipeDialog3);
+		closeButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				addRecipeDialog3.dismiss();
+				
+			}});
 
 		//Gets image from phone when browse pressed
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, addRecipeDialog3);

@@ -35,5 +35,15 @@
         android:layout_below="@+id/ll"
         android:layout_centerHorizontal="true" >
     </ListView>
+    
+     <Button
+        android:id="@+id/closeButton"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/lists"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/drawable_button"
+        android:text="Close" />
 
 </RelativeLayout>

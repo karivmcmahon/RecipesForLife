@@ -132,6 +132,15 @@ public class SignUpSignInActivity extends Activity {
 					// Show dialog
 					dialog.show();
 
+					Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, dialog);
+					closeButton.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							dialog.dismiss();
+							
+						}});
 					// Next button on dialog
 					Button dialogButton = utils.setButtonTextDialog(R.id.nextButton, 22, dialog);
 					dialogButton.setOnClickListener(new OnClickListener() {
@@ -156,6 +165,16 @@ public class SignUpSignInActivity extends Activity {
 										22);
 								utils.setDialogText(R.id.interestView,
 										nextDialog, 22);
+								
+								Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, nextDialog);
+								closeButton.setOnClickListener(new OnClickListener(){
+
+									@Override
+									public void onClick(View v) {
+										// TODO Auto-generated method stub
+										nextDialog.dismiss();
+										
+									}});
 								// Set button click
 								Button nextDialogButton = utils.setButtonTextDialog(R.id.signUpButton, 22, nextDialog);
 								nextDialogButton
