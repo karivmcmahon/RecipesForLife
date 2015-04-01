@@ -482,7 +482,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 		{
 			if(ingredList.get(i).getProgress().equals("added"))
 			{
-				ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue() + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
+				ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue().replace("other", "") + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
 
 			}
 		}		
@@ -508,8 +508,8 @@ public class RecipeEditActivity extends ActionBarActivity {
 		utils.setDialogText(R.id.recipeCookingView, timeDialog, 22);
 		utils.setDialogTextString(R.id.recipePrepEditText, timeDialog, recipe.getPrep());
 		utils.setDialogTextString(R.id.recipeCookingEditText, timeDialog, recipe.getCooking());
-		utils.setTimePickerFrag(timeDialog, R.id.recipePrepEditText, mHandler);
-		utils.setTimePickerFrag(timeDialog, R.id.recipeCookingEditText, mHandler2);
+		utils.setTimePickerFrag(timeDialog, R.id.recipePrepEditText, mHandler,"prepare");
+		utils.setTimePickerFrag(timeDialog, R.id.recipeCookingEditText, mHandler2, "cook");
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, timeDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -1044,7 +1044,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 				linearLayoutInDialog.addView(img);
 
 				ingredDialogLinearLayout.addView(linearLayoutInDialog);
-				amountEdit.setText(Integer.toString(ingredList.get(i).getAmount()));
+				amountEdit.setText(Float.toString(ingredList.get(i).getAmount()));
 				ingredEdit.setText(ingredList.get(i).getName());
 				noteEdit.setText(ingredList.get(i).getNote());
 				sItems.setSelection(utils.getIndex(sItems, ingredList.get(i).getValue()));
@@ -1135,7 +1135,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 					{
 						if(modifiedIngredList.get(i).getProgress().equals("added"))
 						{
-							ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue() + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
+							ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue().replace("other", "") + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
 
 						}
 					}
@@ -1381,7 +1381,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			}
 			else
 			{
-				ingredsEdit.append( amount + " " + value + " " + ingredient + " - " + note + "\n");
+				ingredsEdit.append( amount + " " + value + " " + ingredient.replace("other", "") + " - " + note + "\n");
 			} 
 		}
 

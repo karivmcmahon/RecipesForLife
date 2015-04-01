@@ -182,6 +182,17 @@ public class CustomRecipeListAdapter extends ArrayAdapter<String> {
 									recipeids.remove(position);
 									recipeimages.remove(position);
 									recipenames.remove(position);
+									if(recipeids.size() < 6)
+									{
+										int num = 6 - recipeids.size();
+										for(int a = 0; a < num; a++)
+										{
+											byte[] emptyarr = new byte[0];
+											recipenames.add("");
+											recipeids.add("");
+											recipeimages.add(emptyarr);
+										}
+									} 
 									notifyDataSetChanged();
 								}catch(SQLiteException e)
 								{

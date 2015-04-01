@@ -346,7 +346,7 @@ public class RecipeViewActivity extends ActionBarActivity {
 		{
 			if(ingredList.get(i).getProgress().equals("added"))
 			{
-			ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue() + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
+			ingredients.append("- " + ingredList.get(i).getAmount() + " "+  ingredList.get(i).getValue().replace("other", "") + " " + ingredList.get(i).getName().toString() + " - " + ingredList.get(i).getNote().toString() + "\n");
 			}	
 		}
 		recipeName =  recipe.getName();

@@ -291,7 +291,7 @@ public class SyncRecipeModel extends BaseDataSource {
 			JSONArray ingredprogressarray = new JSONArray();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
-				amountarray.put(Integer.toString(ingredList.get(y).getAmount()));
+				amountarray.put(Float.toString(ingredList.get(y).getAmount()));
 				valuearray.put(ingredList.get(y).getValue());
 				notearray.put(ingredList.get(y).getNote());
 				ingredidarray.put(ingredList.get(y).getUniqueid());

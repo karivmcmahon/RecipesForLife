@@ -206,8 +206,8 @@ public class AddRecipeView extends RecipeListViewActivity {
 		utils.setDialogText(R.id.recipeServesView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipePrepView, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeCookingView, recipeAddDialog2, 22);
-		utils.setTimePickerFrag(recipeAddDialog2, R.id.recipePrepEditText, mHandler);
-		utils.setTimePickerFrag(recipeAddDialog2, R.id.recipeCookingEditText, mHandler2);
+		utils.setTimePickerFrag(recipeAddDialog2, R.id.recipePrepEditText, mHandler, "prepare");
+		utils.setTimePickerFrag(recipeAddDialog2, R.id.recipeCookingEditText, mHandler2, "cook");
 		nextButton2 = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog2);
 		recipeAddDialog2.show();
 	}

@@ -23,11 +23,13 @@ public class TimePickerFragment extends DialogFragment
 	Handler mHandler ;
 	String hour;
 	String minutes;
+	String type;
 	int h, m;
 
-	public TimePickerFragment(Handler h)
+	public TimePickerFragment(Handler h, String type)
 	{
 		mHandler = h;
+		this.type = type;
 	}
 
 	@Override
@@ -50,9 +52,11 @@ public class TimePickerFragment extends DialogFragment
 			}
 		};
 
-
+		
 		// Create a new instance of TimePickerDialog and return
-		return new TimePickerDialog(getActivity(), listener, h,m,true);
+		TimePickerDialog tpd =new TimePickerDialog(getActivity(), listener, h,m,true);
+		tpd.setTitle("Set time it will take to " + type + " recipe in hours:minutes");
+		return tpd;
 	}
 }
 

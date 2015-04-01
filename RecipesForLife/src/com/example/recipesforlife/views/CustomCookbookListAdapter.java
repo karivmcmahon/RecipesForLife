@@ -209,6 +209,17 @@ public class CustomCookbookListAdapter  extends ArrayAdapter<String> {
 									booknames.remove(position);
 									bookids.remove(position);
 									bookimages.remove(position);
+									if(booknames.size() < 6)
+									{
+										int num = 6 - booknames.size();
+										for(int a = 0; a < num; a++)
+										{
+											byte[] emptyarr = new byte[0];
+											booknames.add("");
+											bookids.add("");
+											bookimages.add(emptyarr);
+										}
+									}
 									notifyDataSetChanged();
 								}
 								catch(SQLiteException e)

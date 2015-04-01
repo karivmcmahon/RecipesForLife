@@ -306,7 +306,7 @@ public class Util  {
 	 * @param res
 	 * @param handler
 	 */
-	public void setTimePickerFrag(Dialog dialog, int res, final Handler handler)
+	public void setTimePickerFrag(Dialog dialog, int res, final Handler handler, final String type)
 	{
 		EditText editText2 = (EditText) dialog.findViewById(res);
 		editText2.setOnTouchListener(new OnTouchListener(){
@@ -318,7 +318,7 @@ public class Util  {
 				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
 				{
 					// Instantiating TimePickerDialogFragment 
-					TimePickerFragment timePicker = new TimePickerFragment(handler);
+					TimePickerFragment timePicker = new TimePickerFragment(handler, type);
 
 
 					// Getting fragment manger for this activity 
