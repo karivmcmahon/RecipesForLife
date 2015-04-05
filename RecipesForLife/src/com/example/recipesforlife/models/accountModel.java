@@ -215,7 +215,7 @@ public class AccountModel extends BaseDataSource
 		//If request is from server set updateTime to shared pref time otherwise set to timestamp for that time
 		if(server == true)
 		{
-			values.put("updateTime", sharedpreferences.getString("Account Date", "DEFAULT")); 
+			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
 		}
 		else
 		{
