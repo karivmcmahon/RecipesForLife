@@ -67,20 +67,29 @@ import com.example.recipesforlife.util.Util;
 public class RecipeEditActivity extends ActionBarActivity {
 
 	Util utils;
-	RecipeBean recipe;
+	public static RecipeBean recipe;
 	public static final String MyPREFERENCES = "MyPrefs";
 	Dialog titleDialog, servesDialog, imageDialog;
 	static Dialog timeDialog;
-	Dialog prepDialog;
+	public Dialog prepDialog;
 	Dialog ingredDialog;
 	public static final String emailk = "emailKey";
-	ArrayList<PreperationBean> prepList, modifiedPrepList, addPrepList;
-	ArrayList<IngredientBean> ingredList, modifiedIngredList, addIngredList;
+	public static ArrayList<PreperationBean> prepList;
+	public ArrayList<PreperationBean> modifiedPrepList;
+	public static  ArrayList<PreperationBean> addPrepList;
+	public static ArrayList<IngredientBean> ingredList, modifiedIngredList, addIngredList;
 	ImageBean imgBean;
-	ArrayList<Integer> prepNumEditIds, prepEditIds, amountEditIds, valueEditIds, ingredEditIds, noteEditIds;
-	int id = 1;
+	public ArrayList<Integer> prepNumEditIds;
+	public ArrayList<Integer> prepEditIds;
+	ArrayList<Integer> amountEditIds;
+	ArrayList<Integer> valueEditIds;
+	ArrayList<Integer> ingredEditIds;
+	ArrayList<Integer> noteEditIds;
+	public static int id = 1;
 	NavigationDrawerCreation nav;
 	private static final int SELECT_PHOTO = 100;
+	EditRecipePreperation prep;
+	EditRecipeIngredient ingred;
 
 	// Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
@@ -133,6 +142,8 @@ public class RecipeEditActivity extends ActionBarActivity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.recipe_view_edit);
+	    prep = new  EditRecipePreperation( getApplicationContext(), this);
+	    ingred = new EditRecipeIngredient(getApplicationContext(), this);
 		utils = new Util(getApplicationContext(), this);
 		recipe = new RecipeBean();
 		setStyle();
@@ -241,7 +252,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					setUpStepAddDialog();
+					prep.setUpStepAddDialog();
 				}
 				return false;
 			}});
@@ -750,401 +761,15 @@ public class RecipeEditActivity extends ActionBarActivity {
 	 */
 	public void getAndCreatePrepDialog()
 	{
-		//Build dialog in linear layout
-		prepDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog4);
-		utils.setDialogText(R.id.recipeEditView, prepDialog, 22);
-		prepNumEditIds = new ArrayList<Integer>();
-		prepEditIds = new ArrayList<Integer>();
-		
-				
-		LinearLayout prepDialogLinearLayout = (LinearLayout)prepDialog.findViewById(R.id.editdialog);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,      
-				LayoutParams.WRAP_CONTENT
-				);
-		//Set the text view and edit text data for a linear layout
-		for(int i = 0; i < prepList.size(); i++)
-		{
-			if(prepList.get(i).getProgress().equals("added"))
-			{
-				final int point = i;
-				LinearLayout linearLayoutInDialog = new LinearLayout(RecipeEditActivity.this);
-				linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-
-				params.setMargins(5,5,5,5);
-				final TextView prepView = new TextView(RecipeEditActivity.this);
-				prepView.setText("Preperation");
-				int prepviewid = findId();
-				prepView.setId(prepviewid);
-				prepView.setLayoutParams(params);
-
-				final TextView prepNumView = new TextView(RecipeEditActivity.this);
-				prepNumView.setText("Preperation Num");
-				int prepNumViewId = findId();
-				prepNumView.setId(prepNumViewId);
-				prepNumView.setLayoutParams(params);
-
-
-				final EditText prepEdit = new EditText(RecipeEditActivity.this);
-				int prepEditId = findId();
-				prepEditIds.add(prepEditId);
-				prepEdit.setId(prepEditId);
-				prepEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-				LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(200, 300);
-				lparams.setMargins(5,5,5,5);
-				prepEdit.setLayoutParams(lparams);
-
-				final EditText prepNumEdit = new EditText(RecipeEditActivity.this);
-				int ids = findId();
-				prepNumEditIds.add(ids);
-				prepNumEdit.setId(ids);
-				prepNumEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-				prepNumEdit.setLayoutParams(params);
-
-				ImageButton img = new ImageButton(RecipeEditActivity.this);
-				int imgid = findId();
-				img.setId(imgid);
-				img.setBackgroundDrawable(getResources().getDrawable(R.drawable.icon_delete));
-				LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(40, 40);
-				lparams.setMargins(5,5,5,5);
-				img.setLayoutParams(lparams2);
-
-				linearLayoutInDialog.addView(prepNumView);
-				linearLayoutInDialog.addView(prepNumEdit);
-				linearLayoutInDialog.addView(prepView);
-				linearLayoutInDialog.addView(prepEdit);
-				linearLayoutInDialog.addView(img);
-				prepDialogLinearLayout.addView(linearLayoutInDialog);
-
-				//Create styles
-				utils.setDialogText(prepviewid, prepDialog, 22);
-				prepEdit.setText(prepList.get(i).getPreperation());
-				prepEdit.setWidth(400);
-				utils.setDialogText(prepNumViewId, prepDialog, 22);
-				prepNumEdit.setText(Integer.toString(prepList.get(i).getPrepNum()));
-
-
-				img.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Log.v("POINT", "POINT " + point);
-						prepList.get(point).setProgress("deleted");
-						prepNumEdit.setVisibility(View.INVISIBLE);
-						prepEdit.setVisibility(View.INVISIBLE);
-						prepNumView.setVisibility(View.INVISIBLE);
-						prepView.setVisibility(View.INVISIBLE);
-
-
-					}});
-
-			}
-
-
-		}
-		//Create a button and when on click change prep list to what was set in the dialog box
-		Button okButton = new Button(RecipeEditActivity.this);
-		int buttonId = findId();
-		okButton.setId(buttonId);
-		okButton.setText("Ok");
-		params.gravity = Gravity.CENTER;
-		okButton.setLayoutParams(params);
-		okButton.setBackgroundResource(R.drawable.drawable_button);
-		prepDialogLinearLayout.addView(okButton);
-		okButton = utils.setButtonTextDialog(buttonId, 16, prepDialog);
-
-		final TextView errorView = new TextView(RecipeEditActivity.this);
-		int errorId = findId();
-		errorView.setId(errorId);
-		params.gravity = Gravity.CENTER;
-		okButton.setLayoutParams(params);
-		prepDialogLinearLayout.addView(errorView);
-		utils.setDialogText(errorId,prepDialog,16);
-		errorView.setTextColor(Color.parseColor("#F70521"));
-
-
-		okButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				modifiedPrepList = new ArrayList<PreperationBean>();
-				boolean dismissed = false;
-				int a = 0;
-				for(int i = 0; i < prepList.size(); i++)
-				{
-
-					if(prepList.get(i).getProgress().equals("added"))
-					{
-						PreperationBean prep = new PreperationBean();
-						if(utils.getTextFromDialog(prepEditIds.get(i), prepDialog).equals(""))
-						{
-							errorView.setText("Please input text into all the textboxes");
-						}
-						else if(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog).equals(""))
-						{
-							errorView.setText("Please input text into all the textboxes");
-						}
-						else
-						{
-
-							prep.setPreperation(utils.getTextFromDialog(prepEditIds.get(i), prepDialog));
-							prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
-							prep.setUniqueid(prepList.get(i).getUniqueid());
-							prep.setProgress(prepList.get(i).getProgress());
-							modifiedPrepList.add(prep);
-
-							a += 2;
-							if(a == (prepList.size() * 2))
-							{
-								prepList = modifiedPrepList;
-								prepDialog.dismiss();
-								dismissed = true;
-							} 
-						}
-					}
-				}
-
-				//Set prep list to new modified list
-				if(dismissed == true)
-				{
-					TextView instructions = (TextView) findViewById(R.id.methodList);
-					instructions.setText("");
-					//Order list
-					Collections.sort(modifiedPrepList, new Comparator<PreperationBean>() {
-						@Override 
-						public int compare(PreperationBean p1, PreperationBean p2) {
-							return p1.getPrepNum() - p2.getPrepNum(); // Ascending
-						}});
-					//Set on edit page
-					for(int i = 0; i < modifiedPrepList.size(); i++)
-					{
-						if(modifiedPrepList.get(i).getProgress().equals("added"))
-						{
-							instructions.append(Integer.toString(modifiedPrepList.get(i).getPrepNum()) + ". " +modifiedPrepList.get(i).getPreperation().toString() + "\n \n");
-
-						} 
-					}
-				}
-
-
-			}});
-		prepDialog.show();
+		prep.getPreperation();
 	}
 
 
-	/**
-	 * Creates a dialog for ingredients on the fly based on information from the database
-	 * Note - I had to write this programmatically as we dont know the amount of ingredients for a recipe
-	 */
+	
 	@SuppressLint("NewApi")
 	public void getAndCreateIngredDialog()
 	{
-		ingredDialog = utils.createDialog(RecipeEditActivity.this, R.layout.recipe_edit_dialog5);
-		utils.setDialogText(R.id.recipeEditView, ingredDialog, 22);
-		utils.setDialogText(R.id.amountTitleView, ingredDialog, 22);
-		utils.setDialogText(R.id.valueTitleView, ingredDialog, 22);
-		utils.setDialogText(R.id.ingredientTitleView, ingredDialog, 22);
-		utils.setDialogText(R.id.noteTitleView, ingredDialog, 22);
-
-		amountEditIds = new ArrayList<Integer>();
-		noteEditIds = new ArrayList<Integer>();
-		valueEditIds = new ArrayList<Integer>();
-		ingredEditIds = new ArrayList<Integer>();
-		LinearLayout ingredDialogLinearLayout = (LinearLayout)ingredDialog.findViewById(R.id.editdialog);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,      
-				LayoutParams.WRAP_CONTENT
-				);
-		//Create dialog with textviews and edit text from the database
-		for(int i = 0; i < ingredList.size(); i++)
-		{
-			final int point = i;
-			if(ingredList.get(i).getProgress().equals("added"))
-			{
-				LinearLayout linearLayoutInDialog = new LinearLayout(RecipeEditActivity.this);
-				linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-
-
-				params.setMargins(5,5,5,5);
-
-				final EditText amountEdit = new EditText(RecipeEditActivity.this);
-				int amountEditId = findId();
-				amountEditIds.add(amountEditId);
-				amountEdit.setId(amountEditId);
-				amountEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-				amountEdit.setLayoutParams(params);
-				amountEdit.setWidth(80);
-
-				//Spinner set up with varying measurement amounts
-				List<String> spinnerArray =  new ArrayList<String>();
-				spinnerArray.add("teaspoon");
-				spinnerArray.add("tablespoon");
-				spinnerArray.add("cup");
-				spinnerArray.add("kg");
-				spinnerArray.add("g");
-				spinnerArray.add("l");
-				spinnerArray.add("ml");
-				spinnerArray.add("oz");
-				spinnerArray.add("pint");
-				spinnerArray.add("quart");
-				spinnerArray.add("gallon");
-				spinnerArray.add("lb");
-				spinnerArray.add("ounces");
-				spinnerArray.add("pinch");
-				spinnerArray.add(" ");
-
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-						RecipeEditActivity.this, R.layout.general_spinner_item, spinnerArray);
-
-				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				final Spinner sItems = new Spinner(RecipeEditActivity.this);
-				sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
-				sItems.setAdapter(adapter);
-				sItems.setLayoutParams(params);
-
-				int valueEditId = findId();
-				valueEditIds.add(valueEditId);
-				sItems.setId(valueEditId); 
-
-				final EditText ingredEdit = new EditText(RecipeEditActivity.this);
-				int ingredEditId = findId();
-				ingredEditIds.add(ingredEditId);
-				ingredEdit.setId(ingredEditId);
-				ingredEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-				ingredEdit.setLayoutParams(params);
-				ingredEdit.setWidth(200);
-
-				final TextView view = new TextView(RecipeEditActivity.this);
-				int viewid = findId();
-				view.setText(" - ");
-				view.setId(viewid);
-
-				final EditText noteEdit = new EditText(RecipeEditActivity.this);
-				int noteEditId = findId();
-				noteEditIds.add(noteEditId);
-				noteEdit.setId(noteEditId);
-				noteEdit.setBackgroundColor(Color.parseColor("#FFFFFF"));
-				noteEdit.setLayoutParams(params);
-				noteEdit.setWidth(160);
-
-				ImageButton img = new ImageButton(RecipeEditActivity.this);
-				int imgid = findId();
-				img.setId(imgid);
-				img.setBackgroundDrawable(getResources().getDrawable(R.drawable.icon_delete));
-				LinearLayout.LayoutParams lparams2 = new LinearLayout.LayoutParams(40, 40);
-				lparams2.setMargins(5,5,5,5);
-				img.setLayoutParams(lparams2);
-
-				linearLayoutInDialog.addView(amountEdit);
-				linearLayoutInDialog.addView(sItems);
-				linearLayoutInDialog.addView(ingredEdit);
-				linearLayoutInDialog.addView(view);
-				linearLayoutInDialog.addView(noteEdit);
-				linearLayoutInDialog.addView(img);
-
-				ingredDialogLinearLayout.addView(linearLayoutInDialog);
-				amountEdit.setText(Float.toString(ingredList.get(i).getAmount()));
-				ingredEdit.setText(ingredList.get(i).getName());
-				noteEdit.setText(ingredList.get(i).getNote());
-				sItems.setSelection(utils.getIndex(sItems, ingredList.get(i).getValue()));
-				utils.setDialogText(viewid, ingredDialog, 22);
-
-				img.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Log.v("POINT", "POINT " + point);
-						ingredList.get(point).setProgress("deleted");
-						amountEdit.setVisibility(View.INVISIBLE);
-						ingredEdit.setVisibility(View.INVISIBLE);
-						sItems.setVisibility(View.INVISIBLE);
-						view.setVisibility(View.INVISIBLE);
-						noteEdit.setVisibility(View.INVISIBLE);
-
-
-					}});
-			}
-		}
-		Button okButton = new Button(RecipeEditActivity.this);
-		int buttonId = findId();
-		okButton.setId(buttonId);
-		okButton.setText("Ok");
-		okButton.setBackgroundResource(R.drawable.drawable_button);
-		params.gravity = Gravity.CENTER;
-		okButton.setLayoutParams(params);
-		ingredDialogLinearLayout.addView(okButton);
-		okButton = utils.setButtonTextDialog(buttonId, 16, ingredDialog);
-
-		final TextView errorView = new TextView(RecipeEditActivity.this);
-		int errorId = findId();
-		errorView.setId(errorId);
-		params.gravity = Gravity.CENTER;
-		okButton.setLayoutParams(params);
-		ingredDialogLinearLayout.addView(errorView);
-		utils.setDialogText(errorId,ingredDialog,16);
-		errorView.setTextColor(Color.parseColor("#F70521"));
-
-		//When ok button clicked get new ingredient list
-		okButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				modifiedIngredList = new ArrayList<IngredientBean>();
-				boolean dismissed = false;
-				int b = 0;
-				for(int i = 0; i < ingredList.size(); i++)
-				{
-					IngredientBean ingred = new IngredientBean();
-					if(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog).equals(""))
-					{
-						errorView.setText("Please input text into all the textboxes");
-					}
-					else if(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog).equals(""))
-					{
-						errorView.setText("Please input text into all the textboxes");
-					}
-					else
-					{
-						b += 4;
-						ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
-						ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
-						ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
-						ingred.setProgress(ingredList.get(i).getProgress());
-						Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
-						String value = spinner.getSelectedItem().toString();
-						ingred.setValue(value);			
-						ingred.setUniqueid(ingredList.get(i).getUniqueid());
-						modifiedIngredList.add(ingred);
-						if(b == (ingredList.size() * 4))
-						{
-							//set ingred list to new modified ingred list
-							dismissed = true;
-							ingredList = modifiedIngredList;
-							ingredDialog.dismiss();
-						}
-					}
-				}
-				if(dismissed == true)
-				{
-					//Apply to edit page
-					TextView ingredients = (TextView) findViewById(R.id.ingredientList);
-					ingredients.setText("");
-					for(int i = 0; i < modifiedIngredList.size(); i++)
-					{
-						if(modifiedIngredList.get(i).getProgress().equals("added"))
-						{
-							ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue().replace("other", "") + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
-
-						}
-					}
-				}
-
-			}});
-
-		ingredDialog.show();	
-
+		ingred.getIngredient();
 	}
 
 	/**
@@ -1198,33 +823,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 
 	}
 
-	public void setUpStepAddDialog()
-	{
-		final Dialog recipeAddStepDialog = utils.createDialog(this, R.layout.recipe_add_dialog4);		
-		utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
-		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
-		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
-		
-		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddStepDialog);
-		closeButton.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				recipeAddStepDialog.dismiss();
-				
-			}});
-		
-		Button addButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
-		addButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				getRecipeStep(recipeAddStepDialog);
-			}});
-		recipeAddStepDialog.show();
-	}
 
 	public void setUpIngredAddDialog()
 	{
@@ -1284,54 +883,7 @@ public class RecipeEditActivity extends ActionBarActivity {
 	}
 
 
-	public void getRecipeStep(Dialog recipeAddStepDialog)
-	{
-		//Getting  data from the text boxes
-		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
-		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
-		errorView.setTextColor(Color.parseColor("#FFFFFF"));
-		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
-		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
 
-		//Error catching before moving to next dialog stage
-		if(stepNum.equals(""))
-		{
-			errorView.setText("Please enter a step number");
-		}
-		else if(step.equals(""))
-		{
-			errorView.setText("Please enter a step");
-		}
-		else
-		{
-			recipeAddStepDialog.dismiss();
-			//Sets the details to a prep bean
-			PreperationBean prepBean = new PreperationBean();
-			prepBean.setPreperation(step);
-			prepBean.setPrepNum(Integer.parseInt(stepNum));
-			prepBean.setProgress("added");
-			RecipeModel rm = new RecipeModel(getApplicationContext());
-			prepBean.setUniqueid(rm.generateuuid(recipe.getAddedBy(), "Preperation"));
-			prepList.add(prepBean);
-			addPrepList.add(prepBean);
-			TextView instructions = (TextView) findViewById(R.id.methodList);
-			instructions.setText("");
-			Collections.sort(prepList, new Comparator<PreperationBean>() {
-				@Override 
-				public int compare(PreperationBean p1, PreperationBean p2) {
-					return p1.getPrepNum() - p2.getPrepNum(); // Ascending
-				}});
-
-			for(int i = 0; i < prepList.size(); i++)
-			{
-				if(prepList.get(i).getProgress().equals("added"))
-				{
-					instructions.append(Integer.toString(prepList.get(i).getPrepNum()) + ". " +prepList.get(i).getPreperation().toString() + "\n \n");
-
-				}
-			}
-		}
-	}
 
 	/**
 	 * Get information from ingredient dialogs
