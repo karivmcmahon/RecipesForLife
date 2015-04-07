@@ -38,7 +38,7 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 		this.activity = activity;
 		utils = new Util(context, activity);
 	}
-	
+
 	public void getIngredient()
 	{
 		ingredDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog5);
@@ -61,7 +61,7 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 		for(int i = 0; i < ingredList.size(); i++)
 		{
 			final int point = i;
-		if(ingredList.get(i).getProgress().equals("added"))
+			if(ingredList.get(i).getProgress().equals("added"))
 			{
 				LinearLayout linearLayoutInDialog = new LinearLayout(activity);
 				linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -150,14 +150,16 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 				noteEdit.setText(ingredList.get(i).getNote());
 				sItems.setSelection(utils.getIndex(sItems, ingredList.get(i).getValue()));
 				utils.setDialogText(viewid, ingredDialog, 22);
-
+				ingredList.get(point).setProgress("added");
+				
 				img.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						Log.v("POINT", "POINT " + point);
+						
 						ingredList.get(point).setProgress("deleted");
+						
 						amountEdit.setVisibility(View.INVISIBLE);
 						ingredEdit.setVisibility(View.INVISIBLE);
 						sItems.setVisibility(View.INVISIBLE);
@@ -166,6 +168,13 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 
 
 					}});
+			}
+			else
+			{
+				ingredEditIds.add(i,0);
+				amountEditIds.add(i,0);
+				noteEditIds.add(i,0);
+				valueEditIds.add(i,0); 
 			}
 		}
 		Button okButton = new Button(activity);
@@ -195,37 +204,58 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 				modifiedIngredList = new ArrayList<IngredientBean>();
 				boolean dismissed = false;
 				int b = 0;
-				for(int i = 0; i < ingredEditIds.size(); i++)
+				for(int i = 0; i < ingredList.size(); i++)
 				{
 					IngredientBean ingred = new IngredientBean();
-					if(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog).equals(""))
+					
+				
+					
+					if(ingredList.get(i).getProgress().equals("deleted"))
 					{
-						errorView.setText("Please input text into all the textboxes");
+						b += 1;
+						modifiedIngredList.add(ingredList.get(i));
+						
 					}
-					else if(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog).equals(""))
+					else if(ingredList.get(i).getProgress().equals("added"))
 					{
-						errorView.setText("Please input text into all the textboxes");
-					}
-					else
-					{
-						b += 4;
-						ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
-						ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
-						ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
-						ingred.setProgress(ingredList.get(i).getProgress());
-						Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
-						String value = spinner.getSelectedItem().toString();
-						ingred.setValue(value);			
-						ingred.setUniqueid(ingredList.get(i).getUniqueid());
-						modifiedIngredList.add(ingred);
-						if(b == (ingredEditIds.size() * 4))
+						Log.v("i ", "i " + i );
+						if(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog).equals(""))
 						{
-							//set ingred list to new modified ingred list
-							dismissed = true;
-							ingredList = modifiedIngredList;
-							ingredDialog.dismiss();
+							errorView.setText("Please input text into all the textboxes");
 						}
+						else if(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog).equals(""))
+						{
+							errorView.setText("Please input text into all the textboxes");
+						}
+						else
+						{
+							b += 1;
+
+							ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
+							ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
+							ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
+							ingred.setProgress(ingredList.get(i).getProgress());
+							Spinner spinner = (Spinner) ingredDialog.findViewById(valueEditIds.get(i));
+							String value = spinner.getSelectedItem().toString();
+							ingred.setValue(value);			
+							ingred.setUniqueid(ingredList.get(i).getUniqueid());
+							Log.v("mod ", "mod add " + i + ingred.getName());
+							modifiedIngredList.add(ingred);
+						}
+						
+						
 					}
+					
+					if(b == (ingredList.size()  ))
+					{
+						//set ingred list to new modified ingred list
+						dismissed = true;
+						ingredList = modifiedIngredList;
+						ingredDialog.dismiss();
+					}
+						
+						
+					
 				}
 				if(dismissed == true)
 				{
@@ -239,7 +269,7 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 							ingredients.append("- " + modifiedIngredList.get(i).getAmount() + " "+  modifiedIngredList.get(i).getValue().replace("other", "") + " " + modifiedIngredList.get(i).getName().toString() + " - " + modifiedIngredList.get(i).getNote().toString() + "\n");
 
 						}
-					}
+					} 
 				}
 
 			}});
@@ -247,7 +277,7 @@ public class EditRecipeIngredient extends RecipeEditActivity{
 		ingredDialog.show();	
 
 	}
-	
+
 	@Override
 	public int findId(){  
 		View v = activity.findViewById(id);  

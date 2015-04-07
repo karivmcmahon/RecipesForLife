@@ -87,11 +87,11 @@ public class EditRecipePreperation extends RecipeEditActivity{
 				final TextView prepNumView =  createViewsForDialog("Preperation Num",prepNumViewId);
 
 				int prepEditId = findId();
-				prepEditIds.add(prepEditId);
+				prepEditIds.add(i, prepEditId);
 				final EditText prepEdit = createEditTextForDialog(prepEditId);
 
 				int ids = findId();
-				prepNumEditIds.add(ids);
+				prepNumEditIds.add(i, ids);
 				final EditText prepNumEdit = createEditTextForDialog(ids);
 				prepNumEdit.setLayoutParams(params);
 
@@ -115,6 +115,11 @@ public class EditRecipePreperation extends RecipeEditActivity{
 						setVisibility(point, prepView, prepNumView, prepNumEdit, prepEdit);
 					}});
 
+			}
+			else
+			{
+				prepEditIds.add(i, 0);
+				prepNumEditIds.add(i,0);
 			}
 
 
@@ -202,10 +207,18 @@ public class EditRecipePreperation extends RecipeEditActivity{
 		boolean dismissed = false;
 		int size = 0;
 		final TextView errorView = createErrorView();
-		for(int i = 0; i < prepEditIds.size(); i++)
+		for(int i = 0; i < prepList.size(); i++)
 		{
-
-		
+			if(prepList.get(i).getProgress().equals("deleted"))
+			{
+				size += 1;
+				modifiedPrepList.add(prepList.get(i));
+				Log.v("prep ", "prep " + prepList.get(i).getProgress());
+				dismissed = sizeCheck(size);
+			}
+			else if(prepList.get(i).getProgress().equals("added"))
+			{
+				Log.v("prep ", "prep " + prepList.get(i).getProgress());
 				PreperationBean prep = new PreperationBean();
 				if(utils.getTextFromDialog(prepEditIds.get(i), prepDialog).equals(""))
 				{
@@ -222,12 +235,13 @@ public class EditRecipePreperation extends RecipeEditActivity{
 					prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
 					prep.setUniqueid(prepList.get(i).getUniqueid());
 					prep.setProgress(prepList.get(i).getProgress());
-					modifiedPrepList.add(prep);
+					modifiedPrepList.add(prep); 
 
-					size += 2;
+					size += 1;
 					dismissed = sizeCheck(size);
 
 				}
+			} 
 
 			
 		}
@@ -263,7 +277,7 @@ public class EditRecipePreperation extends RecipeEditActivity{
 	public boolean sizeCheck(int size)
 	{
 		boolean dismiss = false;
-		if(size == (prepEditIds.size() * 2))
+		if(size == (prepList.size()))
 		{
 			prepList = modifiedPrepList;
 			prepDialog.dismiss();
