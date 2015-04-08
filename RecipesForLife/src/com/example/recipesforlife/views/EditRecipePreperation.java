@@ -47,11 +47,12 @@ public class EditRecipePreperation extends RecipeEditActivity{
 
 		//Create a button and when on click change prep list to what was set in the dialog box
 		Button okButton = createButton();
+		final TextView errorView = createErrorView();
 		okButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				modifiedPrepList = new ArrayList<PreperationBean>();
-				listCheck();
+				listCheck(errorView);
 			}});
 		prepDialog.show();
 	}
@@ -202,11 +203,11 @@ public class EditRecipePreperation extends RecipeEditActivity{
 		return errorView;
 	}
 
-	public void listCheck()
+	public void listCheck(TextView errorView)
 	{
 		boolean dismissed = false;
 		int size = 0;
-		final TextView errorView = createErrorView();
+		
 		for(int i = 0; i < prepList.size(); i++)
 		{
 			if(prepList.get(i).getProgress().equals("deleted"))
@@ -312,27 +313,27 @@ public class EditRecipePreperation extends RecipeEditActivity{
 				recipeAddStepDialog.dismiss();
 				
 			}});
-		
+		final TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
 		Button addButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
 		addButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				getRecipeStep(recipeAddStepDialog);
+				getRecipeStep(recipeAddStepDialog, errorView);
 			}});
 		recipeAddStepDialog.show();
 	}
 	
-	public void getRecipeStep(Dialog recipeAddStepDialog)
+	public void getRecipeStep(Dialog recipeAddStepDialog, TextView errorView)
 	{
 		//Getting  data from the text boxes
-		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
+		
 		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
 		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
 		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
-
+		errorView.setText("");
 		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
 		{
