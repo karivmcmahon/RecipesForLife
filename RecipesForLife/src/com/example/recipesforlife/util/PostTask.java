@@ -4,9 +4,9 @@ package com.example.recipesforlife.util;
 import java.util.ArrayList;
 
 import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.models.CookbookModel;
-import com.example.recipesforlife.views.CookbookListActivity;
-import com.example.recipesforlife.views.SignUpSignInActivity;
+import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
+import com.example.recipesforlife.views.Cookbook_ShelfListView;
+import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -60,16 +60,16 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 			{
 				//If cookbook page requests sync - refresh the list view
 				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-				CookbookModel model = new CookbookModel(context);
+				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
 				ArrayList<CookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
-				CookbookListActivity.values.clear();
-				CookbookListActivity.ids.clear();
-				CookbookListActivity.images.clear();
+				Cookbook_ShelfListView.values.clear();
+				Cookbook_ShelfListView.ids.clear();
+				Cookbook_ShelfListView.images.clear();
 				for(int i = 0; i < cookbookList.size(); i++)
 				{
-					CookbookListActivity.values.add(cookbookList.get(i).getName());
-					CookbookListActivity.ids.add(cookbookList.get(i).getUniqueid());
-					CookbookListActivity.images.add(cookbookList.get(i).getImage());
+					Cookbook_ShelfListView.values.add(cookbookList.get(i).getName());
+					Cookbook_ShelfListView.ids.add(cookbookList.get(i).getUniqueid());
+					Cookbook_ShelfListView.images.add(cookbookList.get(i).getImage());
 				}
 				//If the list is under 6 then create empty rows to fill the layout of the app
 				if(cookbookList.size() < 6)
@@ -78,12 +78,12 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 					for(int a = 0; a < num; a++)
 					{
 						byte[] emptyarr = new byte[0];
-						CookbookListActivity.values.add("");
-						CookbookListActivity.ids.add("");
-						CookbookListActivity.images.add(emptyarr);
+						Cookbook_ShelfListView.values.add("");
+						Cookbook_ShelfListView.ids.add("");
+						Cookbook_ShelfListView.images.add(emptyarr);
 					}
 				}
-				CookbookListActivity.adapter.notifyDataSetChanged();
+				Cookbook_ShelfListView.adapter.notifyDataSetChanged();
 			}
 		}
 		else if(response.equals("fail"))

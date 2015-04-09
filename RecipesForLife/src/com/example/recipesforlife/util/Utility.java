@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.recipesforlife.views.SignUpSignInActivity;
+import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

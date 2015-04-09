@@ -53,13 +53,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.models.SyncContributersModel;
-import com.example.recipesforlife.models.SyncCookbookModel;
-import com.example.recipesforlife.models.SyncModel;
-import com.example.recipesforlife.models.SyncRecipeDetails;
-import com.example.recipesforlife.models.SyncRecipeModel;
-import com.example.recipesforlife.models.SyncReviewModel;
-import com.example.recipesforlife.views.SignUpSignInActivity;
+import com.example.recipesforlife.models.SyncModel_ContributersModel;
+import com.example.recipesforlife.models.SyncModel_CookbookModel;
+import com.example.recipesforlife.models.SyncModel_AccountModel;
+import com.example.recipesforlife.models.SyncModel_RecipeDetailsModel;
+import com.example.recipesforlife.models.SyncModel_RecipeModel;
+import com.example.recipesforlife.models.SyncModel_ReviewModel;
+import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 /**
  * Utility class handling common methods for multiple classes
@@ -345,13 +345,13 @@ public class Util  {
 	{
 		if(checkInternetConnection(context) == true)
 		{
-			sharedpreferences = context.getSharedPreferences(SignUpSignInActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-			SyncModel sync = new SyncModel(context);
-			SyncRecipeModel syncRecipe = new SyncRecipeModel(context);
-			SyncCookbookModel syncCookbook = new SyncCookbookModel(context);
-			SyncContributersModel syncContributer = new SyncContributersModel(context);
-			SyncReviewModel syncReview = new SyncReviewModel(context);
-			SyncRecipeDetails syncRecipeDetails = new SyncRecipeDetails(context);
+			sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
+			SyncModel_AccountModel sync = new SyncModel_AccountModel(context);
+			SyncModel_RecipeModel syncRecipe = new SyncModel_RecipeModel(context);
+			SyncModel_CookbookModel syncCookbook = new SyncModel_CookbookModel(context);
+			SyncModel_ContributersModel syncContributer = new SyncModel_ContributersModel(context);
+			SyncModel_ReviewModel syncReview = new SyncModel_ReviewModel(context);
+			SyncModel_RecipeDetailsModel syncRecipeDetails = new SyncModel_RecipeDetailsModel(context);
 			try {
 
 				//Get json from server for inserts
