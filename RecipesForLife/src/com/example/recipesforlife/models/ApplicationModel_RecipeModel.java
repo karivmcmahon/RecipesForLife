@@ -168,10 +168,10 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 		
 				for (int a = 0; a < ingredBeanList.size(); a++)
 				{
-					
 						int id = selectIngredient(ingredBeanList.get(a).getName());
 						if(id == 0)
 						{
+							ingredValues = new ContentValues();
 							ingredValues.put("name", ingredBeanList.get(a).getName());
 							if(server == true)
 							{
@@ -201,6 +201,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 						database.update("IngredientDetails", ingredVals, "uniqueid=?", args);
 					}
 				}
+				
 
 			
 		
@@ -617,15 +618,19 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	public int selectIngredient(String name)
 	{	
 		int id = 0;
-		Cursor cursor = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { name });
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				id = (cursor.getInt(getIndex("id",cursor)));       
+		Cursor cursores = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { name });
+		if (cursores != null && cursores.getCount() > 0) {
+			for (int i = 0; i < cursores.getCount(); i++) {
+				cursores.moveToPosition(i);
+				id = (cursores.getInt(getIndex("id",cursores)));       
 
 			}
 		}
-		cursor.close();
+		else
+		{
+			id = 0;
+		}
+		cursores.close();
 		return id;
 	}
 

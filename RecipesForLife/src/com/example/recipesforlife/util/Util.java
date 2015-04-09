@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -106,10 +107,15 @@ public class Util  {
 	public String dateToString(Date date, boolean inappstring) {
 		SimpleDateFormat formatter;
 
-
+		TimeZone tz = TimeZone.getTimeZone("Europe/London");
+		 
+	      
+	     
 		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-		String currentDate = formatter.format(date);
+		 formatter.setTimeZone(tz);
+		 Calendar cal = Calendar.getInstance(); // creates calendar
+		String currentDate = formatter.format(cal.getTime());
+		Log.v("CURRENT DATE ", "current DATE " + currentDate);
 		return currentDate;
 	}
 

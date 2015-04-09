@@ -361,6 +361,10 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
 		Button addButton = utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeIngredDialog);
+		params = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT,      
+				LayoutParams.WRAP_CONTENT
+				);
 		createSpinner(false);
 		 
 		closeButton.setOnClickListener(new OnClickListener(){

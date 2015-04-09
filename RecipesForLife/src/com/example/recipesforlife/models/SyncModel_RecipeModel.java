@@ -291,7 +291,7 @@ public class SyncModel_RecipeModel extends Database_BaseDataSource {
 			JSONArray ingredprogressarray = new JSONArray();
 			for(int y = 0; y < ingredList.size(); y++)
 			{
-				amountarray.put(Float.toString(ingredList.get(y).getAmount()));
+				amountarray.put(Integer.toString(ingredList.get(y).getAmount()));
 				valuearray.put(ingredList.get(y).getValue());
 				notearray.put(ingredList.get(y).getNote());
 				ingredidarray.put(ingredList.get(y).getUniqueid());
@@ -314,6 +314,7 @@ public class SyncModel_RecipeModel extends Database_BaseDataSource {
 			recipe.accumulate("Ingredient", newObj);
 			newObj = new JSONObject();
 			newObj.put("uniqueid", ingredidarray);	
+			Log.v("UPDATE INGRED ", "UPDATE INGRED " + ingredidarray);
 			recipe.accumulate("Ingredient", newObj);
 			newObj = new JSONObject();
 			newObj.put("ingredprogress", ingredprogressarray);		
@@ -404,8 +405,11 @@ public class SyncModel_RecipeModel extends Database_BaseDataSource {
 				JSONArray ingredProgressArray = (JSONArray) ingredObject.get("ingredprogress");
 				for(int b = 0; b < ingredsArray.length(); b++)
 				{
+					
+					
 					IngredientBean ingredBean = new IngredientBean();
 					ingredBean.setName(ingredsArray.get(b).toString());
+					Log.v("NAME " , "NAME " + ingredsArray.get(b).toString());
 					ingredBean.setNote(notesArray.get(b).toString());
 					ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
 					ingredBean.setValue(valueArray.get(b).toString());

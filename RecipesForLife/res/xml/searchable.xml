@@ -1,7 +1,7 @@
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:hint="@string/action_search"
     android:label="@string/action_search"
-    android:searchSuggestAuthority="com.example.recipesforlife.views.SampleRecentSuggestionsProvider"
+    android:searchSuggestAuthority="com.example.recipesforlife.util.SampleRecentSuggestionsProvider"
     android:searchSuggestSelection=" ?"
     android:background="#F3216C" >
 

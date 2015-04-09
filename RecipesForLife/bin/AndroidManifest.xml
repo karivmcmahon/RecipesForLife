@@ -23,6 +23,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
         <activity
             android:name="com.example.recipesforlife.views.MainActivity"
@@ -30,7 +31,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         <activity
             android:name="com.example.recipesforlife.views.Recipe_View"
@@ -38,7 +39,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         <activity
             android:name="com.example.recipesforlife.views.Recipe_ShelfListView"
@@ -46,7 +47,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         <activity
             android:name="com.example.recipesforlife.views.Recipe_EditView"
@@ -54,7 +55,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         <activity
             android:name="com.example.recipesforlife.views.Cookbook_ShelfListView"
@@ -62,7 +63,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
          <activity
             android:name="com.example.recipesforlife.views.Search_ExploreView"
@@ -70,7 +71,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         
           <activity
@@ -79,7 +80,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         
             <activity
@@ -88,7 +89,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         
              <activity
@@ -97,7 +98,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         
               <activity
@@ -106,7 +107,7 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
         <activity
             android:name="com.example.recipesforlife.views.Search_ResultsView"
@@ -120,14 +121,14 @@
                 android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value="com.example.recipesforlife.views.SearchResultsActivity" />
+                android:value="com.example.recipesforlife.views.Search_ResultsView" />
         </activity>
 
         <uses-library android:name="android.test.runner" />
 
         <provider
             android:name="com.example.recipesforlife.util.SampleRecentSuggestionsProvider"
-            android:authorities="com.example.recipesforlife.views.SampleRecentSuggestionsProvider" >
+            android:authorities="com.example.recipesforlife.util.SampleRecentSuggestionsProvider" >
         </provider>
     </application>
 
