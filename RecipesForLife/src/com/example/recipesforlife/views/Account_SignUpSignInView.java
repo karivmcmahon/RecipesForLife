@@ -87,6 +87,8 @@ public class Account_SignUpSignInView extends Activity {
 			//Dates for recipe syncing
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
+			editor2.putString("Stage", "1");
+			editor2.commit();
 			buildDatabase();
 			new PostTask(utils, context, false).execute();
 		} else {

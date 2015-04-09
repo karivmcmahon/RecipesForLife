@@ -72,6 +72,7 @@ public class Util  {
 	Context context;
 	Typeface typeFace;
 	Activity activity;
+	Editor editor;
 	public static final String MyPREFERENCES = "MyPrefs";
 	private SharedPreferences sharedpreferences;
 	public static final String emailk = "emailKey"; 
@@ -107,15 +108,11 @@ public class Util  {
 	public String dateToString(Date date, boolean inappstring) {
 		SimpleDateFormat formatter;
 
-		TimeZone tz = TimeZone.getTimeZone("Europe/London");
-		 
-	      
-	     
+		TimeZone tz = TimeZone.getTimeZone("Europe/London");   
 		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		 formatter.setTimeZone(tz);
 		 Calendar cal = Calendar.getInstance(); // creates calendar
 		String currentDate = formatter.format(cal.getTime());
-		Log.v("CURRENT DATE ", "current DATE " + currentDate);
 		return currentDate;
 	}
 
@@ -359,37 +356,94 @@ public class Util  {
 			SyncModel_ReviewModel syncReview = new SyncModel_ReviewModel(context);
 			SyncModel_RecipeDetailsModel syncRecipeDetails = new SyncModel_RecipeDetailsModel(context);
 			try {
-
+				
 				//Get json from server for inserts
 
-				Editor editor = sharedpreferences.edit();
+				 editor = sharedpreferences.edit();
 
 				//INSERTS SYNC 
-				
-				sync.getJSONFromServer();
-				sync.getAndCreateAccountJSON();
-				syncCookbook.getJSONFromServer(false);
-				syncCookbook.getAndCreateJSON(false);
-				syncRecipe.getJSONFromServer(false);
-				syncRecipe.getAndCreateJSON(false); 
-				syncRecipeDetails.getJSONFromServer();
-				syncRecipeDetails.getAndCreateJSON(false);
-				syncContributer.getJSONFromServer(false);
-				syncContributer.getAndCreateJSON(false);
-				syncReview.getJSONFromServer();
-				syncReview.getAndCreateJSON(); 
-			
-				//UPDATES SYNC
-				syncRecipe.getJSONFromServer(true);
-				syncRecipe.getAndCreateJSON(true);
-				syncCookbook.getJSONFromServer(true);
-				syncCookbook.getAndCreateJSON(true);
-				syncContributer.getJSONFromServer(true);
-				syncContributer.getAndCreateJSON(true);
+			    if(sharedpreferences.getString("Stage", "DEFAULT").equals("1"))
+			    	sync.getJSONFromServer();
+			    	editor.putString("Stage", "2");
+					editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("2"))
+			    	sync.getAndCreateAccountJSON();
+			    	editor.putString("Stage", "3");
+					editor.commit();
+			   if(sharedpreferences.getString("Stage", "DEFAULT").equals("3"))
+				   syncCookbook.getJSONFromServer(false);
+				   editor.putString("Stage", "4");
+				   editor.commit();
+			    if(sharedpreferences.getString("Stage", "DEFAULT").equals("4"))
+					syncCookbook.getAndCreateJSON(false);
+			    	editor.putString("Stage", "5");
+				    editor.commit();
+			    if(sharedpreferences.getString("Stage", "DEFAULT").equals("5"))   
+					syncRecipe.getJSONFromServer(false);
+				    editor.putString("Stage", "6");
+				    editor.commit();
+			   if(sharedpreferences.getString("Stage", "DEFAULT").equals("6"))   
+				   	syncRecipe.getAndCreateJSON(false); 
+			   		editor.putString("Stage", "7");
+			   		editor.commit();
+			   if(sharedpreferences.getString("Stage", "DEFAULT").equals("7"))
+				   syncRecipeDetails.getJSONFromServer();
+				   editor.putString("Stage", "8");
+			   		editor.commit();
+				 if(sharedpreferences.getString("Stage", "DEFAULT").equals("8"))   
+					 syncRecipeDetails.getAndCreateJSON(false);
+				 	editor.putString("Stage", "9");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("9"))
+					syncRecipeDetails.getAndCreateJSON(false);
+					editor.putString("Stage", "10");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("10"))
+					syncContributer.getJSONFromServer(false);
+					editor.putString("Stage", "11");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("11"))
+					syncContributer.getAndCreateJSON(false);
+					editor.putString("Stage", "12");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("12"))
+					syncReview.getJSONFromServer();
+					editor.putString("Stage", "13");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("13"))
+					syncReview.getAndCreateJSON();
+					editor.putString("Stage", "14");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("14"))
+					syncRecipe.getJSONFromServer(true);
+					editor.putString("Stage", "15");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("15"))
+					syncRecipe.getAndCreateJSON(true);
+					editor.putString("Stage", "16");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("16"))
+					syncCookbook.getJSONFromServer(true);
+					editor.putString("Stage", "17");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("17"))
+					syncCookbook.getAndCreateJSON(true);
+					editor.putString("Stage", "18");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("18"))
+					syncContributer.getJSONFromServer(true);
+					editor.putString("Stage", "19");
+			   		editor.commit();
+				if(sharedpreferences.getString("Stage", "DEFAULT").equals("19"))
+					syncContributer.getAndCreateJSON(true);
+					editor.putString("Stage", "20");
+			   		editor.commit();
 				
 				//Update timestamp
 				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
+				editor.putString("Stage", "1");
+		   		editor.commit();
 				
 				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				return "success";
@@ -415,6 +469,11 @@ public class Util  {
 		return "fail";
 
 	} 
+	
+	public void syncRecipeInserts()
+	{
+		
+	}
 
 	/**
 	 * Creates a dialog

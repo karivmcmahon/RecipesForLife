@@ -52,14 +52,10 @@ public class Utility  {
 	public String dateToString(Date date, boolean inappstring) {
 		SimpleDateFormat formatter;
 		Calendar cal = Calendar.getInstance();
-		      TimeZone tz = TimeZone.getTimeZone("Europe/London");
-		 
-		      
-		     
+		      TimeZone tz = TimeZone.getTimeZone("Europe/London");	     
 		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		 formatter.setTimeZone(tz);
 		String currentDate = formatter.format(cal.getTime());
-		Log.v("CURRENT DATE ", "current DATE " + currentDate);
 		return currentDate;
 	}
 
@@ -135,7 +131,7 @@ public class Utility  {
 
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 7200);
 			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
@@ -201,7 +197,7 @@ public class Utility  {
 
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 3000);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 7200);
 			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8")));
