@@ -414,6 +414,8 @@ public class Util  {
 					syncReview.getAndCreateJSON();
 					editor.putString("Stage", "14");
 			   		editor.commit();
+			   		
+			   		//update syncs
 				if(sharedpreferences.getString("Stage", "DEFAULT").equals("14"))
 					syncRecipe.getJSONFromServer(true);
 					editor.putString("Stage", "15");
