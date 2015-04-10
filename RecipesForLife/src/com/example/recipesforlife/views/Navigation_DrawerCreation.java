@@ -62,8 +62,8 @@ public class Navigation_DrawerCreation   {
 		imageids.add(R.drawable.icon_home);
 		navBarTitles.add("Explore");
 		imageids.add(R.drawable.icon_explore);
-		navBarTitles.add("Proffile");
-		imageids.add(R.drawable.icon_user2);
+		//navBarTitles.add("Proffile");
+		//imageids.add(R.drawable.icon_user2);
 		navBarTitles.add("Log Off");
 		imageids.add(R.drawable.icon_power);
 		drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
@@ -140,7 +140,7 @@ public class Navigation_DrawerCreation   {
 				Intent i = new Intent(activity, Search_ExploreView.class);
 				activity.startActivity(i);
 			}
-			else if(position == 3)
+			else if(position == 2)
 			{
 				//Clears shared prefs and logs out
 				SharedPreferences sharedpreferences = activity.getSharedPreferences
