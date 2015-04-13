@@ -101,7 +101,13 @@ public class MemoryCache {
 		}
 	}
 
-	long getSizeInBytes(Bitmap bitmap) {
+	
+	/**
+	 * Gets the bitmap size in bytes
+	 * @param bitmap
+	 * @return long
+	 */
+	public long getSizeInBytes(Bitmap bitmap) {
 		if(bitmap==null)
 			return 0;
 		return bitmap.getRowBytes() * bitmap.getHeight();

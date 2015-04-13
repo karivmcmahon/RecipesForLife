@@ -35,7 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * Class to handle retrieiving and diplaying search results
+ * Class to handle retreving and displaying search results
  * @author Kari
  *
  */
@@ -52,6 +52,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		setContentView(R.layout.search_listview);
 
 		utils = new Util(getApplicationContext(), this);
+		
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_ResultsView.this, "Search");
 		nav.createDrawer();
@@ -166,6 +167,8 @@ public class Search_ResultsView extends ActionBarActivity {
 		TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
 		cookbooktv.setText("Cookbooks that feature '" + query + "' :");
 		ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
+		
+		//If empty show no results
 		if(cb.size() == 0)
 		{
 			CookbookBean cookbookbean = new CookbookBean();
@@ -178,6 +181,7 @@ public class Search_ResultsView extends ActionBarActivity {
 
 		if(empty == false)
 		{
+			//Enables clicks to take you to the recipe list view
 		cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -210,6 +214,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		utils.setText(R.id.userheader, 30);
 
 		ListView listView = (ListView) findViewById(R.id.list);
+		//If list is 0 shows no results
 		if(rb.size() == 0)
 		{
 			RecipeBean recipebean = new RecipeBean();
@@ -220,13 +225,13 @@ public class Search_ResultsView extends ActionBarActivity {
 		Search_RecipeAdapter adapter = new Search_RecipeAdapter( getApplicationContext(), this,  rb);
 		listView.setAdapter(adapter); 
 
+		//If list view isnt empty enable clicks which takes the user to the recipe view activity
 		if(empty == false)
 		{
 			listView.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					// TODO Auto-generated method stub
 					Intent i = new Intent(Search_ResultsView.this, Recipe_View.class);
 					i.putExtra("uniqueidr", rb.get(position).getUniqueid());
 					i.putExtra("name", rb.get(position).getName());

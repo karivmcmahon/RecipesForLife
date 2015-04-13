@@ -28,6 +28,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * Displays a listview with difficulty results
+ * @author Kari
+ *
+ */
 public class Search_Explore_DifficultyView extends ActionBarActivity {
 	
 	Navigation_DrawerCreation nav;

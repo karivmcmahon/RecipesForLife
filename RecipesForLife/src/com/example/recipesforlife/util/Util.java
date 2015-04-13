@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -77,6 +78,14 @@ public class Util  {
 	private SharedPreferences sharedpreferences;
 	public static final String emailk = "emailKey"; 
 	public static final String pass = "passwordKey"; 
+	SyncModel_AccountModel sync;
+	SyncModel_RecipeModel syncRecipe;
+	SyncModel_CookbookModel syncCookbook;
+	SyncModel_ContributersModel syncContributer;
+	SyncModel_ReviewModel syncReview;
+	SyncModel_RecipeDetailsModel syncRecipeDetails;
+
+
 	public Util(Context context, Activity activity)
 	{
 		this.activity = activity;
@@ -110,8 +119,8 @@ public class Util  {
 
 		TimeZone tz = TimeZone.getTimeZone("Europe/London");   
 		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		 formatter.setTimeZone(tz);
-		 Calendar cal = Calendar.getInstance(); // creates calendar
+		formatter.setTimeZone(tz);
+		Calendar cal = Calendar.getInstance(); // creates calendar
 		String currentDate = formatter.format(cal.getTime());
 		return currentDate;
 	}
@@ -185,7 +194,7 @@ public class Util  {
 		view.setTextSize(fontSize);
 		view.setTextColor(Color.parseColor("#FFFFFFFF"));
 	}
-	
+
 	/**
 	 * Set text to black and italic
 	 * @param resource
@@ -196,7 +205,7 @@ public class Util  {
 		TextView view = (TextView) activity.findViewById(resource);
 		view.setTextSize(fontSize);
 		view.setTypeface(typeFace, Typeface.ITALIC);
-	
+
 	}
 
 	/**
@@ -349,104 +358,30 @@ public class Util  {
 		if(checkInternetConnection(context) == true)
 		{
 			sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
-			SyncModel_AccountModel sync = new SyncModel_AccountModel(context);
-			SyncModel_RecipeModel syncRecipe = new SyncModel_RecipeModel(context);
-			SyncModel_CookbookModel syncCookbook = new SyncModel_CookbookModel(context);
-			SyncModel_ContributersModel syncContributer = new SyncModel_ContributersModel(context);
-			SyncModel_ReviewModel syncReview = new SyncModel_ReviewModel(context);
-			SyncModel_RecipeDetailsModel syncRecipeDetails = new SyncModel_RecipeDetailsModel(context);
+			sync = new SyncModel_AccountModel(context);
+			syncRecipe = new SyncModel_RecipeModel(context);
+			syncCookbook = new SyncModel_CookbookModel(context);
+			syncContributer = new SyncModel_ContributersModel(context);
+			syncReview = new SyncModel_ReviewModel(context);
+			syncRecipeDetails = new SyncModel_RecipeDetailsModel(context);
 			try {
-				
-				//Get json from server for inserts
-
-				 editor = sharedpreferences.edit();
-
-				//INSERTS SYNC 
-			    if(sharedpreferences.getString("Stage", "DEFAULT").equals("1"))
-			    	sync.getJSONFromServer();
-			    	editor.putString("Stage", "2");
-					editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("2"))
-			    	sync.getAndCreateAccountJSON();
-			    	editor.putString("Stage", "3");
-					editor.commit();
-			   if(sharedpreferences.getString("Stage", "DEFAULT").equals("3"))
-				   syncCookbook.getJSONFromServer(false);
-				   editor.putString("Stage", "4");
-				   editor.commit();
-			    if(sharedpreferences.getString("Stage", "DEFAULT").equals("4"))
-					syncCookbook.getAndCreateJSON(false);
-			    	editor.putString("Stage", "5");
-				    editor.commit();
-			    if(sharedpreferences.getString("Stage", "DEFAULT").equals("5"))   
-					syncRecipe.getJSONFromServer(false);
-				    editor.putString("Stage", "6");
-				    editor.commit();
-			   if(sharedpreferences.getString("Stage", "DEFAULT").equals("6"))   
-				   	syncRecipe.getAndCreateJSON(false); 
-			   		editor.putString("Stage", "7");
-			   		editor.commit();
-			   if(sharedpreferences.getString("Stage", "DEFAULT").equals("7"))
-				   syncRecipeDetails.getJSONFromServer();
-				   editor.putString("Stage", "8");
-			   		editor.commit();
-				 if(sharedpreferences.getString("Stage", "DEFAULT").equals("8"))   
-					 syncRecipeDetails.getAndCreateJSON(false);
-				 	editor.putString("Stage", "9");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("9"))
-					syncRecipeDetails.getAndCreateJSON(false);
-					editor.putString("Stage", "10");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("10"))
-					syncContributer.getJSONFromServer(false);
-					editor.putString("Stage", "11");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("11"))
-					syncContributer.getAndCreateJSON(false);
-					editor.putString("Stage", "12");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("12"))
-					syncReview.getJSONFromServer();
-					editor.putString("Stage", "13");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("13"))
-					syncReview.getAndCreateJSON();
-					editor.putString("Stage", "14");
-			   		editor.commit();
-			   		
-			   		//update syncs
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("14"))
-					syncRecipe.getJSONFromServer(true);
-					editor.putString("Stage", "15");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("15"))
-					syncRecipe.getAndCreateJSON(true);
-					editor.putString("Stage", "16");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("16"))
-					syncCookbook.getJSONFromServer(true);
-					editor.putString("Stage", "17");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("17"))
-					syncCookbook.getAndCreateJSON(true);
-					editor.putString("Stage", "18");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("18"))
-					syncContributer.getJSONFromServer(true);
-					editor.putString("Stage", "19");
-			   		editor.commit();
-				if(sharedpreferences.getString("Stage", "DEFAULT").equals("19"))
-					syncContributer.getAndCreateJSON(true);
-					editor.putString("Stage", "20");
-			   		editor.commit();
-				
-				//Update timestamp
+				//Sync
+				editor = sharedpreferences.edit();
+				accountInsertsSync();
+				cookbookInsertsSync();
+				recipeInsertsSync();
+				recipeDetailsInsertsSync();
+				contributorsInsertsSync();
+				reviewInsertsSync();
+				recipeUpdatesSync();
+				cookbookUpdatesSync();
+				contributorUpdatesSync();
+				//Update timestamp and reset stage
 				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
 				editor.putString("Stage", "1");
-		   		editor.commit();
-				
+				editor.commit();
+
 				Log.v("LAST UPDATE", "LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				return "success";
 			} catch (JSONException e) {
@@ -461,7 +396,7 @@ public class Util  {
 				return "fail";
 
 			}
-			catch (SQLException e) {
+			catch (SQLiteException e) {
 				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -471,10 +406,258 @@ public class Util  {
 		return "fail";
 
 	} 
-	
-	public void syncRecipeInserts()
+
+	/**
+	 * Handles the retrieving and sending of account information to be inserted to the databases
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void accountInsertsSync() throws JSONException, IOException, SQLiteException
 	{
-		
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("1"))
+				sync.getJSONFromServer();
+			editor.putString("Stage", "2");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("2"))
+				sync.getAndCreateAccountJSON();
+			editor.putString("Stage", "3");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of cookbook information to be inserted to the databases
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void cookbookInsertsSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("3"))
+				syncCookbook.getJSONFromServer(false);
+			editor.putString("Stage", "4");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("4"))
+				syncCookbook.getAndCreateJSON(false);
+			editor.putString("Stage", "5");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of recipe information to be inserted to the databases
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void recipeInsertsSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("5"))   
+				syncRecipe.getJSONFromServer(false);
+			editor.putString("Stage", "6");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("6"))   
+				syncRecipe.getAndCreateJSON(false); 
+			editor.putString("Stage", "7");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of recipe details information to be inserted to the databases
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void recipeDetailsInsertsSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("7"))
+				syncRecipeDetails.getJSONFromServer();
+			editor.putString("Stage", "8");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("8"))   
+				syncRecipeDetails.getAndCreateJSON(false);
+			editor.putString("Stage", "10");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+
+	}
+
+	/**
+	 * Handles the retrieving and sending of contributors information to be inserted to the databases
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void contributorsInsertsSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("10"))
+				syncContributer.getJSONFromServer(false);
+			editor.putString("Stage", "11");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("11"))
+				syncContributer.getAndCreateJSON(false);
+			editor.putString("Stage", "12");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of review information to be inserted to the databases
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void reviewInsertsSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("12"))
+				syncReview.getJSONFromServer();
+			editor.putString("Stage", "13");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("13"))
+				syncReview.getAndCreateJSON();
+			editor.putString("Stage", "14");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of recipe information to be updated in the database
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void recipeUpdatesSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("14"))
+				syncRecipe.getJSONFromServer(true);
+			editor.putString("Stage", "15");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("15"))
+				syncRecipe.getAndCreateJSON(true);
+			editor.putString("Stage", "16");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of cookbook information to be updated in the database
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void cookbookUpdatesSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("16"))
+				syncCookbook.getJSONFromServer(true);
+			editor.putString("Stage", "17");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("17"))
+				syncCookbook.getAndCreateJSON(true);
+			editor.putString("Stage", "18");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Handles the retrieving and sending of contrib information to be updated in the database
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLiteException
+	 */
+	public void contributorUpdatesSync() throws JSONException, IOException, SQLiteException
+	{
+		try
+		{
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("18"))
+				syncContributer.getJSONFromServer(true);
+			editor.putString("Stage", "19");
+			editor.commit();
+			if(sharedpreferences.getString("Stage", "DEFAULT").equals("19"))
+				syncContributer.getAndCreateJSON(true);
+			editor.putString("Stage", "20");
+			editor.commit();
+		} catch (JSONException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		catch (SQLiteException e) {
+			throw e;
+		}
 	}
 
 	/**
@@ -600,7 +783,11 @@ public class Util  {
 		}
 		return resultBitmap;
 	}
-	
+
+	/** 
+	 * Get image intent for selecting photos from gallery or camera
+	 * @return
+	 */
 	public Intent getImageIntent()
 	{
 		Intent pickIntent = new Intent();
@@ -616,7 +803,11 @@ public class Util  {
 				); 
 		return chooserIntent;
 	}
-	
+
+	/**
+	 * Sets up the search details
+	 * @param menu
+	 */
 	public void setUpSearch(Menu menu)
 	{
 		SearchManager searchManager =

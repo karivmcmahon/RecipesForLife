@@ -12,9 +12,9 @@ public class IngredientBean {
 	String value; //ingredients unit
 	String note; //notes relating to ingred
 	String uniqueid; //ingreds uniqueid
-	String progress;
-	String recipeid;
-	String updateTime;
+	String progress; //holds the progress of this data
+	String recipeid; //holds the id of the recipe the ingredient relates
+	String updateTime; //holds the update time for the ingredient
 	
 	public String getUpdateTime() {
 		return updateTime;

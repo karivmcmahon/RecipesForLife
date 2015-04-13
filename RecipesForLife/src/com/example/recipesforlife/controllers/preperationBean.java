@@ -10,9 +10,9 @@ public class PreperationBean  {
 	int prepNum; //preps step number
 	String preperation; //preperation details
 	String uniqueid; //prep uniqueid
-	String progress;
-	String recipeid;
-	String updateTime;
+	String progress; //prep progress in database 
+	String recipeid; //recipe id for the prep 
+	String updateTime; //update time 
 
 	public String getUpdateTime() {
 		return updateTime;

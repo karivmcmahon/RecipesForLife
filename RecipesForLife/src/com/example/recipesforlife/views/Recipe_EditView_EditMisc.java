@@ -20,64 +20,69 @@ import android.widget.TextView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.util.Util;
-
+/**
+ * Handles the editing of various aspects of a recuoe
+ * @author Kari
+ *
+ */
 public class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 	ActionBarActivity activity;
 	Context context;
 	Util utils;
+
 	// Handles message from time dialog 1 - preptime
-			static Handler mHandler = new Handler(){
-				@Override
-				public void handleMessage(Message m){
-					//Bundle retrieves data
-					Bundle b = m.getData();
-					String hour = b.getString("hour");
-					String minute = b.getString("minute");
-					if(hour.length() == 1)
-					{
-						hour = "0" + hour;
-					}
-					if(minute.length() == 1)
-					{
-						minute = "0" + minute;
-					}
-					//Displays it in edittext once set
-					EditText edit = (EditText) timeDialog.findViewById(R.id.recipePrepEditText);
-					edit.setText(hour + ":" + minute);
-				}
-			};
+	static Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message m){
+			//Bundle retrieves data
+			Bundle b = m.getData();
+			String hour = b.getString("hour");
+			String minute = b.getString("minute");
+			if(hour.length() == 1)
+			{
+				hour = "0" + hour;
+			}
+			if(minute.length() == 1)
+			{
+				minute = "0" + minute;
+			}
+			//Displays it in edittext once set
+			EditText edit = (EditText) timeDialog.findViewById(R.id.recipePrepEditText);
+			edit.setText(hour + ":" + minute);
+		}
+	};
 
-			//Handles message from time dialog 2
-			static Handler mHandler2 = new Handler(){
-				@Override
-				public void handleMessage(Message m){
-					//Bundle retrieves data
-					Bundle b = m.getData();
-					String hour = b.getString("hour");
-					String minute = b.getString("minute");
-					if(hour.length() == 1)
-					{
-						hour = "0" + hour;
-					}
-					if(minute.length() == 1)
-					{
-						minute = "0" + minute;
-					}
-					//Displays it in edittext once set
-					EditText edit = (EditText) timeDialog.findViewById(R.id.recipeCookingEditText);
-					edit.setText(hour + ":" + minute);
-				}
-			};
+	//Handles message from time dialog 2
+	static Handler mHandler2 = new Handler(){
+		@Override
+		public void handleMessage(Message m){
+			//Bundle retrieves data
+			Bundle b = m.getData();
+			String hour = b.getString("hour");
+			String minute = b.getString("minute");
+			if(hour.length() == 1)
+			{
+				hour = "0" + hour;
+			}
+			if(minute.length() == 1)
+			{
+				minute = "0" + minute;
+			}
+			//Displays it in edittext once set
+			EditText edit = (EditText) timeDialog.findViewById(R.id.recipeCookingEditText);
+			edit.setText(hour + ":" + minute);
+		}
+	};
 
-	
+
 	public Recipe_EditView_EditMisc(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
 		utils = new Util(context, activity);
 	}
-	
+
 	/**
 	 * Creates a dialog where the user can edit the serves information
 	 */
@@ -116,7 +121,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 			}});
 		servesDialog.show();
 	}
-	
+
+	/**
+	 * Creates style from a serves dialog
+	 * @param servesDialog
+	 * @param errorView
+	 */
 	public void setUpServesDialog(Dialog servesDialog, TextView errorView)
 	{
 		utils.setDialogText(R.id.errorView,servesDialog,16);
@@ -126,7 +136,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		utils.setDialogTextString(R.id.recipeServesEditText, servesDialog, utils.getTextView(R.id.servesVal));
 		utils.setDialogText(R.id.recipeDifficultyView, servesDialog, 22);
 	}
-	
+
+	/**
+	 * Creates a spinner for the serves dialog
+	 * @param servesDialog
+	 * @return Spinner
+	 */
 	public Spinner setUpServesSpinner(Dialog servesDialog)
 	{
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -142,7 +157,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		sItems.setSelection(utils.getIndex(sItems, utils.getTextView(R.id.diffVal)));
 		return sItems;
 	}
-	
+
 	/**
 	 * Creates a title dialog where the user can edit the title dialog
 	 */
@@ -183,7 +198,10 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 			}});
 		titleDialog.show();
 	}
-	
+
+	/**
+	 * Gets the data from the chef dialog
+	 */
 	public void getChefDialog()
 	{
 		final Dialog cusineDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog8);
@@ -211,6 +229,11 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		cusineDialog.show();
 	}
 
+	/**
+	 * Creates a dialog filled with cuisine data
+	 * @param cusineDialog
+	 * @return Spinner  - with filled data and style
+	 */
 	public Spinner createCusineSpinner(Dialog cusineDialog)
 	{
 		List<String> cusineSpinnerArray =  new ArrayList<String>();
@@ -234,7 +257,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		sItems.setSelection(utils.getIndex(sItems, utils.getTextView(R.id.cusineVal)));
 		return sItems;
 	}
-	
+
+	/**
+	 * Creates a dietary spinner with data and style
+	 * @param cusineDialog
+	 * @return Spinner
+	 */
 	public Spinner createDietarySpinner(Dialog cusineDialog)
 	{
 		List<String> dietarySpinnerArray =  new ArrayList<String>();
@@ -254,7 +282,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		dietaryItems.setSelection(utils.getIndex(dietaryItems, utils.getTextView(R.id.dietaryVal)));
 		return dietaryItems;
 	}
-	
+
+	/**
+	 * Sets up dialog style for the chef dialog
+	 * @param cusineDialog
+	 * @param errorView
+	 */
 	public void setUpChefDialogStyle(Dialog cusineDialog, TextView errorView)
 	{
 		utils.setDialogText(R.id.errorView,cusineDialog,16);
@@ -263,7 +296,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		utils.setDialogText(R.id.recipeCusineView, cusineDialog, 22);
 		utils.setDialogText(R.id.recipeDietaryView, cusineDialog, 22);
 	}
-	
+
+	/**
+	 * Sets up title dialog style for the tite dialog
+	 * @param titleDialog
+	 * @param errorView
+	 */
 	public void setUpTitleDialogStyle(Dialog titleDialog, TextView errorView)
 	{
 		utils.setDialogText(R.id.errorView,titleDialog,16);
@@ -274,7 +312,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		utils.setDialogTextString(R.id.recipenameEditText, titleDialog, utils.getTextView(R.id.recipeTitle));
 		utils.setDialogTextString(R.id.recipeDescEdit, titleDialog, utils.getTextView(R.id.recipeDesc));
 	}
-	
+
 	/**
 	 * Creates a dialog showing the prep and cooking values which the user can change
 	 */
@@ -303,7 +341,11 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		timeDialog.show();
 
 	}
-	
+
+	/**
+	 * Sets up a time dialog style
+	 * @param timeDialog
+	 */
 	public void setUpTimeDialogStyle(Dialog timeDialog)
 	{
 		utils.setDialogText(R.id.recipeEditView, timeDialog, 22);
@@ -314,7 +356,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 		utils.setTimePickerFrag(timeDialog, R.id.recipePrepEditText, mHandler,"prepare");
 		utils.setTimePickerFrag(timeDialog, R.id.recipeCookingEditText, mHandler2, "cook");
 	}
-	
+
 	/**
 	 * Creates a title dialog where the user can edit the title dialog
 	 */
@@ -350,7 +392,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 			}});
 		tipsDialog.show(); 
 	}
-	
+
 }
 
 

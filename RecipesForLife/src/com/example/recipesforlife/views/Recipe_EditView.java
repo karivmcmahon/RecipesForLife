@@ -67,13 +67,13 @@ import com.example.recipesforlife.util.Util;
 public class Recipe_EditView extends ActionBarActivity {
 
 	Util utils;
-	public static RecipeBean recipe;
+	static RecipeBean recipe;
 	public static final String MyPREFERENCES = "MyPrefs";
 	Dialog imageDialog, prepDialog, ingredDialog;
 	static Dialog timeDialog;
-	public static final String emailk = "emailKey";
-	public static ArrayList<PreperationBean> prepList, modifiedPrepList, addPrepList;
-	public static ArrayList<IngredientBean> ingredList, modifiedIngredList, addIngredList;
+    static final String emailk = "emailKey";
+    static ArrayList<PreperationBean> prepList, modifiedPrepList, addPrepList;
+    static ArrayList<IngredientBean> ingredList, modifiedIngredList, addIngredList;
 	ImageBean imgBean;
 	ArrayList<Integer> amountEditIds, valueEditIds, ingredEditIds, noteEditIds, prepNumEditIds, prepEditIds;
 	public static int id = 1;
@@ -273,6 +273,9 @@ public class Recipe_EditView extends ActionBarActivity {
 		utils.setTextString(R.id.cusineVal, recipe.getCusine()); 
 	}
 	
+	/**
+	 * Handle clicks on the edit view for ingredients and prep
+	 */
 	public void handleIngredPrepButtonClicks()
 	{
 		ImageView ingredAddButton = (ImageView) findViewById(R.id.ingredAddImage);
@@ -323,6 +326,9 @@ public class Recipe_EditView extends ActionBarActivity {
 				
 	}
 	
+	/**
+	 * Updates the ingred list in edit view
+	 */
 	public void updateIngredList()
 	{
 		TextView ingredients = (TextView) findViewById(R.id.ingredientList);
@@ -336,6 +342,9 @@ public class Recipe_EditView extends ActionBarActivity {
 		}		
 	}
 
+	/**
+	 * Updates the prep list in edit view
+	 */
 	public void updatePrepList()
 	{
 		//Orders instructions in order
@@ -355,6 +364,10 @@ public class Recipe_EditView extends ActionBarActivity {
 			}
 		}
 	}
+	
+	/**
+	 * Handles image clicks on the edit view
+	 */
 	public void handleMiscImageButtonClicks()
 	{
 		//Set up the various edit buttons for the page
@@ -516,6 +529,9 @@ public class Recipe_EditView extends ActionBarActivity {
 
 	}
 	
+	/**
+	 * If the user edits the image this methods handles the image change
+	 */
 	public void handleImageChange()
 	{
 		imageDialog = utils.createDialog(Recipe_EditView.this, R.layout.recipe_edit_dialog7);

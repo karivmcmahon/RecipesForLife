@@ -194,9 +194,9 @@ public class ImageLoader2 {
 	/**
 	 * Checks if imageview has been used
 	 * @param photoToLoad
-	 * @return
+	 * @return boolean - if image is reusued
 	 */
-	boolean imageViewReused(PhotoToLoad photoToLoad){
+	public boolean imageViewReused(PhotoToLoad photoToLoad){
 		String tag=imageViews.get(photoToLoad.imageView);
 		if(tag==null || !tag.equals(photoToLoad.recipeid))
 			return true;

@@ -1,7 +1,7 @@
 package com.example.recipesforlife.controllers;
 
 /**
- * Stores an images details
+ * Stores  images details
  * @author Kari
  *
  */

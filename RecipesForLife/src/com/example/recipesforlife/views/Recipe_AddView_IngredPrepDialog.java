@@ -19,14 +19,19 @@ import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * The class handles the dialog displayed for adding a recipe. Handles the style and retrieval of data from dialog
+ * @author Kari
+ *
+ */
 public class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
-	
-ActionBarActivity activity;
-Context context;
-String bookname, uniqueid = "";
-Util utils;
 
-	
+	ActionBarActivity activity;
+	Context context;
+	String bookname, uniqueid = "";
+	Util utils;
+
+
 	public Recipe_AddView_IngredPrepDialog(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
@@ -36,7 +41,7 @@ Util utils;
 		this.uniqueid = uniqueid;
 		utils = new Util(context, activity);
 	}
-	
+
 	/**
 	 * Setup ingredient add dialog with font and spinnner
 	 */
@@ -49,7 +54,7 @@ Util utils;
 		utils.setDialogText(R.id.amountView, recipeIngredDialog, 22);
 		utils.setDialogText(R.id.noteView, recipeIngredDialog, 22);
 		utils.setButtonTextDialog(R.id.addIngredButton, 22, recipeIngredDialog);
-		
+
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeIngredDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -57,7 +62,7 @@ Util utils;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				recipeIngredDialog.dismiss();
-				
+
 			}});
 
 		//Spinner set up with varying measurement amounts
@@ -108,11 +113,11 @@ Util utils;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				recipeAddStepDialog.dismiss();
-				
+
 			}});
 		recipeAddStepDialog.show();
 	}
-	
+
 	/**
 	 * Get information from step dialog
 	 */
@@ -125,6 +130,7 @@ Util utils;
 		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
 		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
 		prepnumcount = Integer.parseInt(stepNum) + 1;
+		
 		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
 		{
@@ -141,6 +147,7 @@ Util utils;
 			prepBean.setPreperation(step);
 			prepBean.setPrepNum(Integer.parseInt(stepNum));
 			prepBeanList.add(prepBean);
+			
 			//Append steps to edit text box
 			EditText stepsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeStepsEditText);
 			stepsEdit.append(stepNum +  ". " + step +  ", ");

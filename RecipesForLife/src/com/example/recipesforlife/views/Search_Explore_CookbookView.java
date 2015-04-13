@@ -25,6 +25,11 @@ import com.example.recipesforlife.models.ApplicationModel_SearchModel;
 import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * Displays a result listview for explore cookbooks
+ * @author Kari
+ *
+ */
 public class Search_Explore_CookbookView extends ActionBarActivity {
 	
 	Navigation_DrawerCreation nav;

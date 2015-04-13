@@ -25,6 +25,11 @@ import com.example.recipesforlife.models.ApplicationModel_SearchModel;
 import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * Displays a listview with the dietary results
+ * @author Kari
+ *
+ */
 public class Search_Explore_DietaryView extends ActionBarActivity {
 	
 	Navigation_DrawerCreation nav;

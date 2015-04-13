@@ -11,14 +11,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -117,7 +113,7 @@ public class Cookbook_EditView  {
 	/**
 	 * Sets the dialog styles
 	 */
-	public void setStyle()
+	private void setStyle()
 	{
 		//Set texts
 		utils.setDialogText(R.id.errorView,editDialog,16);
@@ -132,7 +128,7 @@ public class Cookbook_EditView  {
 	/**
 	 * Fills the dialog spinner
 	 */
-	public void fillSpinner()
+	private void fillSpinner()
 	{
 		//Fill adapter
 		spinner = (Spinner) editDialog.findViewById(R.id.privacySpinner);
@@ -151,7 +147,7 @@ public class Cookbook_EditView  {
 	/**
 	 * Sets the text in the edit text dialog box
 	 */
-	public void setText()
+	private void setText()
 	{
 		utils.setDialogTextString(R.id.bookNameEditText, editDialog, cookbook.get(0).getName());
 		utils.setDialogTextString(R.id.bookDescEditText, editDialog, cookbook.get(0).getDescription());
@@ -161,7 +157,7 @@ public class Cookbook_EditView  {
 	/**
 	 * Checks for any errors and edits the cookbook in the database
 	 */
-	public void edit()
+	private void edit()
 	{
 		CookbookBean cb = new CookbookBean();
 		//Error checking
@@ -249,7 +245,6 @@ public class Cookbook_EditView  {
 					byteArray = stream.toByteArray(); 
 
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

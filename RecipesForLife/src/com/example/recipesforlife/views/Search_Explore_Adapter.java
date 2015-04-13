@@ -18,6 +18,11 @@ import com.example.recipesforlife.controllers.UserBean;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * Adapts the explore category list
+ * @author Kari
+ *
+ */
 public class Search_Explore_Adapter extends ArrayAdapter<String> {
 	
 	private final Activity activity;

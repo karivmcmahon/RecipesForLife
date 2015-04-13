@@ -64,10 +64,10 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 	static Dialog recipeAddDialog2;
 	public static Dialog recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
 	protected Dialog recipeAddDialog;
-	public static Button nextButton;
-	public static Button nextButton2;
-	public static Button addIngredButton;
-	public static Button addRecipeButton;
+	static Button nextButton;
+	static Button nextButton2;
+	static Button addIngredButton;
+	static Button addRecipeButton;
 	static String name, desc,recipeBook, serves, prep, cooking, cusine, difficulty, tips, dietary, uniqueid, imageName, bookname;
 	public static final String MyPREFERENCES = "MyPrefs";
 	public static final String emailk = "emailKey"; 
@@ -88,6 +88,9 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 		utils = new Util(context, activity);
 	}
 
+	/**
+	 * Handles the adding of the recipe
+	 */
 	public void addRecipe()
 	{
 		dialog1 = new  Recipe_AddView_Dialog1(activity, context, uniqueid, bookname);

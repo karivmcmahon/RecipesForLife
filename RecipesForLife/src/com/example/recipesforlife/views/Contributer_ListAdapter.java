@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,7 +23,7 @@ import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.util.Util;
 
 /**
- * List adapter for contributers as well as the ability to add and remove contributers
+ * List adapter for contributers and handles the ability to remove contributors
  * @author Kari
  *
  */
@@ -57,7 +56,8 @@ public class Contributer_ListAdapter extends ArrayAdapter<String>{
 
 	@Override
 	/**
-	 * Adapts list data 
+	 * Adapts list data to a view
+	 * @return Return the adapted view
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
@@ -82,55 +82,63 @@ public class Contributer_ListAdapter extends ArrayAdapter<String>{
 					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
-						utils.setDialogText(R.id.textView, dialog, 18);
-						TextView tv = (TextView) dialog.findViewById(R.id.textView);
-						tv.setText("Would you like to delete this user ?");
-						// Show dialog
-						dialog.show();
-
-						//Deletes users and dismiss dialog
-						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
-						yesButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View arg0) {
-								ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
-								int id = model.selectCookbooksIDByUnique(cookbookuid);
-								try
-								{
-									//updates contributer to deleted and removes from list if sucessful
-									model.updateContributers( users.get(position), id, "deleted", false);
-									users.remove(position);
-									notifyDataSetChanged();
-								}
-								catch(SQLiteException e)
-								{
-									Toast.makeText(context, "Contributer could not be added", Toast.LENGTH_LONG).show();
-								}
-								dialog.dismiss(); 
-							}
-						});
-
-						//If user selects no - dismiss dialog
-						Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
-						noButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View arg0) {
-								dialog.dismiss();
-							}
-						});
-					}		
-
+						deleteContribDialog(position);
+					}
 					return false;
-				}
-			});
+				}});
 		}
 
 
 		//Sets the users name in the lost row
 		txtTitle.setText(users.get(position));
 		return rowView;
+	}
+
+	/**
+	 * Displays a delete contributor dialog and handles user actions
+	 * @param position - position in list
+	 */
+	private void deleteContribDialog(final int position)
+	{
+		//Create and display dialog
+		final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
+		utils.setDialogText(R.id.textView, dialog, 18);
+		TextView tv = (TextView) dialog.findViewById(R.id.textView);
+		tv.setText("Would you like to delete this user ?");
+		dialog.show();
+
+		//Deletes users and dismiss dialog if yes is pressed
+		Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+		yesButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
+				int id = model.selectCookbooksIDByUnique(cookbookuid);
+				try
+				{
+					//updates contributer to deleted and removes from list if update is successful
+					model.updateContributers( users.get(position), id, "deleted", false);
+					users.remove(position);
+					notifyDataSetChanged();
+				}
+				catch(SQLiteException e)
+				{
+					Toast.makeText(context, "Contributer could not be added", Toast.LENGTH_LONG).show();
+				}
+				dialog.dismiss(); 
+			}
+		});
+
+		//If user selects no - dismiss dialog
+		Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+		noButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+
 	}
 }

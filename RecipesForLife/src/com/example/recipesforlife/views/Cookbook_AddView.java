@@ -62,7 +62,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	 * Checks for any errors with the users input
 	 * If no errors inserts into the database
 	 */
-	public void addBook()
+	private void addBook()
 	{
 		// Set up
 		sharedpreferences =  context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -111,7 +111,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	 * Checks for any errors with user input
 	 * @return boolean - true if errors, false if no errors
 	 */
-	public boolean errorCheck()
+	private boolean errorCheck()
 	{
 		boolean error = true;
 		//Retrieve id for cookbook inserted in textbox - if its not  0 then it already exists
@@ -139,7 +139,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	/**
 	 * This method gets a default image for cookbooks and sets it to the byte array
 	 */
-	public void setDefaultImage()
+	private void setDefaultImage()
 	{
 		Bitmap bitmap = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.image_default_cookbook)).getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -203,7 +203,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	/**
 	 * Fills the spinner in the dialog
 	 */
-	public void fillSpinner()
+	private void fillSpinner()
 	{
 		//Fill spinner
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -263,7 +263,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	/**
 	 * Sets up the dialog style for the adding cookbook dialog
 	 */
-	public void setStyle()
+	private void setStyle()
 	{
 		utils.setDialogText(R.id.errorView,bookAddDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));

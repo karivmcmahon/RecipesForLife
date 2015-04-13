@@ -26,10 +26,6 @@ import com.example.recipesforlife.views.Account_SignUpSignInView;
  * @author Kari
  *
  */
-/**
- * @author Kari
- *
- */
 public class ApplicationModel_AccountModel extends Database_BaseDataSource
 {
 	ContentValues values;
@@ -37,6 +33,7 @@ public class ApplicationModel_AccountModel extends Database_BaseDataSource
 	Context context;
 	SyncModel_AccountModel sync;
 	Utility utils;
+	
 	//shared preference details
 	SharedPreferences sharedpreferences;
 	public static final String MyPREFERENCES = "MyPrefs" ;

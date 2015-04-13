@@ -23,7 +23,11 @@ import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.models.ApplicationModel_RecipeModel;
 import com.example.recipesforlife.util.Util;
 
-
+/**
+ * Handles the recipe preperation edit details
+ * @author Kari
+ *
+ */
 public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	ActionBarActivity activity;
@@ -40,6 +44,9 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		utils = new Util(context, activity);
 	}
 
+	/**
+	 * Sets up the preperation list to be edited
+	 */
 	public void getPreperation()
 	{
 		setUp();
@@ -57,6 +64,9 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		prepDialog.show();
 	}
 
+	/**
+	 * Set up information for the dialog
+	 */
 	public void setUp()
 	{
 		prepDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog4);
@@ -71,6 +81,9 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 				);
 	}
 
+	/**
+	 * Creates a list of preperation details to be edited
+	 */
 	public void createList()
 	{
 		//Set the text view and edit text data for a linear layout
@@ -107,12 +120,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 				prepEdit.setWidth(400);
 				prepNumEdit.setText(Integer.toString(prepList.get(i).getPrepNum()));
 
-
+				//If img click - set visibility to invisible and set info to deleted progress
 				img.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
 						setVisibility(point, prepView, prepNumView, prepNumEdit, prepEdit);
 					}});
 
@@ -127,6 +139,12 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		}
 	}
 
+	/**
+	 * Create textview for prep list
+	 * @param text
+	 * @param id
+	 * @return TextView
+	 */
 	public TextView createViewsForDialog(String text, int id)
 	{
 		params.setMargins(5,5,5,5);
@@ -137,6 +155,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		return tv;
 	}
 
+	/**
+	 * Create EditText for prep list
+	 * @param id
+	 * @return EditText
+	 */
 	public EditText createEditTextForDialog(int id)
 	{
 		final EditText edittext = new EditText(activity);
@@ -147,6 +170,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		edittext.setLayoutParams(lparams);
 		return edittext;
 	}
+	
+	/**
+	 * Create image button for delete next to each list item
+	 * @return ImageButton
+	 */
 	public ImageButton createImageButton()
 	{
 		ImageButton img = new ImageButton(activity);
@@ -157,7 +185,17 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		img.setLayoutParams(lparams2);
 		return img;
 	}
-
+	
+	
+	/**
+	 * Set up views for the list
+	 * @param linearLayoutInDialog
+	 * @param prepView
+	 * @param prepNumView
+	 * @param prepNumEdit
+	 * @param prepEdit
+	 * @param img
+	 */
 	public void addViews(LinearLayout linearLayoutInDialog, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit, ImageButton img)
 	{
 		linearLayoutInDialog.addView(prepNumView);
@@ -168,6 +206,14 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		prepDialogLinearLayout.addView(linearLayoutInDialog);
 	}
 
+	/**
+	 * Set visibility of list items to visible and set the progress info to deleted
+	 * @param point
+	 * @param prepView
+	 * @param prepNumView
+	 * @param prepNumEdit
+	 * @param prepEdit
+	 */
 	public void setVisibility(int point, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit)
 	{
 		prepList.get(point).setProgress("deleted");
@@ -177,6 +223,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		prepView.setVisibility(View.INVISIBLE);
 	}
 
+	/**
+	 * Create button to be shown at the end of the list with correct stles and fonts
+	 * @return Button
+	 */
 	public Button createButton()
 	{
 		Button okButton = new Button(activity);
@@ -191,6 +241,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		return okButton;
 	}
 
+	/**
+	 * Create error view with the correct styles
+	 * @return TextView with styles 
+	 */
 	public TextView createErrorView()
 	{
 		final TextView errorView = new TextView(activity);
@@ -203,6 +257,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		return errorView;
 	}
 
+	/**
+	 * Checks the list for errors before making changes
+	 * @param errorView
+	 */
 	public void listCheck(TextView errorView)
 	{
 		boolean dismissed = false;
@@ -254,6 +312,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		}
 	}
 
+	/**
+	 * Updates the list on screen once change has been made
+	 * @param list
+	 */
 	public void updateList(ArrayList<PreperationBean> list)
 	{
 		TextView instructions = (TextView) activity.findViewById(R.id.methodList);
@@ -275,6 +337,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		}
 	}
 
+	/**
+	 * Check list size against number - If equals dialog should dismiss
+	 * @param size
+	 * @return boolean - Stating whether dialog should be dismissed
+	 */
 	public boolean sizeCheck(int size)
 	{
 		boolean dismiss = false;
@@ -288,6 +355,9 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	}
 
 	@Override
+	/**
+	 * Checks for ids which can be used
+	 */
 	public int findId(){  
 		View v = activity.findViewById(id);  
 		while (v != null)
@@ -297,6 +367,9 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		return id++;  
 	}
 	
+	/**
+	 * Set the dialog for adding a new step in the edit page
+	 */
 	public void setUpStepAddDialog()
 	{
 		final Dialog recipeAddStepDialog = utils.createDialog(activity, R.layout.recipe_add_dialog4);		
@@ -325,6 +398,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		recipeAddStepDialog.show();
 	}
 	
+	/**
+	 * Get the details from the recipe add step dialog
+	 * @param recipeAddStepDialog
+	 * @param errorView
+	 */
 	public void getRecipeStep(Dialog recipeAddStepDialog, TextView errorView)
 	{
 		//Getting  data from the text boxes

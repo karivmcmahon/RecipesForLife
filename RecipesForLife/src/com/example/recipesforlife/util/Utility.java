@@ -79,13 +79,11 @@ public class Utility  {
 	 * Generates UUID then adds the name and type of table - to create a more detailed unique id
 	 * @param addedBy
 	 * @param table
-	 * @return
+	 * @return Unique ID
 	 */
 	public String generateUUID(String addedBy, String table, SQLiteDatabase database ) {
-		//   final String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		final String uuid = UUID.randomUUID().toString();
 		String uniqueid = addedBy + table + uuid;
-		Log.v("Uniqueid", "Uniqueid" + uniqueid);
 		boolean exists = selectUUID(table, uniqueid,database);
 		if(exists == true)
 		{
@@ -98,7 +96,7 @@ public class Utility  {
 	 * Checks if unique id exists - if so create another one
 	 * @param table
 	 * @param uuid
-	 * @return
+	 * @return true or false depending on if UUID exists
 	 */
 	public boolean selectUUID(String table, String uuid, SQLiteDatabase database )
 	{		
@@ -107,7 +105,6 @@ public class Utility  {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				return true;
-
 			}
 		}
 		cursor.close();

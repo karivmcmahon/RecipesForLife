@@ -78,11 +78,13 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	@Override
 	/**
 	 * Adapts list data 
+	 * @return View with adapted data
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+	
 		//Gets cookbook creator and checks if their creator - determines what images are shown
 		String creator = model.creatorForCookbook(bookids.get(position));
 		if(creator.equals(sharedpreferences.getString(emailk, "")))
@@ -93,8 +95,10 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 		{
 			isCreator = false;
 		}
+		
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+		
 		//Depending on if the bookname is empty or not display an empty row or a cookbook row
 		if(booknames.get(position).toString().equals(""))
 		{
@@ -185,60 +189,7 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
-						utils.setDialogText(R.id.textView, dialog, 18);
-						TextView tv = (TextView) dialog.findViewById(R.id.textView);
-						//confirms with user
-						tv.setText("Would you like to delete this cookbook ?");
-						// Show dialog
-						dialog.show();
-
-						//Deletes cookbook and dismiss dialog
-						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
-						yesButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View arg0) {
-								ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
-								ArrayList<CookbookBean> cbBean = model.selectCookbook(bookids.get(position));
-								cbBean.get(0).setProgress("deleted");
-								try
-								{
-									//updates book to deleted and if successful removes from list
-									model.updateBook( cbBean.get(0), false);
-									booknames.remove(position);
-									bookids.remove(position);
-									bookimages.remove(position);
-									if(booknames.size() < 6)
-									{
-										int num = 6 - booknames.size();
-										for(int a = 0; a < num; a++)
-										{
-											byte[] emptyarr = new byte[0];
-											booknames.add("");
-											bookids.add("");
-											bookimages.add(emptyarr);
-										}
-									}
-									notifyDataSetChanged();
-								}
-								catch(SQLiteException e)
-								{
-									Toast.makeText(context, "Cookbook was not deleted", Toast.LENGTH_LONG).show();
-								}
-								dialog.dismiss();
-							}
-						});
-
-						//If user selects no - dismiss dialog
-						Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
-						noButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View arg0) {
-								dialog.dismiss();
-							}
-						});
+						deleteCookbookDialog(position);
 					}
 					return false;
 				}});
@@ -247,7 +198,7 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	}
 
 	/**
-	 * Handles result recievedd for edit dialog
+	 * Handles result received for edit dialog
 	 * @param requestCode
 	 * @param resultCode
 	 * @param imageReturnedIntent
@@ -256,4 +207,67 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	{
 		edit.resultRecieved( requestCode,  resultCode, imageReturnedIntent);
 	}
+	
+	/**
+	 * Displays the dialog and handles user interaction for deleting cookbook
+	 * @param position
+	 */
+	private void deleteCookbookDialog(final int position)
+	{
+		final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
+		utils.setDialogText(R.id.textView, dialog, 18);
+		
+		//Sets up delete cookbook dialog and displays it
+		TextView tv = (TextView) dialog.findViewById(R.id.textView);
+		tv.setText("Would you like to delete this cookbook ?");
+		dialog.show();
+
+		//Deletes cookbook and dismiss dialog
+		Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+		yesButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
+				ArrayList<CookbookBean> cbBean = model.selectCookbook(bookids.get(position));
+				cbBean.get(0).setProgress("deleted");
+				try
+				{
+					//updates book to deleted and if successful removes from list
+					model.updateBook( cbBean.get(0), false);
+					booknames.remove(position);
+					bookids.remove(position);
+					bookimages.remove(position);
+					if(booknames.size() < 6)
+					{
+						int num = 6 - booknames.size();
+						for(int a = 0; a < num; a++)
+						{
+							byte[] emptyarr = new byte[0];
+							booknames.add("");
+							bookids.add("");
+							bookimages.add(emptyarr);
+						}
+					}
+					notifyDataSetChanged();
+				}
+				catch(SQLiteException e)
+				{
+					Toast.makeText(context, "Cookbook was not deleted", Toast.LENGTH_LONG).show();
+				}
+				dialog.dismiss();
+			}
+		});
+
+		//If user selects no - dismiss dialog
+		Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+		noButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+	}
 }
+

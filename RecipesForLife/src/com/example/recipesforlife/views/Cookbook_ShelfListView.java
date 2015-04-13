@@ -93,6 +93,7 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 
 
 		model = new ApplicationModel_CookbookModel(getApplicationContext());
+
 		//Gets list of cookbooks and displays them
 		cookbookList = new ArrayList<CookbookBean>();
 		updateCookbookList(false);

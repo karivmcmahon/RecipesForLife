@@ -20,14 +20,19 @@ import android.widget.Spinner;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * This class handles the third dialog displayed for adding a recipe. Handles the style and retrieval of data from dialog
+ * @author Kari
+ *
+ */
 public class Recipe_AddView_Dialog3  extends Recipe_AddView {
-	
-ActionBarActivity activity;
-Context context;
-String bookname, uniqueid = "";
-Util utils;
 
-	
+	ActionBarActivity activity;
+	Context context;
+	String bookname, uniqueid = "";
+	Util utils;
+
+
 	public Recipe_AddView_Dialog3(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
@@ -37,7 +42,7 @@ Util utils;
 		this.uniqueid = uniqueid;
 		utils = new Util(context, activity);
 	}
-	
+
 	/**
 	 * Set up third recipe add dialog
 	 */
@@ -53,7 +58,7 @@ Util utils;
 		utils.setDialogText(R.id.recipeDietaryView, addRecipeDialog3, 22);
 		utils.setDialogText(R.id.recipeTipsView, addRecipeDialog3, 22);
 		addRecipeButton = utils.setButtonTextDialog(R.id.addRecipeButton, 22, addRecipeDialog3);
-		
+
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, addRecipeDialog3);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -61,7 +66,7 @@ Util utils;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				addRecipeDialog3.dismiss();
-				
+
 			}});
 
 		//Gets image from phone when browse pressed
@@ -113,15 +118,15 @@ Util utils;
 		Spinner cusineItems = (Spinner) addRecipeDialog3.findViewById(R.id.recipeCusineSpinner);
 		cusineItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		cusineItems.setAdapter(cusineAdapter);
-		
-		
+
+		//Fill spinner for dietary requirements
 		List<String> dietarySpinnerArray =  new ArrayList<String>();
 		dietarySpinnerArray.add("Nut free");
 		dietarySpinnerArray.add("Gluten free");
 		dietarySpinnerArray.add("Vegeterian");
 		dietarySpinnerArray.add("Vegan");
 		dietarySpinnerArray.add("N/A");
-		
+
 		ArrayAdapter<String> dietaryAdapter = new ArrayAdapter<String>(
 				activity, R.layout.general_spinner_item, dietarySpinnerArray);
 		dietaryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -138,7 +143,7 @@ Util utils;
 			}
 		}); 
 	}
-	
+
 	/**
 	 * Get third dialog data
 	 */

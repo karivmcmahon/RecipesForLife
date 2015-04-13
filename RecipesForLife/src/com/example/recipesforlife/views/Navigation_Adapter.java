@@ -29,7 +29,8 @@ public class Navigation_Adapter extends ArrayAdapter<String> {
 	public Navigation_Adapter(Context context, int resource,
 			ArrayList<String> objects, Activity activity, ArrayList<Integer> ids) {
 		super(context, resource, objects);
-		// TODO Auto-generated constructor stub
+		
+		
 		this.activity = activity;
 		this.context = context;
 		names = objects;
@@ -41,6 +42,7 @@ public class Navigation_Adapter extends ArrayAdapter<String> {
 	@Override
 	/**
 	 * Adapts list data 
+	 * @return View - adapted view for list item
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{

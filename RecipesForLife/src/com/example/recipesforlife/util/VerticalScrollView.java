@@ -6,7 +6,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
-//Found here http://stackoverflow.com/questions/3495890/how-can-i-put-a-listview-into-a-scrollview-without-it-collapsing
+/**
+ * Class found here http://stackoverflow.com/questions/3495890/how-can-i-put-a-listview-into-a-scrollview-without-it-collapsing
+ * Enables scrolling vertically when using a listview
+ *
+ */
 public class VerticalScrollView extends ScrollView{
 
 	public VerticalScrollView(Context context) {

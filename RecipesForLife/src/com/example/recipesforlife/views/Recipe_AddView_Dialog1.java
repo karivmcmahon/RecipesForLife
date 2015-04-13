@@ -2,7 +2,6 @@ package com.example.recipesforlife.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,15 +21,19 @@ import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.models.ApplicationModel_RecipeModel;
 import com.example.recipesforlife.util.Util;
 
-
+/**
+ * The first dialog displayed for adding a recipe. Handles the style and retrieval of data from dialog
+ * @author Kari
+ *
+ */
 public class Recipe_AddView_Dialog1 extends Recipe_AddView {
-	
-ActionBarActivity activity;
-Context context;
-String bookname, uniqueid = "";
-Util utils;
 
-	
+	ActionBarActivity activity;
+	Context context;
+	String bookname, uniqueid = "";
+	Util utils;
+
+
 	public Recipe_AddView_Dialog1(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
@@ -41,7 +43,7 @@ Util utils;
 		this.uniqueid = uniqueid;
 		utils = new Util(context, activity);
 	}
-	
+
 	/**
 	 * Set up initial dialog style with correct fonts and spinner filled 
 	 */
@@ -57,7 +59,7 @@ Util utils;
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);	
 		ApplicationModel_CookbookModel cbmodel = new ApplicationModel_CookbookModel(context);
-		
+
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -65,7 +67,7 @@ Util utils;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				recipeAddDialog.dismiss();
-				
+
 			}});
 
 		//Fills the spinner with users cookbooks
@@ -79,14 +81,18 @@ Util utils;
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.general_spinner_item, spinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		//Sets spinner style
 		final Spinner sItems = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		sItems.setAdapter(adapter);
 		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setSelection(utils.getIndex(sItems, bookname));
+
+		//Set up button style
 		nextButton = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog);
 		recipeAddDialog.show();
 	}
-	
+
 	/**
 	 * Get data from the first dialog - does some error checking before getting the data
 	 */
@@ -100,9 +106,10 @@ Util utils;
 		desc = utils.getTextFromDialog(R.id.recipeDescEdit, recipeAddDialog);
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		int pos = spinner.getSelectedItemPosition();
+
 		recipeBook = cookbookuids.get(pos);
 		ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(context);
-		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
 		//Error checking
 		if(model.selectRecipe(name, uniqueid) == true)
 		{

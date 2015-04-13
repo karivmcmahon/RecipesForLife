@@ -28,6 +28,11 @@ import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.models.ApplicationModel_RecipeModel;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * This class handles the displaying of edit ingredient dialogs
+ * @author Kari
+ *
+ */
 public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	ActionBarActivity activity;
@@ -36,21 +41,24 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	LinearLayout.LayoutParams params;
 	LinearLayout ingredDialogLinearLayout;
 	Dialog recipeIngredDialog;
-	
+
 	public Recipe_EditView_EditIngredient(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
 		utils = new Util(context, activity);
-		
+
 	}
 
+	/**
+	 * Handles the ingredient edit dialogs
+	 */
 	public void getIngredient()
 	{
 		setUp();
 		//Create dialog with textviews and edit text from the database
 		createList();
-		
+
 		Button okButton = createButton();
 		final TextView errorView = createErrorView();
 		//When ok button clicked get new ingredient list
@@ -64,10 +72,14 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		ingredDialog.show();	
 
 	}
-	
+
+	/**
+	 * Check the ingredient list and check for any errors before making any changes
+	 * @param errorView
+	 */
 	public void listCheck(TextView errorView)
 	{
-		
+
 		modifiedIngredList = new ArrayList<IngredientBean>();
 		boolean dismissed = false;
 		int size = 0;
@@ -82,7 +94,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 			}
 			else if(ingredList.get(i).getProgress().equals("added"))
 			{
-				
+
 				if(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog).equals(""))
 				{
 					errorView.setText("Please input text into all the textboxes");
@@ -105,16 +117,20 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 					modifiedIngredList.add(ingred);
 					dismissed = sizeCheck(size);
 				}
-				
-				
+
+
 			}	
-			
+
 		}
 		if(dismissed == true)
 		{
 			updateList();
 		}
 	}
+
+	/**
+	 * Set up dialog style
+	 */
 	public void setUp()
 	{
 		ingredDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog5);
@@ -128,13 +144,16 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		noteEditIds = new ArrayList<Integer>();
 		valueEditIds = new ArrayList<Integer>();
 		ingredEditIds = new ArrayList<Integer>();
-	    ingredDialogLinearLayout = (LinearLayout)ingredDialog.findViewById(R.id.editdialog);
+		ingredDialogLinearLayout = (LinearLayout)ingredDialog.findViewById(R.id.editdialog);
 		params = new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT,      
 				LayoutParams.WRAP_CONTENT
 				);
 	}
-	
+
+	/**
+	 * Create list of ingredients - This has to be dynamic as the amount is unknown
+	 */
 	public void createList()
 	{
 		for(int i = 0; i < ingredList.size(); i++)
@@ -146,13 +165,13 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 				linearLayoutInDialog.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 				params.setMargins(5,5,5,5);
 
-						
+
 				int amountEditId = findId();
 				amountEditIds.add(amountEditId);
 				final EditText amountEdit = createEditText(80);
 				amountEdit.setId(amountEditId);
-				
-			
+
+
 				final Spinner sItems = createSpinner(true);
 				int valueEditId = findId();
 				valueEditIds.add(valueEditId);
@@ -162,7 +181,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 				int ingredEditId = findId();
 				ingredEditIds.add(ingredEditId);
 				ingredEdit.setId(ingredEditId);
-		
+
 				final TextView view = new TextView(activity);
 				int viewid = findId();
 				view.setText(" - ");
@@ -172,27 +191,27 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 				int noteEditId = findId();
 				noteEditIds.add(noteEditId);
 				noteEdit.setId(noteEditId);
-				
+
 
 				ImageButton img = createImageButton();
 				addViews(linearLayoutInDialog,
 						amountEdit,  sItems, ingredEdit, view, noteEdit, img);
-						
-				
+
+
 				amountEdit.setText(Integer.toString(ingredList.get(i).getAmount()));
 				ingredEdit.setText(ingredList.get(i).getName());
 				noteEdit.setText(ingredList.get(i).getNote());
 				sItems.setSelection(utils.getIndex(sItems, ingredList.get(i).getValue()));
 				utils.setDialogText(viewid, ingredDialog, 22);
 				ingredList.get(point).setProgress("added");
-				
+
 				img.setOnClickListener(new OnClickListener(){
 
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						setVisibility(point, amountEdit, ingredEdit, sItems, view, noteEdit);
-						
+
 					}});
 			}
 			else
@@ -204,7 +223,11 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 			}
 		}
 	}
-	
+
+	/**
+	 * Create button style for the dialog
+	 * @return
+	 */
 	public Button createButton()
 	{
 		Button okButton = new Button(activity);
@@ -219,6 +242,10 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		return okButton;
 	}
 
+	/**
+	 * Create error view style for dialog
+	 * @return
+	 */
 	public TextView createErrorView()
 	{
 		final TextView errorView = new TextView(activity);
@@ -230,7 +257,12 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		errorView.setTextColor(Color.parseColor("#F70521"));
 		return errorView;
 	}
-	
+
+	/**
+	 * Creates edit text box
+	 * @param width
+	 * @return EditText box with formatting and style
+	 */
 	public EditText createEditText(int width)
 	{
 		EditText edit = new EditText(activity);
@@ -239,7 +271,12 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		edit.setWidth(width);
 		return edit;
 	}
-	
+
+	/**
+	 * Create spinner
+	 * @param create
+	 * @return Spinner with values and style
+	 */
 	public Spinner createSpinner(boolean create)
 	{
 		//Spinner set up with varying measurement amounts
@@ -279,7 +316,11 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		sItems.setLayoutParams(params);
 		return sItems;
 	}
-	
+
+	/**
+	 * Create delete image button for the each item in the list of ingredient
+	 * @return ImageButton
+	 */
 	public ImageButton createImageButton()
 	{
 		ImageButton img = new ImageButton(activity);
@@ -291,7 +332,16 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		img.setLayoutParams(lparams2);
 		return img;
 	}
-	
+
+	/**
+	 * Set visibility of views to invisible if delete is selected
+	 * @param point
+	 * @param amountEdit
+	 * @param ingredEdit
+	 * @param sItems
+	 * @param view
+	 * @param noteEdit
+	 */
 	public void setVisibility(int point, EditText amountEdit, EditText ingredEdit, Spinner sItems, TextView view, EditText noteEdit)
 	{
 		ingredList.get(point).setProgress("deleted");
@@ -303,6 +353,9 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	}
 
 	@Override
+	/**
+	 * Finds an id which is not currently in use
+	 */
 	public int findId(){  
 		View v = activity.findViewById(id);  
 		while (v != null)
@@ -311,7 +364,12 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		}  
 		return id++;  
 	}
-	
+
+	/**
+	 * Checks the size of list against a counter to know when to display
+	 * @param size
+	 * @return a boolean - which tells us when to dismiss dialog
+	 */
 	public boolean sizeCheck(int size)
 	{
 		boolean dismissed = false;
@@ -324,7 +382,10 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		}
 		return dismissed;
 	}
-	
+
+	/**
+	 * Updates ingredient list once changes have been made
+	 */
 	public void updateList()
 	{
 		//Apply to edit page
@@ -339,6 +400,17 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 			}
 		} 
 	}
+
+	/**
+	 * Add the different views to a linear layout
+	 * @param linearLayoutInDialog
+	 * @param amountEdit
+	 * @param sItems
+	 * @param ingredEdit
+	 * @param view
+	 * @param noteEdit
+	 * @param img
+	 */
 	public void addViews(LinearLayout linearLayoutInDialog,
 			EditText amountEdit, Spinner sItems, EditText ingredEdit, TextView view, EditText noteEdit, ImageButton img)
 	{
@@ -350,7 +422,10 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		linearLayoutInDialog.addView(img);
 		ingredDialogLinearLayout.addView(linearLayoutInDialog);
 	}
-	
+
+	/**
+	 * Set up ingred dialog style for adding a new ingredient
+	 */
 	public void setUpIngredAddDialog()
 	{
 		recipeIngredDialog = utils.createDialog(activity,R.layout.recipe_add_dialog5);
@@ -366,14 +441,14 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 				LayoutParams.WRAP_CONTENT
 				);
 		createSpinner(false);
-		 
+
 		closeButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				recipeIngredDialog.dismiss();
-				
+
 			}});
 
 		addButton.setOnClickListener(new OnClickListener() {
@@ -391,7 +466,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 
 	/**
-	 * Get information from ingredient dialogs
+	 * Get information from the add ingredient dialog
 	 */
 	public void getIngredient(Dialog recipeIngredDialog)
 	{
@@ -417,8 +492,8 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		else
 		{
 			recipeIngredDialog.dismiss();
-			//Sets details to ingredient bean
 
+			//Sets details to ingredient bean
 			IngredientBean ingredBean = new IngredientBean();
 			ApplicationModel_RecipeModel rm = new ApplicationModel_RecipeModel(context);
 			ingredBean.setUniqueid(rm.generateuuid(recipe.getAddedBy(), "IngredientDetails"));
@@ -430,7 +505,8 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 			ingredList.add(ingredBean);
 			addIngredList.add(ingredBean);
 			recipeIngredDialog.dismiss();
-			//How ingredients are displayed in the edit text box
+
+			//Append new ingred to list
 			TextView ingredsEdit = (TextView) activity.findViewById(R.id.ingredientList);
 			if(note.equals(""))
 			{

@@ -22,6 +22,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * Activity which handles the explore view
+ * @author Kari
+ *
+ */
 public class Search_ExploreView  extends ActionBarActivity {
 	
 	Navigation_DrawerCreation nav;

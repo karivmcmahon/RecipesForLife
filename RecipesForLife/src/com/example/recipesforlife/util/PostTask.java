@@ -16,11 +16,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * AsyncTask code enables sync code to be done in the background
+ * This class enables the sync to be done in the background
+ *  AsyncTask code enables sync code to be done in the background
  * @author Kari
  *
  */
-public class PostTask extends AsyncTask<Void, Void, String> {
+public class PostTask extends AsyncTask<Void, Void, String> 
+{
 
 	Util utils;
 	Intent i;
@@ -29,6 +31,7 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 	boolean cookbook = false;
 	public static final String MyPREFERENCES = "MyPrefs";
 	public static final String emailk = "emailKey";
+	
 	public PostTask(Util  utils, Context context, boolean cookbook)
 	{
 		this.utils = utils;
@@ -41,7 +44,6 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 	//The sync works in the background
 	public String doInBackground(Void... arg0 ) {
 		String message = utils.sync();
-		Log.v("All Done!","ALL DONE");
 		response = message;	
 		return message;
 	}
@@ -54,8 +56,7 @@ public class PostTask extends AsyncTask<Void, Void, String> {
 		if(response.equals("success"))
 		{
 			//Displays success message
-			Toast.makeText(context, 
-					"App synced ", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "App synced ", Toast.LENGTH_LONG).show();
 			if(cookbook == true)
 			{
 				//If cookbook page requests sync - refresh the list view

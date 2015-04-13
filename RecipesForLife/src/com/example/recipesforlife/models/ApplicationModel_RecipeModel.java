@@ -592,6 +592,9 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 
 	/**
 	 * Insert connected ingred details id and recipe id into database
+	 * 
+	 * @param server - whether the call came from server or not
+	 * 
 	 */
 	public void insertRecipeToIngredient(boolean server)
 	{
@@ -651,11 +654,12 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 			}
 		}
 		else
-		{			ContentValues ingredAddValues = new ContentValues();
-		ingredAddValues.put("name", name);
-		ingredAddValues.put("updateTime", utils.getLastUpdated(false)); 
-		ingredAddValues.put("changeTime", "2015-01-01 12:00:00.000");
-		id = database.insertOrThrow("Ingredient", null, ingredAddValues);
+		{			
+			ContentValues ingredAddValues = new ContentValues();
+			ingredAddValues.put("name", name);
+			ingredAddValues.put("updateTime", utils.getLastUpdated(false)); 
+			ingredAddValues.put("changeTime", "2015-01-01 12:00:00.000");
+			id = database.insertOrThrow("Ingredient", null, ingredAddValues);
 		}
 		cursor.close();
 		return id;
@@ -746,11 +750,16 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 		return uid;	
 	}
 	
+
+	/**
+	 * Selects recipes row id based on its unique id
+	 * @param uid
+	 * @return row id
+	 */
 	public int selectRecipeID(String uid)
 	{	
 		
 		int id = 0;
-		//open();
 		Cursor cursors = database.rawQuery("SELECT id FROM Recipe WHERE uniqueid=?", new String[] { uid });
 		if (cursors != null && cursors.getCount() > 0) {
 			for (int i = 0; i < cursors.getCount(); i++) {
@@ -759,7 +768,6 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 			}
 		}
 		cursors.close();
-		//close();
 		return id;	
 	}
 
@@ -809,9 +817,14 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 		return rb;	
 	}
 
+	/**
+	 * A method to check if the user has access to recipe
+	 * @param user
+	 * @param uid
+	 * @return boolean
+	 */
 	public boolean doesUserHaveAccess(String user, String uid)
 	{
-
 		boolean access;
 		open();
 		Cursor cursor = database.rawQuery("SELECT  * FROM Cookbook LEFT JOIN Contributers ON Contributers.cookbookid = Cookbook.id WHERE  Cookbook.uniqueid = ? AND ( Contributers.accountid = ? OR Cookbook.creator=?)", new String[] { uid,  user, user });
@@ -916,43 +929,44 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 		return ingredList;
 	}
 	
+	/**
+	 * Checks if ingredient already exists based on its unique id
+	 * @param uid
+	 * @return boolean - true or false if it exists
+	 */
 	public boolean ingredientExists(String uid)
 	{
 		boolean exists = false;
-		//open();
 		Cursor cursors = database.rawQuery("SELECT * FROM IngredientDetails WHERE uniqueid=?", new String[] { uid });
-		Log.v("INGRED UID", "I UID "+ uid);
 		if (cursors != null && cursors.getCount() > 0) {
 			exists = true;
-			Log.v("TRUE", "I TRUE");
 		}
 		else
 		{
 			exists = false;
-			Log.v("TRUE", "I FALSE");
+			
 		}
 		cursors.close();
-		//close();
 		return exists;
 	}
 	
+	/**
+	 * Check if preperation exists based on its unique idg 
+	 * @param uid
+	 * @return
+	 */
 	public boolean preperationExists(String uid)
 	{
 		boolean exists = false;
-		//open();
 		Cursor cursor = database.rawQuery("SELECT * FROM Preperation WHERE uniqueid=?", new String[] { uid });
-		Log.v("PREP UID", "P UID "+ uid);
 		if (cursor != null && cursor.getCount() > 0) {
-			Log.v("TRUE", "P TRUE");
 			exists = true;
 		}
 		else
 		{
-			Log.v("TRUE", "P FALSE");
 			exists = false;
 		}
 		cursor.close();
-		//close();
 		return exists;
 	}
 

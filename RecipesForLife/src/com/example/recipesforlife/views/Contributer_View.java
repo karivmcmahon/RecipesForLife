@@ -51,30 +51,31 @@ public class Contributer_View {
 	}
 
 	/**
-	 * Handles the contributer dialog
+	 * Handles the contributer dialog style depending whether they are a cookbook owner or just a contributor
 	 */
 	public void manageContribs()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		//Fill list adapter with cookbook names
+
+		//Retrieves cookbook creator and checks if the person viewing the activity is the same as the creator
 		String creator = model.creatorForCookbook(ccadapter.bookids.get(position));
 		if(creator.equals(sharedpreferences.getString(emailk, "")))
 		{
 			isCreator = true;
 		}
+
 		//Sets up the dialog to show a list of contributers
 		setContribView();
-		
+
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, contribDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				contribDialog.dismiss();
-				
+
 			}});
-		
+
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
 		if(isCreator == false)
 		{
@@ -93,7 +94,7 @@ public class Contributer_View {
 					{
 						//Set up the add contributer dialog
 						addContribDialogViewCreate();
-						
+
 						Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, addContribDialog);
 						closeButton.setOnClickListener(new OnClickListener(){
 
@@ -101,9 +102,9 @@ public class Contributer_View {
 							public void onClick(View v) {
 								// TODO Auto-generated method stub
 								addContribDialog.dismiss();
-								
+
 							}});
-						
+
 						//If they press add
 						Button addContribButton = utils.setButtonTextDialog(R.id.addContribButton, 22, addContribDialog);
 						addContribButton.setOnTouchListener(new OnTouchListener()
@@ -133,10 +134,10 @@ public class Contributer_View {
 	/**
 	 * Sets up the add a contrib dialog style
 	 */
-	public void addContribDialogViewCreate()
+	private void addContribDialogViewCreate()
 	{
+		//Set styles
 		addContribDialog = utils.createDialog(activity, R.layout.contributers_adddialog);
-		//Getting data
 		errorView = (TextView) addContribDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,addContribDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -147,12 +148,14 @@ public class Contributer_View {
 	/**
 	 * Adds a contributer to the database if no errors
 	 */
-	public void addContributer()
+	private void addContributer()
 	{
 		int id = 0;
 		ApplicationModel_AccountModel am = new ApplicationModel_AccountModel(context);
+
 		//checks if the email entered exists
 		boolean exists = am.checkEmail( utils.getTextFromDialog(R.id.emailEditText, addContribDialog));
+
 		//Check for any errors
 		if (exists == false)
 		{
@@ -166,6 +169,7 @@ public class Contributer_View {
 		{
 
 			id = model.selectCookbooksIDByUnique(ccadapter.bookids.get(position));
+
 			//If it exists either update or insert contributer - may be able to update as they might not have been deleted yet
 			boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
 			if(contribExists == true)
@@ -176,6 +180,7 @@ public class Contributer_View {
 			{
 				model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, false);
 			}
+
 			//Updates contributer list
 			ArrayList<String > contribslist = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");
 			ccadapter.adapter2.clear();
@@ -188,11 +193,12 @@ public class Contributer_View {
 	/**
 	 * Set up the initial contributer view dialog
 	 */
-	public void setContribView()
+	private void setContribView()
 	{
 		contribDialog = utils.createDialog(activity, R.layout.contributers_viewdialog);
 		utils.setDialogText(R.id.contributerTitle, contribDialog, 22);
 		TextView tvTitle = (TextView) contribDialog.findViewById(R.id.contributerTitle);
+
 		//Depending on whether the user is the creator or not show a different title
 		if(isCreator == false)
 		{
@@ -203,8 +209,10 @@ public class Contributer_View {
 			tvTitle.setText("Manage Contributors");
 		}
 		ArrayList<String> contribs = new ArrayList<String>();
+
 		//Show list of contributers
 		ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
+
 		//select the contributers and dispaly in a listview
 		contribs = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");
 		ccadapter.adapter2 = new

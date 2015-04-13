@@ -16,13 +16,20 @@ import android.widget.TextView;
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * This class handles the second dialog displayed for adding a recipe. Handles the style and retrieval of data from dialog
+ * @author Kari
+ *
+ */
 public class Recipe_AddView_Dialog2  extends Recipe_AddView {
-	
-ActionBarActivity activity;
-Context context;
-String bookname, uniqueid = "";
-Util utils;
-//Handles message from time dialog 1 - preptime
+
+	ActionBarActivity activity;
+	Context context;
+	String bookname, uniqueid = "";
+	Util utils;
+
+
+	//Handles message from time dialog 1 - preptime
 	static Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message m){
@@ -66,7 +73,7 @@ Util utils;
 		}
 	};
 
-	
+
 	public Recipe_AddView_Dialog2(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
@@ -76,7 +83,7 @@ Util utils;
 		this.uniqueid = uniqueid;
 		utils = new Util(context, activity);
 	}
-	
+
 	/**
 	 * Set up second dialog style with correct fonts and spinner filled 
 	 */
@@ -90,7 +97,7 @@ Util utils;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				recipeAddDialog2.dismiss();
-				
+
 			}});
 		utils.setDialogText(R.id.recipeAddView2, recipeAddDialog2, 22);
 		utils.setDialogText(R.id.recipeIngredsView, recipeAddDialog2, 22);
@@ -117,7 +124,7 @@ Util utils;
 
 		}); 
 	}
-	
+
 	/**
 	 * Get second dialog data 
 	 */
@@ -133,6 +140,7 @@ Util utils;
 		cooking = utils.getTextFromDialog(R.id.recipeCookingEditText, recipeAddDialog2);
 		String methods = utils.getTextFromDialog(R.id.recipeIngredsEditText, recipeAddDialog2);
 		String ingredient = utils.getTextFromDialog(R.id.recipeStepsEditText, recipeAddDialog2);
+	
 		//Error catching before moving to next stage
 		if(ingredient.equals(""))
 		{
@@ -159,12 +167,16 @@ Util utils;
 		{
 			recipeAddDialog2.dismiss();
 			Recipe_AddView_Dialog3 dialog3 = new Recipe_AddView_Dialog3(activity, context, uniqueid, bookname);
+			
 			//Displays and gets third dialog data
 			dialog3.setUpThirdRecipeAddDialog();
-		
+
 		}
 	}
-	
+
+	/**
+	 * Handles the clicks for adding ingred and prep
+	 */
 	public void handleIngredPrepClicks()
 	{
 		final Recipe_AddView_IngredPrepDialog ingredprepdialog = new Recipe_AddView_IngredPrepDialog(activity, context, uniqueid, bookname);
@@ -174,7 +186,7 @@ Util utils;
 			@Override
 			public void onClick(View v) {
 				//Set up the dialog style
-			ingredprepdialog.setUpIngredAddDialog();
+				ingredprepdialog.setUpIngredAddDialog();
 				//Once add is pressed
 				Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
 				addIngredButton.setOnClickListener(new OnClickListener() {
@@ -196,7 +208,7 @@ Util utils;
 				//Set up style
 				ingredprepdialog.setUpStepAddDialog();
 				//Once add is pressed
-			Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
+				Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
 				addStepButton.setOnClickListener(new OnClickListener() {
 
 					@Override

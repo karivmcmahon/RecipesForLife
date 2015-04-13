@@ -14,6 +14,7 @@ import android.widget.TimePicker;
  * A time picker dialog which enables the user to set hours and minutes 
  * Based on the Android documentation
  * Data is sent based on bundles
+ * 
  * @author Kari
  *
  */
@@ -38,6 +39,8 @@ public class TimePickerFragment extends DialogFragment
 		TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {		
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {		
+				
+				//Sends data once time has been sent
 				hour = Integer.toString(hourOfDay);
 				minutes = Integer.toString(minute);
 				h = hourOfDay;

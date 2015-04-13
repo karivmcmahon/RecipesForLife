@@ -62,8 +62,10 @@ public class Navigation_DrawerCreation   {
 		imageids.add(R.drawable.icon_home);
 		navBarTitles.add("Explore");
 		imageids.add(R.drawable.icon_explore);
+		
 		//navBarTitles.add("Proffile");
 		//imageids.add(R.drawable.icon_user2);
+		
 		navBarTitles.add("Log Off");
 		imageids.add(R.drawable.icon_power);
 		drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
@@ -137,6 +139,7 @@ public class Navigation_DrawerCreation   {
 			}
 			else if(position == 1)
 			{
+				//Goes to explore view
 				Intent i = new Intent(activity, Search_ExploreView.class);
 				activity.startActivity(i);
 			}

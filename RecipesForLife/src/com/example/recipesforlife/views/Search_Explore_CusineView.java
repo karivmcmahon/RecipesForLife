@@ -24,6 +24,11 @@ import com.example.recipesforlife.models.ApplicationModel_SearchModel;
 import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
 
+/**
+ * Displays a listview displaying the cusine results 
+ * @author Kari
+ *
+ */
 public class Search_Explore_CusineView extends ActionBarActivity {
 	
 	Navigation_DrawerCreation nav;
