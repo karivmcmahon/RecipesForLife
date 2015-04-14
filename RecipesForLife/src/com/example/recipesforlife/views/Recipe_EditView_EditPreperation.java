@@ -28,16 +28,16 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_EditView_EditPreperation extends Recipe_EditView{
+class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
-	ActionBarActivity activity;
-	Context context;
-	Util utils;
-	LinearLayout prepDialogLinearLayout;
-	LinearLayout.LayoutParams params;
+	private ActionBarActivity activity;
+	private Context context;
+	private Util utils;
+	private LinearLayout prepDialogLinearLayout;
+	private LinearLayout.LayoutParams params;
 
 
-	public Recipe_EditView_EditPreperation(Context context, ActionBarActivity activity)
+	Recipe_EditView_EditPreperation(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -47,7 +47,7 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	/**
 	 * Sets up the preperation list to be edited
 	 */
-	public void getPreperation()
+	void getPreperation()
 	{
 		setUp();
 		createList();
@@ -67,7 +67,7 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	/**
 	 * Set up information for the dialog
 	 */
-	public void setUp()
+	private void setUp()
 	{
 		prepDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog4);
 		utils.setDialogText(R.id.recipeEditView, prepDialog, 22);
@@ -84,7 +84,7 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	/**
 	 * Creates a list of preperation details to be edited
 	 */
-	public void createList()
+	private void createList()
 	{
 		//Set the text view and edit text data for a linear layout
 		for(int i = 0; i < prepList.size(); i++)
@@ -141,11 +141,12 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Create textview for prep list
-	 * @param text
-	 * @param id
-	 * @return TextView
+	 * 
+	 * @param text			Text displayed in the text view
+	 * @param id			TextViews id
+	 * @return TextView		Updated textview
 	 */
-	public TextView createViewsForDialog(String text, int id)
+	private TextView createViewsForDialog(String text, int id)
 	{
 		params.setMargins(5,5,5,5);
 		TextView tv = new TextView(activity);
@@ -157,10 +158,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Create EditText for prep list
-	 * @param id
-	 * @return EditText
+	 * 
+	 * @param id			EditText id
+	 * @return EditText		Updated edit text
 	 */
-	public EditText createEditTextForDialog(int id)
+	private EditText createEditTextForDialog(int id)
 	{
 		final EditText edittext = new EditText(activity);
 		edittext.setId(id);
@@ -173,9 +175,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	
 	/**
 	 * Create image button for delete next to each list item
+	 * 
 	 * @return ImageButton
 	 */
-	public ImageButton createImageButton()
+	@SuppressWarnings("deprecation")
+	private ImageButton createImageButton()
 	{
 		ImageButton img = new ImageButton(activity);
 		int imgid = findId();
@@ -189,6 +193,7 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	
 	/**
 	 * Set up views for the list
+	 * 
 	 * @param linearLayoutInDialog
 	 * @param prepView
 	 * @param prepNumView
@@ -196,7 +201,7 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	 * @param prepEdit
 	 * @param img
 	 */
-	public void addViews(LinearLayout linearLayoutInDialog, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit, ImageButton img)
+	private void addViews(LinearLayout linearLayoutInDialog, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit, ImageButton img)
 	{
 		linearLayoutInDialog.addView(prepNumView);
 		linearLayoutInDialog.addView(prepNumEdit);
@@ -208,13 +213,14 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Set visibility of list items to visible and set the progress info to deleted
-	 * @param point
-	 * @param prepView
-	 * @param prepNumView
-	 * @param prepNumEdit
-	 * @param prepEdit
+	 * 
+	 * @param point				point in loop
+	 * @param prepView			TextView
+	 * @param prepNumView		TextView
+	 * @param prepNumEdit		EditText
+	 * @param prepEdit			EditText
 	 */
-	public void setVisibility(int point, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit)
+	private void setVisibility(int point, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit)
 	{
 		prepList.get(point).setProgress("deleted");
 		prepNumEdit.setVisibility(View.INVISIBLE);
@@ -224,10 +230,11 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	}
 
 	/**
-	 * Create button to be shown at the end of the list with correct stles and fonts
+	 * Create button to be shown at the end of the list with correct styles and fonts
+	 * 
 	 * @return Button
 	 */
-	public Button createButton()
+	private Button createButton()
 	{
 		Button okButton = new Button(activity);
 		int buttonId = findId();
@@ -243,9 +250,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Create error view with the correct styles
-	 * @return TextView with styles 
+	 * 
+	 * @return TextView 	Updated TextView
 	 */
-	public TextView createErrorView()
+	private TextView createErrorView()
 	{
 		final TextView errorView = new TextView(activity);
 		int errorId = findId();
@@ -259,9 +267,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Checks the list for errors before making changes
+	 * 
 	 * @param errorView
 	 */
-	public void listCheck(TextView errorView)
+	private void listCheck(TextView errorView)
 	{
 		boolean dismissed = false;
 		int size = 0;
@@ -314,9 +323,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Updates the list on screen once change has been made
-	 * @param list
+	 * 
+	 * @param list	Preperation List
 	 */
-	public void updateList(ArrayList<PreperationBean> list)
+	private void updateList(ArrayList<PreperationBean> list)
 	{
 		TextView instructions = (TextView) activity.findViewById(R.id.methodList);
 		instructions.setText("");
@@ -339,10 +349,10 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 	/**
 	 * Check list size against number - If equals dialog should dismiss
-	 * @param size
-	 * @return boolean - Stating whether dialog should be dismissed
+	 * @param size		Value from a counter
+	 * @return boolean  Stating whether dialog should be dismissed
 	 */
-	public boolean sizeCheck(int size)
+	private boolean sizeCheck(int size)
 	{
 		boolean dismiss = false;
 		if(size == (prepList.size()))
@@ -382,7 +392,6 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				recipeAddStepDialog.dismiss();
 				
 			}});
@@ -400,13 +409,13 @@ public class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	
 	/**
 	 * Get the details from the recipe add step dialog
-	 * @param recipeAddStepDialog
+	 * 
+	 * @param recipeAddStepDialog	Dialog to retrieve data from
 	 * @param errorView
 	 */
-	public void getRecipeStep(Dialog recipeAddStepDialog, TextView errorView)
+	private void getRecipeStep(Dialog recipeAddStepDialog, TextView errorView)
 	{
 		//Getting  data from the text boxes
-		
 		utils.setDialogText(R.id.errorView,recipeAddStepDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
 		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);

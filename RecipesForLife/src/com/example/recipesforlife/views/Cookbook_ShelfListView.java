@@ -1,37 +1,22 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.SearchView;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.CookbookBean;
@@ -47,24 +32,19 @@ import com.example.recipesforlife.util.Util;
  */
 public class Cookbook_ShelfListView extends ActionBarActivity {
 
-	ListView listView;
-	public static final String MyPREFERENCES = "MyPrefs";
-	static ArrayList<CookbookBean> cookbookList;
-	public static final String pass = "passwordKey"; 
-	String type = "";
-	Util utils;
+	private ListView listView;
+	private static final String MyPREFERENCES = "MyPrefs";
+	private static ArrayList<CookbookBean> cookbookList;
+	private Util utils;
 	public static Cookbook_ListAdapter adapter;
 	public static ArrayList<String> values, ids;
 	public static ArrayList<byte[]> images;
 	Cookbook_AddView add;
 	private Handler mHandler = new Handler();
 	static ApplicationModel_CookbookModel model;
-	static Context context;
-
-
-	Navigation_DrawerCreation nav;
-
-	public static final String emailk = "emailKey";
+	private static Context context;
+	private Navigation_DrawerCreation nav;
+	private static final String emailk = "emailKey";
 	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -87,8 +67,6 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 		actionBar.setTitle(s);
 
 		utils = new Util(getApplicationContext(), this);
-		Intent intent = getIntent();
-		type = intent.getStringExtra("type");
 		listView = (ListView) findViewById(R.id.list);
 
 
@@ -133,9 +111,9 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 
 	/**
 	 * Updates the cookbook list - called when data has changed in database
-	 * @param update
+	 * @param update	Whether its an update
 	 */
-	public static void updateCookbookList(boolean update)
+	private static void updateCookbookList(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		//Fill list adapter with cookbook names
@@ -202,6 +180,10 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 	@Override
 	/**
 	 * Retrieves activity result - calls appropriate method based on result code
+	 * 
+	 * @param requestCode
+	 * @param resultCode
+	 * @param imageReturnedIntent
 	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 

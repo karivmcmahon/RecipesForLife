@@ -20,16 +20,16 @@ public abstract class Database_BaseDataSource {
 		dbHelper = new Database_DatabaseConnection(context);
 	}
 
-	public void open() throws SQLException {
-		database = dbHelper.getWritableDatabase();
-	}
-
-	public void close() {
+	void close() {
 		dbHelper.close();
 	}
 
 	protected int getIndex(String columnName, Cursor cursor) {
 		int controlIndex = cursor.getColumnIndex(columnName);
 		return controlIndex;
+	}
+
+	void open() throws SQLException {
+		database = dbHelper.getWritableDatabase();
 	}
 }

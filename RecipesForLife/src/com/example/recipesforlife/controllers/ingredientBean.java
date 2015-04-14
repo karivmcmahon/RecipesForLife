@@ -6,15 +6,15 @@ package com.example.recipesforlife.controllers;
  *
  */
 public class IngredientBean {
-	String name; //name of ingredient
-	int ingredId;  //id of row in db
-	int amount; //amount of this ingredient
-	String value; //ingredients unit
-	String note; //notes relating to ingred
-	String uniqueid; //ingreds uniqueid
-	String progress; //holds the progress of this data
-	String recipeid; //holds the id of the recipe the ingredient relates
-	String updateTime; //holds the update time for the ingredient
+	private String name; 		 //name of ingredient
+	private int ingredId; 		//id of row in db
+	private int amount; 	 	//amount of this ingredient
+	private String value; 		//ingredients unit
+	private String note; 		//notes relating to ingred
+	private String uniqueid; 	//ingreds uniqueid
+	private String progress; 	//holds the progress of this data
+	private String recipeid; 	//holds the id of the recipe the ingredient relates
+	private String updateTime; 	//holds the update time for the ingredient
 	
 	public String getUpdateTime() {
 		return updateTime;

@@ -26,32 +26,28 @@ import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.util.Util;
 
 /**
  * Displays dialog to create/add a cookbook and handles the view code for adding a cookbook
+ * 
  * @author Kari
  *
  */
-public class Cookbook_AddView extends Cookbook_ShelfListView {
+class Cookbook_AddView extends Cookbook_ShelfListView {
 
-	ActionBarActivity activity;
-	Context context;
-	Util utils;
-	Dialog bookAddDialog;
-	TextView errorView;
-	public static final String MyPREFERENCES = "MyPrefs";
-	public static final String pass = "passwordKey"; 
-	public static final String emailk = "emailKey";
-	ArrayList<String> bookDetails;
+	private ActionBarActivity activity;
+	private Context context;
+	private Util utils;
+	private Dialog bookAddDialog;
+	private TextView errorView; 
+	private static final String emailk = "emailKey";
 	private static final int SELECT_PHOTO = 100;
-	ImageBean imgBean;
-	byte[] byteArray;
-	SharedPreferences sharedpreferences;
+	private byte[] byteArray;
+	private SharedPreferences sharedpreferences;
 
-	public Cookbook_AddView(Context context, ActionBarActivity activity)
+	Cookbook_AddView(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -109,7 +105,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 
 	/**
 	 * Checks for any errors with user input
-	 * @return boolean - true if errors, false if no errors
+	 * @return boolean 	true if errors, false if no errors
 	 */
 	private boolean errorCheck()
 	{
@@ -151,12 +147,11 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	/**
 	 * Creates an add a cookbook dialog
 	 */
-	public void addCookbook()
+    void addCookbook()
 	{
 		//set up
 		bookAddDialog = utils.createDialog(activity , R.layout.cookbook_adddialog);
 		errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
-		bookDetails = new ArrayList<String>();
 		//sets up the dialog style
 		setStyle();
 		//fills the spinner
@@ -226,7 +221,7 @@ public class Cookbook_AddView extends Cookbook_ShelfListView {
 	 * @param resultCode
 	 * @param imageReturnedIntent
 	 */
-	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
+	void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 
 		switch(requestCode) { 

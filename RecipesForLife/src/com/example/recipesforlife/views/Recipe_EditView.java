@@ -6,14 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.SQLException;
@@ -21,31 +15,18 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StrictMode;
-import android.provider.MediaStore;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,23 +45,21 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_EditView extends ActionBarActivity {
+ public class Recipe_EditView extends ActionBarActivity {
 
-	Util utils;
+	private Util utils;
 	static RecipeBean recipe;
-	public static final String MyPREFERENCES = "MyPrefs";
 	Dialog imageDialog, prepDialog, ingredDialog;
 	static Dialog timeDialog;
-    static final String emailk = "emailKey";
     static ArrayList<PreperationBean> prepList, modifiedPrepList, addPrepList;
     static ArrayList<IngredientBean> ingredList, modifiedIngredList, addIngredList;
-	ImageBean imgBean;
+	private ImageBean imgBean;
 	ArrayList<Integer> amountEditIds, valueEditIds, ingredEditIds, noteEditIds, prepNumEditIds, prepEditIds;
-	public static int id = 1;
+	static int id = 1;
 	Navigation_DrawerCreation nav;
 	private static final int SELECT_PHOTO = 100;
-	Recipe_EditView_EditPreperation prep;
-	Recipe_EditView_EditIngredient ingred;
+	private Recipe_EditView_EditPreperation prep;
+	private Recipe_EditView_EditIngredient ingred;
 	Recipe_EditView_EditMisc misc;
 	
 
@@ -214,7 +193,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Set text style
 	 */
-	public void setStyle()
+	private void setStyle()
 	{
 		utils.setTextPink(R.id.recipeTitle, 26);
 		utils.setTextBlackItalic(R.id.recipeDesc, 22);
@@ -242,7 +221,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Sets up the text for the edit view page
 	 */
-	public void setTextForLayout()
+	private void setTextForLayout()
 	{
 		ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(getApplicationContext());
 
@@ -276,7 +255,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Handle clicks on the edit view for ingredients and prep
 	 */
-	public void handleIngredPrepButtonClicks()
+	private void handleIngredPrepButtonClicks()
 	{
 		ImageView ingredAddButton = (ImageView) findViewById(R.id.ingredAddImage);
 		ingredAddButton.setOnTouchListener(new OnTouchListener(){
@@ -329,7 +308,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Updates the ingred list in edit view
 	 */
-	public void updateIngredList()
+	private void updateIngredList()
 	{
 		TextView ingredients = (TextView) findViewById(R.id.ingredientList);
 		for(int i = 0; i < ingredList.size(); i++)
@@ -345,7 +324,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Updates the prep list in edit view
 	 */
-	public void updatePrepList()
+	private void updatePrepList()
 	{
 		//Orders instructions in order
 		TextView instructions = (TextView) findViewById(R.id.methodList);
@@ -368,7 +347,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Handles image clicks on the edit view
 	 */
-	public void handleMiscImageButtonClicks()
+	private void handleMiscImageButtonClicks()
 	{
 		//Set up the various edit buttons for the page
 		ImageView titleButton = (ImageView) findViewById(R.id.recipeTitleEditImage);
@@ -446,7 +425,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * Saves recipe by updating in the database
 	 */
-	public void saveRecipe(final boolean close)
+	private void saveRecipe(final boolean close)
 	{
 		RecipeBean recipechange = new RecipeBean();
 		recipechange.setName(utils.getTextView(R.id.recipeTitle));
@@ -532,7 +511,7 @@ public class Recipe_EditView extends ActionBarActivity {
 	/**
 	 * If the user edits the image this methods handles the image change
 	 */
-	public void handleImageChange()
+	private void handleImageChange()
 	{
 		imageDialog = utils.createDialog(Recipe_EditView.this, R.layout.recipe_edit_dialog7);
 		final TextView errorView = (TextView) imageDialog.findViewById(R.id.errorView);

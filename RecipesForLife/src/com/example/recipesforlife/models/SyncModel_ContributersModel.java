@@ -3,31 +3,18 @@ package com.example.recipesforlife.models;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.example.recipesforlife.controllers.ContributerBean;
-import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.controllers.RecipeBean;
-import com.example.recipesforlife.util.Util;
-import com.example.recipesforlife.util.Utility;
-import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.util.Log;
-import android.widget.Toast;
+
+import com.example.recipesforlife.controllers.ContributerBean;
+import com.example.recipesforlife.util.Utility;
+import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 /**
  * Gets and creates JSON contributers too send to and from server
@@ -36,8 +23,8 @@ import android.widget.Toast;
  */
 public class SyncModel_ContributersModel extends Database_BaseDataSource {
 
-	Context context;
-	Utility util;
+	private Context context;
+	private Utility util;
 
 
 	public SyncModel_ContributersModel(Context context) {
@@ -47,11 +34,44 @@ public class SyncModel_ContributersModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Gets contributers within a specific date range
-	 * @param update - whether checking for updates or inserts
-	 * @return List of contributers
+	 * Create a json of the contributers information and sends to the server
+	 * 
+	 * @param update 			whether the json is for update or insert
+	 * @throws JSONException
+	 * @throws IOException
 	 */
-	public ArrayList<ContributerBean> getContribs(boolean update)
+	public void getAndCreateJSON(boolean update) throws JSONException, IOException
+	{
+		ArrayList<ContributerBean> contribs = getContribs(update);
+		JSONArray jsonArray = new JSONArray();
+
+		for(int i = 0; i < contribs.size(); i++)
+		{
+			JSONObject contrib = new JSONObject();		
+			contrib.put("email", contribs.get(i).getAccount());
+			contrib.put("bookid", contribs.get(i).getBookUniqId());
+			contrib.put("updateTime", contribs.get(i).getUpdateTime());
+			contrib.put("changeTime", contribs.get(i).getChangeTime());
+			contrib.put("progress", contribs.get(i).getProgress());
+			jsonArray.put(contrib);			
+		} 
+		if(update == true)
+		{
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm13.aspx");
+		}
+		else
+		{
+			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");
+		}
+	} 
+
+	/**
+	 * Gets contributers after a specific date
+	 * 
+	 * @param update 							whether checking for updates or inserts
+	 * @return ArrayList<ContributerBean>		List of contributers
+	 */
+	private ArrayList<ContributerBean> getContribs(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
 		open();
@@ -92,42 +112,12 @@ public class SyncModel_ContributersModel extends Database_BaseDataSource {
 		return contribList;
 	} 
 
-	/**
-	 * Create a json of the contributers information and sends to the server
-	 * @param update - whether the json is for update or insert
-	 * @throws JSONException
-	 * @throws IOException
-	 */
-	public void getAndCreateJSON(boolean update) throws JSONException, IOException
-	{
-		ArrayList<ContributerBean> contribs = getContribs(update);
-		JSONArray jsonArray = new JSONArray();
-
-		for(int i = 0; i < contribs.size(); i++)
-		{
-			JSONObject contrib = new JSONObject();		
-			contrib.put("email", contribs.get(i).getAccount());
-			contrib.put("bookid", contribs.get(i).getBookUniqId());
-			contrib.put("updateTime", contribs.get(i).getUpdateTime());
-			contrib.put("changeTime", contribs.get(i).getChangeTime());
-			contrib.put("progress", contribs.get(i).getProgress());
-			jsonArray.put(contrib);			
-		} 
-		if(update == true)
-		{
-			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm13.aspx");
-		}
-		else
-		{
-			util.sendJSONToServer(jsonArray, update, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm11.aspx");
-		}
-	} 
-
 
 
 	/**
-	 * Get contributer json from server and either insert or update the contributer
-	 * @param update - whether the json is for update or insert
+	 * Get contributer json from server and either insert or update the contributer in the db
+	 * 
+	 * @param update 			whether the json is for update or insert
 	 * @throws JSONException
 	 * @throws IOException
 	 */

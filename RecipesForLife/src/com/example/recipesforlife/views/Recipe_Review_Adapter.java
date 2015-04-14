@@ -1,21 +1,17 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.controllers.ReviewBean;
-import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
 /**
@@ -23,25 +19,24 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_Review_Adapter extends ArrayAdapter<ReviewBean> {
+class Recipe_Review_Adapter extends ArrayAdapter<ReviewBean> {
 
 
 	private final Activity activity;
-	Context context;
-	Util utils;
-	ArrayList<ReviewBean> rb;
-	ImageLoader2 imgload;
+	private Context context;
+	private Util utils;
+	private ArrayList<ReviewBean> rb;
+	
 
-	public Recipe_Review_Adapter(Context context, Activity activity, ArrayList<ReviewBean> reviewbean) {
+	Recipe_Review_Adapter(Context context, Activity activity, ArrayList<ReviewBean> reviewbean) {
 		super(context, R.layout.recipe_individreview, reviewbean);
 		this.activity = activity;
 		this.context = context;
 		rb = reviewbean;
-		imgload = new ImageLoader2(this.context);
-		// TODO Auto-generated constructor stub
 		utils = new Util(this.context, activity);
 	}
 
+	@SuppressLint({ "InflateParams", "ViewHolder" })
 	@Override
 	/**
 	 * Adapts list data 
@@ -60,11 +55,11 @@ public class Recipe_Review_Adapter extends ArrayAdapter<ReviewBean> {
 	
 	/**
 	 * Sets the style of row in list and adapts the data for that row
-	 * @param rowView
-	 * @param position
-	 * @return rowView - updated row
+	 * @param rowView		rowView
+	 * @param position		position in list
+	 * @return rowView 		updated row
 	 */
-	public View setListStyle(View rowView, int position)
+	private View setListStyle(View rowView, int position)
 	{
 		//Sets data to text views and sets the style
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.comment);

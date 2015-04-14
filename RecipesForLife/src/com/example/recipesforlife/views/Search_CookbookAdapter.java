@@ -2,6 +2,7 @@ package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
@@ -24,15 +24,15 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Search_CookbookAdapter extends ArrayAdapter<CookbookBean> {
+class Search_CookbookAdapter extends ArrayAdapter<CookbookBean> {
 
 	private final Activity activity;
-	Context context;
-	Util utils;
-	ArrayList<CookbookBean> cb;
-	ImageLoader2 imgload;
+	private Context context;
+	private Util utils;
+	private ArrayList<CookbookBean> cb;
+	private ImageLoader2 imgload;
 
-	public Search_CookbookAdapter(Context context, Activity activity, ArrayList<CookbookBean> cookbookbean) {
+	Search_CookbookAdapter(Context context, Activity activity, ArrayList<CookbookBean> cookbookbean) {
 		super(context, R.layout.search_cookbookview, cookbookbean);
 		this.activity = activity;
 		this.context = context;
@@ -41,6 +41,7 @@ public class Search_CookbookAdapter extends ArrayAdapter<CookbookBean> {
 		utils = new Util(this.context, activity);
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	/**
 	 * Adapts list data 

@@ -3,8 +3,6 @@ package com.example.recipesforlife.views;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -44,25 +42,22 @@ import com.example.recipesforlife.util.Util;
 public class Account_SignUpSignInView extends Activity {
 
 	// Strings to store info from edit text box
-	String email, name, password, country, city, interest, bio;
+	private String email, name, password, country, city, interest, bio;
 
-	// List to store account information
-	List<String> account;
-	AccountBean accountBean;
-	UserBean userBean;
+	private AccountBean accountBean;
+	private UserBean userBean;
 
 	// Typeface to change to custom font
-	Typeface typeFace;
+	private Typeface typeFace;
 
 	// Shared prefs to store log in data
 	public static final String MyPREFERENCES = "MyPrefs";
-	public static final String emailk = "emailKey";
-	public static final String pass = "passwordKey";
-	SharedPreferences sharedpreferences;
+	private static final String emailk = "emailKey";
+	private static final String pass = "passwordKey";
+	private SharedPreferences sharedpreferences;
 
-	Util utils;
-	int counter;
-	Context context;
+	private Util utils;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +67,6 @@ public class Account_SignUpSignInView extends Activity {
 		.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 
-		//Set up variables and view
-		counter = 0;
 		setContentView(R.layout.signup_view);
 		utils = new Util(getApplicationContext(), this);
 		accountBean = new AccountBean();
@@ -153,7 +146,6 @@ public class Account_SignUpSignInView extends Activity {
 	 */
 	private void createSignUpDialog()
 	{
-		account = new ArrayList<String>();
 		// Creates a custom dialog
 		final Dialog dialog = utils.createDialog(Account_SignUpSignInView.this, R.layout.signup_dialog1);
 
@@ -184,7 +176,6 @@ public class Account_SignUpSignInView extends Activity {
 		{
 			@Override
 			public void onClick(View v) {
-				counter++;
 				// get the info from the dialog - if good to go then display next sign up dialog
 				boolean show = getInitialDialogInfo(dialog);
 				if (show == true) {
@@ -332,7 +323,7 @@ public class Account_SignUpSignInView extends Activity {
 	 * Get information from the first dialog box when creating account
 	 * 
 	 * @param dialog
-	 * @return boolean - return true/false if any errors occur
+	 * @return boolean 	return true/false if any errors occur
 	 */
 	private boolean getInitialDialogInfo(Dialog dialog) {
 		Context t = getApplicationContext();
@@ -350,7 +341,6 @@ public class Account_SignUpSignInView extends Activity {
 		String passwordregex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%-_]).{6,12})";
 		//From http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
 		String emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"	+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-
 
 		//checks for errors
 		if (accountmodel.checkEmail(email) == true) 
@@ -389,7 +379,7 @@ public class Account_SignUpSignInView extends Activity {
 	 * 
 	 * @param  nextDialog
 	 */
-	public void getSecondDialogInfo(Dialog nextDialog) 
+	private void getSecondDialogInfo(Dialog nextDialog) 
 	{
 		// Get info from textboxes
 		TextView errorView = (TextView) nextDialog.findViewById(R.id.errorView);

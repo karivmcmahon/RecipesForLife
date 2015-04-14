@@ -25,28 +25,23 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_AddView_Dialog3  extends Recipe_AddView {
+class Recipe_AddView_Dialog3  extends Recipe_AddView {
 
-	ActionBarActivity activity;
-	Context context;
-	String bookname, uniqueid = "";
-	Util utils;
+	private ActionBarActivity activity;
+	private Util utils;
 
 
-	public Recipe_AddView_Dialog3(ActionBarActivity activity, Context context, String uniqueid, String bookname)
+	Recipe_AddView_Dialog3(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
 		this.activity = activity;
-		this.context = context;
-		this.bookname = bookname;
-		this.uniqueid = uniqueid;
 		utils = new Util(context, activity);
 	}
 
 	/**
 	 * Set up third recipe add dialog
 	 */
-	public void setUpThirdRecipeAddDialog()
+	void setUpThirdRecipeAddDialog()
 	{
 		//create and set up style
 		addRecipeDialog3 = utils.createDialog(activity, R.layout.recipe_add_dialog3);		
@@ -147,7 +142,7 @@ public class Recipe_AddView_Dialog3  extends Recipe_AddView {
 	/**
 	 * Get third dialog data
 	 */
-	public void getThirdDialogData()
+	private void getThirdDialogData()
 	{	
 
 		Spinner dietaryspinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDietarySpinner);

@@ -2,14 +2,6 @@ package com.example.recipesforlife.models;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,8 +10,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.recipesforlife.controllers.AccountBean;
 import com.example.recipesforlife.controllers.UserBean;
@@ -27,46 +17,57 @@ import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 /**
- * This class syncs the sever and phone databases for account JSON
+ * This class syncs the sever and phone databases for account JSONs
  * @author Kari
  *
  */
 public class SyncModel_AccountModel extends Database_BaseDataSource
 {
-	Context context;
-	Utility util;
+	private Context context;
+	private Utility util;
 	public SyncModel_AccountModel(Context context) {
 		super(context);
 		this.context = context;
 		util = new Utility();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
-	 * Gets	the users between a datetime range
-	 * @return the list of users
+	 * Sets info from db to the account controller
+	 * 
+	 * @param cursor			Results from db query
+	 * @return accountBean		Stores query results
 	 */
-	public ArrayList<UserBean> getUsers()
-	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
-		open();
-		ArrayList<UserBean> userList = new ArrayList<UserBean>();
-		Cursor cursor;
-		cursor = database.rawQuery("SELECT * FROM Users WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")});
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				userList.add(cursorToUser(cursor));
-			}
-		}
-		cursor.close();
-		close();
-		return userList;
+	public AccountBean cursorToAccount(Cursor cursor) {
+		AccountBean ab = new AccountBean();
+		ab.setId(cursor.getInt(getIndex("id",cursor)));       
+		ab.setEmail(cursor.getString(getIndex("email", cursor)));
+		ab.setPassword(cursor.getString(getIndex("password", cursor)));
+		ab.setUpdateTime(cursor.getString(getIndex("updateTime",cursor)));
+		return ab;
 	}
 
 	/**
-	 * Gets the accounts between a datetime range
-	 * @return the list of accounts
+	 * Sets info from db to the user controller
+	 * 
+	 * @param cursor			Results from db query
+	 * @return userBean			Stores query results
+	 */
+	public UserBean cursorToUser(Cursor cursor) {
+		UserBean ub = new UserBean();
+		ub.setId(cursor.getInt(getIndex("id",cursor)));       
+		ub.setName(cursor.getString(getIndex("name", cursor)));
+		ub.setBio(cursor.getString(getIndex("bio", cursor)));
+		ub.setCity(cursor.getString(getIndex("city", cursor)));
+		ub.setCountry(cursor.getString(getIndex("country", cursor)));
+		ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
+		return ub;
+	}
+
+	/**
+	 * Gets the accounts after a certain date
+	 * 
+	 * @return ArrayList<AccountBean>	List of accounts
 	 */
 	public ArrayList<AccountBean> getAccount()
 	{
@@ -87,37 +88,8 @@ public class SyncModel_AccountModel extends Database_BaseDataSource
 	}
 
 	/**
-	 * Sets info from db to the controller
-	 * @param cursor
-	 * @return accountBean
-	 */
-	public AccountBean cursorToAccount(Cursor cursor) {
-		AccountBean ab = new AccountBean();
-		ab.setId(cursor.getInt(getIndex("id",cursor)));       
-		ab.setEmail(cursor.getString(getIndex("email", cursor)));
-		ab.setPassword(cursor.getString(getIndex("password", cursor)));
-		ab.setUpdateTime(cursor.getString(getIndex("updateTime",cursor)));
-		return ab;
-	}
-
-	/**
-	 * Sets info from db to the controller
-	 * @param cursor
-	 * @return userBean
-	 */
-	public UserBean cursorToUser(Cursor cursor) {
-		UserBean ub = new UserBean();
-		ub.setId(cursor.getInt(getIndex("id",cursor)));       
-		ub.setName(cursor.getString(getIndex("name", cursor)));
-		ub.setBio(cursor.getString(getIndex("bio", cursor)));
-		ub.setCity(cursor.getString(getIndex("city", cursor)));
-		ub.setCountry(cursor.getString(getIndex("country", cursor)));
-		ub.setCookingInterest(cursor.getString(getIndex("cookingInterest", cursor)));
-		return ub;
-	}
-
-	/**
 	 * Create a json with the recently added account info to send to server
+	 * 
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
@@ -143,10 +115,9 @@ public class SyncModel_AccountModel extends Database_BaseDataSource
 		util.sendJSONToServer(jsonArray, false, "https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm1.aspx");
 	}
 
-
-
 	/**
 	 * Gets the json with it's sync info from the server
+	 * 
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
@@ -154,7 +125,6 @@ public class SyncModel_AccountModel extends Database_BaseDataSource
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
 
-		JSONArray jsonArray = new JSONArray();
 		JSONObject json;
 		String str = util.retrieveFromServer("https://zeno.computing.dundee.ac.uk/2014-projects/karimcmahon/wwwroot/WebForm2.aspx", sharedpreferences.getString("Date", "DEFAULT") , false);
 
@@ -187,6 +157,31 @@ public class SyncModel_AccountModel extends Database_BaseDataSource
 		}
 
 
+	}
+
+
+
+	/**
+	 * Gets	the users info after a datetime range
+	 * 
+	 * @return ArrayList<UserBean> 	List of users after this datetime range
+	 */
+	public ArrayList<UserBean> getUsers()
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
+		open();
+		ArrayList<UserBean> userList = new ArrayList<UserBean>();
+		Cursor cursor;
+		cursor = database.rawQuery("SELECT * FROM Users WHERE  updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")});
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				userList.add(cursorToUser(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return userList;
 	}
 
 }

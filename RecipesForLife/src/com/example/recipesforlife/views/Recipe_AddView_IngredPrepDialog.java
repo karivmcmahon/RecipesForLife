@@ -24,28 +24,23 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
+class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 
-	ActionBarActivity activity;
-	Context context;
-	String bookname, uniqueid = "";
-	Util utils;
+	private ActionBarActivity activity;
+	private Util utils;
 
 
-	public Recipe_AddView_IngredPrepDialog(ActionBarActivity activity, Context context, String uniqueid, String bookname)
+	Recipe_AddView_IngredPrepDialog(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
-		this.activity = activity;
-		this.context = context;
-		this.bookname = bookname;
-		this.uniqueid = uniqueid;
+		this.activity = activity;		
 		utils = new Util(context, activity);
 	}
 
 	/**
 	 * Setup ingredient add dialog with font and spinnner
 	 */
-	public void setUpIngredAddDialog()
+	void setUpIngredAddDialog()
 	{
 		recipeIngredDialog = utils.createDialog(activity,R.layout.recipe_add_dialog5);
 		utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
@@ -97,7 +92,7 @@ public class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 	/**
 	 * Set up step dialog with correct fonts
 	 */
-	public void setUpStepAddDialog()
+	void setUpStepAddDialog()
 	{
 		recipeAddStepDialog = utils.createDialog(activity, R.layout.recipe_add_dialog4);		
 		utils.setDialogText(R.id.stepNumView,recipeAddStepDialog,22);
@@ -121,7 +116,7 @@ public class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 	/**
 	 * Get information from step dialog
 	 */
-	public void getRecipeStep()
+	void getRecipeStep()
 	{
 		//Getting  data from the text boxes
 		TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
@@ -158,7 +153,7 @@ public class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 	/**
 	 * Get information from ingredient dialogs
 	 */
-	public void getIngredient()
+	void getIngredient()
 	{
 		//Getting text
 		String ingredient = utils.getTextFromDialog(R.id.ingredEditText, recipeIngredDialog);

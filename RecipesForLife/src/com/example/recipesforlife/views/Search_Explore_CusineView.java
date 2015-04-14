@@ -31,8 +31,8 @@ import com.example.recipesforlife.util.Util;
  */
 public class Search_Explore_CusineView extends ActionBarActivity {
 	
-	Navigation_DrawerCreation nav;
-	Util utils;
+	private Navigation_DrawerCreation nav;
+	private Util utils;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		utils.setText(R.id.exploreheader, 26);
 		utils.setText(R.id.exploreheadercont, 26);
 		
+		//Add cusines to spinner list
 		ArrayList<String> cusineSpinnerArray =  new ArrayList<String>();
 		cusineSpinnerArray.add("Italian");
 		cusineSpinnerArray.add("Indian");
@@ -78,10 +79,11 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		//makes spinner triangle white
 		sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
+		
+		//When spinner item clicked get results
 		sItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 		    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) { 
 		    	boolean empty = false;
-		        Log.v("SPINNER", "SPINNER" + sItems.getSelectedItem().toString());
 		        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 				final ArrayList<RecipeBean> rb = sm.selectRecipeByCuisine(sItems.getSelectedItem().toString());
 				ListView listView = (ListView) findViewById(R.id.list);
@@ -95,6 +97,7 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 				Search_RecipeAdapter recipeadapter = new Search_RecipeAdapter( getApplicationContext(), Search_Explore_CusineView.this,  rb);
 				listView.setAdapter(recipeadapter);
 				
+				//If the list is not empty then enable clicks on items to take them to results page
 				if(empty == false)
 				{
 					listView.setOnItemClickListener(new OnItemClickListener() {
@@ -116,18 +119,6 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		        return;
 		    } 
 		}); 
-	/**	SearchModel sm = new SearchModel(getApplicationContext());
-		final ArrayList<RecipeBean> rb = sm.selectRecipeByDiff(sItems.getSelectedItem().toString());
-		ListView listView = (ListView) findViewById(R.id.list);
-		if(rb.size() == 0)
-		{
-			RecipeBean recipebean = new RecipeBean();
-			recipebean.setName("empty");
-			rb.add(recipebean);
-			//empty = true;
-		}
-		CustomRecipeSearchAdapter recipeadapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
-		listView.setAdapter(recipeadapter); **/
 
 	}
 

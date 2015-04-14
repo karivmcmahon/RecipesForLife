@@ -1,17 +1,6 @@
 package com.example.recipesforlife.views;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.ImageBean;
-import com.example.recipesforlife.controllers.IngredientBean;
-import com.example.recipesforlife.controllers.PreperationBean;
-import com.example.recipesforlife.controllers.RecipeBean;
-import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
-import com.example.recipesforlife.models.ApplicationModel_RecipeModel;
-import com.example.recipesforlife.util.ImageLoader2;
-import com.example.recipesforlife.util.Util;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,10 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,26 +21,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.ImageBean;
+import com.example.recipesforlife.controllers.IngredientBean;
+import com.example.recipesforlife.controllers.PreperationBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.models.ApplicationModel_RecipeModel;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
+
 /**
  * This class contains a list of recipes relating to a cookbook
  * @author Kari
  *
  */
-public class Recipe_ListAdapter extends ArrayAdapter<String> {
+class Recipe_ListAdapter extends ArrayAdapter<String> {
 	private final Activity activity;
 	private ArrayList<String> recipenames;
 	private ArrayList<String> recipeids;
 	private ArrayList<byte[]> recipeimages;
 	String bookid;
-	public static final String emailk = "emailKey";
+	private static final String emailk = "emailKey";
 	public static final String MyPREFERENCES = "MyPrefs";
-	Context context;
-	Util utils;
-	ImageLoader2 imgload;
-	ApplicationModel_RecipeModel model;
-	boolean isCreator;
+	private Context context;
+	private Util utils;
+	private ImageLoader2 imgload;
+	private ApplicationModel_RecipeModel model;
+	
 
-	public Recipe_ListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages, String bookid)
+	Recipe_ListAdapter(Activity activity , ArrayList<String> recipenames, Context context, ArrayList<String> recipeids, ArrayList<byte[]> recipeimages, String bookid)
 	{
 		super(context, R.layout.recipe_listitem, recipenames);
 		this.activity = activity;
@@ -103,7 +98,6 @@ public class Recipe_ListAdapter extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						// TODO Auto-generated method stub
 						Intent i = new Intent(activity, Recipe_View.class);
 						i.putExtra("uniqueidr", recipeids.get(position));
 						i.putExtra("name", recipenames.get(position));

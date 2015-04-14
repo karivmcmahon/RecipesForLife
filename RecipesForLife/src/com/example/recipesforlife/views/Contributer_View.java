@@ -23,24 +23,25 @@ import com.example.recipesforlife.util.Util;
 
 /**
  * Displays the dialog showing a list of the cookbook contributers and the ability to add contributers
+ * 
  * @author Kari
  *
  */
-public class Contributer_View {
+class Contributer_View {
 
-	Context context;
-	Activity activity;
-	Util utils;
-	Cookbook_ListAdapter ccadapter;
-	int position;
-	public static final String emailk = "emailKey";
-	public static final String MyPREFERENCES = "MyPrefs";
-	Dialog addContribDialog, contribDialog;
-	TextView errorView;
-	ApplicationModel_CookbookModel model;
-	boolean isCreator = false;
+	private Context context;
+	private Activity activity;
+	private Util utils;
+	private Cookbook_ListAdapter ccadapter;
+	private int position;
+	private static final String emailk = "emailKey";
+	private static final String MyPREFERENCES = "MyPrefs";
+	private Dialog addContribDialog, contribDialog;
+	private TextView errorView;
+	private ApplicationModel_CookbookModel model;
+	private boolean isCreator = false;
 
-	public Contributer_View(Context context, Activity activity, Cookbook_ListAdapter adapter, int position)
+	Contributer_View(Context context, Activity activity, Cookbook_ListAdapter adapter, int position)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -53,7 +54,7 @@ public class Contributer_View {
 	/**
 	 * Handles the contributer dialog style depending whether they are a cookbook owner or just a contributor
 	 */
-	public void manageContribs()
+	void manageContribs()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 

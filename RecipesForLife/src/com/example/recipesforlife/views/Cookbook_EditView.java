@@ -33,25 +33,25 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Cookbook_EditView  {
+class Cookbook_EditView  {
 
-	Context context;
-	Activity activity;
-	Util utils;
-	Cookbook_ListAdapter ccadapter;
-	int position;
-	public static final String emailk = "emailKey";
-	public static final String MyPREFERENCES = "MyPrefs";
-	Dialog editDialog;
-	TextView errorView;
-	ApplicationModel_CookbookModel model;
-	ArrayList<CookbookBean> cookbook;
-	byte[] byteArray;
-	String uid;
-	Spinner spinner;
+	private Context context;
+	private Activity activity;
+	private Util utils;
+	private Cookbook_ListAdapter ccadapter;
+	private int position;
+	private static final String emailk = "emailKey";
+	private static final String MyPREFERENCES = "MyPrefs";
+	private Dialog editDialog;
+	private TextView errorView;
+	private ApplicationModel_CookbookModel model;
+	private ArrayList<CookbookBean> cookbook;
+	private byte[] byteArray;
+	private String uid;
+	private Spinner spinner;
 	private static final int SELECT_PHOTO = 101;
 
-	public Cookbook_EditView(Context context, Activity activity, Cookbook_ListAdapter adapter, int position)
+	Cookbook_EditView(Context context, Activity activity, Cookbook_ListAdapter adapter, int position)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -63,7 +63,7 @@ public class Cookbook_EditView  {
 	/**
 	 * Sets up the edit book dialog and enables user to edit the cookbook
 	 */
-	public void editBook()
+	void editBook()
 	{
 		editDialog = utils.createDialog(activity, R.layout.cookbook_editdialog);
 		errorView = (TextView) editDialog.findViewById(R.id.errorView);
@@ -225,7 +225,7 @@ public class Cookbook_EditView  {
 	 * @param resultCode
 	 * @param imageReturnedIntent
 	 */
-	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
+	void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 
 		switch(requestCode) { 

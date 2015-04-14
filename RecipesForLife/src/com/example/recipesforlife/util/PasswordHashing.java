@@ -15,16 +15,16 @@ import javax.crypto.spec.PBEKeySpec;
  */
 public class PasswordHashing
 {
-	public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
+	private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 
 	// The following constants may be changed without breaking existing hashes.
-	public static final int SALT_BYTE_SIZE = 24;
-	public static final int HASH_BYTE_SIZE = 24;
-	public static final int PBKDF2_ITERATIONS = 1000;
+	private static final int SALT_BYTE_SIZE = 24;
+	private static final int HASH_BYTE_SIZE = 24;
+	private static final int PBKDF2_ITERATIONS = 1000;
 
-	public static final int ITERATION_INDEX = 0;
-	public static final int SALT_INDEX = 1;
-	public static final int PBKDF2_INDEX = 2;
+	private static final int ITERATION_INDEX = 0;
+	private static final int SALT_INDEX = 1;
+	private static final int PBKDF2_INDEX = 2;
 
 	/**
 	 * Returns a salted PBKDF2 hash of the password.
@@ -43,7 +43,7 @@ public class PasswordHashing
 	 * @param   password    the password to hash
 	 * @return              a salted PBKDF2 hash of the password
 	 */
-	public static String createHash(char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException
+	private static String createHash(char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		// Generate a random salt
 		SecureRandom random = new SecureRandom();
@@ -75,7 +75,7 @@ public class PasswordHashing
 	 * @param   correctHash     the hash of the valid password
 	 * @return                  true if the password is correct, false if not
 	 */
-	public static boolean validatePassword(char[] password, String correctHash)	throws NoSuchAlgorithmException, InvalidKeySpecException
+	private static boolean validatePassword(char[] password, String correctHash)	throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		// Decode the hash into its parameters
 		String[] params = correctHash.split(":");

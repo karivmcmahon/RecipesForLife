@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,26 +12,21 @@ import android.database.SQLException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
@@ -48,23 +42,22 @@ import com.example.recipesforlife.util.Util;
  *
  */
 public class Recipe_ShelfListView extends ActionBarActivity {
-	Util utils;	
-	ListView listView;
-	String type, uniqueid = "";
-	ArrayList<RecipeBean> recipeList;
-	ApplicationModel_CookbookModel model;
-	ApplicationModel_RecipeModel rmodel;
-	public static Recipe_ListAdapter adapter;
-	Navigation_DrawerCreation nav;
-	public static final String MyPREFERENCES = "MyPrefs";
-	public static final String emailk = "emailKey"; 
-	public static final String pass = "passwordKey"; 
-	public static ArrayList<String> recipeids, recipeimagesid, recipenames;
-	public static ArrayList<byte[]> recipeimages;
-	Recipe_AddView add;
-	ArrayList<RecipeBean> rbList;
-    Dialog cloneDialog;
-    TextView errorView;
+	private Util utils;	
+	private ListView listView;
+	private String uniqueid = "";
+	private ArrayList<RecipeBean> recipeList;
+	private ApplicationModel_CookbookModel model;
+	private ApplicationModel_RecipeModel rmodel;
+	static Recipe_ListAdapter adapter;
+	private Navigation_DrawerCreation nav;
+	private static final String MyPREFERENCES = "MyPrefs";
+	private static final String emailk = "emailKey";  
+	static ArrayList<String> recipeids,  recipenames;
+	static ArrayList<byte[]> recipeimages;
+	private Recipe_AddView add;
+	private ArrayList<RecipeBean> rbList;
+    private Dialog cloneDialog;
+    private TextView errorView;
 
 
 
@@ -83,7 +76,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		Intent intent = getIntent();
 		//gets details from intent
 		uniqueid = intent.getStringExtra("uniqueid");
-		type = intent.getStringExtra("type");
+	
 		String bookname = intent.getStringExtra("bookname");
 
 		//Sets up the navigation drawer
@@ -241,7 +234,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 	/**
 	 * Creates the clone dialog - to clone recipes into cookbook
 	 */
-	public void createCloneDialog()
+	private void createCloneDialog()
 	{
 		//creates clone style
 		cloneDialog = utils.createDialog(Recipe_ShelfListView.this , R.layout.recipe_clone);
@@ -294,6 +287,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 					{
 						//clone recipe
 						String uid = model.insertRecipe(rbList.get(namepos), false, ingredList, prepList, imgBean);
+						
 						//Add to list
 						recipenames.add(0, rbList.get(namepos).getName());
 						recipeids.add(0,  uid);
@@ -318,7 +312,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 	 * Fills spinner for cloning
 	 * @return filled spinner
 	 */
-	public Spinner fillSpinner()
+	private Spinner fillSpinner()
 	{
 		//Fill with a list of recipes the user owns
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -339,7 +333,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 	/**
 	 * Set up a clone dialog style
 	 */
-	public void setCloneDialogStyle()
+	private void setCloneDialogStyle()
 	{
 		utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
 		utils.setDialogText(R.id.currentRecipesView,cloneDialog,22);

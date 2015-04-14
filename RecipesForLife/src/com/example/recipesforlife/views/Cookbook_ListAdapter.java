@@ -1,7 +1,6 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
-import android.graphics.Color;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,16 +17,12 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.models.ApplicationModel_AccountModel;
 import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
@@ -41,26 +34,27 @@ import com.example.recipesforlife.util.Util;
  */
 public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	private final Activity activity;
-	public ArrayList<String> booknames, bookids;
-	public  ArrayList<byte[]> bookimages;
-	public static final String emailk = "emailKey";
-	public static final String MyPREFERENCES = "MyPrefs";
-	Context context;
-	Util utils;
+    ArrayList<String> booknames, bookids;
+	private  ArrayList<byte[]> bookimages;
+	private static final String emailk = "emailKey";
+	private static final String MyPREFERENCES = "MyPrefs";
+	private Context context;
+	private Util utils;
 	Contributer_ListAdapter adapter2;
-	boolean isCreator = false;
-	ApplicationModel_CookbookModel model;
-	ImageLoader2 imgload;
-	Cookbook_EditView edit;
+	private boolean isCreator = false;
+	private ApplicationModel_CookbookModel model;
+	private ImageLoader2 imgload;
+	private Cookbook_EditView edit;
 
 	/** 
 	 * Gets list data
 	 * @param activity
-	 * @param users
+	 * @param booknames			List of book names to be displayed in listview
 	 * @param context
-	 * @param cookbookuid
+	 * @param bookids			List of book ids to be displayed in listview
+	 * @param bookimages		List of book images to be displayed in listview
 	 */
-	public Cookbook_ListAdapter(Activity activity , ArrayList<String> booknames, Context context, ArrayList<String> bookids, ArrayList<byte[]> bookimages)
+	Cookbook_ListAdapter(Activity activity , ArrayList<String> booknames, Context context, ArrayList<String> bookids, ArrayList<byte[]> bookimages)
 	{
 		super(context, R.layout.contributers_listitem, booknames);
 		this.activity = activity;
@@ -78,6 +72,7 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	@Override
 	/**
 	 * Adapts list data 
+	 * 
 	 * @return View with adapted data
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
@@ -126,7 +121,6 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 
 					@Override
 					public boolean onTouch(View arg0, MotionEvent arg1) {
-						// TODO Auto-generated method stub
 						if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 						{
 							//Show edit dialog
@@ -143,7 +137,6 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 
 				@Override
 				public boolean onTouch(View arg0, MotionEvent arg1) {
-					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
 						//Show contrib dialog
@@ -162,7 +155,6 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 
 				@Override
 				public boolean onTouch(View arg0, MotionEvent arg1) {
-					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
 						Intent i = new Intent(activity, Recipe_ShelfListView.class);
@@ -212,7 +204,7 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	 * Displays the dialog and handles user interaction for deleting cookbook
 	 * @param position
 	 */
-	private void deleteCookbookDialog(final int position)
+	void deleteCookbookDialog(final int position)
 	{
 		final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
 		utils.setDialogText(R.id.textView, dialog, 18);

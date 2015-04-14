@@ -4,37 +4,36 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.RecipeBean;
-import com.example.recipesforlife.util.ImageLoader2;
-import com.example.recipesforlife.util.Util;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.util.ImageLoader2;
+import com.example.recipesforlife.util.Util;
 
 /**
  * This class handles the layout adapting of recipes for search results
  * @author Kari
  *
  */
-public class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
+class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 
 	private final Activity activity;
-	Context context;
-	Util utils;
-	ArrayList<RecipeBean> rb;
-	ImageLoader2 imgload;
-	public Search_RecipeAdapter(Context context, Activity activity, ArrayList<RecipeBean> recipebean) {
+	private Context context;
+	private Util utils;
+	private ArrayList<RecipeBean> rb;
+	private ImageLoader2 imgload;
+	
+	Search_RecipeAdapter(Context context, Activity activity, ArrayList<RecipeBean> recipebean) {
 		super(context, R.layout.search_recipeview, recipebean);
 		this.activity = activity;
 		this.context = context;
@@ -44,6 +43,7 @@ public class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 		utils = new Util(this.context, activity);
 	}
 
+	@SuppressLint({ "InflateParams", "SimpleDateFormat" })
 	@SuppressWarnings("deprecation")
 	@Override
 	/**
@@ -104,11 +104,12 @@ public class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 	
 	/**
 	 * Set the layout with correct styles and data thats being adapated
+	 * 
 	 * @param rowView
-	 * @param position - position of list
-	 * @return rowView - updated rowView
+	 * @param position   Position of list
+	 * @return rowView   Updated rowView
 	 */
-	public View setListStyle(View rowView, int position)
+	private View setListStyle(View rowView, int position)
 	{
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.recipeName);
 		txtTitle.setText(rb.get(position).getName());

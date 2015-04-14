@@ -2,18 +2,15 @@ package com.example.recipesforlife.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
-import com.example.recipesforlife.controllers.ImageBean;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+
+import com.example.recipesforlife.controllers.ImageBean;
 
 /**
  * Handles the loading of single images
@@ -21,10 +18,7 @@ import android.widget.ImageView;
  *
  */
 public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
-
-
 	private Context context;
-	private InputStream in;
 	private ImageBean imgbean;
 	private final WeakReference imageViewReference;
 
@@ -79,7 +73,8 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	 * @return Changed bitmap
 	 * @throws FileNotFoundException
 	 */
-	public static Bitmap decodeSampledBitmapFromResource(Context context, ByteArrayInputStream imageStream,
+	@SuppressWarnings("deprecation")
+	private static Bitmap decodeSampledBitmapFromResource(Context context, ByteArrayInputStream imageStream,
 			int reqWidth, int reqHeight) 
 					throws FileNotFoundException {
 
@@ -100,7 +95,7 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 	 * @param reqHeight
 	 * @return int - sample size
 	 */
-	public static int calculateInSampleSize(
+	private static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) 
 	{
 		// Raw height and width of image

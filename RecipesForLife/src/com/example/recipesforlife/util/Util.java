@@ -6,18 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.UUID;
-import java.util.logging.Logger;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.annotation.SuppressLint;
@@ -29,7 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,12 +40,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.recipesforlife.R;
+import com.example.recipesforlife.models.SyncModel_AccountModel;
 import com.example.recipesforlife.models.SyncModel_ContributersModel;
 import com.example.recipesforlife.models.SyncModel_CookbookModel;
-import com.example.recipesforlife.models.SyncModel_AccountModel;
 import com.example.recipesforlife.models.SyncModel_RecipeDetailsModel;
 import com.example.recipesforlife.models.SyncModel_RecipeModel;
 import com.example.recipesforlife.models.SyncModel_ReviewModel;
@@ -70,20 +57,19 @@ import com.example.recipesforlife.views.Account_SignUpSignInView;
  */
 public class Util  {
 
-	Context context;
-	Typeface typeFace;
-	Activity activity;
-	Editor editor;
-	public static final String MyPREFERENCES = "MyPrefs";
+	private Context context;
+	private Typeface typeFace;
+	private Activity activity;
+	private Editor editor;
 	private SharedPreferences sharedpreferences;
-	public static final String emailk = "emailKey"; 
-	public static final String pass = "passwordKey"; 
-	SyncModel_AccountModel sync;
-	SyncModel_RecipeModel syncRecipe;
-	SyncModel_CookbookModel syncCookbook;
-	SyncModel_ContributersModel syncContributer;
-	SyncModel_ReviewModel syncReview;
-	SyncModel_RecipeDetailsModel syncRecipeDetails;
+	 
+	 
+	private SyncModel_AccountModel sync;
+	private SyncModel_RecipeModel syncRecipe;
+	private SyncModel_CookbookModel syncCookbook;
+	private SyncModel_ContributersModel syncContributer;
+	private SyncModel_ReviewModel syncReview;
+	private SyncModel_RecipeDetailsModel syncRecipeDetails;
 
 
 	public Util(Context context, Activity activity)
@@ -98,7 +84,7 @@ public class Util  {
 	 * @param context
 	 * @return if there is return true else return false
 	 */
-	public boolean checkInternetConnection(Context context) {
+	private boolean checkInternetConnection(Context context) {
 		ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable()
 				&& conMgr.getActiveNetworkInfo().isConnected()) {
@@ -114,7 +100,7 @@ public class Util  {
 	 * @return string with date
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public String dateToString(Date date, boolean inappstring) {
+	private String dateToString(Date date, boolean inappstring) {
 		SimpleDateFormat formatter;
 
 		TimeZone tz = TimeZone.getTimeZone("Europe/London");   
@@ -326,7 +312,6 @@ public class Util  {
 			@SuppressLint("NewApi")
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
 				if(arg1.getAction()  == MotionEvent.ACTION_DOWN)
 				{
 					// Instantiating TimePickerDialogFragment 
@@ -353,7 +338,7 @@ public class Util  {
 	/**
 	 * Code to sync the databases
 	 */
-	public String sync()
+	String sync()
 	{
 		if(checkInternetConnection(context) == true)
 		{
@@ -413,7 +398,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void accountInsertsSync() throws JSONException, IOException, SQLiteException
+	private void accountInsertsSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -441,7 +426,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void cookbookInsertsSync() throws JSONException, IOException, SQLiteException
+	private void cookbookInsertsSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -469,7 +454,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void recipeInsertsSync() throws JSONException, IOException, SQLiteException
+	private void recipeInsertsSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -497,7 +482,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void recipeDetailsInsertsSync() throws JSONException, IOException, SQLiteException
+	private void recipeDetailsInsertsSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -526,7 +511,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void contributorsInsertsSync() throws JSONException, IOException, SQLiteException
+	private void contributorsInsertsSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -554,7 +539,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void reviewInsertsSync() throws JSONException, IOException, SQLiteException
+	private void reviewInsertsSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -582,7 +567,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void recipeUpdatesSync() throws JSONException, IOException, SQLiteException
+	private void recipeUpdatesSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -610,7 +595,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void cookbookUpdatesSync() throws JSONException, IOException, SQLiteException
+	private void cookbookUpdatesSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{
@@ -638,7 +623,7 @@ public class Util  {
 	 * @throws IOException
 	 * @throws SQLiteException
 	 */
-	public void contributorUpdatesSync() throws JSONException, IOException, SQLiteException
+	private void contributorUpdatesSync() throws JSONException, IOException, SQLiteException
 	{
 		try
 		{

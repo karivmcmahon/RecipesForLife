@@ -11,22 +11,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.util.Base64;
 import android.util.Log;
 
-import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
-import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
-	Context context;
-	ApplicationModel_RecipeModel rm;
-	Utility util;
-	String recipeingredid = "";
-	String recipeprepid = "";
+	private Context context;
+	private ApplicationModel_RecipeModel rm;
+	private Utility util;
+	private String recipeingredid = "";
+	private String recipeprepid = "";
 
 
 	public SyncModel_RecipeDetailsModel(Context context) {
@@ -34,72 +31,18 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 		this.context = context;
 		util = new Utility();
 		rm = new ApplicationModel_RecipeModel(context);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	
 
 	/**
-	 * Get ingredients for recipes based on recipe id 
-	 * @param id
-	 * @return ArrayList<IngredientBean>
-	 */
-	public ArrayList<IngredientBean> getIngred()
-	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
-		open();
-		ArrayList<IngredientBean> ingredientList = new ArrayList<IngredientBean>();
-		Cursor cursor = database.rawQuery("SELECT ingredientDetailsId, Recipeid From RecipeIngredient WHERE   updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?) ", new String[] {    sharedpreferences.getString("Date", "DEFAULT") });
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
-				int id = cursor.getInt(getIndex("Recipeid", cursor));
-				Log.v("REC ID ", "REC ID " + id);
-				recipeingredid =  rm.selectRecipeByID(id);
-				Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE  id = ?", new String[] {  Integer.toString(detsId) });
-				if (cursor2 != null && cursor2.getCount() > 0) {
-					for (int x = 0; x < cursor2.getCount(); x++) {
-						cursor2.moveToPosition(x);
-						ingredientList.add(cursorToIngredientDetails(cursor2));
-					}
-				}
-				cursor2.close();
-			}
-		}
-		cursor.close();
-		close();
-		return ingredientList;
-	}
-
-	/**
-	 * Retrieves name of ingredient based on id then returns name
-	 * @param id
-	 * @return name
-	 */
-	public String getIngredName(int id)
-	{
-		open();
-		String name = null;
-		Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  id = ? ", new String[] {   Integer.toString(id) });
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				name = cursor.getString(getIndex("name", cursor));
-
-			}
-		}
-		cursor.close();
-		close();
-		return name;
-	}
-
-	/**
 	 * Sets the ingredient data from the database to ingredientbean
-	 * @param cursor
-	 * @return recipeBean
+	 * 
+	 * @param cursor			Query results
+	 * @return IngreientBean	Stores query results
 	 */
-	public IngredientBean cursorToIngredientDetails(Cursor cursor)
+	private IngredientBean cursorToIngredientDetails(Cursor cursor)
 	{
 		IngredientBean ib = new IngredientBean();
 		ib.setAmount(cursor.getInt(getIndex("amount", cursor)));
@@ -113,45 +56,12 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Gets preperation information based on recipe id
-	 * @param id
-	 * @return ArrayList<preperationBean>
-	 */
-	public ArrayList<PreperationBean> getPrep()
-	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
-		open();
-		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
-		Cursor cursor = database.rawQuery("SELECT Preperationid, recipeId FROM PrepRecipe WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?) ", new String[] {    sharedpreferences.getString("Date", "DEFAULT") });
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				int prepid = cursor.getInt(getIndex("Preperationid", cursor));
-				int id = cursor.getInt(getIndex("recipeId", cursor));
-				recipeprepid = rm.selectRecipeByID(id);
-				Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE  id = ?", new String[] {  Integer.toString(prepid) });
-				if (cursor2 != null && cursor2.getCount() > 0) {
-					for (int x = 0; x < cursor2.getCount(); x++) {
-						cursor2.moveToPosition(x);
-						prepList.add(cursorToPreperation(cursor2));
-					}
-				}
-				cursor2.close();
-			}
-
-		}
-		cursor.close();
-		close();
-
-		return prepList;
-	}
-
-	/**
 	 * Set preperation bean data based on database
-	 * @param cursor
-	 * @return preperationBean
+	 * 
+	 * @param cursor				Query results
+	 * @return preperationBean		Store query results
 	 */
-	public PreperationBean cursorToPreperation(Cursor cursor)
+	private PreperationBean cursorToPreperation(Cursor cursor)
 	{
 		PreperationBean pb = new PreperationBean();
 		pb.setPreperation(cursor.getString(getIndex("instruction", cursor)));
@@ -164,7 +74,8 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 
 	/**
 	 * Builds a json with all the recipe data to send to the server
-	 * @param update - whether its for update or insert
+	 * 
+	 * @param update 			Whether its for update or insert
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
@@ -268,6 +179,68 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 		
 	}
 
+	/**
+	 * Get ingredients for recipes
+	 * 
+	 * @return ArrayList<IngredientBean>	List of ingredients
+	 */
+	public ArrayList<IngredientBean> getIngred()
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
+		open();
+		ArrayList<IngredientBean> ingredientList = new ArrayList<IngredientBean>();
+		Cursor cursor = database.rawQuery("SELECT ingredientDetailsId, Recipeid From RecipeIngredient WHERE   updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?) ", new String[] {    sharedpreferences.getString("Date", "DEFAULT") });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
+				int id = cursor.getInt(getIndex("Recipeid", cursor));
+				Log.v("REC ID ", "REC ID " + id);
+				recipeingredid =  rm.selectRecipeByID(id);
+				Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE  id = ?", new String[] {  Integer.toString(detsId) });
+				if (cursor2 != null && cursor2.getCount() > 0) {
+					for (int x = 0; x < cursor2.getCount(); x++) {
+						cursor2.moveToPosition(x);
+						ingredientList.add(cursorToIngredientDetails(cursor2));
+					}
+				}
+				cursor2.close();
+			}
+		}
+		cursor.close();
+		close();
+		return ingredientList;
+	}
+
+	/**
+	 * Retrieves name of ingredient based on id then returns name
+	 * 
+	 * @param id		ingredient id
+	 * @return name		ingredient name
+	 */	
+	private String getIngredName(int id)
+	{
+		open();
+		String name = null;
+		Cursor cursor = database.rawQuery("SELECT name From Ingredient WHERE  id = ? ", new String[] {   Integer.toString(id) });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				name = cursor.getString(getIndex("name", cursor));
+
+			}
+		}
+		cursor.close();
+		close();
+		return name;
+	}
+
+	/**
+	 * Gets JSON from server and inserts the details
+	 * 
+	 * @throws JSONException
+	 * @throws IOException
+	 */
 	public void getJSONFromServer() throws JSONException, IOException
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
@@ -348,6 +321,40 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 
 
 
+	}
+
+	/**
+	 * Gets preperation information 
+	 * 
+	 * @return ArrayList<preperationBean>		List of prep details
+	 */
+	public ArrayList<PreperationBean> getPrep()
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
+		open();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+		Cursor cursor = database.rawQuery("SELECT Preperationid, recipeId FROM PrepRecipe WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?) ", new String[] {    sharedpreferences.getString("Date", "DEFAULT") });
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				int prepid = cursor.getInt(getIndex("Preperationid", cursor));
+				int id = cursor.getInt(getIndex("recipeId", cursor));
+				recipeprepid = rm.selectRecipeByID(id);
+				Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE  id = ?", new String[] {  Integer.toString(prepid) });
+				if (cursor2 != null && cursor2.getCount() > 0) {
+					for (int x = 0; x < cursor2.getCount(); x++) {
+						cursor2.moveToPosition(x);
+						prepList.add(cursorToPreperation(cursor2));
+					}
+				}
+				cursor2.close();
+			}
+
+		}
+		cursor.close();
+		close();
+
+		return prepList;
 	}
 
 

@@ -3,17 +3,14 @@ package com.example.recipesforlife.util;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
 import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.views.Cookbook_ShelfListView;
-import com.example.recipesforlife.views.Account_SignUpSignInView;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * This class enables the sync to be done in the background
@@ -24,13 +21,11 @@ import android.widget.Toast;
 public class PostTask extends AsyncTask<Void, Void, String> 
 {
 
-	Util utils;
-	Intent i;
-	Context context;
-	String response = "";
-	boolean cookbook = false;
-	public static final String MyPREFERENCES = "MyPrefs";
-	public static final String emailk = "emailKey";
+	private Util utils;
+	private Context context;
+	private boolean cookbook = false;
+	private static final String MyPREFERENCES = "MyPrefs";
+	private static final String emailk = "emailKey";
 	
 	public PostTask(Util  utils, Context context, boolean cookbook)
 	{
@@ -44,7 +39,6 @@ public class PostTask extends AsyncTask<Void, Void, String>
 	//The sync works in the background
 	public String doInBackground(Void... arg0 ) {
 		String message = utils.sync();
-		response = message;	
 		return message;
 	}
 

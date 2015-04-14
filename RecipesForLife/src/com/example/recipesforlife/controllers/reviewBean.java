@@ -7,11 +7,11 @@ package com.example.recipesforlife.controllers;
  */
 public class ReviewBean {
 
-	String comment; //the review comment
-	String user; //who the review is by
-	int recipeid; //row id of recipe in db
-	String recipeuniqueid; //recipe the review relates to - unique id
-	String updateTime; //time review was added
+	private String comment; 		//the review comment
+	private String user; 			//who the review is by
+	private int recipeid; 			//row id of recipe in db
+	private String recipeuniqueid; 	//recipe the review relates to - unique id
+	private String updateTime; 		//time review was added
 
 	public String getUpdateTime() {
 		return updateTime;

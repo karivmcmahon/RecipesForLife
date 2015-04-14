@@ -2,30 +2,15 @@ package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
 
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.controllers.RecipeBean;
-import com.example.recipesforlife.controllers.UserBean;
-import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
-import com.example.recipesforlife.models.ApplicationModel_SearchModel;
-import com.example.recipesforlife.util.SampleRecentSuggestionsProvider;
-import com.example.recipesforlife.util.TypefaceSpan;
-import com.example.recipesforlife.util.Util;
-
-import android.app.Activity;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.SearchRecentSuggestions;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,15 +19,24 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.controllers.CookbookBean;
+import com.example.recipesforlife.controllers.RecipeBean;
+import com.example.recipesforlife.controllers.UserBean;
+import com.example.recipesforlife.models.ApplicationModel_SearchModel;
+import com.example.recipesforlife.util.SampleRecentSuggestionsProvider;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
+
 /**
- * Class to handle retreving and displaying search results
+ * Class to handle retrieving and displaying search results
  * @author Kari
  *
  */
 public class Search_ResultsView extends ActionBarActivity {
 
-	Navigation_DrawerCreation nav;
-	Util utils;
+	private Navigation_DrawerCreation nav;
+	private Util utils;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +46,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		setContentView(R.layout.search_listview);
 
 		utils = new Util(getApplicationContext(), this);
-		
+
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_ResultsView.this, "Search");
 		nav.createDrawer();
@@ -108,6 +102,11 @@ public class Search_ResultsView extends ActionBarActivity {
 		handleIntent(intent);
 	}
 
+	/**
+	 * Handles the search intent
+	 * 
+	 * @param intent
+	 */
 	private void handleIntent(Intent intent) {
 
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -138,10 +137,11 @@ public class Search_ResultsView extends ActionBarActivity {
 
 	/**
 	 * Gets users based on the search query and places them in listview
-	 * @param query - string search
-	 * @param ub - list of users retrieved from database
+	 * 
+	 * @param query		What the user searched for
+	 * @param ub		List of users retrieved from db
 	 */
-	public void getUsersBasedOnQuery(String query, final ArrayList<UserBean> ub)
+	private void getUsersBasedOnQuery(String query, final ArrayList<UserBean> ub)
 	{
 		TextView usertv = (TextView) findViewById(R.id.userheader);
 		usertv.setText("Accounts that feature '" + query + "' :");
@@ -158,16 +158,17 @@ public class Search_ResultsView extends ActionBarActivity {
 
 	/**
 	 * Gets cookbooks based on search query and places them in listview
-	 * @param query - string seach
-	 * @param cb - list of cookbooks retrieved from database
+	 * 
+	 * @param query		What the user searched for
+	 * @param cb 		List of cookbooks retrieved from db
 	 */
-	public void getCookbooksBasedOnQuery(String query, final ArrayList<CookbookBean> cb)
+	private void getCookbooksBasedOnQuery(String query, final ArrayList<CookbookBean> cb)
 	{
 		boolean empty = false;
 		TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
 		cookbooktv.setText("Cookbooks that feature '" + query + "' :");
 		ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
-		
+
 		//If empty show no results
 		if(cb.size() == 0)
 		{
@@ -182,29 +183,30 @@ public class Search_ResultsView extends ActionBarActivity {
 		if(empty == false)
 		{
 			//Enables clicks to take you to the recipe list view
-		cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				Intent i = new Intent(Search_ResultsView.this, Recipe_ShelfListView.class);
-				//intents used on getting the recipes		
-				i.putExtra("uniqueid", cb.get(position).getUniqueid());
-				i.putExtra("type", "view");
-				i.putExtra("bookname", cb.get(position).getName());
-				startActivity(i);
+			cookbooklistView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					Intent i = new Intent(Search_ResultsView.this, Recipe_ShelfListView.class);
+					//intents used on getting the recipes		
+					i.putExtra("uniqueid", cb.get(position).getUniqueid());
+					i.putExtra("type", "view");
+					i.putExtra("bookname", cb.get(position).getName());
+					startActivity(i);
 
-			}                 
-		});
+				}                 
+			});
 		}
 	}
 
 	/**
 	 * Gets recipes based on the search query and places them in a listview
-	 * @param query - search query string
-	 * @param rb -list of recipe beans
+	 * 
+	 * @param query 	What the user searched for
+	 * @param rb 		List of recipes found from the search
 	 */
-	public void getRecipesBasedOnQuery(String query, final ArrayList<RecipeBean> rb)
+	private void getRecipesBasedOnQuery(String query, final ArrayList<RecipeBean> rb)
 	{
 		boolean empty = false;
 		TextView tv = (TextView) findViewById(R.id.recipeheader);

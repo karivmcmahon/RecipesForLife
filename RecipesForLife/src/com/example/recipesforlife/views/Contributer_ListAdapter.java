@@ -1,7 +1,7 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.util.Util;
@@ -27,22 +26,22 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Contributer_ListAdapter extends ArrayAdapter<String>{
+class Contributer_ListAdapter extends ArrayAdapter<String>{
 	private final Activity activity;
 	private final ArrayList<String> users;
-	Context context;
-	String cookbookuid;
-	boolean isCreator;
-	Util utils;
+	private Context context;
+	private String cookbookuid;
+	private boolean isCreator;
+	private Util utils;
 
 	/** 
 	 * Gets list data
-	 * @param activity
-	 * @param users
+	 * @param activity 
+	 * @param users			List of users
 	 * @param context
-	 * @param cookbookuid
+	 * @param cookbookuid	Cookbook that contains the contributers
 	 */
-	public Contributer_ListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid, boolean isCreator)
+	Contributer_ListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid, boolean isCreator)
 	{
 		super(context, R.layout.contributers_listitem, users);
 		this.activity = activity;
@@ -54,9 +53,11 @@ public class Contributer_ListAdapter extends ArrayAdapter<String>{
 
 	}
 
+	@SuppressLint("ViewHolder")
 	@Override
 	/**
 	 * Adapts list data to a view
+	 * 
 	 * @return Return the adapted view
 	 */
 	public View getView(final int position, View view, ViewGroup parent) 
@@ -96,7 +97,8 @@ public class Contributer_ListAdapter extends ArrayAdapter<String>{
 
 	/**
 	 * Displays a delete contributor dialog and handles user actions
-	 * @param position - position in list
+	 * 
+	 * @param position 	position in list
 	 */
 	private void deleteContribDialog(final int position)
 	{

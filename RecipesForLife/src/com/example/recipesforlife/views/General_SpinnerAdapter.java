@@ -1,42 +1,43 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.example.recipesforlife.R;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.example.recipesforlife.R;
 
 
 /**
  * Creates a view for a general spinner item
+ * 
  * @author Kari
  *
  */
-public class General_SpinnerAdapter extends ArrayAdapter<String> {
-	Context context;
-	ArrayList<String> items;
-	Activity activity;
-	public General_SpinnerAdapter(Context context, Activity activity, int resource, ArrayList<String> items) {
+class General_SpinnerAdapter extends ArrayAdapter<String> {
+	private Context context;
+	private ArrayList<String> items;
+	private Activity activity;
+	
+	General_SpinnerAdapter(Context context, Activity activity, int resource, ArrayList<String> items) {
 		super(context,R.layout.general_spinner_item2, items);
 		this.context = context;
 		this.activity = activity;
 		this.items = items;
 	}
 
+	@SuppressLint("ViewHolder")
 	@Override
 	/**
 	 * Adapts list data 
-	 * return View that was adapted
+	 * 
+	 * @return View that was adapted
 	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = activity.getLayoutInflater();
@@ -51,6 +52,7 @@ public class General_SpinnerAdapter extends ArrayAdapter<String> {
 
 	/**
 	 * Create a view for the drop down list
+	 * 
 	 * @return View that was adapted for drop down list
 	 */
 	public View getDropDownView(int position,  View convertView,  ViewGroup parent) {

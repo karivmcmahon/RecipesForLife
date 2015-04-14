@@ -2,11 +2,6 @@ package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
 
-import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.UserBean;
-import com.example.recipesforlife.util.TypefaceSpan;
-import com.example.recipesforlife.util.Util;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -22,6 +17,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.recipesforlife.R;
+import com.example.recipesforlife.util.TypefaceSpan;
+import com.example.recipesforlife.util.Util;
+
 /**
  * Activity which handles the explore view
  * @author Kari
@@ -29,8 +28,8 @@ import android.widget.TextView;
  */
 public class Search_ExploreView  extends ActionBarActivity {
 	
-	Navigation_DrawerCreation nav;
-	Util utils;
+	private Navigation_DrawerCreation nav;
+	private Util utils;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,7 @@ public class Search_ExploreView  extends ActionBarActivity {
 		setContentView(R.layout.explore_listview);
 
 		utils = new Util(getApplicationContext(), this);
+		
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_ExploreView.this, "Explore");
 		nav.createDrawer();
@@ -68,24 +68,28 @@ public class Search_ExploreView  extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
+				
 				if(position == 0)
 				{
+					//Searches recipe by difficulty
 					Intent i = new Intent(Search_ExploreView.this, Search_Explore_DifficultyView.class);
 					startActivity(i);
 				}
 				if(position == 1)
 				{
+					//Searches recipes by cusine
 					Intent i = new Intent(Search_ExploreView.this, Search_Explore_CusineView.class);
 					startActivity(i);
 				}
 				if(position == 2)
 				{
+					//Searches recipes by dietary
 					Intent i = new Intent(Search_ExploreView.this, Search_Explore_DietaryView.class);
 					startActivity(i);
 				}
 				if(position == 3)
 				{
+					//Searches recipes by cookbook
 					Intent i = new Intent(Search_ExploreView.this, Search_Explore_CookbookView.class);
 					startActivity(i);
 				}

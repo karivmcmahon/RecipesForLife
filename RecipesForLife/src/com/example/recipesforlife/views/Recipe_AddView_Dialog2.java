@@ -21,16 +21,16 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_AddView_Dialog2  extends Recipe_AddView {
+class Recipe_AddView_Dialog2  extends Recipe_AddView {
 
-	ActionBarActivity activity;
-	Context context;
-	String bookname, uniqueid = "";
-	Util utils;
+	private ActionBarActivity activity;
+	private Context context;
+	private String bookname, uniqueid = "";
+	private Util utils;
 
 
 	//Handles message from time dialog 1 - preptime
-	static Handler mHandler = new Handler(){
+	private static Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message m){
 			//Bundle retrieves data
@@ -52,7 +52,7 @@ public class Recipe_AddView_Dialog2  extends Recipe_AddView {
 	};
 
 	//Handles message from time dialog 2 - cooking time
-	static Handler mHandler2 = new Handler(){
+	private static Handler mHandler2 = new Handler(){
 		@Override
 		public void handleMessage(Message m){
 			//Bundle retrieves data
@@ -74,7 +74,7 @@ public class Recipe_AddView_Dialog2  extends Recipe_AddView {
 	};
 
 
-	public Recipe_AddView_Dialog2(ActionBarActivity activity, Context context, String uniqueid, String bookname)
+	Recipe_AddView_Dialog2(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
 		this.activity = activity;
@@ -87,7 +87,7 @@ public class Recipe_AddView_Dialog2  extends Recipe_AddView {
 	/**
 	 * Set up second dialog style with correct fonts and spinner filled 
 	 */
-	public void setUpSecondRecipeAddDialog()
+	void setUpSecondRecipeAddDialog()
 	{
 		recipeAddDialog2 = utils.createDialog(activity, R.layout.recipe_add_dialog2);
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddDialog2);
@@ -128,7 +128,7 @@ public class Recipe_AddView_Dialog2  extends Recipe_AddView {
 	/**
 	 * Get second dialog data 
 	 */
-	public void getSecondDialogData()
+	private void getSecondDialogData()
 	{
 		//Getting text for edit text boxes
 		TextView errorView = (TextView) recipeAddDialog2.findViewById(R.id.errorView);
@@ -177,7 +177,7 @@ public class Recipe_AddView_Dialog2  extends Recipe_AddView {
 	/**
 	 * Handles the clicks for adding ingred and prep
 	 */
-	public void handleIngredPrepClicks()
+	private void handleIngredPrepClicks()
 	{
 		final Recipe_AddView_IngredPrepDialog ingredprepdialog = new Recipe_AddView_IngredPrepDialog(activity, context, uniqueid, bookname);
 		ImageButton ingredsPlusButton = (ImageButton) recipeAddDialog2.findViewById(R.id.ingredsAddButton);						

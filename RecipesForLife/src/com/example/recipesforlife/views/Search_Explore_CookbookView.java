@@ -9,18 +9,16 @@ import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.CookbookBean;
-import com.example.recipesforlife.controllers.RecipeBean;
 import com.example.recipesforlife.models.ApplicationModel_SearchModel;
 import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
@@ -32,8 +30,8 @@ import com.example.recipesforlife.util.Util;
  */
 public class Search_Explore_CookbookView extends ActionBarActivity {
 	
-	Navigation_DrawerCreation nav;
-	Util utils;
+	private Navigation_DrawerCreation nav;
+	private Util utils;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +41,7 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 		setContentView(R.layout.explore_listview2);
 
 		utils = new Util(getApplicationContext(), this);
+		
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_Explore_CookbookView.this, "Explore Cookbooks");
 		nav.createDrawer();
@@ -50,6 +49,7 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+	
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
@@ -61,10 +61,12 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 		final Spinner sItems = (Spinner) findViewById(R.id.spinner);
 		sItems.setVisibility(View.INVISIBLE);
 		boolean empty = false;
-	//      Log.v("SPINNER", "SPINNER" + sItems.getSelectedItem().toString());
+	
 	        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 			final ArrayList<CookbookBean> cb = sm.selectRandomCookbooks();
 			ListView listView = (ListView) findViewById(R.id.list);
+			
+			//if empty then add following to the list
 			if(cb.size() == 0)
 			{
 				CookbookBean cookbookbean = new CookbookBean();
@@ -75,6 +77,7 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 			Search_CookbookAdapter cookbookadapter = new Search_CookbookAdapter( getApplicationContext(), Search_Explore_CookbookView.this,  cb);
 			listView.setAdapter(cookbookadapter);
 			
+			//If not empty then enable clicks on items
 			if(empty == false)
 			{
 				listView.setOnItemClickListener(new OnItemClickListener() {
@@ -92,19 +95,6 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 					}                 
 				});
 			}
-		
-	/**	SearchModel sm = new SearchModel(getApplicationContext());
-		final ArrayList<RecipeBean> rb = sm.selectRecipeByDiff(sItems.getSelectedItem().toString());
-		ListView listView = (ListView) findViewById(R.id.list);
-		if(rb.size() == 0)
-		{
-			RecipeBean recipebean = new RecipeBean();
-			recipebean.setName("empty");
-			rb.add(recipebean);
-			//empty = true;
-		}
-		CustomRecipeSearchAdapter recipeadapter = new CustomRecipeSearchAdapter( getApplicationContext(), this,  rb);
-		listView.setAdapter(recipeadapter); **/
 
 	}
 

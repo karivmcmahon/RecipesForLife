@@ -1,16 +1,16 @@
 package com.example.recipesforlife.controllers;
 
 /**
- * Controller for contributors details
+ * Controller for handling a contributors details
  * @author Kari
  *
  */
 public class ContributerBean {
-	String account; //users account - email
-	String bookUniqId; //cookbooks uniqueid
-	String updateTime; //time it was added 
-	String progress; //contributors progress
-	String changeTime; //time it was updated
+	private String account; 	//users account - email
+	private String bookUniqId; 	//cookbooks uniqueid
+	private String updateTime; 	//time it was added 
+	private String progress; 	//contributors progress
+	private String changeTime; 	//time it was updated
 
 	public String getProgress() {
 		return progress;

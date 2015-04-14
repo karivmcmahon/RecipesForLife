@@ -1,19 +1,19 @@
 package com.example.recipesforlife.controllers;
 
 /**
- * Controller for user bean
+ * Controller storing user information
  * @author Kari
  *
  */
 public class UserBean {
 	
-	String name; //name of the user
-	String country; //country they are in
-	String city; //city they are in
-	String bio; //something about themselves
-	int id; //row id in db
-	String cookingInterest; //users cooking interest
-	String email; //users email
+	private String name; 			//name of the user
+	private String country; 		//country they are in
+	private String city; 			//city they are in
+	private String bio; 			//something about themselves
+	private int id; 				//row id in db
+	private String cookingInterest; //users cooking interest
+	private String email; 			//users email
 
 	public String getEmail() {
 		return email;
@@ -57,8 +57,4 @@ public class UserBean {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
-
-
 }

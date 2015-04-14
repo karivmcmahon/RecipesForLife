@@ -29,7 +29,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,37 +62,40 @@ import com.example.recipesforlife.util.Util;
  *
  */
 public class Recipe_View extends ActionBarActivity {
-	Util utils;
-	Navigation_DrawerCreation nav;
-	int counter = 0;
-	int fullScreenCounter = 0;
+	private Util utils;
+	private Navigation_DrawerCreation nav;
+	private int counter = 0;
+	private int fullScreenCounter = 0;
 	private ShareActionProvider mShareActionProvider;
-	String recipeName = "";
-	int recipeFont = 22;
-	int recipeFontHeader = 26;
-	RecipeBean recipe;
-	public static final String MyPREFERENCES = "MyPrefs" ;
-	public static final String emailk = "emailKey"; 
-	SharedPreferences sharedpreferences;
-	ArrayList<ReviewBean> rbs;
-	Recipe_Review_Adapter adapter;
-	ImageView img;
-	Dialog cloneDialog;
-	TextView errorView;
-	ArrayList<CookbookBean> cbList;
-	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
-	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
-	ImageBean imgBean = new ImageBean();
-	File file;
+	private String recipeName = "";
+	private int recipeFont = 22;
+	private int recipeFontHeader = 26;
+	private RecipeBean recipe;
+	private static final String MyPREFERENCES = "MyPrefs" ;
+	private static final String emailk = "emailKey"; 
+	private SharedPreferences sharedpreferences;
+	private ArrayList<ReviewBean> rbs;
+	private Recipe_Review_Adapter adapter;
+	private ImageView img;
+	private Dialog cloneDialog;
+	private TextView errorView;
+	private ArrayList<CookbookBean> cbList;
+	private ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+	private ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+	private ImageBean imgBean = new ImageBean();
+	private File file;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.recipe_view);
+		
 		utils = new Util(getApplicationContext(), this);
 		setStyle();
 		setTextForLayout();
+		
+		//set up a nav bar
 		nav = new Navigation_DrawerCreation(this, recipeName );
 		nav.createDrawer();
 		SpannableString s = new SpannableString(recipeName);
@@ -117,6 +118,7 @@ public class Recipe_View extends ActionBarActivity {
 		final TextView errorView = (TextView) findViewById(R.id.errorView);
 		utils.setText(R.id.errorView,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
+		
 		//when review submited
 		Button submitbutton = (Button) findViewById(R.id.sumbitButton);
 		submitbutton.setOnClickListener(new OnClickListener(){
@@ -280,7 +282,7 @@ public class Recipe_View extends ActionBarActivity {
 	/**
 	 * Sets style for the recipe view
 	 */
-	public void setStyle()
+	private void setStyle()
 	{
 		utils.setTextPink(R.id.recipeTitle, recipeFontHeader);
 		utils.setTextBlackItalic(R.id.recipeDesc, recipeFont);
@@ -308,7 +310,7 @@ public class Recipe_View extends ActionBarActivity {
 	/**
 	 * Sets text for the recipe page
 	 */
-	public void setTextForLayout()
+	private void setTextForLayout()
 	{
 		ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(getApplicationContext());
 		recipe = new RecipeBean();
@@ -366,10 +368,11 @@ public class Recipe_View extends ActionBarActivity {
 	/**
 	 * Gets the local bitmap URI - this is ued for sharing image
 	 * Code from here https://guides.codepath.com/android/Sharing-Content-with-Intents
+	 * 
 	 * @param imageView
 	 * @return Uri 
 	 */
-	public Uri getLocalBitmapUri(ImageView imageView) {
+	private Uri getLocalBitmapUri(ImageView imageView) {
 		// Extract Bitmap from ImageView drawable
 		Drawable drawable = imageView.getDrawable();
 		Bitmap bmp = null;
@@ -400,7 +403,7 @@ public class Recipe_View extends ActionBarActivity {
 	/**
 	 * Creates the clone dialog - to clone recipes into cookbook
 	 */
-	public void createCloneDialog()
+	private void createCloneDialog()
 	{
 		//creates clone style
 		cloneDialog = utils.createDialog(Recipe_View.this , R.layout.recipe_clone_forview);
@@ -429,7 +432,6 @@ public class Recipe_View extends ActionBarActivity {
 			public void onClick(View v) {
 				//gets a position of select item
 				int namepos = spinner.getSelectedItemPosition();
-				RecipeBean cloneRecipe = recipe;
 				recipe.setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
 				recipe.setRecipeBook(cbList.get(namepos).getUniqueid());
 				recipe.setAddedBy(sharedpreferences.getString(emailk, ""));
@@ -448,7 +450,6 @@ public class Recipe_View extends ActionBarActivity {
 					}
 					else
 					{
-						//clone recipe
 						String uid = rmodel.insertRecipe(recipe, false, ingredList, prepList, imgBean);
 						Recipe_ShelfListView.adapter.notifyDataSetChanged(); 
 						cloneDialog.dismiss();
@@ -468,9 +469,10 @@ public class Recipe_View extends ActionBarActivity {
 	
 	/**
 	 * Fills spinner for cloning
+	 * 
 	 * @return filled spinner
 	 */
-	public Spinner fillSpinner()
+	private Spinner fillSpinner()
 	{
 		//Fill with a list of recipes the user owns
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -491,7 +493,7 @@ public class Recipe_View extends ActionBarActivity {
 	/**
 	 * Set up a clone dialog style
 	 */
-	public void setCloneDialogStyle()
+	private void setCloneDialogStyle()
 	{
 		utils.setDialogText(R.id.cloneTitle,cloneDialog,22);
 		utils.setDialogText(R.id.currentCookbooksView,cloneDialog,22);

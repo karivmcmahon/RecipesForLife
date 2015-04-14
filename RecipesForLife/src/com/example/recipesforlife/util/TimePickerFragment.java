@@ -17,17 +17,17 @@ import android.widget.TimePicker;
  * 
  * @author Kari
  *
- */
-public class TimePickerFragment extends DialogFragment 
+ */ 
+class TimePickerFragment extends DialogFragment 
 {
 
-	Handler mHandler ;
-	String hour;
-	String minutes;
-	String type;
-	int h, m;
+	private Handler mHandler ;
+	private String hour;
+	private String minutes;
+	private String type;
+	private int h, m;
 
-	public TimePickerFragment(Handler h, String type)
+	TimePickerFragment(Handler h, String type)
 	{
 		mHandler = h;
 		this.type = type;

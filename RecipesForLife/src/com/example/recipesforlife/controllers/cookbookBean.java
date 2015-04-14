@@ -1,18 +1,20 @@
 package com.example.recipesforlife.controllers;
 
 /**
- * Controller for cookbook
+ * Controller for cookbook details
  * @author Kari
  *
  */
 public class CookbookBean {
-	String name; //cookbooks name
-	String description; //cookbooks description
-	String privacy; //cookbooks privacy setting
-	String creator; // who created the cookbook
-	String uniqueid; //cookbooks uniqueid
-	byte[] image; //cookbooks image
-	String progress; //cookbooks progress e.g. added, deleted
+	private String name; 		//cookbooks name
+	private String description; //cookbooks description
+	private String privacy; 	//cookbooks privacy setting
+	private String creator; 	// who created the cookbook
+	private String uniqueid; 	//cookbooks uniqueid
+	private byte[] image; 		//cookbooks image
+	private String progress; 	//cookbooks progress e.g. added, deleted
+	private String updateTime; 	//time inserted
+	private String changeTime; 	//time changed
 
 	public String getProgress() {
 		return progress;
@@ -38,8 +40,7 @@ public class CookbookBean {
 	public void setChangeTime(String changeTime) {
 		this.changeTime = changeTime;
 	}
-	String updateTime;
-	String changeTime;
+
 
 	public String getName() {
 		return name;

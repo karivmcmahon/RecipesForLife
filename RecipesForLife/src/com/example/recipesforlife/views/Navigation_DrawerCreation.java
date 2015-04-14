@@ -2,7 +2,6 @@ package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,46 +10,45 @@ import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.CookbookBean;
 
 
 /**
  * This class sets up creation of the navigation drawer
+ * 
  * @author Kari
  *
  */
-public class Navigation_DrawerCreation   {
+class Navigation_DrawerCreation   {
 
 	private ArrayList<String> navBarTitles;
 	private ArrayList<Integer> imageids;
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
+	@SuppressWarnings("deprecation")
 	private ActionBarDrawerToggle drawerToggle;
-	ActionBarActivity activity;
-	public static final String MyPREFERENCES = "MyPrefs";
-	public static final String pass = "passwordKey";
-	public static final String emailk = "emailKey";
-	String title;
-	Context context;
+	private ActionBarActivity activity;
+	private static final String pass = "passwordKey";
+	private static final String emailk = "emailKey";
+	private String title;
+	
 
-	public Navigation_DrawerCreation(ActionBarActivity activity, String title)
+	Navigation_DrawerCreation(ActionBarActivity activity, String title)
 	{
 		this.activity = activity;
 		this.title = title;
 	}
 
 
-	public void createDrawer()
+	/**
+	 * Creates the nav drawer
+	 */
+	void createDrawer()
 	{
 		//Set title of action bar
 		activity.getSupportActionBar().setTitle(title);
@@ -104,17 +102,17 @@ public class Navigation_DrawerCreation   {
 		drawerList.setOnItemClickListener(new DrawerItemClickListener());
 	}
 
-	public void syncState()
+	void syncState()
 	{
 		drawerToggle.syncState();
 	}
 
-	public void config(Configuration newConfig)
+	void config(Configuration newConfig)
 	{
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	public boolean drawerToggle(MenuItem item)
+	boolean drawerToggle(MenuItem item)
 	{
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;

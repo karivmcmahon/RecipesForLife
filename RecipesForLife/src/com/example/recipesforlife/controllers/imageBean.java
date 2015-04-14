@@ -1,13 +1,13 @@
 package com.example.recipesforlife.controllers;
 
 /**
- * Stores  images details
+ * Stores image details
  * @author Kari
  *
  */
 public class ImageBean {
-	byte[] image; //byte array of image
-	String uniqueid; //images uniqueid
+	private byte[] image; 		//byte array of image
+	private String uniqueid; 	//images uniqueid
 
 	public String getUniqueid() {
 		return uniqueid;

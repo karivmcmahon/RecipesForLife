@@ -6,11 +6,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,16 +29,16 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_EditView_EditIngredient extends Recipe_EditView{
+class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
-	ActionBarActivity activity;
-	Context context;
-	Util utils;
-	LinearLayout.LayoutParams params;
-	LinearLayout ingredDialogLinearLayout;
-	Dialog recipeIngredDialog;
+	private ActionBarActivity activity;
+	private Context context;
+	private Util utils;
+	private LinearLayout.LayoutParams params;
+	private LinearLayout ingredDialogLinearLayout;
+	private Dialog recipeIngredDialog;
 
-	public Recipe_EditView_EditIngredient(Context context, ActionBarActivity activity)
+	Recipe_EditView_EditIngredient(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -53,7 +49,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	/**
 	 * Handles the ingredient edit dialogs
 	 */
-	public void getIngredient()
+	void getIngredient()
 	{
 		setUp();
 		//Create dialog with textviews and edit text from the database
@@ -77,7 +73,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * Check the ingredient list and check for any errors before making any changes
 	 * @param errorView
 	 */
-	public void listCheck(TextView errorView)
+	private void listCheck(TextView errorView)
 	{
 
 		modifiedIngredList = new ArrayList<IngredientBean>();
@@ -131,7 +127,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	/**
 	 * Set up dialog style
 	 */
-	public void setUp()
+	private void setUp()
 	{
 		ingredDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog5);
 		utils.setDialogText(R.id.recipeEditView, ingredDialog, 22);
@@ -154,7 +150,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	/**
 	 * Create list of ingredients - This has to be dynamic as the amount is unknown
 	 */
-	public void createList()
+	private void createList()
 	{
 		for(int i = 0; i < ingredList.size(); i++)
 		{
@@ -228,7 +224,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * Create button style for the dialog
 	 * @return
 	 */
-	public Button createButton()
+	private Button createButton()
 	{
 		Button okButton = new Button(activity);
 		int buttonId = findId();
@@ -246,7 +242,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * Create error view style for dialog
 	 * @return
 	 */
-	public TextView createErrorView()
+	private TextView createErrorView()
 	{
 		final TextView errorView = new TextView(activity);
 		int errorId = findId();
@@ -263,7 +259,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * @param width
 	 * @return EditText box with formatting and style
 	 */
-	public EditText createEditText(int width)
+	private EditText createEditText(int width)
 	{
 		EditText edit = new EditText(activity);
 		edit.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -277,7 +273,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * @param create
 	 * @return Spinner with values and style
 	 */
-	public Spinner createSpinner(boolean create)
+	private Spinner createSpinner(boolean create)
 	{
 		//Spinner set up with varying measurement amounts
 		List<String> spinnerArray =  new ArrayList<String>();
@@ -321,7 +317,8 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * Create delete image button for the each item in the list of ingredient
 	 * @return ImageButton
 	 */
-	public ImageButton createImageButton()
+	@SuppressWarnings({ "deprecation" })
+	private ImageButton createImageButton()
 	{
 		ImageButton img = new ImageButton(activity);
 		int imgid = findId();
@@ -342,7 +339,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * @param view
 	 * @param noteEdit
 	 */
-	public void setVisibility(int point, EditText amountEdit, EditText ingredEdit, Spinner sItems, TextView view, EditText noteEdit)
+	private void setVisibility(int point, EditText amountEdit, EditText ingredEdit, Spinner sItems, TextView view, EditText noteEdit)
 	{
 		ingredList.get(point).setProgress("deleted");
 		amountEdit.setVisibility(View.INVISIBLE);
@@ -370,7 +367,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * @param size
 	 * @return a boolean - which tells us when to dismiss dialog
 	 */
-	public boolean sizeCheck(int size)
+	private boolean sizeCheck(int size)
 	{
 		boolean dismissed = false;
 		if(size == (ingredList.size()  ))
@@ -386,7 +383,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	/**
 	 * Updates ingredient list once changes have been made
 	 */
-	public void updateList()
+	private void updateList()
 	{
 		//Apply to edit page
 		TextView ingredients = (TextView) activity.findViewById(R.id.ingredientList);
@@ -411,7 +408,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	 * @param noteEdit
 	 * @param img
 	 */
-	public void addViews(LinearLayout linearLayoutInDialog,
+	private void addViews(LinearLayout linearLayoutInDialog,
 			EditText amountEdit, Spinner sItems, EditText ingredEdit, TextView view, EditText noteEdit, ImageButton img)
 	{
 		linearLayoutInDialog.addView(amountEdit);
@@ -426,7 +423,7 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	/**
 	 * Set up ingred dialog style for adding a new ingredient
 	 */
-	public void setUpIngredAddDialog()
+    void setUpIngredAddDialog()
 	{
 		recipeIngredDialog = utils.createDialog(activity,R.layout.recipe_add_dialog5);
 		utils.setDialogText(R.id.addIngredientView, recipeIngredDialog, 22);
@@ -467,8 +464,10 @@ public class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Get information from the add ingredient dialog
+	 * 
+	 * @param recipeIngredDialog		Used to retrieve data from dialog
 	 */
-	public void getIngredient(Dialog recipeIngredDialog)
+	private void getIngredient(Dialog recipeIngredDialog)
 	{
 		//Getting text
 		String ingredient = utils.getTextFromDialog(R.id.ingredEditText, recipeIngredDialog);

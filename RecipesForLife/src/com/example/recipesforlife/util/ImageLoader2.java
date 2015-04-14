@@ -4,17 +4,14 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.Map;
-import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.ImageView;
 
 
@@ -26,18 +23,15 @@ import android.widget.ImageView;
  */
 public class ImageLoader2 {
 
-	MemoryCache memoryCache=new MemoryCache();
-
+	private MemoryCache memoryCache=new MemoryCache();
 	private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-	ExecutorService executorService;
-	Handler handler=new Handler();//handler to display images in UI thread
-	Utility utils;
-	String uuid = "";
-	Context context;
+	private ExecutorService executorService;
+	private Handler handler=new Handler();//handler to display images in UI thread
+	private String uuid = "";
+	private Context context;
 
 	public ImageLoader2(Context context){
 		executorService=Executors.newFixedThreadPool(5);
-		utils = new Utility();
 		this.context = context;
 	}
 
@@ -104,7 +98,8 @@ public class ImageLoader2 {
 	 * @return
 	 * @throws FileNotFoundException
 	 */
-	public static Bitmap decodeSampledBitmap(Context context, ByteArrayInputStream imageStream,
+	@SuppressWarnings("deprecation")
+	private static Bitmap decodeSampledBitmap(Context context, ByteArrayInputStream imageStream,
 			int reqWidth, int reqHeight) 
 					throws FileNotFoundException {
 
@@ -125,7 +120,7 @@ public class ImageLoader2 {
 	 * @param reqHeight
 	 * @return int - sample size for image
 	 */
-	public static int calculateInSampleSize(
+	private static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image
 		final int height = options.outHeight;
@@ -166,9 +161,9 @@ public class ImageLoader2 {
 	 * @author Kari
 	 *
 	 */
-	class PhotosLoader implements Runnable {
-		PhotoToLoad photoToLoad;
-		PhotosLoader(PhotoToLoad photoToLoad){
+	private class PhotosLoader implements Runnable {
+		private PhotoToLoad photoToLoad;
+		private PhotosLoader(PhotoToLoad photoToLoad){
 			this.photoToLoad=photoToLoad;
 		}
 
@@ -196,7 +191,7 @@ public class ImageLoader2 {
 	 * @param photoToLoad
 	 * @return boolean - if image is reusued
 	 */
-	public boolean imageViewReused(PhotoToLoad photoToLoad){
+	private boolean imageViewReused(PhotoToLoad photoToLoad){
 		String tag=imageViews.get(photoToLoad.imageView);
 		if(tag==null || !tag.equals(photoToLoad.recipeid))
 			return true;
@@ -204,11 +199,11 @@ public class ImageLoader2 {
 	}
 
 	//Used to display bitmap in the UI thread
-	class BitmapDisplayer implements Runnable
+	private class BitmapDisplayer implements Runnable
 	{
-		Bitmap bitmap;
-		PhotoToLoad photoToLoad;
-		public BitmapDisplayer(Bitmap b, PhotoToLoad p){bitmap=b;photoToLoad=p;}
+		private Bitmap bitmap;
+		private PhotoToLoad photoToLoad;
+		private BitmapDisplayer(Bitmap b, PhotoToLoad p){bitmap=b;photoToLoad=p;}
 		public void run()
 		{
 			if(imageViewReused(photoToLoad))

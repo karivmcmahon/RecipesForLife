@@ -3,49 +3,26 @@ package com.example.recipesforlife.views;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.controllers.ImageBean;
 import com.example.recipesforlife.controllers.IngredientBean;
 import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.controllers.RecipeBean;
-import com.example.recipesforlife.models.ApplicationModel_CookbookModel;
 import com.example.recipesforlife.models.ApplicationModel_RecipeModel;
 import com.example.recipesforlife.util.Util;
 
@@ -56,30 +33,28 @@ import com.example.recipesforlife.util.Util;
  */
 public class Recipe_AddView extends Recipe_ShelfListView {
 
-	ActionBarActivity activity;
-	Context context;
-	Util utils;
+	private ActionBarActivity activity;
+	private Context context;
+	private Util utils;
 	static ArrayList<IngredientBean> ingredBeanList;
 	static ArrayList<PreperationBean> prepBeanList;
 	static Dialog recipeAddDialog2;
-	public static Dialog recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
-	protected Dialog recipeAddDialog;
+	static Dialog recipeIngredDialog, recipeAddStepDialog, addRecipeDialog3;
+    static Dialog recipeAddDialog;
 	static Button nextButton;
 	static Button nextButton2;
-	static Button addIngredButton;
 	static Button addRecipeButton;
-	static String name, desc,recipeBook, serves, prep, cooking, cusine, difficulty, tips, dietary, uniqueid, imageName, bookname;
-	public static final String MyPREFERENCES = "MyPrefs";
-	public static final String emailk = "emailKey"; 
-	public static final String pass = "passwordKey"; 
+	public static String name, desc,recipeBook, serves, prep, cooking, cusine, difficulty, tips, dietary, uniqueid, imageName, bookname;
+	static final String MyPREFERENCES = "MyPrefs";
+	static final String emailk = "emailKey"; 
 	public static final int SELECT_PHOTO = 100;
 	static byte[] array;
 	protected ArrayList<String> cookbookuids = new ArrayList<String>();
-	Recipe_AddView_Dialog1 dialog1;
+	private Recipe_AddView_Dialog1 dialog1;
 	int prepnumcount = 1;
 
 	
-	public Recipe_AddView(Context context, ActionBarActivity activity, String uniqueid, String bookname)
+	Recipe_AddView(Context context, ActionBarActivity activity, String uniqueid, String bookname)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -91,7 +66,7 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 	/**
 	 * Handles the adding of the recipe
 	 */
-	public void addRecipe()
+	void addRecipe()
 	{
 		dialog1 = new  Recipe_AddView_Dialog1(activity, context, uniqueid, bookname);
 		//Set up dialog style
@@ -112,7 +87,7 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 	/**
 	 * Prepare the data to send to the model where the data will be inserted 
 	 */
-	public void sendDataToModel()
+	void sendDataToModel()
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		RecipeBean recipe = new RecipeBean();
@@ -151,7 +126,7 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 	 * @param resultCode
 	 * @param imageReturnedIntent
 	 */
-	public void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
+	void resultRecieved(int requestCode, int resultCode, Intent imageReturnedIntent)
 	{
 
 		switch(requestCode) { 

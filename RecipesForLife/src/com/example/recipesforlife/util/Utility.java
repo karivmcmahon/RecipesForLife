@@ -19,11 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.recipesforlife.views.Account_SignUpSignInView;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -49,7 +45,7 @@ public class Utility  {
 	 * @return string with date
 	 */
 	@SuppressLint("SimpleDateFormat")
-	public String dateToString(Date date, boolean inappstring) {
+	private String dateToString(Date date, boolean inappstring) {
 		SimpleDateFormat formatter;
 		Calendar cal = Calendar.getInstance();
 		      TimeZone tz = TimeZone.getTimeZone("Europe/London");	     
@@ -98,7 +94,8 @@ public class Utility  {
 	 * @param uuid
 	 * @return true or false depending on if UUID exists
 	 */
-	public boolean selectUUID(String table, String uuid, SQLiteDatabase database )
+	@SuppressWarnings("unused")
+	private boolean selectUUID(String table, String uuid, SQLiteDatabase database )
 	{		
 		Cursor cursor = database.rawQuery("SELECT uniqueid FROM " + table + " WHERE uniqueid=?", new String[] { uuid});
 		if (cursor != null && cursor.getCount() > 0) {

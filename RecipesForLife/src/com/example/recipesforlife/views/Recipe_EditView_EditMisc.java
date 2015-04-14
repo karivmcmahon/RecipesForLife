@@ -25,14 +25,14 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Recipe_EditView_EditMisc extends Recipe_EditView{
+class Recipe_EditView_EditMisc extends Recipe_EditView{
 
-	ActionBarActivity activity;
-	Context context;
-	Util utils;
+	private ActionBarActivity activity;
+	private Context context;
+	private Util utils;
 
 	// Handles message from time dialog 1 - preptime
-	static Handler mHandler = new Handler(){
+	private static Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message m){
 			//Bundle retrieves data
@@ -54,7 +54,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	};
 
 	//Handles message from time dialog 2
-	static Handler mHandler2 = new Handler(){
+	private static Handler mHandler2 = new Handler(){
 		@Override
 		public void handleMessage(Message m){
 			//Bundle retrieves data
@@ -76,7 +76,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	};
 
 
-	public Recipe_EditView_EditMisc(Context context, ActionBarActivity activity)
+	Recipe_EditView_EditMisc(Context context, ActionBarActivity activity)
 	{
 		this.context = context;
 		this.activity = activity;
@@ -86,7 +86,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Creates a dialog where the user can edit the serves information
 	 */
-	public void getServesDialog()
+	void getServesDialog()
 	{
 		final Dialog servesDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog2);
 		final TextView errorView = (TextView) servesDialog.findViewById(R.id.errorView);
@@ -124,10 +124,11 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 	/**
 	 * Creates style from a serves dialog
+	 * 
 	 * @param servesDialog
 	 * @param errorView
 	 */
-	public void setUpServesDialog(Dialog servesDialog, TextView errorView)
+	private void setUpServesDialog(Dialog servesDialog, TextView errorView)
 	{
 		utils.setDialogText(R.id.errorView,servesDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -139,10 +140,11 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 	/**
 	 * Creates a spinner for the serves dialog
+	 * 
 	 * @param servesDialog
 	 * @return Spinner
 	 */
-	public Spinner setUpServesSpinner(Dialog servesDialog)
+	private Spinner setUpServesSpinner(Dialog servesDialog)
 	{
 		List<String> spinnerArray =  new ArrayList<String>();
 		spinnerArray.add("Easy");
@@ -159,9 +161,9 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a title dialog where the user can edit the title dialog
+	 * Creates a title dialog where the user can edit the title and desc of recipe
 	 */
-	public void getTitleDialog()
+	void getTitleDialog()
 	{
 		final Dialog titleDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog1);
 		final TextView errorView = (TextView) titleDialog.findViewById(R.id.errorView);
@@ -202,7 +204,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Gets the data from the chef dialog
 	 */
-	public void getChefDialog()
+	void getChefDialog()
 	{
 		final Dialog cusineDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog8);
 		final TextView errorView = (TextView) cusineDialog.findViewById(R.id.errorView);
@@ -230,11 +232,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a dialog filled with cuisine data
+	 * Creates a dialog filled with cuisine data to be edited 
+	 * 
 	 * @param cusineDialog
 	 * @return Spinner  - with filled data and style
 	 */
-	public Spinner createCusineSpinner(Dialog cusineDialog)
+	private Spinner createCusineSpinner(Dialog cusineDialog)
 	{
 		List<String> cusineSpinnerArray =  new ArrayList<String>();
 		cusineSpinnerArray.add("Italian");
@@ -259,11 +262,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a dietary spinner with data and style
+	 * Creates a dietary spinner with correct data and style
+	 * 
 	 * @param cusineDialog
 	 * @return Spinner
 	 */
-	public Spinner createDietarySpinner(Dialog cusineDialog)
+	private Spinner createDietarySpinner(Dialog cusineDialog)
 	{
 		List<String> dietarySpinnerArray =  new ArrayList<String>();
 		dietarySpinnerArray.add("Nut free");
@@ -285,10 +289,11 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 	/**
 	 * Sets up dialog style for the chef dialog
+	 * 
 	 * @param cusineDialog
 	 * @param errorView
 	 */
-	public void setUpChefDialogStyle(Dialog cusineDialog, TextView errorView)
+	private void setUpChefDialogStyle(Dialog cusineDialog, TextView errorView)
 	{
 		utils.setDialogText(R.id.errorView,cusineDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -298,11 +303,12 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Sets up title dialog style for the tite dialog
+	 * Sets up title dialog style for the title dialog
+	 * 
 	 * @param titleDialog
 	 * @param errorView
 	 */
-	public void setUpTitleDialogStyle(Dialog titleDialog, TextView errorView)
+	private void setUpTitleDialogStyle(Dialog titleDialog, TextView errorView)
 	{
 		utils.setDialogText(R.id.errorView,titleDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
@@ -316,7 +322,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Creates a dialog showing the prep and cooking values which the user can change
 	 */
-	public void getTimeDialog()
+	void getTimeDialog()
 	{
 		timeDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog3);
 		setUpTimeDialogStyle(timeDialog);
@@ -360,7 +366,7 @@ public class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Creates a title dialog where the user can edit the title dialog
 	 */
-	public void getTipsDialog()
+	void getTipsDialog()
 	{
 		final Dialog tipsDialog = utils.createDialog(activity, R.layout.recipe_edit_dialog6);
 		final TextView errorView = (TextView) tipsDialog.findViewById(R.id.errorView);

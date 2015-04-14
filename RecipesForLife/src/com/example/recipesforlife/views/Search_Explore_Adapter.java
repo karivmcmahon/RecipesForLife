@@ -1,21 +1,16 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.UserBean;
-import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
 /**
@@ -23,14 +18,14 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Search_Explore_Adapter extends ArrayAdapter<String> {
+class Search_Explore_Adapter extends ArrayAdapter<String> {
 	
 	private final Activity activity;
-	Context context;
-	Util utils;
-	ArrayList<String> categories = new ArrayList<String>();
+	private Context context;
+	private Util utils;
+	private ArrayList<String> categories = new ArrayList<String>();
 
-	public Search_Explore_Adapter(Context context, Activity activity, ArrayList<String> categories) {
+	Search_Explore_Adapter(Context context, Activity activity, ArrayList<String> categories) {
 		super(context, R.layout.explore_listitem, categories);
 		this.activity = activity;
 		this.context = context;
@@ -38,6 +33,7 @@ public class Search_Explore_Adapter extends ArrayAdapter<String> {
 		utils = new Util(this.context, activity);
 	}
 
+	@SuppressLint({ "InflateParams", "ViewHolder" })
 	@Override
 	/**
 	 * Adapts list data 

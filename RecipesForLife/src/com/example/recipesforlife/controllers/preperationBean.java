@@ -6,13 +6,13 @@ package com.example.recipesforlife.controllers;
  *
  */
 public class PreperationBean  {
-	int id; //preps row id in db
-	int prepNum; //preps step number
-	String preperation; //preperation details
-	String uniqueid; //prep uniqueid
-	String progress; //prep progress in database 
-	String recipeid; //recipe id for the prep 
-	String updateTime; //update time 
+	private int id; 			//preps row id in db
+	private int prepNum; 		//preps step number
+	private String preperation; //preperation details
+	private String uniqueid; 	//prep uniqueid
+	private String progress; 	//prep progress in database 
+	private String recipeid; 	//recipe id for the prep 
+	private String updateTime; 	//update time 
 
 	public String getUpdateTime() {
 		return updateTime;
@@ -56,13 +56,5 @@ public class PreperationBean  {
 	public void setPreperation(String preperation) {
 		this.preperation = preperation;
 	}
-	
-	
-
-
-
-
-
-
 
 }

@@ -1,7 +1,6 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -15,9 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.recipesforlife.R;
 import com.example.recipesforlife.controllers.RecipeBean;
@@ -32,8 +31,8 @@ import com.example.recipesforlife.util.Util;
  */
 public class Search_Explore_DietaryView extends ActionBarActivity {
 	
-	Navigation_DrawerCreation nav;
-	Util utils;
+	private Navigation_DrawerCreation nav;
+	private Util utils;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,7 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 		setContentView(R.layout.explore_listview2);
 
 		utils = new Util(getApplicationContext(), this);
+	
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_Explore_DietaryView.this, "Explore By Dietary Requirements");
 		nav.createDrawer();
@@ -58,6 +58,7 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 		utils.setText(R.id.exploreheader, 26);
 		utils.setText(R.id.exploreheadercont, 26);
 		
+		//Fills spinner with dietary
 		ArrayList<String> dietarySpinnerArray =  new ArrayList<String>();
 		dietarySpinnerArray.add("Nut free");
 		dietarySpinnerArray.add("Gluten free");
@@ -73,13 +74,18 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 		//makes spinner triangle white
 		sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
+		
+		//When item selected in spinner
 		sItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 		    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) { 
 		    	boolean empty = false;
-		        Log.v("SPINNER", "SPINNER" + sItems.getSelectedItem().toString());
+		 
+		    	//Get results for selected item
 		        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 				final ArrayList<RecipeBean> rb = sm.selectRecipeByDietary(sItems.getSelectedItem().toString());
 				ListView listView = (ListView) findViewById(R.id.list);
+			
+				//If no results - set empty to true and add to list
 				if(rb.size() == 0)
 				{
 					RecipeBean recipebean = new RecipeBean();
@@ -90,6 +96,7 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 				Search_RecipeAdapter recipeadapter = new Search_RecipeAdapter( getApplicationContext(), Search_Explore_DietaryView.this,  rb);
 				listView.setAdapter(recipeadapter);
 				
+				//If empty false then enable clicks which allows the user to move to the next activity
 				if(empty == false)
 				{
 					listView.setOnItemClickListener(new OnItemClickListener() {

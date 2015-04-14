@@ -1,7 +1,7 @@
 package com.example.recipesforlife.views;
 
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -10,11 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.example.recipesforlife.R;
-import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.controllers.UserBean;
-import com.example.recipesforlife.util.ImageLoader2;
 import com.example.recipesforlife.util.Util;
 
 /***
@@ -22,23 +19,23 @@ import com.example.recipesforlife.util.Util;
  * @author Kari
  *
  */
-public class Search_UserAdapter extends ArrayAdapter<UserBean> {
+class Search_UserAdapter extends ArrayAdapter<UserBean> {
 
 	private final Activity activity;
-	Context context;
-	Util utils;
-	ArrayList<UserBean> ub;
-	ImageLoader2 imgload;
+	private Context context;
+	private Util utils;
+	private ArrayList<UserBean> ub;
+	
 
-	public Search_UserAdapter(Context context, Activity activity, ArrayList<UserBean> userbean) {
+	Search_UserAdapter(Context context, Activity activity, ArrayList<UserBean> userbean) {
 		super(context, R.layout.search_userview, userbean);
 		this.activity = activity;
 		this.context = context;
 		ub = userbean;
-		imgload = new ImageLoader2(this.context);
 		utils = new Util(this.context, activity);
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	/**
 	 * Adapts list data 
@@ -68,10 +65,10 @@ public class Search_UserAdapter extends ArrayAdapter<UserBean> {
 	/**
 	 * Sets the style of row and adapts the data for the row
 	 * @param rowView
-	 * @param position
-	 * @return rowView - rowView
+	 * @param position		Position in list
+	 * @return rowView 		Updated  rowView
 	 */
-	public View setListStyle(View rowView, int position)
+	private View setListStyle(View rowView, int position)
 	{
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.userinfo);
 		txtTitle.setText(ub.get(position).getName() + " - " + ub.get(position).getCountry());

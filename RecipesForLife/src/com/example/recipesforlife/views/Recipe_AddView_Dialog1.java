@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -28,26 +29,27 @@ import com.example.recipesforlife.util.Util;
  */
 public class Recipe_AddView_Dialog1 extends Recipe_AddView {
 
-	ActionBarActivity activity;
-	Context context;
-	String bookname, uniqueid = "";
-	Util utils;
+	private ActionBarActivity activity;
+	private Context context;
+	private String bookname, uniqueid = "";
+	private Util utils;
 
 
-	public Recipe_AddView_Dialog1(ActionBarActivity activity, Context context, String uniqueid, String bookname)
+	Recipe_AddView_Dialog1(ActionBarActivity activity, Context context, String uniqueid, String bookname)
 	{
 		super(context, activity, uniqueid, bookname);
 		this.activity = activity;
 		this.context = context;
 		this.bookname = bookname;
 		this.uniqueid = uniqueid;
+		Log.v("Dialog uid " , "Dialog uid " + uniqueid);
 		utils = new Util(context, activity);
 	}
 
 	/**
 	 * Set up initial dialog style with correct fonts and spinner filled 
 	 */
-	public void setUpInitialRecipeAddDialog()
+	void setUpInitialRecipeAddDialog()
 	{
 		ingredBeanList = new ArrayList<IngredientBean>();
 		prepBeanList = new ArrayList<PreperationBean>();
@@ -96,14 +98,14 @@ public class Recipe_AddView_Dialog1 extends Recipe_AddView {
 	/**
 	 * Get data from the first dialog - does some error checking before getting the data
 	 */
-	public void getInitialRecipeAddDialogData()
+	void getInitialRecipeAddDialogData()
 	{
 		//Getting data
 		TextView errorView = (TextView) recipeAddDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeAddDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
 		name = utils.getTextFromDialog(R.id.recipenameEditText, recipeAddDialog);
-		desc = utils.getTextFromDialog(R.id.recipeDescEdit, recipeAddDialog);
+	    desc = utils.getTextFromDialog(R.id.recipeDescEdit, recipeAddDialog);
 		Spinner spinner = (Spinner) recipeAddDialog.findViewById(R.id.recipeBookSpinner);
 		int pos = spinner.getSelectedItemPosition();
 
@@ -113,7 +115,7 @@ public class Recipe_AddView_Dialog1 extends Recipe_AddView {
 		//Error checking
 		if(model.selectRecipe(name, uniqueid) == true)
 		{
-			errorView.setText("You already have a recipe with this name");
+			errorView.setText("You already have a recipe with this name");		
 		}
 		else if(name.equals(""))
 		{

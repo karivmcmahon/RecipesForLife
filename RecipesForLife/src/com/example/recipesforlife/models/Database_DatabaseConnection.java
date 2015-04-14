@@ -39,6 +39,67 @@ public class Database_DatabaseConnection extends SQLiteOpenHelper {
 		resources = myContext.getResources();
 	}
 
+	private boolean checkDataBase() 
+	{
+		SQLiteDatabase checkDB = null;
+		try 
+		{
+			String myPath = DB_PATH + DB_NAME;
+			Log.v("PATH ", "PATH " + myPath);
+			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+			Log.v("Database Debug", "Database does exist");
+
+		} 
+		catch (SQLiteException e) 
+		{
+			Log.v("Database Debug", "Database doesn't exist yet.");
+		}
+
+		if (checkDB != null) 
+		{
+			checkDB.close();
+			SQLiteDatabase.releaseMemory();
+		}
+		return checkDB != null ? true : false;
+	}
+
+	@Override
+	public synchronized void close() 
+	{
+		if (myDataBase != null)
+			myDataBase.close();
+		super.close();
+	}
+
+	/**
+	 * Copys database
+	 * @throws IOException
+	 */
+	private void copyDataBase() throws IOException 
+	{
+		//Open your local db as the input stream
+		AssetManager mg = resources.getAssets();
+		InputStream myInput = mg.open("databases/dv.sqlite");
+
+		// Path to the just created empty db
+		String outFileName = DB_PATH + DB_NAME;
+
+		//Open the empty db as the output stream
+		OutputStream myOutput = new FileOutputStream(outFileName);
+
+		//Transfer bytes from the inputfile to the outputfile
+		byte[] buffer = new byte[1024];
+		int length;
+		while ((length = myInput.read(buffer)) > 0) 
+		{
+			myOutput.write(buffer, 0, length);
+		}
+		//Close the streams
+		myOutput.flush();
+		myOutput.close();
+		myInput.close();
+	}
+
 	/**
 	 * Creates the database
 	 * @throws IOException
@@ -95,57 +156,26 @@ public class Database_DatabaseConnection extends SQLiteOpenHelper {
 		}
 	}
 
-	private boolean checkDataBase() 
+	/**
+	 * Deletes the database
+	 * @throws SQLException
+	 */
+	public void deleteDatabase() throws SQLException 
 	{
-		SQLiteDatabase checkDB = null;
-		try 
-		{
-			String myPath = DB_PATH + DB_NAME;
-			Log.v("PATH ", "PATH " + myPath);
-			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-			Log.v("Database Debug", "Database does exist");
-
-		} 
-		catch (SQLiteException e) 
-		{
-			Log.v("Database Debug", "Database doesn't exist yet.");
-		}
-
-		if (checkDB != null) 
-		{
-			checkDB.close();
-			SQLiteDatabase.releaseMemory();
-		}
-		return checkDB != null ? true : false;
+		myContext.deleteDatabase(DB_NAME);
 	}
 
-	/**
-	 * Copys database
-	 * @throws IOException
-	 */
-	private void copyDataBase() throws IOException 
-	{
-		//Open your local db as the input stream
-		AssetManager mg = resources.getAssets();
-		InputStream myInput = mg.open("databases/dv.sqlite");
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
 
-		// Path to the just created empty db
-		String outFileName = DB_PATH + DB_NAME;
 
-		//Open the empty db as the output stream
-		OutputStream myOutput = new FileOutputStream(outFileName);
+	}
 
-		//Transfer bytes from the inputfile to the outputfile
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = myInput.read(buffer)) > 0) 
-		{
-			myOutput.write(buffer, 0, length);
-		}
-		//Close the streams
-		myOutput.flush();
-		myOutput.close();
-		myInput.close();
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -163,36 +193,6 @@ public class Database_DatabaseConnection extends SQLiteOpenHelper {
 		Log.v("Database Debug", "Database opened successfully.");
 		close();
 		return myDataBase;
-	}
-
-	/**
-	 * Deletes the database
-	 * @throws SQLException
-	 */
-	public void deleteDatabase() throws SQLException 
-	{
-		myContext.deleteDatabase(DB_NAME);
-	}
-
-	@Override
-	public synchronized void close() 
-	{
-		if (myDataBase != null)
-			myDataBase.close();
-		super.close();
-	}
-
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
-
-
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

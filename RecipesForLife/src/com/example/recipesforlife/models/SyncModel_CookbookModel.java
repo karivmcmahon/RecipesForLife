@@ -2,14 +2,6 @@ package com.example.recipesforlife.models;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,8 +11,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.recipesforlife.controllers.CookbookBean;
 import com.example.recipesforlife.util.Utility;
@@ -32,8 +22,8 @@ import com.example.recipesforlife.views.Account_SignUpSignInView;
  *
  */
 public class SyncModel_CookbookModel extends Database_BaseDataSource {
-	Context context;
-	Utility util;
+	private Context context;
+	private Utility util;
 
 
 	public SyncModel_CookbookModel(Context context) {
@@ -44,41 +34,12 @@ public class SyncModel_CookbookModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Get cookbooks inserted or updated within a certain time frame
-	 * @param update - whether checking for updates or inserts
-	 * @return list of cookbook's
-	 */
-	public ArrayList<CookbookBean> getCookbook(boolean update)
-	{
-		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
-		open();
-		Cursor cursor;
-		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
-		if(update == true)
-		{
-			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
-		}
-		else
-		{	
-			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Date", "DEFAULT") });
-		}
-		if (cursor != null && cursor.getCount() > 0) {
-			for (int i = 0; i < cursor.getCount(); i++) {
-				cursor.moveToPosition(i);
-				cbList.add(cursorToCookbook(cursor));
-			}
-		}
-		cursor.close();
-		close();
-		return cbList;
-	}
-
-	/**
 	 * Get data from cursor and place in a cookbook bean
-	 * @param cursor
-	 * @return cookbookBean
+	 * 
+	 * @param cursor			Query results from db
+	 * @return cookbookBean		Stores query results 
 	 */
-	public CookbookBean cursorToCookbook(Cursor cursor) {
+	private CookbookBean cursorToCookbook(Cursor cursor) {
 		CookbookBean cb = new CookbookBean();
 		cb.setName(cursor.getString(getIndex("name",cursor)));
 		cb.setDescription(cursor.getString(getIndex("description",cursor)));
@@ -94,7 +55,9 @@ public class SyncModel_CookbookModel extends Database_BaseDataSource {
 
 	/**
 	 * Builds a json with all the cookbook data to send to the server
-	 * @param - builds json and sends to server based on update or insert
+	 * 
+	 * @param update	whether the JSON is for update or insert
+	 * 
 	 * @throws JSONException
 	 * @throws IOException 
 	 */
@@ -127,11 +90,43 @@ public class SyncModel_CookbookModel extends Database_BaseDataSource {
 		}
 	}
 
+	/**
+	 * Get cookbooks inserted or updated within a certain time frame
+	 * 
+	 * @param update 					whether checking for updates or inserts
+	 * @return ArrayList<CookbookBean> 	List of cookbook's
+	 */
+	private ArrayList<CookbookBean> getCookbook(boolean update)
+	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
+		open();
+		Cursor cursor;
+		ArrayList<CookbookBean> cbList = new ArrayList<CookbookBean>();
+		if(update == true)
+		{
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE changeTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] { sharedpreferences.getString("Date", "DEFAULT")  });
+		}
+		else
+		{	
+			cursor = database.rawQuery("SELECT * FROM Cookbook WHERE updateTime > STRFTIME('%Y-%m-%d %H:%M:%f', ?)", new String[] {  sharedpreferences.getString("Date", "DEFAULT") });
+		}
+		if (cursor != null && cursor.getCount() > 0) {
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				cbList.add(cursorToCookbook(cursor));
+			}
+		}
+		cursor.close();
+		close();
+		return cbList;
+	}
+
 
 
 	/**
 	 * Gets and decodes json from server and inserts or updates cookbook
-	 * @param update - whether the json is for update or insert
+	 * 
+	 * @param update 			whether the json is for update or insert
 	 * @throws JSONException
 	 * @throws IOException
 	 */
