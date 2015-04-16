@@ -347,4 +347,3 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 
 
 
-

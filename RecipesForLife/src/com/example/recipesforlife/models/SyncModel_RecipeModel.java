@@ -194,7 +194,6 @@ public class SyncModel_RecipeModel extends Database_BaseDataSource {
 			recipe.accumulate("Ingredient", newObj);
 			newObj = new JSONObject();
 			newObj.put("uniqueid", ingredidarray);	
-			Log.v("UPDATE INGRED ", "UPDATE INGRED " + ingredidarray);
 			recipe.accumulate("Ingredient", newObj);
 			newObj = new JSONObject();
 			newObj.put("ingredprogress", ingredprogressarray);		
@@ -343,7 +342,6 @@ public class SyncModel_RecipeModel extends Database_BaseDataSource {
 					
 					IngredientBean ingredBean = new IngredientBean();
 					ingredBean.setName(ingredsArray.get(b).toString());
-					Log.v("NAME " , "NAME " + ingredsArray.get(b).toString());
 					ingredBean.setNote(notesArray.get(b).toString());
 					ingredBean.setAmount(Integer.parseInt(amountArray.get(b).toString()));
 					ingredBean.setValue(valueArray.get(b).toString());

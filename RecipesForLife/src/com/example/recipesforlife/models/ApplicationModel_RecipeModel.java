@@ -164,7 +164,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * @param uid		 ingredients unique id
 	 * @return boolean 	 true or false if it exists
 	 */
-	private boolean ingredientExists(String uid)
+	public boolean ingredientExists(String uid)
 	{
 		boolean exists = false;
 		Cursor cursors = database.rawQuery("SELECT * FROM IngredientDetails WHERE uniqueid=?", new String[] { uid });

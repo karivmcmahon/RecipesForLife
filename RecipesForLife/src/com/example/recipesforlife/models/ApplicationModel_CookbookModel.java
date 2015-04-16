@@ -287,7 +287,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * @param rowid		Cookbooks database row id
 	 * @return String	Cookbooks unique id
 	 */
-	String selectCookbooksByRowID(int rowid)
+	public String selectCookbooksByRowID(int rowid)
 	{
 		String id = "";
 		open();
@@ -380,7 +380,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * @param recipeid		recipe row id
 	 * @return uniqueid		cookbook unique id
 	 */
-	String selectCookbooksUniqueID(int recipeid)
+	public String selectCookbooksUniqueID(int recipeid)
 	{
 		String id = "";
 		open();

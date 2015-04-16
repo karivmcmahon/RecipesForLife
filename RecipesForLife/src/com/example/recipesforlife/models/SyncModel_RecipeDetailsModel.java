@@ -195,7 +195,6 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 				cursor.moveToPosition(i);
 				int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
 				int id = cursor.getInt(getIndex("Recipeid", cursor));
-				Log.v("REC ID ", "REC ID " + id);
 				recipeingredid =  rm.selectRecipeByID(id);
 				Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE  id = ?", new String[] {  Integer.toString(detsId) });
 				if (cursor2 != null && cursor2.getCount() > 0) {
@@ -302,13 +301,12 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 					prepBeanList.add(prepBean);
 				}
 			}
-			//RecipeModel model = new RecipeModel(context);
+			
 		
 			try
 			{
 				rm.insertIngredExtras(true, ingredBeanList);
 				rm.insertPrepExtras(true, prepBeanList);
-				//model.insertRecipe(recipe, true, ingredBeanList, prepBeanList );
 			}
 			catch(SQLException e)
 			{

@@ -204,5 +204,17 @@ public void testDeleteRecipe()
 		Assert.assertEquals(reviews.get(1).getComment(), "I like this recipe");
 				
 	}
+	
+	public void testDoesUserHasAccess()
+	{
+		boolean access = recipemodel.doesUserHaveAccess("kimk@aol.co.uk", "cookbookuniqueid1");
+		Assert.assertEquals(access, true);
+	}
+	
+	/**public void testIngredExists()
+	{
+		boolean exists = recipemodel.ingredientExists("ingreddetsuniqueid1");
+		Assert.assertEquals(exists, true);
+	} **/
 
 }

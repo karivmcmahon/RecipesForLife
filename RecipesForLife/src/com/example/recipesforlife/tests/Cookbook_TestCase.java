@@ -154,7 +154,7 @@ public class Cookbook_TestCase  extends AndroidTestCase {
 		Assert.assertEquals(contribs.get(0), "kimk@aol.co.uk");
 	}
 	
-	public void testUpdateContribs()
+	public void testDeleteContribs()
 	{
 		cookbookmodel.updateContributers("kimk@aol.co.uk", 1, "deleted", false);
 		ArrayList<String> contribs = cookbookmodel.selectCookbookContributers("cookbookuniqueid1", "deleted");
@@ -174,6 +174,55 @@ public class Cookbook_TestCase  extends AndroidTestCase {
 		ArrayList<CookbookBean> cblist1 = cookbookmodel.selectCookbooksByUser("kimk@aol.co.uk");
 		Assert.assertEquals(cblist1.get(0).getName(), "book1");
 		
+	}
+	
+	public void testSelectCookbooksByRowID()
+	{
+		String uniqueid = cookbookmodel.selectCookbooksByRowID(1);
+		Assert.assertEquals(uniqueid, "cookbookuniqueid1");
+	}
+	
+	public void testSelectCookbooksByUniqueID()
+	{
+		int id = cookbookmodel.selectCookbooksIDByUnique("cookbookuniqueid1");
+		Assert.assertEquals(id, 1);
+	}
+	
+	public void testSelectCookbooksUniqueIDBasedOnRecipe()
+	{
+		String uniqueid = cookbookmodel.selectCookbooksUniqueID(1);
+		Assert.assertEquals(uniqueid, "cookbookuniqueid1");
+	}
+	
+	
+	public void testSelectCookbookByCreator()
+	{
+		ArrayList<CookbookBean> cblist = cookbookmodel.selectCookbooksByCreator("doe");
+		Assert.assertEquals(cblist.get(0).getName(), "book1");
+	}
+	
+	public void testSelectingRecipesByCookbook()
+	{
+		ArrayList<RecipeBean> rblist = cookbookmodel.selectRecipesByCookbook("cookbookuniqueid1");
+		Assert.assertEquals(rblist.get(0).getName(), "pizza");
+	}
+	
+	public void  testSelectCookbookContributers()
+	{
+		ArrayList<String> cblist = cookbookmodel.selectCookbookContributers("cookbookuniqueid1", "added");
+		Assert.assertEquals(cblist.get(0), "kimk@aol.co.uk");
+	}
+	
+	public void testSelectContributers()
+	{
+		boolean exists = cookbookmodel.selectContributer("kimk@aol.co.uk", 1);
+		Assert.assertEquals(exists, true);
+	}
+	
+	public void testSelectCreatorOfCookbook()
+	{
+		String creator = cookbookmodel.creatorForCookbook("cookbookuniqueid1");
+		Assert.assertEquals(creator, "doe");
 	}
 	
 	

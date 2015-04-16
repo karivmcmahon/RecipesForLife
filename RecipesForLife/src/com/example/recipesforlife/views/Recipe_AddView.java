@@ -160,6 +160,3 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 
 
 }
-
-
-
