@@ -12,7 +12,7 @@ using System.Web.Script.Serialization;
 namespace WebApplication1
 {
 	/**
-	* Handles account information received from JSON
+	* Class handles account information received from JSON and inserts into db
 	*
 	**/
 	public partial class WebForm1 : System.Web.UI.Page
@@ -22,11 +22,11 @@ namespace WebApplication1
 		SqlCommand insertUsers = null;
 		Int32 newId = 0;
 		List<Account> account  = new List<Account>();
+		SqlTransaction transaction;
 		
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			//Reads Json on page load
-			
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -53,11 +53,16 @@ namespace WebApplication1
 			JavaScriptSerializer js = new JavaScriptSerializer();
 			js.MaxJsonLength = Int32.MaxValue;
 			account = js.Deserialize<List<Account>>(jsonInput);
+			
 			//Inserts json info into users table of database
 			for (int i = 0; i < account.Count(); i++)
 			{
 				con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-				insertUsers = new SqlCommand(" INSERT INTO Users(name, cookingInterest, updateTime, bio, city, country) OUTPUT INSERTED.id VALUES (@name, @cookingInterest, @updateTime, @bio, @city, @country)", con);
+				con.Open();
+				transaction = con.BeginTransaction();
+				
+				//Command to insert user info baased on json
+				insertUsers = new SqlCommand(" INSERT INTO Users(name, cookingInterest, updateTime, bio, city, country) OUTPUT INSERTED.id VALUES (@name, @cookingInterest, @updateTime, @bio, @city, @country)", con, transaction);
 				insertUsers.Parameters.AddWithValue("@name", account[i].name);
 				insertUsers.Parameters.AddWithValue("@cookingInterest", account[i].cookingInterest);
 				insertUsers.Parameters.AddWithValue("@updateTime", account[i].updateTime);
@@ -67,13 +72,15 @@ namespace WebApplication1
 
 				try
 				{                 
-					con.Open();
-					newId = (Int32) insertUsers.ExecuteScalar();
-					insertIndAccount(i);
+					
+					newId = (Int32) insertUsers.ExecuteScalar(); //insert users and retrieve id
+					insertIndAccount(i); //inserts users related account info
+					transaction.Commit();
 
 				}
 				catch (Exception ex)
 				{
+					transaction.Rollback();
 					Response.Write("Error");
 					Response.Write(ex);
 				}
@@ -89,7 +96,7 @@ namespace WebApplication1
 		**/
 		public void insertIndAccount(int i)
 		{
-			SqlCommand insertAccount = new SqlCommand(" INSERT INTO Account(id,email,password,updateTime) VALUES (@id,@email,@password,@updateTime)", con);
+			SqlCommand insertAccount = new SqlCommand(" INSERT INTO Account(id,email,password,updateTime) VALUES (@id,@email,@password,@updateTime)", con, transaction);
 			insertAccount.Parameters.AddWithValue("@id", newId);
 			insertAccount.Parameters.AddWithValue("@email", account[i].email);
 			insertAccount.Parameters.AddWithValue("@password", account[i].password);

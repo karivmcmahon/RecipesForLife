@@ -23,10 +23,12 @@ namespace WebApplication1
 				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				js.MaxJsonLength = Int32.MaxValue;
-				var contribs = js.Deserialize<List<Contributer>>(jsonInput);
+				var contribs = js.Deserialize<List<Contributer>>(jsonInput); //deserializes json into contrib objects
 				for (int i = 0; i < contribs.Count(); i++)
 				{
 					int id = 0;
+					
+					//Select id from cookbook based of uniqueid from json
 					SqlConnection connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 					SqlCommand select = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
 					select.Parameters.AddWithValue("@uniqueid", contribs[i].bookid);
@@ -39,45 +41,50 @@ namespace WebApplication1
 						{
 							while (rdr.Read())
 							{
-								// read a row, for example:
 								id = rdr.GetInt32(0);
 							}
 						}
 						rdr.Close();
-						SqlCommand insert = new SqlCommand("UPDATE Contributers SET progress=@progress, changeTime=@changeTime WHERE Cookbookid=@bookid AND usersId=@usersid", connn);
-						insert.Parameters.AddWithValue("@bookid", id);
-						insert.Parameters.AddWithValue("@usersid", contribs[i].email);
-						insert.Parameters.AddWithValue("@changeTime", contribs[i].changeTime);
-						insert.Parameters.AddWithValue("@progress", contribs[i].progress);
+						
+						//Update contrib info in database 
+						SqlCommand update = new SqlCommand("UPDATE Contributers SET progress=@progress, changeTime=@changeTime WHERE Cookbookid=@bookid AND usersId=@usersid", connn);
+						update.Parameters.AddWithValue("@bookid", id);
+						update.Parameters.AddWithValue("@usersid", contribs[i].email);
+						update.Parameters.AddWithValue("@changeTime", contribs[i].changeTime);
+						update.Parameters.AddWithValue("@progress", contribs[i].progress);
 						try
 						{
 
-							SqlDataReader rdr2= insert.ExecuteReader();
+							SqlDataReader rdr2= update.ExecuteReader();
 							rdr2.Close();
 						}									  
 						catch (Exception ex)
 						{
 
-							Response.Write("Error ");
+							Response.Write("Error Contrib Update ");
 							Response.Write(ex);
 						}
 					}
 					catch (Exception ex)
 					{
 
-						Response.Write("Error ");
+						Response.Write("Error Contrib Update ");
 						Response.Write(ex);
 					}
 					connn.Close();
 				}
 				}catch(Exception ex)
 				{
-					Response.Write("Error");
+					Response.Write("Error Contrib Update");
 					Response.Write(ex);
 				}
 			}
 		}
 		
+		/**
+		* Class stores info from contrib json
+		*
+		**/
 		public class Contributer
 		{
 			public string bookid { get; set; }

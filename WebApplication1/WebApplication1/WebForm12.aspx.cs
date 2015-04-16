@@ -30,8 +30,8 @@ namespace WebApplication1
 				try
 				{
 					var time = js.Deserialize<List<Date2>>(jsonInput);
-					lastUpdated = time[0].updateTime;
-					change = time[0].change;
+					lastUpdated = time[0].updateTime; //gets last updated time - insert time
+					change = time[0].change; //gets last change time - update time
 					con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 					selectContribs();
 				}catch(Exception ex)
@@ -43,7 +43,10 @@ namespace WebApplication1
 			}
 		}
 		
-		//Select contributers
+		/**
+		* Select contributers for update json or insert json whether change is true
+		*
+		**/
 		public void selectContribs()
 		{
 			if(change == "true")
@@ -61,6 +64,7 @@ namespace WebApplication1
 			contributers.Contributer = new List<Contributer>();
 			var reader = select.ExecuteReader();
 			
+			//Gets contributer info to place in a json
 			while (reader.Read())
 			{
 				Contributer contrib = new Contributer();
@@ -70,12 +74,16 @@ namespace WebApplication1
 				
 			}
 			con.Close();
+			
 			//Creates json of contributers
 			string json = js.Serialize(contributers);
 			Response.Write(json);
 		}
 		
-		//Selects cookbook contributer is associated with's uniqueid
+		/**
+		* Selects cookbook unique id which is associated with contributer
+		*
+		**/
 		public void selectContribBook(SqlDataReader reader, Contributer contrib, List<Contributer> contribs)
 		{
 			SqlCommand select2 = new SqlCommand(" SELECT uniqueid FROM Cookbook WHERE id=@id", con);
@@ -88,6 +96,10 @@ namespace WebApplication1
 			contribs.Add(contrib);
 		}
 		
+		/**
+		* Stores json from app containing dates
+		*
+		**/
 		public class Date2
 		{
 			public string updateTime { get; set; }
@@ -100,7 +112,10 @@ namespace WebApplication1
 
 		}
 
-
+		/**
+		* Stores contrib info to send to JSON
+		*
+		**/
 		public class Contributer
 		{
 			public string bookid { get; set; }

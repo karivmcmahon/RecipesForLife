@@ -30,7 +30,8 @@ namespace WebApplication1
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
 					dates = js.Deserialize<List<Date>>(jsonInput);
-					//Gets last updated time
+				
+					//Gets last updated time from json
 					string lastUpdated = dates[0].updateTime;
 					
 					SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
@@ -47,6 +48,7 @@ namespace WebApplication1
 					con2.Open();
 					var reader = selectAccount.ExecuteReader();
 					
+					//Sets up list
 					var list = new List<Acc>();
 					var list2 = new List<User>();
 					var reader2 = selectUsers.ExecuteReader();
@@ -91,9 +93,12 @@ namespace WebApplication1
 					}
 					con2.Close();
 					con.Close();
+					
 					//Serialize json to send to device
 					string json = js.Serialize(fulllist);
 					list.Clear();
+					
+					//Print json once finished
 					Response.Write(json);
 					json = "";
 				}

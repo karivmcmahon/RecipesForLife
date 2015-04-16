@@ -11,7 +11,7 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	Class handles recipe JSON from app
+	Class handles recipe details JSON from app
 	**/
 	public partial class WebForm16 : System.Web.UI.Page
 	{
@@ -21,6 +21,7 @@ namespace WebApplication1
 		SqlConnection connn = null;
 		SqlConnection connn2 = null;
 		Int32 recipeId =0;
+		SqlTransaction transaction;
 		
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -36,7 +37,7 @@ namespace WebApplication1
 					for(int i = 0; i < recipe.Count(); i++)
 					{
 						
-						insertRecipe(i);
+						insertAdditionalDets(i);
 						
 					}
 				}catch(Exception ex)
@@ -49,22 +50,25 @@ namespace WebApplication1
 		
 		
 		/**
-		Inserts recipe into database
+		* Inserts additional prep and recipe details which are added after the recipe was inserted 
 		**/
-		public void insertRecipe(int i)
+		public void insertAdditionalDets(int i)
 		{
 			connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn.Open();
 			connn2.Open();
+			transaction = connn.BeginTransaction();
 			try
 			{ 
 				
 				insertPrep(i);	
 				insertIngredient(i);
+				transaction.Commit();
 			}
 			catch(Exception e)
 			{
+				transaction.Rollback();
 				Response.Write("Error Insert Recipe");
 				Response.Write(e);
 			}
@@ -73,7 +77,8 @@ namespace WebApplication1
 		}
 		
 		/**
-		inserts prep details into database
+		* Inserts prep details into database
+		* i - point in loop
 		**/
 		public void insertPrep(int i)
 		{
@@ -81,8 +86,8 @@ namespace WebApplication1
 			{
 			if(selectPrepUID(recipe[i].Preperation[2].uniqueid[y]) == false)
 			{
-				Response.Write("EXISTS");
-				SqlCommand insertPrep = new SqlCommand(" INSERT INTO Preperation(instruction, instructionNum, updateTime, changeTime, uniqueid, progress) OUTPUT INSERTED.id VALUES (@prep, @prepNums, @updateTime, @changeTime, @uniqueid, @progress)", connn);
+
+				SqlCommand insertPrep = new SqlCommand(" INSERT INTO Preperation(instruction, instructionNum, updateTime, changeTime, uniqueid, progress) OUTPUT INSERTED.id VALUES (@prep, @prepNums, @updateTime, @changeTime, @uniqueid, @progress)", connn, transaction);
 				insertPrep.Parameters.AddWithValue("@prep", recipe[i].Preperation[0].prep[y]);
 				insertPrep.Parameters.AddWithValue("@prepNums", recipe[i].Preperation[1].prepNums[y]);
 				insertPrep.Parameters.AddWithValue("@updateTime", recipe[i].Preperation[5].updateTime[y]);
@@ -91,10 +96,8 @@ namespace WebApplication1
 				insertPrep.Parameters.AddWithValue("@progress", recipe[i].Preperation[3].prepprogress[y]);
 				try
 				{
-				 Response.Write("RESPONSE ID " + recipe[i].Preperation[4].preprecipeid[y]);
 					Int32 prepId = (Int32)insertPrep.ExecuteScalar();
-					Response.Write("RESPONSE ID " + recipe[i].Preperation[4].preprecipeid[y]);
-					SqlCommand insertPrepLink = new SqlCommand(" INSERT INTO PrepRecipe(recipeId, Preperationid, updateTime, changeTime)  VALUES (@recipeId, @Preperationid, @updateTime, @changeTime)", connn);
+					SqlCommand insertPrepLink = new SqlCommand(" INSERT INTO PrepRecipe(recipeId, Preperationid, updateTime, changeTime)  VALUES (@recipeId, @Preperationid, @updateTime, @changeTime)", connn, transaction);
 					insertPrepLink.Parameters.AddWithValue("@recipeId", selectRecipe(recipe[i].Preperation[4].preprecipeid[y]));
 					insertPrepLink.Parameters.AddWithValue("@Preperationid", prepId);
 					insertPrepLink.Parameters.AddWithValue("@updateTime", recipe[i].Preperation[5].updateTime[y]);
@@ -107,21 +110,24 @@ namespace WebApplication1
 					}
 					catch (Exception ex)
 					{
-						Response.Write("Error ");
+						Response.Write("Error Prep Details");
 						Response.Write(ex);
+						throw ex;
 					}
 				}
 				catch (Exception ex)
 				{
-					Response.Write("Error ");
+					Response.Write("Error Prep Details ");
 					Response.Write(ex);
+					throw ex;
 				}	
 				}
 			}
 		}
 		
 		/**
-		Inserts ingredient details into database
+		* Inserts ingredient details into database
+		* i - point in loop
 		**/
 		public void insertIngredient(int i)
 		{
@@ -129,7 +135,7 @@ namespace WebApplication1
 			{
 				
 				Int32 ingredId = 0;
-				SqlCommand selectIngredId = new SqlCommand(" SELECT id FROM Ingredient WHERE name=@name", connn);
+				SqlCommand selectIngredId = new SqlCommand(" SELECT id FROM Ingredient WHERE name=@name", connn, transaction);
 				selectIngredId.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
 				try
 				{
@@ -151,12 +157,13 @@ namespace WebApplication1
 
 					Response.Write("Error ");
 					Response.Write(ex);
+					throw ex;
 				}
 				
 				if(selectIngredUID(recipe[i].Ingredient[4].uniqueid[a]) == false)
 				{
 				
-				SqlCommand insertIngred = new SqlCommand(" INSERT INTO Ingredient(name, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime, @changeTime)", connn);
+				SqlCommand insertIngred = new SqlCommand(" INSERT INTO Ingredient(name, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime, @changeTime)", connn, transaction);
 				insertIngred.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
 				insertIngred.Parameters.AddWithValue("@updateTime", recipe[i].Ingredient[7].updateTime[a]);
 				insertIngred.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
@@ -167,7 +174,7 @@ namespace WebApplication1
 						ingredId = (Int32)insertIngred.ExecuteScalar();
 					}
 					
-					SqlCommand insertIngredDet = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime, uniqueid, progress)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime, @uniqueid, @progress)", connn);
+					SqlCommand insertIngredDet = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime, uniqueid, progress)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime, @uniqueid, @progress)", connn, transaction);
 					insertIngredDet.Parameters.AddWithValue("@id", ingredId);
 					insertIngredDet.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
 					insertIngredDet.Parameters.AddWithValue("@note", recipe[i].Ingredient[3].Notes[a]);
@@ -180,7 +187,7 @@ namespace WebApplication1
 					{
 
 						Int32 ingredDetsId = (Int32)insertIngredDet.ExecuteScalar();
-						SqlCommand insertIngredRecipeLink = new SqlCommand(" INSERT INTO RecipeIngredient(Recipeid, ingredientDetailsId, updateTime, changeTime)  VALUES (@recipeid,@detsid, @updateTime, @changeTime)", connn);
+						SqlCommand insertIngredRecipeLink = new SqlCommand(" INSERT INTO RecipeIngredient(Recipeid, ingredientDetailsId, updateTime, changeTime)  VALUES (@recipeid,@detsid, @updateTime, @changeTime)", connn, transaction);
 						insertIngredRecipeLink.Parameters.AddWithValue("@recipeid", selectRecipe(recipe[i].Ingredient[6].ingredrecipeid[a]));
 						insertIngredRecipeLink.Parameters.AddWithValue("@detsid", ingredDetsId);
 						insertIngredRecipeLink.Parameters.AddWithValue("@updateTime", recipe[i].Ingredient[7].updateTime[a]);
@@ -190,7 +197,7 @@ namespace WebApplication1
 
 							SqlDataReader rdr = insertIngredRecipeLink.ExecuteReader();
 							rdr.Close();
-							SqlCommand insertIngredDetsLink = new SqlCommand(" INSERT INTO IngredToIngredDetails(Ingredientdetailsid, ingredientid, updateTime, changeTime)  VALUES (@detsid,@ingredid, @updateTime, @changeTime)", connn);
+							SqlCommand insertIngredDetsLink = new SqlCommand(" INSERT INTO IngredToIngredDetails(Ingredientdetailsid, ingredientid, updateTime, changeTime)  VALUES (@detsid,@ingredid, @updateTime, @changeTime)", connn, transaction);
 							insertIngredDetsLink.Parameters.AddWithValue("@ingredid", ingredId);
 							insertIngredDetsLink.Parameters.AddWithValue("@detsid", ingredDetsId);
 							insertIngredDetsLink.Parameters.AddWithValue("@updateTime", recipe[i].Ingredient[7].updateTime[a]);
@@ -207,6 +214,7 @@ namespace WebApplication1
 
 								Response.Write("Error ");
 								Response.Write(ex);
+								throw ex;
 							}
 
 						}
@@ -215,6 +223,7 @@ namespace WebApplication1
 
 							Response.Write("Error ");
 							Response.Write(ex);
+							throw ex;
 						}
 
 					}
@@ -223,6 +232,7 @@ namespace WebApplication1
 
 						Response.Write("Error ");
 						Response.Write(ex);
+						throw ex;
 					}
 
 				}
@@ -231,12 +241,17 @@ namespace WebApplication1
 
 					Response.Write("Error ");
 					Response.Write(ex);
+					throw ex;
 				}
 			}
 			}
 			
 		}
 		
+		/**
+		* Selects recipe id from database based on recipe unique id
+		* uniqueid - recipe uniqueid
+		**/
 		public Int32 selectRecipe(String uniqueid)
 		{
 			SqlConnection connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
@@ -257,6 +272,10 @@ namespace WebApplication1
 			return id;
 		}
 		
+		/**
+		* Checks if the ingredient unique id already exists
+		* uniqueid - ingred unique id
+		**/
 		public bool selectIngredUID(String uniqueid)
 		{
 			SqlConnection connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
@@ -277,6 +296,10 @@ namespace WebApplication1
 			return exists;
 		}
 		
+		/**
+		* Check if prep unique id already exists in db
+		* uniqueid - prep unique id
+		**/
 		public bool selectPrepUID(String uniqueid)
 		{
 			SqlConnection connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);

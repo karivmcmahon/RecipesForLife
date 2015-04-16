@@ -11,7 +11,7 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	* Sends recipe JSON to app based on date
+	* Sends additional recipe details JSON to app based on date
 	**/
 	public partial class WebForm17 : System.Web.UI.Page
 	{
@@ -46,7 +46,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Select recipe info from database
+		* Select recipe additional info from database
 		**/
 		public void select()
 		{
@@ -65,6 +65,10 @@ namespace WebApplication1
 			Response.Write(json);
 		}
 		
+		/**
+		* Select recipes unique id based on id in database
+		* return - String - recipe uniqueid
+		**/
 		public String selectRecipe(int id)
 		{
 			String uniqueid = "";
@@ -151,7 +155,7 @@ namespace WebApplication1
 			
 		}
 
-		//List of recipes - creates a json array
+		//List of recipe info - creates a json array
 		public class Recipes
 		{
 			public List<Recipe> Recipe { get; set;} 

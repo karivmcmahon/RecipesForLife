@@ -24,8 +24,11 @@ namespace WebApplication1
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
 					var time = js.Deserialize<List<Date2>>(jsonInput);
-					string lastUpdated = time[0].updateTime;
+					string lastUpdated = time[0].updateTime; //gets last updated time from json
+					
+					
 					SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					//Selects cookbook info from last updated
 					SqlCommand select = new SqlCommand(" SELECT * FROM Cookbook WHERE updateTime > @lastUpdated", con);
 					select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 					con.Open();
@@ -34,6 +37,7 @@ namespace WebApplication1
 					var reader = select.ExecuteReader();
 					while (reader.Read())
 					{
+						//Creates new cookbook object to use for json list
 						byte[] image = new byte[0];
 						Cookbook cookbook = new Cookbook();
 						cookbook.name = (string)reader["name"];
@@ -47,11 +51,11 @@ namespace WebApplication1
 						cookbooks.Cookbook.Add(cookbook);
 					} 
 					con.Close();
-					string json = js.Serialize(cookbooks);
+					string json = js.Serialize(cookbooks); //serialize list into JSON
 					Response.Write(json);
 				}catch(Exception ex)
 				{
-					Response.Write("Error");
+					Response.Write("Error Selecting Cookbooks");
 					Response.Write(ex);
 				}
 			}

@@ -17,16 +17,19 @@ namespace WebApplication1
 		JavaScriptSerializer js = new JavaScriptSerializer();
 		string lastUpdated = "";
 		SqlConnection connection = null;
+		
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			js.MaxJsonLength = Int32.MaxValue;
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
-			if (jsonInput != null)
+		
+		if (jsonInput != null)
 			{	
 				try
 				{
 					var time = js.Deserialize<List<Date>>(jsonInput);
-					lastUpdated = time[0].changeTime;
+					lastUpdated = time[0].changeTime; //gets last updated time from JSON
+					
 					connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 					selectRecipe();
 				}catch(Exception ex)
@@ -37,19 +40,22 @@ namespace WebApplication1
 			}
 		}
 		
-		//Selects recipe needing updated
+		/**
+		* Selects recipe needing updated in the app
+		*
+		**/
 		public void selectRecipe()
 		{
 			SqlCommand select = new SqlCommand(" SELECT * FROM Recipe WHERE changeTime > @lastUpdated", connection);
 			select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 			connection.Open();
-			var reader = select.ExecuteReader();
+			SqlDataReader reader = select.ExecuteReader();
 			Recipes recipes = new Recipes();
 			recipes.Recipe = new List<Recipe>();
 			
 			while (reader.Read())
 			{
-
+				//Creates recipe object to help build a JSON 
 				Recipe recipe = new Recipe();
 				recipe.Preperation = new List<Preperation>();
 				recipe.Ingredient = new List<Ingredient>();
@@ -62,59 +68,79 @@ namespace WebApplication1
 				recipe.uniqueid = (string)reader["uniqueid"];
 				recipe.serves = (Int32)reader["serves"];
 				recipe.progress = (string)reader["progress"];
-				if( reader["difficulty"] == DBNull.Value)
-				{
-					recipe.difficulty = "";
-				}
-				else
-				{
-					recipe.difficulty = (string)reader["difficulty"];
-				}
-				if( reader["dietary"] == DBNull.Value)
-				{
-					recipe.dietary = "";
-				}
-				else
-				{
-					recipe.dietary = (string)reader["dietary"];
-				}
-				if( reader["tips"] == DBNull.Value)
-				{
-					recipe.tips = "";
-				}
-				else
-				{
-					recipe.tips = (string)reader["tips"];
-				}
-				if( reader["cusine"] == DBNull.Value)
-				{
-					recipe.cusine = "";
-				}
-				else
-				{
-					recipe.cusine = (string)reader["cusine"];
-				}
+				//Checks for nulls
+				recipe = checkForNulls(recipe, reader);
+		
+				recipe.Preperation = selectPrep(recipe, recipe.Preperation); //selects prep to be updated
+				recipe.Ingredient = selectIngred(recipe, recipe.Ingredient); //selects ingreds to be updated
+				recipe = selectImages(recipe); //selcts images to be update
+				//Add recipe to list which will be used to create JSON
 				recipes.Recipe.Add(recipe); 
-				selectPrep(recipe, recipe.Preperation);
-				selectIngred(recipe, recipe.Ingredient);
-				
-				recipe = selectImages(recipe);
 			}
 			connection.Close();
-			string json = js.Serialize(recipes);
+			string json = js.Serialize(recipes); // Serialize list to JSON
 			Response.Write(json);
 		}
 		
-		//Selects related preperation to recipe
-		public void selectPrep(Recipe recipe, List<Preperation> preprecipe)
+		/**
+		* Checks for nulls in db values and sets them to empty quotes
+		* recipe - stores recipe data
+		* recipereader - stores info from query
+		*
+		* return - recipe - with updated recipe info
+		**/
+		public Recipe checkForNulls(Recipe recipe, SqlDataReader recipeReader)
+		{
+			if( recipeReader["difficulty"] == DBNull.Value)
+			{
+				recipe.difficulty = "";
+			}
+			else
+			{
+				recipe.difficulty = (string)recipeReader["difficulty"];
+			}
+			if( recipeReader["dietary"] == DBNull.Value)
+			{
+				recipe.dietary = "";
+			}
+			else
+			{
+				recipe.dietary = (string)recipeReader["dietary"];
+			}
+			if( recipeReader["tips"] == DBNull.Value)
+			{
+				recipe.tips = "";
+			}
+			else
+			{
+				recipe.tips = (string)recipeReader["tips"];
+			}
+			if( recipeReader["cusine"] == DBNull.Value)
+			{
+				recipe.cusine = "";
+			}
+			else
+			{
+				recipe.cusine = (string)recipeReader["cusine"];
+			}
+			return recipe;
+		}
+		
+		/**
+		* Selects related preperation to recipe
+		* recipe - stores recipe info like id which is used for query
+		* preprecipe - A list of preperation details for recipe. Adds selected info onto it for use info json
+		*
+		* return - List<Preperation> - Updated list of prep details
+		**/
+		public List<Preperation> selectPrep(Recipe recipe, List<Preperation> preprecipe)
 		{		
 			SqlCommand selectprep = new SqlCommand("SELECT PrepRecipe.Preperationid, Preperation.instruction, Preperation.instructionNum, Preperation.uniqueid, Preperation.progress FROM PrepRecipe INNER JOIN Preperation ON PrepRecipe.PreperationId=Preperation.id WHERE PrepRecipe.recipeId = @recipe;", connection);
 			selectprep.Parameters.AddWithValue("@recipe", recipe.id);
 			var selectprepReader = selectprep.ExecuteReader();
-			// int i = 0;
 			while (selectprepReader.Read())
 			{
-				//Preperation preps = new Preperation();
+				
 				Preperation preps = new Preperation();
 				preps.prep = new List<string>();
 				preps.uniqueid = new List<string>();
@@ -126,10 +152,17 @@ namespace WebApplication1
 				preps.prepprogress.Add((string)selectprepReader["progress"]);
 				preprecipe.Add(preps);			
 			}
+			return preprecipe;
 		}
 		
-		//selects related ingredients to recipe
-		public void selectIngred(Recipe recipe, List<Ingredient> ingredrecipe)
+		/** 
+		* selects related ingredients to recipe
+		* recipe - stores recipe info liked id which is used for query
+		* ingredrecipe - List of ingredient details for recipe. Adds selected info onto it for use in JSON
+		*
+		* return - List<Ingredient> - Updated list of ingred details
+		**/
+		public List<Ingredient> selectIngred(Recipe recipe, List<Ingredient> ingredrecipe)
 		{
 			SqlCommand selectingred = new SqlCommand("SELECT * FROM IngredientDetails INNER JOIN RecipeIngredient ON IngredientDetails.id=RecipeIngredient.ingredientDetailsId INNER JOIN Ingredient ON Ingredient.id = IngredientDetails.ingredientId WHERE RecipeIngredient.RecipeId = @recipe;", connection);
 			selectingred.Parameters.AddWithValue("@recipe", recipe.id);
@@ -151,8 +184,15 @@ namespace WebApplication1
 				ingreds.uniqueid.Add((string)selectingredReader["uniqueid"]);
 				ingredrecipe.Add(ingreds); 
 			}
+			return ingredrecipe;
 		}
 		
+		/**
+		* Select images to be updated for recipe.
+		* recipe - recipe info used for update
+		*
+		* return - recipe - now containing image info
+		**/
 		public Recipe selectImages(Recipe recipe)
 		{
 			SqlCommand selectimage = new SqlCommand("SELECT image, uniqueid FROM Images INNER JOIN RecipeImages ON RecipeImages.imageid=Images.imageid WHERE RecipeImages.Recipeid = @recipe;", connection);
@@ -167,7 +207,7 @@ namespace WebApplication1
 			return recipe;
 		}
 		
-		//Stores date sent to webpage
+		//Stores date sent to webpage from json
 		public class Date
 		{
 			public string changeTime { get; set; }

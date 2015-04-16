@@ -10,6 +10,11 @@ using System.Configuration;
 
 namespace WebApplication1
 {
+
+	/**
+	* Class handles the sending of review json from database to app
+	*
+	**/
 	public partial class WebForm15 : System.Web.UI.Page
 	{
 		Int32 reviewID = 0;
@@ -26,10 +31,12 @@ namespace WebApplication1
 			{
 				try
 				{
-					//Gets last update
+					//Gets last update time
 					var time = js.Deserialize<List<Date>>(jsonInput);
 					lastUpdated = time[0].updateTime;
 					connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					
+					//Selects reviews based on this time
 					SqlCommand selectreview = new SqlCommand(" SELECT * FROM Review WHERE updateTime > @lastUpdated", connection1);
 					selectreview.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 					connection1.Open();
@@ -39,12 +46,13 @@ namespace WebApplication1
 					
 					while (reviewReader.Read())
 					{
+						//Create review object for json based on review
 						Review review = new Review();			
 						review.comment = (string)reviewReader["review"];
 						review.user = (string)reviewReader["userid"];
 						reviewID = (Int32)reviewReader["reviewId"];
 						
-						
+						//Select unique id for recipe to place in json
 						SqlCommand selectRecipeUniqueID = new SqlCommand("SELECT uniqueid FROM Recipe INNER JOIN ReviewRecipe ON ReviewRecipe.Recipeid = Recipe.id INNER JOIN Review ON Review.reviewId = ReviewRecipe.ReviewId WHERE Review.reviewId = @id", connection1);
 						selectRecipeUniqueID.Parameters.AddWithValue("@id", reviewID);
 						var selectRecipeReader = selectRecipeUniqueID.ExecuteReader();
@@ -68,6 +76,10 @@ namespace WebApplication1
 			}
 		}
 		
+		/**
+		* Class which holds date sent from app
+		*
+		**/
 		public class Date
 		{
 			public string updateTime { get; set; }
@@ -79,6 +91,10 @@ namespace WebApplication1
 
 		}
 		
+		/**
+		* Review class which stores json
+		*
+		**/
 		public class Review
 		{
 			public string comment { get; set; }

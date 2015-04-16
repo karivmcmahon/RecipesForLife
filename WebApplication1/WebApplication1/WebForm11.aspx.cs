@@ -22,11 +22,13 @@ namespace WebApplication1
 				try{
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
-					var contribs = js.Deserialize<List<Contributer>>(jsonInput);
+					var contribs = js.Deserialize<List<Contributer>>(jsonInput); //Get info from json and add to contrib object
 					for (int i = 0; i < contribs.Count(); i++)
 					{
 						int id = 0;
 						SqlConnection connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+						
+						//Get cookbook id based on  uniqueid from json. This is so a link from contribs to cookbook can be added
 						SqlCommand select = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
 						select.Parameters.AddWithValue("@uniqueid", contribs[i].bookid);
 						connn.Open();
@@ -38,14 +40,14 @@ namespace WebApplication1
 							{
 								while (rdr.Read())
 								{
-									// read a row, for example:
-									id = rdr.GetInt32(0);
+									id = rdr.GetInt32(0); //get id
 								}
 							}
-							Response.Write("Cookbook id " + id);
+							
 							rdr.Close();
 							if(id != 0)
 							{
+							//Insert contributer into db with cookbook id from database
 							SqlCommand insert = new SqlCommand("INSERT INTO Contributers(Cookbookid,usersId,updateTime,changeTime, progress) VALUES(@bookid, @usersid, @updateTime, @changeTime, @progress)", connn);
 							insert.Parameters.AddWithValue("@bookid", id);
 							insert.Parameters.AddWithValue("@usersid", contribs[i].email);
@@ -84,7 +86,10 @@ namespace WebApplication1
 			
 			
 		
-		
+		/**
+		* Class stores contrib info from JSON
+		*
+		**/
 		public class Contributer
 		{
 			public string bookid { get; set; }

@@ -23,11 +23,17 @@ namespace WebApplication1
 				{
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
+					
+					//Deserializes json input into a list of cookbook objects
 					var cookbook = js.Deserialize<List<Cookbook>>(jsonInput);
+					
 					for (int i = 0; i < cookbook.Count(); i++)
 					{
 						SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+						
+						//Creates command to insert cookbook
 						SqlCommand insertCookbook = new SqlCommand("INSERT INTO Cookbook(name,description,creator,updateTime,changeTime,uniqueid, privacyOption, image, progress) VALUES (@name, @description, @creator, @updateTime, @changeTime, @uniqueid, @privacyOption, @image, @progress)", connection);
+						//Binds params for command
 						insertCookbook.Parameters.AddWithValue("@name", cookbook[i].name);
 						insertCookbook.Parameters.AddWithValue("@description", cookbook[i].description);
 						insertCookbook.Parameters.AddWithValue("@creator", cookbook[i].creator);
@@ -39,25 +45,26 @@ namespace WebApplication1
 						byte[] image  = null;
 						if(cookbook[i].image != "")
 						{
-							image = Convert.FromBase64String(cookbook[i].image);
+							image = Convert.FromBase64String(cookbook[i].image); //get image to byte error
 						}
 						insertCookbook.Parameters.AddWithValue("@image", image );
-						connection.Open();
+					
+    					connection.Open();
 						try
 						{
-							SqlDataReader rdr= insertCookbook.ExecuteReader();
+							SqlDataReader rdr= insertCookbook.ExecuteReader(); //insert cookbook
 							rdr.Close();
 						}
 						catch (Exception ex)
 						{
-							Response.Write("Error ");
+							Response.Write("Error  Cookbook Insert ");
 							Response.Write(ex);
 						}
 						connection.Close();
 					}
 				}catch(Exception ex)
 				{
-					Response.Write("Error");
+					Response.Write("Error Cookbook Insert ");
 					Response.Write(ex);
 				}
 			}
