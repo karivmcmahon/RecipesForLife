@@ -338,7 +338,7 @@ public class Util  {
 	/**
 	 * Code to sync the databases
 	 */
-	String sync()
+	public String sync()
 	{
 		if(checkInternetConnection(context) == true)
 		{

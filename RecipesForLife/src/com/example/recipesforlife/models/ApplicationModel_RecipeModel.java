@@ -618,7 +618,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * @param uid		 preperations unique id
 	 * @return boolean	 whether it exists
 	 */
-	private boolean preperationExists(String uid)
+	public boolean preperationExists(String uid)
 	{
 		boolean exists = false;
 		Cursor cursor = database.rawQuery("SELECT * FROM Preperation WHERE uniqueid=?", new String[] { uid });
@@ -707,7 +707,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * 
 	 * @param name		Ingredient name
 	 */
-	private int selectIngredient(String name)
+	public int selectIngredient(String name)
 	{	
 		int id = 0;
 		Cursor cursores = database.rawQuery("SELECT * FROM Ingredient WHERE name=?", new String[] { name });
@@ -825,7 +825,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * @param id			 row id in database
 	 * @return uniqueid 	 recipes unique id
 	 */
-	String selectRecipeByID(int id)
+	public String selectRecipeByID(int id)
 	{	
 
 		String uid = "";

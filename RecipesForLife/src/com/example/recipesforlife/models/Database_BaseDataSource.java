@@ -20,7 +20,7 @@ public abstract class Database_BaseDataSource {
 		dbHelper = new Database_DatabaseConnection(context);
 	}
 
-	void close() {
+	public void close() {
 		dbHelper.close();
 	}
 
@@ -29,7 +29,7 @@ public abstract class Database_BaseDataSource {
 		return controlIndex;
 	}
 
-	void open() throws SQLException {
+	public void open() throws SQLException {
 		database = dbHelper.getWritableDatabase();
 	}
 }

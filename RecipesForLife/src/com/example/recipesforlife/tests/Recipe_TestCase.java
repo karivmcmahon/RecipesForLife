@@ -43,12 +43,13 @@ public class Recipe_TestCase extends AndroidTestCase{
 	Account_SignUpSignInView activity;
 	Database_DatabaseConnection dbConnection;
 	 RenamingDelegatingContext context;
+	
 
 	protected void setUp() throws Exception {
 		super.setUp();
 	    context 
 	        = new RenamingDelegatingContext(getContext(), "test_");
-		
+
 		recipemodel = new ApplicationModel_RecipeModel(context);
 		reviewmodel = new ApplicationModel_ReviewModel(context);
 		copyDataBase();
@@ -211,10 +212,86 @@ public void testDeleteRecipe()
 		Assert.assertEquals(access, true);
 	}
 	
-	/**public void testIngredExists()
+	public void testAllRecipesUserCanAccess()
 	{
+		ArrayList<RecipeBean> rblist = recipemodel.selectAllRecipesUserCanAccess("doe");
+		Assert.assertEquals(rblist.get(0).getName(), "pizza");
+	}
+	
+	public void testIngredSelection()
+	{
+		recipemodel.open();
+		int id = recipemodel.selectIngredient("cheese");
+		Assert.assertEquals(id, 1);
+		recipemodel.close();
+	}
+	
+	public void testSelectIngredsByRecipeID()
+	{
+		ArrayList<IngredientBean> iblist = recipemodel.selectIngredients(1);
+		Assert.assertEquals(iblist.get(0).getName(), "cheese");
+	}
+	
+	public void testSelectRecipeByID()
+	{
+		String uniqueid = recipemodel.selectRecipeByID(1);
+		Assert.assertEquals(uniqueid, "uniqueidrecip1");
+	}
+	
+	public void testIngredExists()
+	{
+		recipemodel.open();
 		boolean exists = recipemodel.ingredientExists("ingreddetsuniqueid1");
 		Assert.assertEquals(exists, true);
-	} **/
+		recipemodel.close();
+	
+	} 
+	
+	public void testSelectRecipeByUser()
+	{
+		ArrayList<RecipeBean> rblist = recipemodel.selectRecipesByUser("doe");
+		Assert.assertEquals(rblist.get(0).getName(), "pizza");
+	}
+	
+	public void testSelectPrepExists()
+	{
+		recipemodel.open();
+		boolean exists = recipemodel.preperationExists("prepuniqueid1");
+		Assert.assertEquals(exists, true);
+		recipemodel.close();
+	}
+	
+	public void testInsertPrepEdit()
+	{
+		RecipeBean recipe = new RecipeBean();
+		recipe.setId(1);
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+		PreperationBean prep = new PreperationBean();
+		prep.setPreperation("Add topping");
+		prep.setPrepNum(2);
+		prep.setProgress("added");
+		prepList.add(prep);
+		recipemodel.insertPrepFromEdit(false, prepList, recipe);
+		
+		ArrayList<PreperationBean> prepsList =  recipemodel.selectPreperation(1);
+		Assert.assertEquals(prepsList.get(1).getPreperation(), "Add topping");
+	}
+	
+	public void testInsertIngredEdit()
+	{
+		RecipeBean recipe = new RecipeBean();
+		recipe.setId(1);
+		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+		IngredientBean ingred = new IngredientBean();
+		ingred.setName("passata");
+		ingred.setAmount(500);
+		ingred.setValue("ml");
+		ingred.setProgress("added");
+		ingredList.add(ingred);
+		recipemodel.insertIngredFromEdit(false, ingredList, recipe);
+		
+		ArrayList<IngredientBean> ingredlist = recipemodel.selectIngredients(1);
+		Assert.assertEquals(ingredlist.get(1).getName(), "passata");
+	}
 
 }
