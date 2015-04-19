@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-09-01" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-10-06" view-index="0" gantt-divider-location="353" resource-divider-location="300" version="2.0" locale="en_GB">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
+    <view zooming-state="default:5" id="gantt-chart">
         <field id="tpd3" name="Name" width="57" order="0"/>
         <field id="tpd4" name="Begin date" width="21" order="1"/>
         <field id="tpd5" name="End date" width="21" order="2"/>
-        <timeline><![CDATA[0,0,0,0,0]]></timeline>
+        <timeline><![CDATA[0]]></timeline>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="52" order="0"/>
-        <field id="1" name="Default role" width="47" order="1"/>
+        <field id="0" name="Name" width="50" order="0"/>
+        <field id="1" name="Default role" width="49" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -36,7 +36,7 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="129" name="Project" meeting="false" start="2014-03-20" duration="396" complete="5" expand="true">
+        <task id="129" name="Project" color="#000000" meeting="false" start="2014-10-06" duration="196" complete="5" expand="true">
             <task id="0" name="Background Reading" color="#8cb6ce" meeting="true" start="2014-10-06" duration="0" complete="100" expand="true">
                 <task id="7" name="Research into history of cookbooks and recipes" color="#8cb6ce" meeting="false" start="2014-10-06" duration="14" complete="100" expand="true"/>
                 <task id="28" name="Idea Development" color="#8cb6ce" meeting="false" start="2014-10-06" duration="5" complete="100" expand="true"/>
@@ -90,7 +90,7 @@
             </task>
             <task id="70" name="User Tesiting" meeting="false" start="2015-02-23" duration="14" complete="0" expand="true"/>
             <task id="71" name="Evaluation" meeting="false" start="2015-02-23" duration="14" complete="0" expand="true"/>
-            <task id="72" name="Demo Prep" meeting="false" start="2014-03-20" duration="11" complete="0" expand="true"/>
+            <task id="72" name="Demo Prep" color="#8cb6ce" meeting="false" start="2015-03-20" duration="11" complete="0" expand="true"/>
         </task>
     </tasks>
     <resources>
