@@ -75,14 +75,13 @@ public class Util  {
 	public Util(Context context, Activity activity)
 	{
 		this.activity = activity;
-		// TODO Auto-generated constructor st
 		this.context = context;
 		typeFace=Typeface.createFromAsset(context.getAssets(),"fonts/elsie.ttf");
 	}
 	/**
 	 * Checks if there is internet connection
 	 * @param context
-	 * @return if there is return true else return false
+	 * @return boolean	if there is return true else return false
 	 */
 	private boolean checkInternetConnection(Context context) {
 		ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -97,7 +96,7 @@ public class Util  {
 	/**
 	 * Convert date to string
 	 * @param date
-	 * @return string with date
+	 * @return String 	Date as string
 	 */
 	@SuppressLint("SimpleDateFormat")
 	private String dateToString(Date date, boolean inappstring) {
@@ -115,6 +114,9 @@ public class Util  {
 
 	/**
 	 * Get current date
+	 * @param appstring  Request coming from app
+	 * 
+	 * @return String	current date time
 	 */
 	private String getLastUpdated(boolean appstring)
 	{
@@ -127,9 +129,9 @@ public class Util  {
 
 	/**
 	 * Set custom text for the dialog
-	 * @param resource
-	 * @param dialog
-	 * @param fontSize
+	 * @param resource		Resource that the custom text will be set for
+	 * @param dialog		Dialog the resource is contained in
+	 * @param fontSize		Fontsize for text
 	 */
 	public void setDialogText(int resource, Dialog dialog, int fontSize)
 	{
@@ -142,9 +144,9 @@ public class Util  {
 
 	/**
 	 * Set text for a row in a listview
-	 * @param resource
-	 * @param rowview
-	 * @param fontSize
+	 * @param resource		Resource that the custom text will be set for
+	 * @param rowview		Row view in a list
+	 * @param fontSize		Fontsize for text
 	 */
 	public void setRowText(int resource, View rowview, int fontSize)
 	{
@@ -157,9 +159,9 @@ public class Util  {
 
 	/**
 	 * Set custom text for the dialog
-	 * @param resource
-	 * @param dialog
-	 * @param fontSize
+	 * @param resource		Resource that the custom text will be set for
+	 * @param dialog		Dialog the resource is contained 
+	 * @param fontSize		Fontsize for text
 	 */
 	public void setDialogTextString(int resource, Dialog dialog, String text)
 	{
@@ -170,8 +172,8 @@ public class Util  {
 
 	/**
 	 * Set custom text
-	 * @param resource
-	 * @param fontSize
+	 * @param resource	Resource that the custom text will be set for
+	 * @param fontSize	Fontsize for text
 	 */
 	public void setText(int resource,int fontSize)
 	{
@@ -183,8 +185,8 @@ public class Util  {
 
 	/**
 	 * Set text to black and italic
-	 * @param resource
-	 * @param fontSize
+	 * @param resource		Resource that the custom text will be set for
+	 * @param fontSize		Fontsize for text
 	 */
 	public void setTextBlackItalic(int resource,int fontSize)
 	{
@@ -196,8 +198,8 @@ public class Util  {
 
 	/**
 	 * Set custom text
-	 * @param resource
-	 * @param fontSize
+	 * @param resource	Resource that the  text will be set for
+	 * @param text 		Text to be set to textview
 	 */
 	public void setTextString(int resource,String text)
 	{
@@ -207,8 +209,8 @@ public class Util  {
 
 	/**
 	 * Get text from edit text
-	 * @param resource
-	 * @param fontSize
+	 * @param resource  Resource that the text will be retrieved from
+	 * @return String 	Retrieved text from edit text
 	 */
 	public String getText(int resource )
 	{
@@ -219,8 +221,8 @@ public class Util  {
 
 	/**
 	 * Gets text from textview
-	 * @param resource
-	 * @return
+	 * @param resource	Resource that the text will be retrieved from
+	 * @return String		Text retrieved from textview
 	 */
 	public String getTextView(int resource )
 	{
@@ -231,8 +233,9 @@ public class Util  {
 
 	/**
 	 * Get text from Dialog
-	 * @param resource
-	 * @param fontSize
+	 * @param resource	Resource that the text will be retrieved from
+	 * @param dialog 	Dialog the text is being retrieved from
+	 * @return String 	Text retrieved from dialog
 	 */
 	public String getTextFromDialog(int resource, Dialog dialog )
 	{
@@ -243,8 +246,8 @@ public class Util  {
 
 	/**
 	 * Set custom text with pink color
-	 * @param resource
-	 * @param fontSize
+	 * @param resource	Resource that the text will be set for
+	 * @param fontSize	Font size for text
 	 */
 	public void setTextPink(int resource,int fontSize)
 	{
@@ -256,23 +259,22 @@ public class Util  {
 
 	/**
 	 * Set custom text with black color
-	 * @param resource
-	 * @param fontSize
+	 * @param resource	Resource that the text will be set for
+	 * @param fontSize	Font size for text
 	 */
 	public void setTextBlack(int resource,int fontSize)
 	{
 		TextView view = (TextView) activity.findViewById(resource);
 		view.setTypeface(typeFace);
 		view.setTextSize(fontSize);
-		//view.setTextColor(Color.parseColor("#F3216C"));
 	}
 
 
 
 	/**
 	 * Set custom text for button
-	 * @param resource
-	 * @param fontSize
+	 * @param resource	Resource that the text will be set for
+	 * @param fontSize	Font size for text
 	 */
 	public void setButtonText(int resource, int fontSize)
 	{
@@ -284,10 +286,10 @@ public class Util  {
 
 	/**
 	 * Set button text for a dialog
-	 * @param resource
-	 * @param fontSize
-	 * @param dialog
-	 * @return Button
+	 * @param resource	Resource that the button text will be set for
+	 * @param fontSize	Font size for text
+	 * @param dialog	Dialog which contains the button
+	 * @return Button	Button with text
 	 */
 	public Button setButtonTextDialog(int resource, int fontSize, Dialog dialog)
 	{
@@ -300,9 +302,10 @@ public class Util  {
 
 	/**
 	 * Set up the time picker
-	 * @param dialog
-	 * @param res
+	 * @param dialog		Dialog which should contain the time picker
+	 * @param res			Resource for the time picker
 	 * @param handler
+	 * @param type			Time picker type
 	 */
 	public void setTimePickerFrag(Dialog dialog, int res, final Handler handler, final String type)
 	{
@@ -352,15 +355,20 @@ public class Util  {
 			try {
 				//Sync
 				editor = sharedpreferences.edit();
+				
+				//Handles inserts
 				accountInsertsSync();
 				cookbookInsertsSync();
 				recipeInsertsSync();
 				recipeDetailsInsertsSync();
 				contributorsInsertsSync();
 				reviewInsertsSync();
+			
+				//Handles updates
 				recipeUpdatesSync();
 				cookbookUpdatesSync();
 				contributorUpdatesSync();
+			
 				//Update timestamp and reset stage
 				editor.putString("Date", getLastUpdated(true));
 				editor.commit();
@@ -375,7 +383,6 @@ public class Util  {
 				return "fail";
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
 				e.printStackTrace();
 				return "fail";
@@ -383,7 +390,6 @@ public class Util  {
 			}
 			catch (SQLiteException e) {
 				Log.v("LAST UPDATE", "ERROR LAST UPDATE " + sharedpreferences.getString("Date", "DEFAULT"));
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return "fail";
 			}
@@ -647,8 +653,8 @@ public class Util  {
 
 	/**
 	 * Creates a dialog
-	 * @param activity
-	 * @param resource
+	 * @param activity	
+	 * @param resource	Resource for dialog view to be set to
 	 * @return Dialog
 	 */
 	public Dialog createDialog(Activity activity, int resource)
@@ -664,8 +670,8 @@ public class Util  {
 
 	/**
 	 * Gets spinner index  - found online http://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position
-	 * @param spinner
-	 * @param myString
+	 * @param spinner		Spinner
+	 * @param myString		String item to get index for
 	 * @return int - the index
 	 */
 	public int getIndex(Spinner spinner, String myString)
@@ -684,8 +690,8 @@ public class Util  {
 
 	/**
 	 * Gets image path based on URI - used to show path when user selects image in browse
-	 * @param uri
-	 * @return String
+	 * @param uri		Uri
+	 * @return String	Image path
 	 */
 	public String getRealPathFromURI(Uri uri) {
 		String[] projection = { MediaStore.Images.Media.DATA };
@@ -699,8 +705,8 @@ public class Util  {
 
 	/**
 	 * Decodes image and finds the correct scale value for sample size
-	 * @param selectedImage
-	 * @return
+	 * @param selectedImage		Image URI
+	 * @return Bitmap			Bitmap image
 	 * @throws FileNotFoundException
 	 */
 	public Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
@@ -735,9 +741,9 @@ public class Util  {
 
 	/**
 	 * Rotates image based on ExifInterface - particularly useful for camera photos
-	 * @param bitmap
-	 * @param filePath
-	 * @return Bitmap
+	 * @param bitmap		Image bitmap
+	 * @param filePath		Image file path
+	 * @return Bitmap		Correctly rotated image
 	 */
 	public Bitmap rotateImage(Bitmap bitmap, String filePath)
 	{
@@ -771,7 +777,7 @@ public class Util  {
 
 	/** 
 	 * Get image intent for selecting photos from gallery or camera
-	 * @return
+	 * @return Intent	For selecting image
 	 */
 	public Intent getImageIntent()
 	{
@@ -791,7 +797,7 @@ public class Util  {
 
 	/**
 	 * Sets up the search details
-	 * @param menu
+	 * @param menu	Menu
 	 */
 	public void setUpSearch(Menu menu)
 	{

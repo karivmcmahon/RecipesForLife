@@ -64,6 +64,9 @@ import com.example.recipesforlife.util.Util;
 	
 
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -111,6 +114,9 @@ import com.example.recipesforlife.util.Util;
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -118,14 +124,18 @@ import com.example.recipesforlife.util.Util;
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 
-	/**
-	 * Handles action bar selections
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -140,10 +150,15 @@ import com.example.recipesforlife.util.Util;
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_plain, menu);
+		
 		utils.setUpSearch(menu);
 		return true;
 	}
@@ -153,6 +168,9 @@ import com.example.recipesforlife.util.Util;
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 
@@ -164,11 +182,14 @@ import com.example.recipesforlife.util.Util;
 	 */
 	@Override
 	public void onBackPressed() {
+		
 		//Reminds user to save before leaving page
 		final Dialog dialog = utils.createDialog(Recipe_EditView.this, R.layout.general_savedialog);
 		utils.setDialogText(R.id.textView, dialog, 18);
+		
 		// Show dialog
 		dialog.show();
+		
 		Button button = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
 		button.setOnClickListener(new OnClickListener() {
 
@@ -180,6 +201,7 @@ import com.example.recipesforlife.util.Util;
 
 			}
 		});
+		
 		Button button2 = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
 		button2.setOnClickListener(new OnClickListener() {
 
@@ -229,14 +251,17 @@ import com.example.recipesforlife.util.Util;
 		ingredList = new ArrayList<IngredientBean>();
 		addIngredList = new ArrayList<IngredientBean>();
 		addPrepList = new ArrayList<PreperationBean>();
+		
 		Intent intent = getIntent();
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr"));
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
 		imgBean = model.selectImages(recipe.getId());
+		
 		ImageView img = (ImageView) findViewById(R.id.foodImage);
-		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
+		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);	
 		task.execute();
+		
 		updatePrepList();
 		updateIngredList();
 
@@ -427,6 +452,7 @@ import com.example.recipesforlife.util.Util;
 	 */
 	private void saveRecipe(final boolean close)
 	{
+		//Set changes to recipe bean
 		RecipeBean recipechange = new RecipeBean();
 		recipechange.setName(utils.getTextView(R.id.recipeTitle));
 		recipechange.setDesc(utils.getTextView(R.id.recipeDesc));
@@ -443,17 +469,23 @@ import com.example.recipesforlife.util.Util;
 		ApplicationModel_RecipeModel rm = new ApplicationModel_RecipeModel(getApplicationContext());
 		try
 		{
+			//Handle additional prep and ingred adds first
 			rm.insertPrepFromEdit(false, addPrepList, recipechange);
 			addPrepList.clear();
 			rm.insertIngredFromEdit(false, addIngredList, recipechange);
 			addIngredList.clear();
+			
+			//Update recipe
 			rm.updateRecipe(recipechange, prepList, ingredList, imgBean, false );	
+			
 			final Dialog dialog = utils.createDialog(Recipe_EditView.this, R.layout.general_dialog);
 			utils.setDialogText(R.id.textView, dialog, 18);
+			
+			//Tell the user the recipe has been saved
 			TextView txtView = (TextView) dialog.findViewById(R.id.textView);
 			txtView.setText("Recipe has been saved");
-			// Show dialog
 			dialog.show();
+			
 			Button button = utils.setButtonTextDialog(R.id.okButton, 22, dialog);
 			button.setOnClickListener(new OnClickListener() {
 
@@ -486,18 +518,22 @@ import com.example.recipesforlife.util.Util;
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
 				try {
+					
 					//Gets image and its file and rotates it
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
 					String imageName = f.getName();
+					
 					//set image name to edit text
 					utils.setDialogTextString(R.id.recipeImagesEditText, imageDialog, imageName);
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					
 					//compresses image and set to byte array
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
 					byte[] byteArray = stream.toByteArray(); 		
-					imgBean.setImage(byteArray);			
+					imgBean.setImage(byteArray);
+					
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -559,10 +595,6 @@ import com.example.recipesforlife.util.Util;
 		imageDialog.show();
 	}
 	
-
-
-
-
 	/**
 	 * Finds current available id's - found online
 	 * @return

@@ -90,9 +90,9 @@ namespace WebApplication1
 		**/
 		public void selectContribBook(SqlDataReader reader, Contributer contrib, List<Contributer> contribs)
 		{
-			SqlCommand select2 = new SqlCommand(" SELECT uniqueid FROM Cookbook WHERE id=@id", con);
-			select2.Parameters.AddWithValue("@id", (Int32)reader["Cookbookid"]);
-			var reader2 = select2.ExecuteReader();
+			SqlCommand selectbook = new SqlCommand(" SELECT uniqueid FROM Cookbook WHERE id=@id", con);
+			selectbook.Parameters.AddWithValue("@id", (Int32)reader["Cookbookid"]);
+			var reader2 = selectbook.ExecuteReader();
 			while(reader2.Read())
 			{
 				contrib.bookid = (string)reader2["uniqueid"];

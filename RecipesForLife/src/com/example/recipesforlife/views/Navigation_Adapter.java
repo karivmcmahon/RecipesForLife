@@ -25,12 +25,12 @@ class Navigation_Adapter extends ArrayAdapter<String> {
 	private ArrayList<String> names;
 	private ArrayList<Integer> ids;
 	Util utils;
+	
+	
 	Navigation_Adapter(Context context, int resource,
 			ArrayList<String> objects, Activity activity, ArrayList<Integer> ids) 
 	{
 		super(context, resource, objects);
-		
-		
 		this.activity = activity;
 		names = objects;
 		utils = new Util(context, activity);
@@ -38,31 +38,28 @@ class Navigation_Adapter extends ArrayAdapter<String> {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint("ViewHolder")
 	@Override
-	/**
-	 * Adapts list data 
-	 * 
-	 * @return View - adapted view for list item
-	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = inflater.inflate(R.layout.navbar_draweritem, null, true);
 		TextView title = (TextView) rowView.findViewById(R.id.textView);
+		
 		//page name set
 		title.setText(names.get(position));
+		
 		//icons relating to page
 		ImageView imageView =(ImageView) rowView.findViewById(R.id.myImageView);
 		imageView.setImageResource(ids.get(position));
+		
 		//set text style
 		utils.setRowText(R.id.textView, rowView, 28);
+		
 		return rowView;
 	}
-
-
-
-
-
 
 }

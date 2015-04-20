@@ -30,8 +30,10 @@ class Navigation_DrawerCreation   {
 	private ArrayList<Integer> imageids;
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
+	
 	@SuppressWarnings("deprecation")
 	private ActionBarDrawerToggle drawerToggle;
+	
 	private ActionBarActivity activity;
 	private static final String pass = "passwordKey";
 	private static final String emailk = "emailKey";
@@ -59,13 +61,10 @@ class Navigation_DrawerCreation   {
 		navBarTitles.add("Home");
 		imageids.add(R.drawable.icon_home);
 		navBarTitles.add("Explore");
-		imageids.add(R.drawable.icon_explore);
-		
-		//navBarTitles.add("Proffile");
-		//imageids.add(R.drawable.icon_user2);
-		
+		imageids.add(R.drawable.icon_explore);	
 		navBarTitles.add("Log Off");
 		imageids.add(R.drawable.icon_power);
+		
 		drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
 		drawerList = (ListView) activity.findViewById(R.id.left_drawer);
 		
@@ -102,16 +101,25 @@ class Navigation_DrawerCreation   {
 		drawerList.setOnItemClickListener(new DrawerItemClickListener());
 	}
 
+	/**
+	 * Handles the sync state for the navigation drawer
+	 */
 	void syncState()
 	{
 		drawerToggle.syncState();
 	}
 
+	/*
+	 * Handles the configuration for the navigation drawer
+	 */
 	void config(Configuration newConfig)
 	{
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	/*
+	 * Handles the item selection for the navigation drawer
+	 */
 	boolean drawerToggle(MenuItem item)
 	{
 		if (drawerToggle.onOptionsItemSelected(item)) {
@@ -128,7 +136,9 @@ class Navigation_DrawerCreation   {
 	 */
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
-		public void onItemClick(AdapterView parent, View view, int position, long id) {
+		public void onItemClick(AdapterView parent, View view, int position, long id) 
+		{
+			
 			if(position == 0)
 			{
 				//Goes to homepage
@@ -153,6 +163,7 @@ class Navigation_DrawerCreation   {
 				Intent i = new Intent(activity, Account_SignUpSignInView.class);
 				activity.startActivity(i);
 			}
+			
 			//closes drawer
 			drawerLayout.closeDrawer(drawerList);
 

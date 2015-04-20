@@ -39,8 +39,8 @@ public class MemoryCache {
 
 	/**
 	 * Get bitmap based on id
-	 * @param id
-	 * @return
+	 * @param id			Image id
+	 * @return Bitmap		Image
 	 */
 	public Bitmap get(String id){
 		try{
@@ -55,8 +55,8 @@ public class MemoryCache {
 
 	/**
 	 * Puts bitmap in cache
-	 * @param id
-	 * @param bitmap
+	 * @param id		Image id
+	 * @param bitmap	Image
 	 */
 	public void put(String id, Bitmap bitmap){
 		try{
@@ -104,8 +104,8 @@ public class MemoryCache {
 	
 	/**
 	 * Gets the bitmap size in bytes
-	 * @param bitmap
-	 * @return long
+	 * @param bitmap	Image
+	 * @return long		Bitmap size
 	 */
 	public long getSizeInBytes(Bitmap bitmap) {
 		if(bitmap==null)

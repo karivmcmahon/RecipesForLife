@@ -33,7 +33,7 @@ namespace WebApplication1
 					SqlCommand select = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
 					select.Parameters.AddWithValue("@uniqueid", contribs[i].bookid);
 				
-				connn.Open();
+					connn.Open();
 					try
 					{
 

@@ -306,7 +306,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	/**
 	 * Select cookbooks which belong to a user whether they are creator or a contributer
 	 * 
-	 * @param user						 Users email addrss
+	 * @param user						 Users email address
 	 * @return ArrayList<cookbookBean>   List of cookbooks
 	 */
 	public ArrayList<CookbookBean> selectCookbooksByUser(String user)

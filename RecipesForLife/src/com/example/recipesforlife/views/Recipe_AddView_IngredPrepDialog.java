@@ -55,7 +55,6 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				recipeIngredDialog.dismiss();
 
 			}});
@@ -165,6 +164,7 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 		TextView errorView = (TextView) recipeIngredDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeIngredDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
+		
 		//Error catching before moving onto next stage
 		if(ingredient.equals(""))
 		{
@@ -184,6 +184,7 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 			ingredBean.setValue(value);
 			ingredBeanList.add(ingredBean);
 			recipeIngredDialog.dismiss();
+			
 			//How ingredients are displayed in the edit text box
 			EditText ingredsEdit = (EditText) recipeAddDialog2.findViewById(R.id.recipeIngredsEditText);
 			if(note.equals(""))

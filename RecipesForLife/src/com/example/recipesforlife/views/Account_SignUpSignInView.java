@@ -85,9 +85,11 @@ public class Account_SignUpSignInView extends Activity {
 			editor.putBoolean("firstTime", true);
 			editor.commit();
 			Editor editor2 = sharedpreferences.edit();
+			
 			//Dates for recipe syncing
 			editor2.putString("Date", "2015-01-01 12:00:00");
 			editor2.commit();
+			
 			//Tracker for recipe syncing
 			editor2.putString("Stage", "1");
 			editor2.commit();
@@ -164,7 +166,6 @@ public class Account_SignUpSignInView extends Activity {
 		{
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				dialog.dismiss();
 
 			}
@@ -236,12 +237,15 @@ public class Account_SignUpSignInView extends Activity {
 		return true;
 	}
 
-	/**
-	 * On resume takes user to activity if logged in
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
 	 */
 	@Override
 	protected void onResume() {
+		
 		super.onResume();
+		
 		//If the email and password is already stored - log them into their cookbook shelf
 		sharedpreferences = getSharedPreferences(MyPREFERENCES,	Context.MODE_PRIVATE);
 		if (sharedpreferences.contains(emailk)) 

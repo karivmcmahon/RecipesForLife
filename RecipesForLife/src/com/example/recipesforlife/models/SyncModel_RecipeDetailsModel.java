@@ -81,11 +81,9 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 	 */
 	public void getAndCreateJSON(boolean update) throws JSONException, IOException
 	{
-		
-		JSONArray jsonArray = new JSONArray();
+			JSONArray jsonArray = new JSONArray();
 		
 			JSONObject recipe = new JSONObject();		
-			//recipe.put("updateTime", util.getLastUpdated(false));
 			recipe.put("changeTime", "2015-01-01 12:00:00");
 			
 

@@ -52,11 +52,13 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	void getIngredient()
 	{
 		setUp();
+		
 		//Create dialog with textviews and edit text from the database
 		createList();
 
 		Button okButton = createButton();
 		final TextView errorView = createErrorView();
+		
 		//When ok button clicked get new ingredient list
 		okButton.setOnClickListener(new OnClickListener() {
 
@@ -443,7 +445,6 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				recipeIngredDialog.dismiss();
 
 			}});
@@ -452,7 +453,6 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				getIngredient(recipeIngredDialog);
 
 			}}); 
@@ -479,6 +479,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		TextView errorView = (TextView) recipeIngredDialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView,recipeIngredDialog,16);
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
+		
 		//Error catching before moving onto next stage
 		if(ingredient.equals(""))
 		{

@@ -36,11 +36,11 @@ class Recipe_Review_Adapter extends ArrayAdapter<ReviewBean> {
 		utils = new Util(this.context, activity);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint({ "InflateParams", "ViewHolder" })
 	@Override
-	/**
-	 * Adapts list data 
-	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 

@@ -38,6 +38,9 @@ public class Search_ResultsView extends ActionBarActivity {
 	private Navigation_DrawerCreation nav;
 	private Util utils;
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,6 +65,9 @@ public class Search_ResultsView extends ActionBarActivity {
 		handleIntent(getIntent());
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -70,6 +76,9 @@ public class Search_ResultsView extends ActionBarActivity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -77,18 +86,25 @@ public class Search_ResultsView extends ActionBarActivity {
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//handles nav drawer clicks
 		boolean result = nav.drawerToggle(item);
 
-		switch (item.getItemId()) {
+		switch (item.getItemId()) 
+		{
 		default:
 			result = false;
 		}
@@ -97,6 +113,9 @@ public class Search_ResultsView extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onNewIntent(android.content.Intent)
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		handleIntent(intent);
@@ -136,7 +155,7 @@ public class Search_ResultsView extends ActionBarActivity {
 	}
 
 	/**
-	 * Gets users based on the search query and places them in listview
+	 * Gets users based on the search query and place them in a listview
 	 * 
 	 * @param query		What the user searched for
 	 * @param ub		List of users retrieved from db
@@ -157,7 +176,7 @@ public class Search_ResultsView extends ActionBarActivity {
 	}
 
 	/**
-	 * Gets cookbooks based on search query and places them in listview
+	 * Gets cookbooks based on search query and place them in listview
 	 * 
 	 * @param query		What the user searched for
 	 * @param cb 		List of cookbooks retrieved from db
@@ -187,7 +206,6 @@ public class Search_ResultsView extends ActionBarActivity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					// TODO Auto-generated method stub
 					Intent i = new Intent(Search_ResultsView.this, Recipe_ShelfListView.class);
 					//intents used on getting the recipes		
 					i.putExtra("uniqueid", cb.get(position).getUniqueid());
@@ -201,7 +219,7 @@ public class Search_ResultsView extends ActionBarActivity {
 	}
 
 	/**
-	 * Gets recipes based on the search query and places them in a listview
+	 * Gets recipes based on the search query and place them in a listview
 	 * 
 	 * @param query 	What the user searched for
 	 * @param rb 		List of recipes found from the search
@@ -216,6 +234,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		utils.setText(R.id.userheader, 30);
 
 		ListView listView = (ListView) findViewById(R.id.list);
+		
 		//If list is 0 shows no results
 		if(rb.size() == 0)
 		{

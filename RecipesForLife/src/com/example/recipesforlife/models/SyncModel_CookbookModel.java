@@ -30,7 +30,6 @@ public class SyncModel_CookbookModel extends Database_BaseDataSource {
 		super(context);
 		this.context = context;
 		util = new Utility();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

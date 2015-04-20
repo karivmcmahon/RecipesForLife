@@ -42,7 +42,6 @@ public class Recipe_AddView_Dialog1 extends Recipe_AddView {
 		this.context = context;
 		this.bookname = bookname;
 		this.uniqueid = uniqueid;
-		Log.v("Dialog uid " , "Dialog uid " + uniqueid);
 		utils = new Util(context, activity);
 	}
 
@@ -55,11 +54,13 @@ public class Recipe_AddView_Dialog1 extends Recipe_AddView {
 		prepBeanList = new ArrayList<PreperationBean>();
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		recipeAddDialog = utils.createDialog(activity , R.layout.recipe_add_dialog1);
+		
 		//sets up styles
 		utils.setDialogText(R.id.recipeAddView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeBookView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeNameView,recipeAddDialog,22);
 		utils.setDialogText(R.id.recipeDescView,recipeAddDialog,22);	
+		
 		ApplicationModel_CookbookModel cbmodel = new ApplicationModel_CookbookModel(context);
 
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddDialog);

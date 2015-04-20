@@ -65,24 +65,33 @@ class Cookbook_EditView  {
 	 */
 	void editBook()
 	{
+		//Sets up dialog
 		editDialog = utils.createDialog(activity, R.layout.cookbook_editdialog);
 		errorView = (TextView) editDialog.findViewById(R.id.errorView);
+
+		//Sets up models
 		model = new ApplicationModel_CookbookModel(context);
 		cookbook = model.selectCookbook(ccadapter.bookids.get(position));
+
+		//Fill spinner for dialog
 		fillSpinner();
+
+		//Set style for dialog
 		setStyle();
+
+		//Set text for dialog
 		setText();
 
+		//Dismiss dialog
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, editDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				editDialog.dismiss();
-				
+
 			}});
-		
+
 		//Starts intent to get image from phone if selected
 		Button browseButton = utils.setButtonTextDialog(R.id.browseButton, 22, editDialog);
 		browseButton.setOnClickListener(new OnClickListener()
@@ -90,12 +99,13 @@ class Cookbook_EditView  {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent chooserIntent = utils.getImageIntent();
 				activity.startActivityForResult(chooserIntent, SELECT_PHOTO);
 			}
 
 		});
+
+
 		//edits cookbook if selected
 		Button btn = utils.setButtonTextDialog(R.id.updateButton,22, editDialog);
 		btn.setOnClickListener(new OnClickListener(){
@@ -160,6 +170,7 @@ class Cookbook_EditView  {
 	private void edit()
 	{
 		CookbookBean cb = new CookbookBean();
+
 		//Error checking
 		if(utils.getTextFromDialog(R.id.bookNameEditText, editDialog).equals(""))
 		{
@@ -180,21 +191,27 @@ class Cookbook_EditView  {
 			cb.setProgress("added");
 			try
 			{
-				model.updateBook(cb, false);
+				model.updateBook(cb, false); //update book in db
 
 				//updates list after book update
 				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
+
 				ArrayList<CookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+
+				//Clear list
 				Cookbook_ShelfListView.values.clear();
 				Cookbook_ShelfListView.ids.clear();
 				Cookbook_ShelfListView.images.clear();
+
+				//Update list
 				for(int i = 0; i < cookbookList.size(); i++)
 				{
 					Cookbook_ShelfListView.values.add(cookbookList.get(i).getName());
 					Cookbook_ShelfListView.ids.add(cookbookList.get(i).getUniqueid());
 					Cookbook_ShelfListView.images.add(cookbookList.get(i).getImage());
 				}
+
 				//If the list is under 6 then create empty rows to fill the layout of the app
 				if(cookbookList.size() < 6)
 				{
@@ -207,6 +224,7 @@ class Cookbook_EditView  {
 						Cookbook_ShelfListView.images.add(emptyarr);
 					}
 				}
+
 				//notifys list change
 				Cookbook_ShelfListView.adapter.notifyDataSetChanged();
 			}
@@ -237,6 +255,7 @@ class Cookbook_EditView  {
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
+
 					//Set to dialog and compresses then set to byte array
 					String imageName = f.getName();
 					utils.setDialogTextString(R.id.cookbookImageEditText, editDialog, imageName);
@@ -250,9 +269,7 @@ class Cookbook_EditView  {
 			}
 		}
 
-
 	}
-
 
 }
 

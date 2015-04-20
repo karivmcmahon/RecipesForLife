@@ -281,12 +281,10 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 			{
 				size += 1;
 				modifiedPrepList.add(prepList.get(i));
-				Log.v("prep ", "prep " + prepList.get(i).getProgress());
 				dismissed = sizeCheck(size);
 			}
 			else if(prepList.get(i).getProgress().equals("added"))
 			{
-				Log.v("prep ", "prep " + prepList.get(i).getProgress());
 				PreperationBean prep = new PreperationBean();
 				if(utils.getTextFromDialog(prepEditIds.get(i), prepDialog).equals(""))
 				{
@@ -330,12 +328,14 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	{
 		TextView instructions = (TextView) activity.findViewById(R.id.methodList);
 		instructions.setText("");
+		
 		//Order list
 		Collections.sort(list, new Comparator<PreperationBean>() {
 			@Override 
 			public int compare(PreperationBean p1, PreperationBean p2) {
 				return p1.getPrepNum() - p2.getPrepNum(); // Ascending
 			}});
+		
 		//Set on edit page
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -395,7 +395,9 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 				recipeAddStepDialog.dismiss();
 				
 			}});
+		
 		final TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
+		
 		Button addButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
 		addButton.setOnClickListener(new OnClickListener() {
 
@@ -421,6 +423,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
 		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
 		errorView.setText("");
+		
 		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
 		{
@@ -433,6 +436,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		else
 		{
 			recipeAddStepDialog.dismiss();
+			
 			//Sets the details to a prep bean
 			PreperationBean prepBean = new PreperationBean();
 			prepBean.setPreperation(step);

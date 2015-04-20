@@ -67,6 +67,7 @@ namespace WebApplication1
 		
 		/**
 		* Select recipes unique id based on id in database
+		* int id - row in database
 		* return - String - recipe uniqueid
 		**/
 		public String selectRecipe(int id)
@@ -166,7 +167,9 @@ namespace WebApplication1
 
 		}
 
-		//Stores recipe prep details
+		/**
+		* Stores recipe prep details
+		**/
 		public class Preperation
 		{
 			public List<String> prep { get; set; }

@@ -69,6 +69,7 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 	void addRecipe()
 	{
 		dialog1 = new  Recipe_AddView_Dialog1(activity, context, uniqueid, bookname);
+		
 		//Set up dialog style
 		dialog1.setUpInitialRecipeAddDialog();
 		//Once next pressed
@@ -107,7 +108,9 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 		ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(context);
 		try
 		{
+			//inserts recipe and retrieves uid
 			String uid = model.insertRecipe(recipe, false, ingredBeanList, prepBeanList, imgBean);
+		
 			//Updates recipe list once inserted
 			Recipe_ShelfListView.recipenames.add(0, name);
 			Recipe_ShelfListView.recipeids.add(0, uid);
@@ -134,21 +137,24 @@ public class Recipe_AddView extends Recipe_ShelfListView {
 			if(resultCode == RESULT_OK){  
 				Uri selectedImage = imageReturnedIntent.getData();
 				try {
+					
 					//Get image and file and rotate correctly
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));
 					yourSelectedImage = utils.rotateImage(yourSelectedImage, f.getPath());
+					
 					//Set image name in edit text
 					imageName = f.getName();					
 					utils.setDialogTextString(R.id.recipeImagesEditText, addRecipeDialog3, imageName);
+					
 					//compress image
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					yourSelectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+					
 					//set image to byte array
 					byte[] byteArray = stream.toByteArray(); 
 					array = byteArray;
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

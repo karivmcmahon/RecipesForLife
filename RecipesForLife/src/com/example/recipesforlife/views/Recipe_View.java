@@ -85,6 +85,9 @@ public class Recipe_View extends ActionBarActivity {
 	private ImageBean imgBean = new ImageBean();
 	private File file;
 	
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -125,7 +128,7 @@ public class Recipe_View extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				errorView.setText("");
 				sharedpreferences = getApplicationContext().getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
 				ReviewBean rb = new ReviewBean();
@@ -141,7 +144,7 @@ public class Recipe_View extends ActionBarActivity {
 					}
 					else
 					{
-
+						//Inserts review
 						reviewmodel.insertReview(rb, false);
 						rbs.add(0, rb);
 						adapter.notifyDataSetChanged();
@@ -161,6 +164,9 @@ public class Recipe_View extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -168,22 +174,31 @@ public class Recipe_View extends ActionBarActivity {
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 
 		return super.onPrepareOptionsMenu(menu);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
+		//Handling action bar selections
 		nav.drawerToggle(item);
 
 		//These choices increase or decrease font size
@@ -250,6 +265,7 @@ public class Recipe_View extends ActionBarActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_recipe_view, menu);
 
+		//Sets up search manager
 		SearchManager searchManager =
 				(SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		android.support.v7.widget.SearchView searchView =
@@ -258,6 +274,7 @@ public class Recipe_View extends ActionBarActivity {
 				searchManager.getSearchableInfo(getComponentName()));
 
 		MenuItem item = menu.findItem(R.id.action_share);
+
 		//Creates a share recipe link when the share button on the action bar selected
 		mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 		if(mShareActionProvider != null)
@@ -327,7 +344,7 @@ public class Recipe_View extends ActionBarActivity {
 		task.execute();
 
 
-
+		//Set up instruction list
 		TextView instructions = (TextView) findViewById(R.id.methodList);
 		Collections.sort(prepList, new Comparator<PreperationBean>() {
 			@Override 
@@ -343,6 +360,7 @@ public class Recipe_View extends ActionBarActivity {
 			}
 		}
 
+		//Set up ingredient list
 		TextView ingredients = (TextView) findViewById(R.id.ingredientList);
 		for(int i = 0; i < ingredList.size(); i++)
 		{
@@ -352,6 +370,8 @@ public class Recipe_View extends ActionBarActivity {
 			}	
 		}
 		recipeName =  recipe.getName();
+		
+		//set up other items in recipe
 		utils.setTextString(R.id.recipeTitle, recipe.getName());
 		utils.setTextString(R.id.recipeDesc, recipe.getDesc());
 		utils.setTextString(R.id.servesVal, recipe.getServes());
@@ -373,6 +393,7 @@ public class Recipe_View extends ActionBarActivity {
 	 * @return Uri 
 	 */
 	private Uri getLocalBitmapUri(ImageView imageView) {
+		
 		// Extract Bitmap from ImageView drawable
 		Drawable drawable = imageView.getDrawable();
 		Bitmap bmp = null;
@@ -381,6 +402,7 @@ public class Recipe_View extends ActionBarActivity {
 		} else {
 			return null;
 		}
+		
 		// Store image to default external storage directory
 		Uri bmpUri = null;
 		try {

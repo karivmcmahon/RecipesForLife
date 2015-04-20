@@ -64,7 +64,7 @@ namespace WebApplication1
 								catch (Exception ex)
 								{
 
-									Response.Write("Error ");
+									Response.Write("Error Contribs Insert");
 									Response.Write(ex);
 								}
 							}
@@ -72,14 +72,14 @@ namespace WebApplication1
 						catch (Exception ex)
 						{
 
-							Response.Write("Error ");
+							Response.Write("Error Contribs Insert");
 							Response.Write(ex);
 						}
 						connn.Close();
 					}
 				}catch(Exception ex)
 				{
-					Response.Write("Error");
+					Response.Write("Error Contribs Insert");
 					Response.Write(ex);
 				}
 			}

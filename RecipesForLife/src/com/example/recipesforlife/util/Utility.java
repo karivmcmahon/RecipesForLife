@@ -42,7 +42,7 @@ public class Utility  {
 	/**
 	 * Convert date to string
 	 * @param date
-	 * @return string with date
+	 * @return String	string with date
 	 */
 	@SuppressLint("SimpleDateFormat")
 	private String dateToString(Date date, boolean inappstring) {
@@ -59,6 +59,7 @@ public class Utility  {
 
 	/**
 	 * Get current date and time
+	 * @param appstring		whether request is coming from app
 	 */
 	public String getLastUpdated(boolean appstring)
 	{
@@ -73,9 +74,9 @@ public class Utility  {
 
 	/**
 	 * Generates UUID then adds the name and type of table - to create a more detailed unique id
-	 * @param addedBy
-	 * @param table
-	 * @return Unique ID
+	 * @param addedBy		Who is inserting into the db
+	 * @param table			Table for which the uuid request is coming from
+	 * @return String		Unique ID
 	 */
 	public String generateUUID(String addedBy, String table, SQLiteDatabase database ) {
 		final String uuid = UUID.randomUUID().toString();
@@ -90,8 +91,8 @@ public class Utility  {
 
 	/**
 	 * Checks if unique id exists - if so create another one
-	 * @param table
-	 * @param uuid
+	 * @param table		Table for which the uuid request is coming from
+	 * @param uuid		Generated unique id
 	 * @return true or false depending on if UUID exists
 	 */
 	@SuppressWarnings("unused")
@@ -110,9 +111,9 @@ public class Utility  {
 
 	/**
 	 * Send json to the server
-	 * @param jsonArray
-	 * @param update
-	 * @param url
+	 * @param jsonArray		JSON to send to server
+	 * @param update		Whether the request is update or not
+	 * @param url			URL it's being sent to
 	 * @throws IOException
 	 */
 	public void sendJSONToServer(JSONArray jsonArray, boolean update, String url ) throws IOException
@@ -159,9 +160,9 @@ public class Utility  {
 	
 	/**
 	 * Retrieves JSON from server
-	 * @param url - url to retrieve JSON
-	 * @param pref - datetime from a shared preference
-	 * @param update - whether its for an update or insert
+	 * @param url 		url to retrieve JSON
+	 * @param pref 		datetime from a shared preference
+	 * @param update 	whether its for an update or insert
 	 * @return A JSON string recieved from server
 	 * @throws IOException
 	 * @throws JSONException

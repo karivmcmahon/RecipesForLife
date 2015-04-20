@@ -38,9 +38,9 @@ public class ImageLoader2 {
 
 	/**
 	 * Sets the image to be displayed if in cache otherwise it will queue photo
-	 * @param imageView
-	 * @param arr
-	 * @param recipeid
+	 * @param imageView		Where the image will displayed
+	 * @param arr			Image byte array
+	 * @param recipeid		Recipe unique id
 	 */
 	public void DisplayImage(ImageView imageView, byte[] arr, String recipeid)
 	{
@@ -57,8 +57,8 @@ public class ImageLoader2 {
 
 	/**
 	 * Submits photo to executor service
-	 * @param bytearr
-	 * @param imageView
+	 * @param bytearr		Image byte array
+	 * @param imageView		Where image is displayed
 	 */
 	private void queuePhoto(byte[] bytearr, ImageView imageView)
 	{
@@ -68,8 +68,8 @@ public class ImageLoader2 {
 
 	/**
 	 * Gets bitmap by using method decode sampled bitmap
-	 * @param bytearr
-	 * @return Bitmap
+	 * @param bytearr		Image byte array
+	 * @return Bitmap		Image bitmap
 	 */
 	private Bitmap getBitmap(byte[] bytearr) 
 	{
@@ -79,7 +79,6 @@ public class ImageLoader2 {
 		try {
 			b = decodeSampledBitmap(context, imageStream , 200, 150 );
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(b!=null)
@@ -93,9 +92,9 @@ public class ImageLoader2 {
 	 * Gets bitmap with correct sample size for width and height
 	 * @param context
 	 * @param imageStream
-	 * @param reqWidth
-	 * @param reqHeight
-	 * @return
+	 * @param reqWidth			Required width for image
+	 * @param reqHeight			Required height for image
+	 * @return Bitmap			Image bitmap
 	 * @throws FileNotFoundException
 	 */
 	@SuppressWarnings("deprecation")
@@ -106,6 +105,7 @@ public class ImageLoader2 {
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+		
 		// Decode bitmap with inSampleSize se#
 		options.inJustDecodeBounds = false;
 		options.inPurgeable = true;
@@ -115,10 +115,10 @@ public class ImageLoader2 {
 
 	/**
 	 * Calculates sample size based on width and height
-	 * @param options
-	 * @param reqWidth
-	 * @param reqHeight
-	 * @return int - sample size for image
+	 * @param options		Bitmap options
+	 * @param reqWidth		Required image width
+	 * @param reqHeight		Required image height
+	 * @return int 			Sample size for image
 	 */
 	private static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -188,8 +188,8 @@ public class ImageLoader2 {
 
 	/**
 	 * Checks if imageview has been used
-	 * @param photoToLoad
-	 * @return boolean - if image is reusued
+	 * @param photoToLoad		Instance of photoToLoad
+	 * @return boolean 			 if image is reusued
 	 */
 	private boolean imageViewReused(PhotoToLoad photoToLoad){
 		String tag=imageViews.get(photoToLoad.imageView);

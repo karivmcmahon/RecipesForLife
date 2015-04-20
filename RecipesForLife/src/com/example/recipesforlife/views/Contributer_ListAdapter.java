@@ -53,17 +53,17 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint("ViewHolder")
 	@Override
-	/**
-	 * Adapts list data to a view
-	 * 
-	 * @return Return the adapted view
-	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView= inflater.inflate(R.layout.contributers_listitem, null, true);
+
+		//Set title for name of contributer
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
 		utils.setRowText(R.id.txt, rowView, 22);
 
@@ -80,7 +80,6 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 
 				@Override
 				public boolean onTouch(View arg0, MotionEvent arg1) {
-					// TODO Auto-generated method stub
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
 						deleteContribDialog(position);
@@ -90,7 +89,7 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 		}
 
 
-		//Sets the users name in the lost row
+		//Sets the users name in the row
 		txtTitle.setText(users.get(position));
 		return rowView;
 	}
@@ -102,21 +101,30 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 	 */
 	private void deleteContribDialog(final int position)
 	{
-		//Create and display dialog
+		//Create dialog
 		final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
 		utils.setDialogText(R.id.textView, dialog, 18);
+
+		//Set text in dialog
 		TextView tv = (TextView) dialog.findViewById(R.id.textView);
 		tv.setText("Would you like to delete this user ?");
+
+		//display dialog
 		dialog.show();
 
-		//Deletes users and dismiss dialog if yes is pressed
+		//Sets on click for yes button
+		//If clicked deletes contrib and dismisses dialog
 		Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
 		yesButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
+
 				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
+
+				//get cookbook id based on unique id
 				int id = model.selectCookbooksIDByUnique(cookbookuid);
+
 				try
 				{
 					//updates contributer to deleted and removes from list if update is successful
@@ -137,7 +145,8 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 		noButton.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View arg0) 
+			{
 				dialog.dismiss();
 			}
 		});

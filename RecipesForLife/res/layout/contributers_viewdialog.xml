@@ -35,8 +35,8 @@
         android:layout_below="@+id/ll"
         android:layout_centerHorizontal="true" >
     </ListView>
-    
-     <Button
+
+    <Button
         android:id="@+id/closeButton"
         android:layout_width="60dp"
         android:layout_height="25dp"

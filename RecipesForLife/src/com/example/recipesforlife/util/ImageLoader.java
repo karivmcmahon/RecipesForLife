@@ -48,8 +48,7 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 		try {
 			bitmap = decodeSampledBitmapFromResource(context, imageStream, 200,200);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+					e.printStackTrace();
 		}
 		return bitmap;
 	}
@@ -60,8 +59,6 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 		ImageView imageView = (ImageView) imageViewReference.get();
 		imageView.setImageBitmap(result);
-
-
 	}
 
 	/**
@@ -78,11 +75,13 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 			int reqWidth, int reqHeight) 
 					throws FileNotFoundException {
 
+		
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 		options.inPurgeable = true;
 		options.inInputShareable = true;
+	
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeStream(imageStream, null, options);

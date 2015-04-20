@@ -147,34 +147,32 @@
             android:textSize="14dp" />
     </LinearLayout>
 
-      <LinearLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/errorView"
         android:gravity="center_horizontal"
         android:orientation="horizontal" >
-        
-    <Button
-        android:id="@+id/addRecipeButton"
-        android:layout_width="60dp"
-        android:layout_height="25dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-         android:layout_marginRight="10dp"
-        android:background="@drawable/drawable_button"
-        android:text="Add" />
-    
-    
-          <Button
-        android:id="@+id/closeButton"
-        android:layout_width="60dp"
-        android:layout_height="25dp"
-        android:layout_below="@+id/errorView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/drawable_button"
-        android:text="Close" />
-    
+
+        <Button
+            android:id="@+id/addRecipeButton"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/drawable_button"
+            android:text="Add" />
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_below="@+id/errorView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/drawable_button"
+            android:text="Close" />
     </LinearLayout>
 
 </LinearLayout>

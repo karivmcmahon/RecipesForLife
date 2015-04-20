@@ -25,7 +25,7 @@ import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
 
 /**
- * Displays a listview displaying the cusine results 
+ * Displays a listview displaying the cuisine results 
  * @author Kari
  *
  */
@@ -42,6 +42,7 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		setContentView(R.layout.explore_listview2);
 
 		utils = new Util(getApplicationContext(), this);
+		
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_Explore_CusineView.this, "Explore By Cuisine");
 		nav.createDrawer();
@@ -104,7 +105,6 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 						@Override
 						public void onItemClick(AdapterView<?> parent, View view,
 								int position, long id) {
-							// TODO Auto-generated method stub
 							Intent i = new Intent(Search_Explore_CusineView.this, Recipe_View.class);
 							i.putExtra("uniqueidr", rb.get(position).getUniqueid());
 							i.putExtra("name", rb.get(position).getName());
@@ -122,27 +122,42 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_plain, menu);
 		utils.setUpSearch(menu);
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
+		
 		super.onPostCreate(savedInstanceState);
+		
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//handles nav drawer clicks

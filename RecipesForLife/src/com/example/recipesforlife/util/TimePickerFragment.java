@@ -57,6 +57,7 @@ class TimePickerFragment extends DialogFragment
 
 		
 		// Create a new instance of TimePickerDialog and return
+		//Sets a specific title so its easier for other people to understand what it does
 		TimePickerDialog tpd =new TimePickerDialog(getActivity(), listener, h,m,true);
 		tpd.setTitle("Set time it will take to " + type + " recipe in hours:minutes");
 		return tpd;

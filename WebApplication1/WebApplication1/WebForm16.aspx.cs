@@ -34,15 +34,16 @@ namespace WebApplication1
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
 					recipe = js.Deserialize<List<Recipe>>(jsonInput);
+					
 					for(int i = 0; i < recipe.Count(); i++)
 					{
 						
-						insertAdditionalDets(i);
+						insertAdditionalDets(i); //inserts additional recipe details into database
 						
 					}
 				}catch(Exception ex)
 				{
-					Response.Write("Error");
+					Response.Write("Error Additional Details");
 					Response.Write(ex);
 				}
 			}
@@ -51,6 +52,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts additional prep and recipe details which are added after the recipe was inserted 
+		* int i - point in loop
 		**/
 		public void insertAdditionalDets(int i)
 		{
@@ -58,18 +60,18 @@ namespace WebApplication1
 			connn2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn.Open();
 			connn2.Open();
-			transaction = connn.BeginTransaction();
+			transaction = connn.BeginTransaction(); // Start transaction
 			try
 			{ 
 				
 				insertPrep(i);	
 				insertIngredient(i);
-				transaction.Commit();
+				transaction.Commit(); //commit transaction if successful
 			}
 			catch(Exception e)
 			{
-				transaction.Rollback();
-				Response.Write("Error Insert Recipe");
+				transaction.Rollback(); //rollback transaction if unsuccessful
+				Response.Write("Error Insert Recipe Details");
 				Response.Write(e);
 			}
 			connn.Close();
@@ -126,7 +128,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Inserts ingredient details into database
+		* Inserts ingredient details into database if they dont already exist
 		* i - point in loop
 		**/
 		public void insertIngredient(int i)
@@ -212,7 +214,7 @@ namespace WebApplication1
 							catch (Exception ex)
 							{
 
-								Response.Write("Error ");
+								Response.Write("Error Ingred Additional Dets ");
 								Response.Write(ex);
 								throw ex;
 							}
@@ -221,7 +223,7 @@ namespace WebApplication1
 						catch (Exception ex)
 						{
 
-							Response.Write("Error ");
+							Response.Write("Error Ingred Additional Dets ");
 							Response.Write(ex);
 							throw ex;
 						}
@@ -230,7 +232,7 @@ namespace WebApplication1
 					catch (Exception ex)
 					{
 
-						Response.Write("Error ");
+						Response.Write("Error Ingred Additional Dets ");
 						Response.Write(ex);
 						throw ex;
 					}
@@ -239,7 +241,7 @@ namespace WebApplication1
 				catch (Exception ex)
 				{
 
-					Response.Write("Error ");
+					Response.Write("Error Ingred Additional Dets ");
 					Response.Write(ex);
 					throw ex;
 				}
@@ -251,6 +253,8 @@ namespace WebApplication1
 		/**
 		* Selects recipe id from database based on recipe unique id
 		* uniqueid - recipe uniqueid
+		* I
+		* return - Int32 - recipe id
 		**/
 		public Int32 selectRecipe(String uniqueid)
 		{
@@ -274,7 +278,8 @@ namespace WebApplication1
 		
 		/**
 		* Checks if the ingredient unique id already exists
-		* uniqueid - ingred unique id
+		* uniqueid - ingred unique 
+		* return - bool - states whether the ingred already exists or not
 		**/
 		public bool selectIngredUID(String uniqueid)
 		{
@@ -299,6 +304,7 @@ namespace WebApplication1
 		/**
 		* Check if prep unique id already exists in db
 		* uniqueid - prep unique id
+		* return - bool - states whether the ingred already exists or not
 		**/
 		public bool selectPrepUID(String uniqueid)
 		{

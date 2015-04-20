@@ -154,8 +154,8 @@
                 android:id="@+id/cusineVal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/difficulty"
+                android:layout_marginTop="20dp"
                 android:layout_toRightOf="@+id/cusine"
                 android:text="" />
 
@@ -258,17 +258,17 @@
                 android:layout_toRightOf="@+id/ingredientTitle"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_pen_pink" />
-            
-              <ImageView
-                  android:id="@+id/ingredAddImage"
-                  android:layout_width="30dp"
-                  android:layout_height="30dp"
-                  android:layout_below="@+id/chefImage"
-                  android:layout_marginTop="40dp"
-                  android:layout_toRightOf="@+id/ingredEditImage"
-                  android:clickable="true"
-                  android:scaleType="fitXY"
-                  android:src="@drawable/icon_plus_pink" />
+
+            <ImageView
+                android:id="@+id/ingredAddImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/chefImage"
+                android:layout_marginTop="40dp"
+                android:layout_toRightOf="@+id/ingredEditImage"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_plus_pink" />
 
             <TextView
                 android:id="@+id/ingredientList"
@@ -298,8 +298,8 @@
                 android:clickable="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_pen_pink" />
-            
-              <ImageView
+
+            <ImageView
                 android:id="@+id/methodAddImage"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

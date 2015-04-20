@@ -28,8 +28,8 @@
             android:layout_height="25dp"
             android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="26dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="26dp"
             android:background="@drawable/drawable_button"
             android:text="Yes" />
 

@@ -51,21 +51,26 @@ public class PostTask extends AsyncTask<Void, Void, String>
 		{
 			//Displays success message
 			Toast.makeText(context, "App synced ", Toast.LENGTH_LONG).show();
+		
+			//The update cookbook list after sync
 			if(cookbook == true)
 			{
 				//If cookbook page requests sync - refresh the list view
 				SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
 				ArrayList<CookbookBean> cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
+			
 				Cookbook_ShelfListView.values.clear();
 				Cookbook_ShelfListView.ids.clear();
 				Cookbook_ShelfListView.images.clear();
+			
 				for(int i = 0; i < cookbookList.size(); i++)
 				{
 					Cookbook_ShelfListView.values.add(cookbookList.get(i).getName());
 					Cookbook_ShelfListView.ids.add(cookbookList.get(i).getUniqueid());
 					Cookbook_ShelfListView.images.add(cookbookList.get(i).getImage());
 				}
+				
 				//If the list is under 6 then create empty rows to fill the layout of the app
 				if(cookbookList.size() < 6)
 				{
@@ -78,6 +83,7 @@ public class PostTask extends AsyncTask<Void, Void, String>
 						Cookbook_ShelfListView.images.add(emptyarr);
 					}
 				}
+				
 				Cookbook_ShelfListView.adapter.notifyDataSetChanged();
 			}
 		}

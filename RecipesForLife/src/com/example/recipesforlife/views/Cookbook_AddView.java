@@ -80,9 +80,10 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 				setDefaultImage();
 			}  
 
-			book.setImage(byteArray);
+			book.setImage(byteArray); // set image to byte array
 
 			ApplicationModel_CookbookModel cbmodel = new ApplicationModel_CookbookModel(context);
+	
 			try
 			{
 				//insert book into database and get unique id
@@ -110,8 +111,10 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 	private boolean errorCheck()
 	{
 		boolean error = true;
+		
 		//Retrieve id for cookbook inserted in textbox - if its not  0 then it already exists
 		int id = model.selectCookbooksID(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog), sharedpreferences.getString(emailk, "DEFAULT"));
+		
 		//Check for errors
 		if(utils.getTextFromDialog(R.id.bookNameEditText, bookAddDialog).equals(""))
 		{
@@ -129,6 +132,7 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 		{
 			error = false;
 		}
+		
 		return error;
 	}
 
@@ -152,8 +156,10 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 		//set up
 		bookAddDialog = utils.createDialog(activity , R.layout.cookbook_adddialog);
 		errorView = (TextView) bookAddDialog.findViewById(R.id.errorView);
+	
 		//sets up the dialog style
 		setStyle();
+		
 		//fills the spinner
 		fillSpinner();
 
@@ -212,6 +218,7 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 		//makes spinner triangle white
 		sItems.getBackground().setColorFilter(activity.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 
+		//Adapts list to spinner
 		sItems.setAdapter(adapter);
 	}
 
@@ -226,11 +233,14 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 
 		switch(requestCode) { 
 		case SELECT_PHOTO:
+			
 			//If the result code says its ok then get an image
 			if(resultCode == RESULT_OK){  
+			
 				//Gets the image
 				Uri selectedImage = imageReturnedIntent.getData();
 				try {
+				
 					//Gets image and file then rotates the image correctly
 					Bitmap yourSelectedImage = utils.decodeUri(selectedImage);
 					File f = new File(utils.getRealPathFromURI(selectedImage));

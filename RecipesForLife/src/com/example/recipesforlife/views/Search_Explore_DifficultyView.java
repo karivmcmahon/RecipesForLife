@@ -41,6 +41,7 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 		setContentView(R.layout.explore_listview2);
 
 		utils = new Util(getApplicationContext(), this);
+	
 		//Sets up nav bar
 		nav = new Navigation_DrawerCreation(Search_Explore_DifficultyView.this, "Explore By Difficulty");
 		nav.createDrawer();
@@ -48,6 +49,7 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 		s.setSpan(new TypefaceSpan(this, "elsie.otf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+		
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
@@ -69,7 +71,7 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 
 		//makes spinner triangle white
 		sItems.getBackground().setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
-		sItems.setAdapter(adapter);
+		sItems.setAdapter(adapter); //adapts difficulties
 
 		//When item selected on spinner
 		sItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -92,7 +94,7 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 				Search_RecipeAdapter recipeadapter = new Search_RecipeAdapter( getApplicationContext(), Search_Explore_DifficultyView.this,  rb);
 				listView.setAdapter(recipeadapter);
 
-				//If empty false then enable clicks on results to take user to a new activity
+				//If empty false then enable clicks on results to take user to a new activity w
 				if(empty == false)
 				{
 					listView.setOnItemClickListener(new OnItemClickListener() {
@@ -116,6 +118,9 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -124,6 +129,9 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -131,12 +139,18 @@ public class Search_Explore_DifficultyView extends ActionBarActivity {
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//handles nav drawer clicks

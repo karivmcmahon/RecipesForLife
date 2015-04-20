@@ -30,7 +30,7 @@ namespace WebApplication1
 				
 				SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			
-			//Command to get cookbooks from last updated time
+				//Command to get cookbooks from last updated time
 				SqlCommand selectCookbook = new SqlCommand(" SELECT * FROM Cookbook WHERE changeTime > @lastUpdated", connection);
 				selectCookbook.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 				connection.Open();
@@ -39,7 +39,7 @@ namespace WebApplication1
 				var reader = selectCookbook.ExecuteReader();
 				while (reader.Read())
 				{
-					//Creates cookbook based on info from server
+					//Creates cookbook based on info from server db
 					Cookbook cookbook = new Cookbook();
 					cookbook.name = (string)reader["name"];
 					cookbook.description = (string)reader["description"];

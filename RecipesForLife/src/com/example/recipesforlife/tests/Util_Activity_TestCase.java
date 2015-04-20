@@ -10,8 +10,12 @@ import junit.framework.Assert;
 import com.example.recipesforlife.models.ApplicationModel_AccountModel;
 import com.example.recipesforlife.models.ApplicationModel_SearchModel;
 import com.example.recipesforlife.util.Util;
+import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
@@ -65,10 +69,16 @@ public class Util_Activity_TestCase extends AndroidTestCase  {
 		//dbConnection.cArrayList<E>		
 	}
 	
-	public void testSync()
+	/**private void testSync()
 	{
+		SharedPreferences sharedpreferences = context.getSharedPreferences(Account_SignUpSignInView.MyPREFERENCES, Context.MODE_PRIVATE);
 		String response = util.sync();
 		Assert.assertEquals(response, "success");
-	}
+		Editor editor = sharedpreferences.edit();
+		editor.putString("Date", "2015-01-01 12:00:00");
+		editor.commit();
+		editor.putString("Stage", "1");
+		editor.commit();
+	}**/
 
 }

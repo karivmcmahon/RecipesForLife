@@ -64,10 +64,10 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 
 	}
 
-	@Override
-	/**
-	 * Adapts list data 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
+	@Override
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
@@ -89,6 +89,7 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 			//set text style
 			txtTitle.setText(recipenames.get(position));
 			utils.setRowText(R.id.myImageViewText, rowView, 22);
+		
 			//If recipe selected view the recipe
 			ImageView recipeImage = (ImageView) rowView.findViewById(R.id.myImageView);
 			imgload.DisplayImage(recipeImage, recipeimages.get(position), Base64.encodeToString(recipeimages.get(position), Base64.DEFAULT) + recipeids.get(position));
@@ -149,62 +150,7 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
-						final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
-						utils.setDialogText(R.id.textView, dialog, 18);
-						TextView tv = (TextView) dialog.findViewById(R.id.textView);
-						tv.setText("Would you like to delete this recipe ?");
-						// Show dialog
-						dialog.show();
-
-						//Deletes users and dismiss dialog
-						Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
-						yesButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View arg0) {
-								//Gets the recipe details and updates the recipe to be deleted
-								ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(context);
-								RecipeBean recipebean = model.selectRecipe2(recipeids.get(position));
-								ArrayList<PreperationBean> prepList = model.selectPreperation(recipebean.getId());
-								ArrayList<IngredientBean> ingredList = model.selectIngredients(recipebean.getId());
-								ImageBean imgBean = model.selectImages(recipebean.getId());
-								recipebean.setProgress("deleted");
-								try
-								{
-									//updates recipe to be deleted and removes from list
-									model.updateRecipe( recipebean, prepList, ingredList, imgBean, false);
-									recipeids.remove(position);
-									recipeimages.remove(position);
-									recipenames.remove(position);
-									if(recipeids.size() < 6)
-									{
-										int num = 6 - recipeids.size();
-										for(int a = 0; a < num; a++)
-										{
-											byte[] emptyarr = new byte[0];
-											recipenames.add("");
-											recipeids.add("");
-											recipeimages.add(emptyarr);
-										}
-									} 
-									notifyDataSetChanged();
-								}catch(SQLiteException e)
-								{
-									Toast.makeText(context, "Recipe was not deleted", Toast.LENGTH_LONG).show();
-								}
-								dialog.dismiss();
-							}
-						});
-
-						//If user selects no - dismiss dialog
-						Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
-						noButton.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View arg0) {
-								dialog.dismiss();
-							}
-						});
+						getDeleteDialog(position);
 					}
 					return false;
 
@@ -215,6 +161,74 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 		}
 		return rowView;		
 	}
+	
+	/**
+	 * Displays a delete dialog
+	 * @param position - position in row
+	 */
+	public void getDeleteDialog(final int position)
+	{
+		final Dialog dialog = utils.createDialog(activity, R.layout.general_savedialog);
+		utils.setDialogText(R.id.textView, dialog, 18);
+		TextView tv = (TextView) dialog.findViewById(R.id.textView);
+		tv.setText("Would you like to delete this recipe ?");
+		
+		// Show dialog
+		dialog.show();
 
+		//Deletes users and dismiss dialog
+		Button yesButton = utils.setButtonTextDialog(R.id.yesButton, 22, dialog);
+		yesButton.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View arg0) {
+		
+				//Gets the recipe details and updates the recipe to be deleted
+				ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(context);
+				RecipeBean recipebean = model.selectRecipe2(recipeids.get(position));
+			
+				ArrayList<PreperationBean> prepList = model.selectPreperation(recipebean.getId());
+				ArrayList<IngredientBean> ingredList = model.selectIngredients(recipebean.getId());
+				
+				ImageBean imgBean = model.selectImages(recipebean.getId());
+				recipebean.setProgress("deleted");
+				try
+				{
+					//updates recipe to be deleted and removes from list
+					model.updateRecipe( recipebean, prepList, ingredList, imgBean, false);
+					recipeids.remove(position);
+					recipeimages.remove(position);
+					recipenames.remove(position);
+					if(recipeids.size() < 6)
+					{
+						int num = 6 - recipeids.size();
+						for(int a = 0; a < num; a++)
+						{
+							byte[] emptyarr = new byte[0];
+							recipenames.add("");
+							recipeids.add("");
+							recipeimages.add(emptyarr);
+						}
+					} 
+					notifyDataSetChanged();
+				}catch(SQLiteException e)
+				{
+					Toast.makeText(context, "Recipe was not deleted", Toast.LENGTH_LONG).show();
+				}
+				dialog.dismiss();
+			}
+		});
+
+		//If user selects no - dismiss dialog
+		Button noButton = utils.setButtonTextDialog(R.id.noButton, 22, dialog);
+		noButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				dialog.dismiss();
+			}
+		});
+	}
 }
+
+

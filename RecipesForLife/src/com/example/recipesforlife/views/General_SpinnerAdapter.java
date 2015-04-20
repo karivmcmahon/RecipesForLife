@@ -32,15 +32,15 @@ class General_SpinnerAdapter extends ArrayAdapter<String> {
 		this.items = items;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint("ViewHolder")
 	@Override
-	/**
-	 * Adapts list data 
-	 * 
-	 * @return View that was adapted
-	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = activity.getLayoutInflater();
+		
+		//Set up style for row view and return it
 		View rowView= inflater.inflate(R.layout.general_spinner_item2, null, true);
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
 		txtTitle.setText(items.get(position));

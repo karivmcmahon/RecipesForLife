@@ -39,21 +39,21 @@ class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 		this.context = context;
 		rb = recipebean;
 		imgload = new ImageLoader2(this.context);
-		// TODO Auto-generated constructor stub
 		utils = new Util(this.context, activity);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint({ "InflateParams", "SimpleDateFormat" })
 	@SuppressWarnings("deprecation")
 	@Override
-	/**
-	 * Adapts list data 
-	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+	
 		//If no results then display the no results layout
 		if(rb.get(position).getName().equals("empty"))
 		{
@@ -66,11 +66,12 @@ class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 		{
 			//display the recipe layout
 			rowView= inflater.inflate(R.layout.search_recipeview, null, true);
+			
 			//set the styles for the layout with the data from the search
 			rowView = setListStyle(rowView, position);
 			
 
-			//Calculate the total cooking time - prep + cooking
+			//Calculate the total cooking time - prep + cooking to display in row
 			SimpleDateFormat  format = new SimpleDateFormat("HH:mm");  
 			int hours = 0;
 			int minutes = 0;
@@ -105,7 +106,7 @@ class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 	/**
 	 * Set the layout with correct styles and data thats being adapated
 	 * 
-	 * @param rowView
+	 * @param rowView	 View of row to be modified
 	 * @param position   Position of list
 	 * @return rowView   Updated rowView
 	 */

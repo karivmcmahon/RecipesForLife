@@ -37,7 +37,7 @@ import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
 
 /**
- * Class to show a list of recipes belonging to a specific cookbook
+ * Class to show a list of recipes that belong to a specific cookbook
  * @author Kari
  *
  */
@@ -61,6 +61,9 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 
 
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -74,9 +77,9 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		rmodel = new ApplicationModel_RecipeModel(getApplicationContext());
 		recipeList = new ArrayList<RecipeBean>();
 		Intent intent = getIntent();
+	
 		//gets details from intent
 		uniqueid = intent.getStringExtra("uniqueid");
-	
 		String bookname = intent.getStringExtra("bookname");
 
 		//Sets up the navigation drawer
@@ -101,6 +104,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 			recipeids.add(recipeList.get(a).getUniqueid());
 			recipeimages.add(image.getImage());
 		}
+		
 		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
 		{
@@ -119,12 +123,18 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
+		
 		menu.clear();
+		
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		Intent intent = getIntent();
+		
 		boolean access = rmodel.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), intent.getStringExtra("uniqueid"));
 		if(access == true)
 		{
@@ -138,11 +148,16 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) { 
 		menu.clear();
+		
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		Intent intent = getIntent();
+		
 		boolean access = rmodel.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), intent.getStringExtra("uniqueid"));
 		if(access == true)
 		{
@@ -156,9 +171,13 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		return super.onPrepareOptionsMenu(menu);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onResume()
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		//Updates list on resume
 		recipenames.clear();
 		recipeids.clear();
@@ -172,6 +191,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 			recipeimages.add(image.getImage());
 
 		}
+		
 		//if recipes list is less than 6 add extra recipe rows for layout
 		if(recipeList.size() < 6)
 		{
@@ -189,28 +209,39 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
+		
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle 
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 
-	/**
-	 * Handles action bar selection
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
 		//Checks for nav drawer selection
 		nav.drawerToggle(item);
+		
 		//If add icons selected - displays dialog to add a new recipe
-	if(item.getItemId() ==  R.id.action_bookadd)
+		if(item.getItemId() ==  R.id.action_bookadd)
 		{
 			Intent intent = getIntent();
 			add = new Recipe_AddView(getApplicationContext(), Recipe_ShelfListView.this, uniqueid, intent.getStringExtra("bookname"));
@@ -224,6 +255,9 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onActivityResult(int, int, android.content.Intent)
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
@@ -261,12 +295,15 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
+				
 				//gets a position of select item
 				int namepos = spinner.getSelectedItemPosition();
+				
 				//sets recipe thats being cloned to new info
 				rbList.get(namepos).setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));
 				rbList.get(namepos).setAddedBy(sharedpreferences.getString(emailk, ""));
 				rbList.get(namepos).setRecipeBook(uniqueid);
+				
 				//Retrieve preps, ingreds and images 
 				ArrayList<PreperationBean> prepList = model.selectPreperation(rbList.get(namepos).getId());
 				ArrayList<IngredientBean> ingredList = model.selectIngredients(rbList.get(namepos).getId());

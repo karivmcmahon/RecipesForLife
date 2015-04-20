@@ -110,6 +110,7 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 		nextButton2 = utils.setButtonTextDialog(R.id.nextButton, 22, recipeAddDialog2);
 		recipeAddDialog2.show();
 		handleIngredPrepClicks();
+
 		//Once next button is clicked
 		nextButton2.setOnClickListener(new OnClickListener()
 		{
@@ -140,7 +141,7 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 		cooking = utils.getTextFromDialog(R.id.recipeCookingEditText, recipeAddDialog2);
 		String methods = utils.getTextFromDialog(R.id.recipeIngredsEditText, recipeAddDialog2);
 		String ingredient = utils.getTextFromDialog(R.id.recipeStepsEditText, recipeAddDialog2);
-	
+
 		//Error catching before moving to next stage
 		if(ingredient.equals(""))
 		{
@@ -167,7 +168,7 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 		{
 			recipeAddDialog2.dismiss();
 			Recipe_AddView_Dialog3 dialog3 = new Recipe_AddView_Dialog3(activity, context, uniqueid, bookname);
-			
+
 			//Displays and gets third dialog data
 			dialog3.setUpThirdRecipeAddDialog();
 
@@ -185,8 +186,10 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 
 			@Override
 			public void onClick(View v) {
+
 				//Set up the dialog style
 				ingredprepdialog.setUpIngredAddDialog();
+
 				//Once add is pressed
 				Button addIngredButton = (Button) recipeIngredDialog.findViewById(R.id.addIngredButton);
 				addIngredButton.setOnClickListener(new OnClickListener() {
@@ -205,8 +208,10 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 
 			@Override
 			public void onClick(View v) {
+
 				//Set up style
 				ingredprepdialog.setUpStepAddDialog();
+
 				//Once add is pressed
 				Button addStepButton = (Button) recipeAddStepDialog.findViewById(R.id.addStepButton);
 				addStepButton.setOnClickListener(new OnClickListener() {

@@ -68,6 +68,7 @@ class Contributer_View {
 		//Sets up the dialog to show a list of contributers
 		setContribView();
 
+		//If close button selected then close the dialog
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, contribDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -77,6 +78,7 @@ class Contributer_View {
 
 			}});
 
+		//If add button selected enable the creator to add a new contrib
 		ImageButton addButton = (ImageButton) contribDialog.findViewById(R.id.contributerAddButton);
 		if(isCreator == false)
 		{
@@ -101,7 +103,6 @@ class Contributer_View {
 
 							@Override
 							public void onClick(View v) {
-								// TODO Auto-generated method stub
 								addContribDialog.dismiss();
 
 							}});
@@ -169,16 +170,20 @@ class Contributer_View {
 		else
 		{
 
+			//Get cookbooks row id from db
 			id = model.selectCookbooksIDByUnique(ccadapter.bookids.get(position));
 
 			//If it exists either update or insert contributer - may be able to update as they might not have been deleted yet
 			boolean contribExists = model.selectContributer(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id);
+
 			if(contribExists == true)
 			{
+				//Exists  - update
 				model.updateContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, "added", false);
 			}
 			else
 			{
+				//New  - insert
 				model.insertContributers(utils.getTextFromDialog(R.id.emailEditText, addContribDialog), id, false);
 			}
 
@@ -187,6 +192,8 @@ class Contributer_View {
 			ccadapter.adapter2.clear();
 			ccadapter.adapter2.addAll(contribslist);
 			ccadapter.adapter2.notifyDataSetChanged();
+
+			//dismiss dialog
 			addContribDialog.dismiss();
 		}
 	}

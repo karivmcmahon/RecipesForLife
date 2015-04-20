@@ -152,6 +152,7 @@ class Recipe_AddView_Dialog3  extends Recipe_AddView {
 		difficulty = spinner.getSelectedItem().toString();
 		Spinner cusinespinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeCusineSpinner);
 		cusine = cusinespinner.getSelectedItem().toString();
+		
 		//if no image is selected
 		if(utils.getTextFromDialog(R.id.recipeImagesEditText, addRecipeDialog3).equals(""))
 		{
@@ -162,7 +163,9 @@ class Recipe_AddView_Dialog3  extends Recipe_AddView {
 			byte[] byteArray = stream.toByteArray();
 			array = byteArray;
 		}  
+	
 		sendDataToModel(); //sends all the data thats been stored and sends to the model
+		
 		addRecipeDialog3.dismiss();
 	}
 

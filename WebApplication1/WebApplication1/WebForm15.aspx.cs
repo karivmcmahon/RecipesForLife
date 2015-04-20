@@ -52,7 +52,7 @@ namespace WebApplication1
 						review.user = (string)reviewReader["userid"];
 						reviewID = (Int32)reviewReader["reviewId"];
 						
-						//Select unique id for recipe to place in json
+						//Select unique id for recipe to place in json - the recipe id which review is connected too
 						SqlCommand selectRecipeUniqueID = new SqlCommand("SELECT uniqueid FROM Recipe INNER JOIN ReviewRecipe ON ReviewRecipe.Recipeid = Recipe.id INNER JOIN Review ON Review.reviewId = ReviewRecipe.ReviewId WHERE Review.reviewId = @id", connection1);
 						selectRecipeUniqueID.Parameters.AddWithValue("@id", reviewID);
 						var selectRecipeReader = selectRecipeUniqueID.ExecuteReader();
@@ -65,7 +65,7 @@ namespace WebApplication1
 						reviews.Review.Add(review); 
 					}		
 					connection1.Close();
-					string json = js.Serialize(reviews);
+					string json = js.Serialize(reviews); //serialize to json and write
 					Response.Write(json);
 				}
 				catch(Exception ex)

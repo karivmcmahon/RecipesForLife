@@ -41,21 +41,23 @@ class Search_CookbookAdapter extends ArrayAdapter<CookbookBean> {
 		utils = new Util(this.context, activity);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint("InflateParams")
 	@Override
-	/**
-	 * Adapts list data 
-	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
-
+		//Sets up rowview with style and data
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+	
 		//If no results
 		if(cb.get(position).getName().equals("empty"))
 		{
 			//Display no results layout
 			rowView= inflater.inflate(R.layout.search_noresultsview, null, true);
+		
 			//Set text style
 			TextView txtTitle = (TextView) rowView.findViewById(R.id.noResults);
 			utils.setRowText(R.id.noResults, rowView, 26);

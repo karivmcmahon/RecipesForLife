@@ -12,8 +12,8 @@
         android:layout_width="200dp"
         android:layout_height="150dp"
         android:layout_marginBottom="30dp"
-        android:scaleType="fitXY"
         android:contentDescription="An image which relates to the cookbook"
+        android:scaleType="fitXY"
         android:src="@drawable/image_default_cookbook" />
 
     <ImageView
@@ -32,8 +32,8 @@
         android:layout_below="@+id/editView"
         android:layout_marginBottom="15dp"
         android:layout_toRightOf="@+id/myImageView"
-        android:scaleType="fitXY"
         android:contentDescription="An image representing a user"
+        android:scaleType="fitXY"
         android:src="@drawable/icon_user2" />
 
     <ImageView

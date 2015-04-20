@@ -45,6 +45,7 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 	private static Context context;
 	private Navigation_DrawerCreation nav;
 	private static final String emailk = "emailKey";
+	
 	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -79,25 +80,38 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 		listView.setAdapter(adapter); 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 
 		return super.onPrepareOptionsMenu(menu);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu, menu);
+		
 		//sets up search
 		utils.setUpSearch(menu);
 
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onResume()
+	 */
 	@Override
 	protected void onResume() {
+		
 		super.onResume();
+		
 		//Sync for apps to be done in background on resume
 		mHandler.postDelayed(new Runnable() {
 			public void run() {
@@ -116,17 +130,20 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 	private static void updateCookbookList(boolean update)
 	{
 		SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		
 		//Fill list adapter with cookbook names
 		cookbookList = model.selectCookbooksByUser(sharedpreferences.getString(emailk, ""));
 		values = new ArrayList<String>();
 		ids = new ArrayList<String>();
 		images = new ArrayList<byte[]>();
+		
 		for(int i = 0; i < cookbookList.size(); i++)
 		{
 			values.add(cookbookList.get(i).getName());
 			ids.add(cookbookList.get(i).getUniqueid());
 			images.add(cookbookList.get(i).getImage());
 		}
+		
 		//If the list is under 6 then create empty rows to fill the layout of the app
 		if(cookbookList.size() < 6)
 		{
@@ -142,21 +159,32 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
+		
 		super.onPostCreate(savedInstanceState);
+		
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		
 		super.onConfigurationChanged(newConfig);
+		
 		nav.config(newConfig);
 	}
 
-	/**
-	 * Handles action bar clicks
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -165,7 +193,7 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 
 		switch (item.getItemId()) {
 
-		//If the user presses add button - show add cookbook
+		//If the user presses add button - show add cookbook dialog
 		case R.id.action_bookadd:
 			add = new Cookbook_AddView(getApplicationContext(), this);
 			add.addCookbook();

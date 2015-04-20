@@ -18,7 +18,8 @@ namespace WebApplication1
 		Int32 reviewId = 0;
 		Int32 recipeid = 0;
 		SqlConnection connection;
-			SqlTransaction transaction;
+		SqlTransaction transaction;
+		
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
@@ -107,7 +108,7 @@ namespace WebApplication1
 			}
 			
 			/**
-			* Select id from recipe based on uniqueid
+			* Select id from recipe based on uniqueid - the recipe which links to review
 			* i - point in loop
 			* review - list of reviews from json
 			**/

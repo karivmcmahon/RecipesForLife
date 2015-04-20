@@ -22,7 +22,7 @@ import com.example.recipesforlife.util.TypefaceSpan;
 import com.example.recipesforlife.util.Util;
 
 /**
- * Activity which handles the explore view
+ * Activity which handles the explore view which is shown to the user
  * @author Kari
  *
  */
@@ -31,6 +31,9 @@ public class Search_ExploreView  extends ActionBarActivity {
 	private Navigation_DrawerCreation nav;
 	private Util utils;
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,9 +53,13 @@ public class Search_ExploreView  extends ActionBarActivity {
 		// Update the action bar title with the TypefaceSpan instance
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
+		
+		//Set header
 		TextView headertv = (TextView) findViewById(R.id.exploreheader);
 		headertv.setText("Explore");
 		utils.setText(R.id.exploreheader, 26);
+		
+		//Set up categories
 		ArrayList<String> categories = new ArrayList<String>();
 		categories.add("Recipes By Difficulty");
 		categories.add("Recipes By Cuisine");
@@ -101,6 +108,9 @@ public class Search_ExploreView  extends ActionBarActivity {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -109,6 +119,9 @@ public class Search_ExploreView  extends ActionBarActivity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPostCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -116,12 +129,18 @@ public class Search_ExploreView  extends ActionBarActivity {
 		nav.syncState();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onConfigurationChanged(android.content.res.Configuration)
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		nav.config(newConfig);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//handles nav drawer clicks

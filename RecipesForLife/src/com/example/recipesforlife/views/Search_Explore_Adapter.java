@@ -33,13 +33,14 @@ class Search_Explore_Adapter extends ArrayAdapter<String> {
 		utils = new Util(this.context, activity);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@SuppressLint({ "InflateParams", "ViewHolder" })
 	@Override
-	/**
-	 * Adapts list data 
-	 */
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
+		//Set up row view with data
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		rowView= inflater.inflate(R.layout.explore_listitem, null, true);

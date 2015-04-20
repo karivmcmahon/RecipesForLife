@@ -158,6 +158,7 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 					if (arg1.getAction() == MotionEvent.ACTION_DOWN) 
 					{
 						Intent i = new Intent(activity, Recipe_ShelfListView.class);
+				
 						//intents used on getting the recipes		
 						i.putExtra("uniqueid", bookids.get(position));
 						i.putExtra("type", "view");
@@ -221,8 +222,13 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 			@Override
 			public void onClick(View arg0) {
 				ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
+				
+				//Sets up cookbook bean
 				ArrayList<CookbookBean> cbBean = model.selectCookbook(bookids.get(position));
+				
+				//Sets progress to deleted
 				cbBean.get(0).setProgress("deleted");
+				
 				try
 				{
 					//updates book to deleted and if successful removes from list
