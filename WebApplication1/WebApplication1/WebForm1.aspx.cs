@@ -36,7 +36,7 @@ namespace WebApplication1
 				}
 				catch(Exception ex)
 				{
-					Response.Write("Error");
+					Response.Write("Error Account");
 					Response.Write(ex);
 				}
 			}
@@ -59,7 +59,7 @@ namespace WebApplication1
 			{
 				con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 				con.Open();
-				transaction = con.BeginTransaction();
+				transaction = con.BeginTransaction(); // begin transaction
 				
 				//Command to insert user info baased on json
 				insertUsers = new SqlCommand(" INSERT INTO Users(name, cookingInterest, updateTime, bio, city, country) OUTPUT INSERTED.id VALUES (@name, @cookingInterest, @updateTime, @bio, @city, @country)", con, transaction);
@@ -75,7 +75,7 @@ namespace WebApplication1
 					
 					newId = (Int32) insertUsers.ExecuteScalar(); //insert users and retrieve id
 					insertIndAccount(i); //inserts users related account info
-					transaction.Commit();
+					transaction.Commit(); //if successful commit transaction
 
 				}
 				catch (Exception ex)

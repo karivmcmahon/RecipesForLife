@@ -37,11 +37,10 @@ namespace WebApplication1
 						reviewId = 0;
 						connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 						connection.Open();
-						transaction = connection.BeginTransaction();
+						transaction = connection.BeginTransaction(); //Start transaction
 						
 						try
 						{
-							//Start transaction
 							
 							insertReview( i, review);
 							selectRecipeID(i, review);
@@ -167,9 +166,9 @@ namespace WebApplication1
 			}
 			
 			/**
-		* Class stores review json
-		*
-		**/
+			* Class stores review json
+			*
+			**/
 			public class Review
 			{
 				public string comment { get; set; }

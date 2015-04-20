@@ -35,7 +35,7 @@ namespace WebApplication1
 					var time = js.Deserialize<List<RecipeDate>>(jsonInput);
 					lastUpdated = time[0].updateTime;
 					connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-					select();
+					select(); //select additional prep and ingred details
 				}catch(Exception ex)
 				{
 					Response.Write("Error");
@@ -139,7 +139,9 @@ namespace WebApplication1
 		}
 		
 		
-		
+		/**
+		* Class stores date sent from JSON
+		**/
 		public class RecipeDate
 		{
 			public string updateTime { get; set; }
@@ -155,7 +157,9 @@ namespace WebApplication1
 			
 		}
 
-		//List of recipe info - creates a json array
+		/**
+		* List of recipe info used to create  a json array
+		**/
 		public class Recipes
 		{
 			public List<Recipe> Recipe { get; set;} 
@@ -173,7 +177,9 @@ namespace WebApplication1
 			
 		}
 
-		//Stores recipe ingred details
+		/**
+		* Stores recipe ingred details
+		**/
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }

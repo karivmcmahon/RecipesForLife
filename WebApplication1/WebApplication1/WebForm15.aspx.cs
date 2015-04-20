@@ -85,6 +85,9 @@ namespace WebApplication1
 			public string updateTime { get; set; }
 		}
 		
+		/**
+		* Creates a list of reviews for json
+		**/
 		public class Reviews
 		{
 			public List<Review> Review { get; set;} 

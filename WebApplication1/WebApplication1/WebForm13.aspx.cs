@@ -32,7 +32,8 @@ namespace WebApplication1
 					SqlConnection connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 					SqlCommand select = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
 					select.Parameters.AddWithValue("@uniqueid", contribs[i].bookid);
-					connn.Open();
+				
+				connn.Open();
 					try
 					{
 

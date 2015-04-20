@@ -35,7 +35,10 @@ namespace WebApplication1
 					//Gets last update
 					var time = js.Deserialize<List<RecipeDate>>(jsonInput);
 					lastUpdated = time[0].updateTime;
+					
+					//Sets up connection
 					connection1 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					
 					selectRecipe(); //selects recipe to build JSON
 				}catch(Exception ex)
 				{
@@ -85,7 +88,7 @@ namespace WebApplication1
 				recipes.Recipe.Add(recipe);  //Add these details to a list which will be serialized as a JSON
 			}		
 			connection1.Close();
-			string json = js.Serialize(recipes);
+			string json = js.Serialize(recipes); //serializes json and writes for app to read
 			Response.Write(json);
 		}
 		
@@ -272,14 +275,20 @@ namespace WebApplication1
 			
 		}
 
-		//List of recipes - creates a json array
+		/**
+		* List of recipes - creates a json array
+		*
+		**/
 		public class Recipes
 		{
 			public List<Recipe> Recipe { get; set;} 
 
 		}
 
-		//Stores recipe prep details
+		/**
+		* Stores recipe prep details
+		*
+		**/
 		public class Preperation
 		{
 			public List<String> prep { get; set; }
@@ -289,7 +298,10 @@ namespace WebApplication1
 			
 		}
 
-		//Stores recipe ingred details
+		/**
+		* Stores recipe ingred details
+		*
+		**/
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }

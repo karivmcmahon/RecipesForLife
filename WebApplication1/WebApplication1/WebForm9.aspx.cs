@@ -24,12 +24,15 @@ namespace WebApplication1
 				{
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				js.MaxJsonLength = Int32.MaxValue;
+				
 				var cookbook = js.Deserialize<List<Cookbook>>(jsonInput); //Deserialize json into cookbook objects
 				for (int i = 0; i < cookbook.Count(); i++)
 				{
 					SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					
 					//Command to update cookbooks
 					SqlCommand updateCookbook = new SqlCommand("UPDATE Cookbook SET name=@name, description=@description, privacyOption=@privacyOption, changeTime=@changeTime, image=@image,progress=@progress WHERE uniqueid=@uniqueid", connection);
+				
 					//Bind params
 					updateCookbook.Parameters.AddWithValue("@name", cookbook[i].name);
 					updateCookbook.Parameters.AddWithValue("@description", cookbook[i].description);
@@ -66,7 +69,9 @@ namespace WebApplication1
 			}
 		}
 		
-		//Stores cookbook info
+		/**
+		* Stores cookbook info
+		**/
 		public class Cookbook
 		{
 			public string name { get; set; }

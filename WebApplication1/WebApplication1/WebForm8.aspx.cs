@@ -26,12 +26,15 @@ namespace WebApplication1
 					var time = js.Deserialize<List<Date2>>(jsonInput);
 					string lastUpdated = time[0].updateTime; //gets last updated time from json
 					
-					
+					//Sets up connection
 					SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					
 					//Selects cookbook info from last updated
 					SqlCommand select = new SqlCommand(" SELECT * FROM Cookbook WHERE updateTime > @lastUpdated", con);
 					select.Parameters.AddWithValue("@lastUpdated", lastUpdated);
 					con.Open();
+					
+					//Sets up vars
 					Cookbooks cookbooks = new Cookbooks();
 					cookbooks.Cookbook = new List<Cookbook>();
 					var reader = select.ExecuteReader();
@@ -51,7 +54,7 @@ namespace WebApplication1
 						cookbooks.Cookbook.Add(cookbook);
 					} 
 					con.Close();
-					string json = js.Serialize(cookbooks); //serialize list into JSON
+					string json = js.Serialize(cookbooks); //serialize list into JSON and then writes it
 					Response.Write(json);
 				}catch(Exception ex)
 				{
@@ -61,17 +64,24 @@ namespace WebApplication1
 			}
 		}
 		
+		/**
+		* Stores date sent from app in json form
+		**/
 		public class Date2
 		{
 			public string updateTime { get; set; }
 		}
-		//Stores list of cookbooks
+		/**
+		* Stores list of cookbooks
+		**/
 		public class Cookbooks
 		{
 			public List<Cookbook> Cookbook { get; set;} 
 
 		}
-		//Stores a cookbook
+		/**
+		* Stores a cookbook
+		**/
 		public class Cookbook
 		{
 			public string name { get; set; }

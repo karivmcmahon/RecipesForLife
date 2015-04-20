@@ -23,6 +23,7 @@ namespace WebApplication1
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
 					var contribs = js.Deserialize<List<Contributer>>(jsonInput); //Get info from json and add to contrib object
+					
 					for (int i = 0; i < contribs.Count(); i++)
 					{
 						int id = 0;
@@ -40,32 +41,32 @@ namespace WebApplication1
 							{
 								while (rdr.Read())
 								{
-									id = rdr.GetInt32(0); //get id
+									id = rdr.GetInt32(0); //get cookbook  id
 								}
 							}
 							
 							rdr.Close();
 							if(id != 0)
 							{
-							//Insert contributer into db with cookbook id from database
-							SqlCommand insert = new SqlCommand("INSERT INTO Contributers(Cookbookid,usersId,updateTime,changeTime, progress) VALUES(@bookid, @usersid, @updateTime, @changeTime, @progress)", connn);
-							insert.Parameters.AddWithValue("@bookid", id);
-							insert.Parameters.AddWithValue("@usersid", contribs[i].email);
-							insert.Parameters.AddWithValue("@updateTime", contribs[i].updateTime);
-							insert.Parameters.AddWithValue("@changeTime", contribs[i].changeTime);
-							insert.Parameters.AddWithValue("@progress", contribs[i].progress);
-							try
-							{
+								//Insert contributer into db with cookbook id from database
+								SqlCommand insert = new SqlCommand("INSERT INTO Contributers(Cookbookid,usersId,updateTime,changeTime, progress) VALUES(@bookid, @usersid, @updateTime, @changeTime, @progress)", connn);
+								insert.Parameters.AddWithValue("@bookid", id);
+								insert.Parameters.AddWithValue("@usersid", contribs[i].email);
+								insert.Parameters.AddWithValue("@updateTime", contribs[i].updateTime);
+								insert.Parameters.AddWithValue("@changeTime", contribs[i].changeTime);
+								insert.Parameters.AddWithValue("@progress", contribs[i].progress);
+								try
+								{
 
-								SqlDataReader rdr2= insert.ExecuteReader();
-								rdr2.Close();
-							}									  
-							catch (Exception ex)
-							{
+									SqlDataReader rdr2= insert.ExecuteReader();
+									rdr2.Close();
+								}									  
+								catch (Exception ex)
+								{
 
-								Response.Write("Error ");
-								Response.Write(ex);
-							}
+									Response.Write("Error ");
+									Response.Write(ex);
+								}
 							}
 						}
 						catch (Exception ex)
@@ -76,15 +77,15 @@ namespace WebApplication1
 						}
 						connn.Close();
 					}
-					}catch(Exception ex)
-					{
-						Response.Write("Error");
-						Response.Write(ex);
-					}
+				}catch(Exception ex)
+				{
+					Response.Write("Error");
+					Response.Write(ex);
 				}
 			}
-			
-			
+		}
+		
+		
 		
 		/**
 		* Class stores contrib info from JSON

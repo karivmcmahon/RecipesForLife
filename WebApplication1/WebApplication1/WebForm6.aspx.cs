@@ -27,11 +27,14 @@ namespace WebApplication1
 			{	
 				try
 				{
+					//Deserialize json
 					var time = js.Deserialize<List<Date>>(jsonInput);
 					lastUpdated = time[0].changeTime; //gets last updated time from JSON
 					
+					//Set up connection
 					connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
-					selectRecipe();
+					
+					selectRecipe(); // select recipe details to send to app
 				}catch(Exception ex)
 				{
 					Response.Write("Error");
@@ -68,13 +71,15 @@ namespace WebApplication1
 				recipe.uniqueid = (string)reader["uniqueid"];
 				recipe.serves = (Int32)reader["serves"];
 				recipe.progress = (string)reader["progress"];
+				
 				//Checks for nulls
 				recipe = checkForNulls(recipe, reader);
 		
 				recipe.Preperation = selectPrep(recipe, recipe.Preperation); //selects prep to be updated
 				recipe.Ingredient = selectIngred(recipe, recipe.Ingredient); //selects ingreds to be updated
 				recipe = selectImages(recipe); //selcts images to be update
-				//Add recipe to list which will be used to create JSON
+			
+			//Add recipe to list which will be used to create JSON then write json
 				recipes.Recipe.Add(recipe); 
 			}
 			connection.Close();
@@ -207,13 +212,19 @@ namespace WebApplication1
 			return recipe;
 		}
 		
-		//Stores date sent to webpage from json
+		/**
+		* Stores date sent to webpage from json
+		*
+		**/
 		public class Date
 		{
 			public string changeTime { get; set; }
 		}
 
-		//Class to create recipe json
+		/** 
+		* Class to create recipe json
+		*
+		**/
 		public class Recipe
 		{
 			public string name { get; set; }
@@ -233,15 +244,20 @@ namespace WebApplication1
 			public string cusine { get; set; }
 			public List<Preperation> Preperation { get; set; }
 			public List<Ingredient> Ingredient { get; set; }
-			//  public List<Ingredient> Ingredient { get; set; }
 		}
-		//Creates list of recipes - json array
+		
+		/**
+		* Creates list of recipes - json array
+		**/
 		public class Recipes
 		{
 			public List<Recipe> Recipe { get; set;} 
 
 		}
-		//Class to store preperation dets
+		
+		/**
+		* Class to store preperation dets
+		**/
 		public class Preperation
 		{
 			public List<String> prep { get; set; }
@@ -250,7 +266,10 @@ namespace WebApplication1
 			public List<String> prepprogress { get; set; }
 			
 		}
-		//Class to store ingredient dets
+		
+		/**
+		* Class to store ingredient dets
+		**/
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }

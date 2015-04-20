@@ -34,6 +34,7 @@ namespace WebApplication1
 					//Gets last updated time from json
 					string lastUpdated = dates[0].updateTime;
 					
+					//Sets up connections
 					SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 					SqlConnection con2 = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 					
@@ -135,6 +136,9 @@ namespace WebApplication1
 		public string cookingInterest { get; set; }
 	}
 
+	/**
+	* Stores account details
+	**/
 	public class Acc
 	{
 		public string email { get; set; }
@@ -143,6 +147,9 @@ namespace WebApplication1
 
 	}
 
+	/**
+	* Stores user details
+	**/
 	public class User
 	{
 		public string name { get; set; }

@@ -33,6 +33,7 @@ namespace WebApplication1
 						
 						//Creates command to insert cookbook
 						SqlCommand insertCookbook = new SqlCommand("INSERT INTO Cookbook(name,description,creator,updateTime,changeTime,uniqueid, privacyOption, image, progress) VALUES (@name, @description, @creator, @updateTime, @changeTime, @uniqueid, @privacyOption, @image, @progress)", connection);
+					
 						//Binds params for command
 						insertCookbook.Parameters.AddWithValue("@name", cookbook[i].name);
 						insertCookbook.Parameters.AddWithValue("@description", cookbook[i].description);
@@ -70,7 +71,9 @@ namespace WebApplication1
 			}
 		}
 		
-		//Stores json cookbook
+		/**
+		* Stores  cookbook json
+		**/
 		public class Cookbook
 		{
 			public string name { get; set; }

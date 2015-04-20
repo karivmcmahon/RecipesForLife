@@ -32,7 +32,11 @@ namespace WebApplication1
 					var time = js.Deserialize<List<Date2>>(jsonInput);
 					lastUpdated = time[0].updateTime; //gets last updated time - insert time
 					change = time[0].change; //gets last change time - update time
+					
+					//sets up connection
 					con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
+					
+					//retrieves contributors
 					selectContribs();
 				}catch(Exception ex)
 				{
@@ -106,6 +110,9 @@ namespace WebApplication1
 			public string change { get; set; }
 		}
 
+		/**
+		* Creates a list of contributers used for json
+		**/
 		public class Contributers
 		{
 			public List<Contributer> Contributer { get; set;} 

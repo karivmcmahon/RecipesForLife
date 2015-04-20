@@ -27,24 +27,27 @@ namespace WebApplication1
 			connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			js.MaxJsonLength = Int32.MaxValue;
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
+			
 			if (jsonInput != null)
 			{
 				try
 				{
-					//Deserializes JSON into a list of recipe objects
+					//Deserializes JSON into a list of recipe objects	
 					recipe = js.Deserialize<List<Recipe>>(jsonInput);
+					
 					for (int i = 0; i < recipe.Count(); i++)
 					{
 						connection.Open();
-						transaction = connection.BeginTransaction();
+						transaction = connection.BeginTransaction(); // Start transaction
+						
 						try
 						{
 							updateRecipe(i);
-							transaction.Commit();
+							transaction.Commit(); //commit transaction if successful
 							connection.Close();
 						}catch(Exception ex)
 						{
-							transaction.Rollback();
+							transaction.Rollback(); //rollback transaction if unsuccessful
 							Response.Write("Error ");
 							Response.Write(ex);
 							connection.Close();
@@ -82,7 +85,7 @@ namespace WebApplication1
 			updateRecipe.Parameters.AddWithValue("@tips", recipe[i].tips);
 			updateRecipe.Parameters.AddWithValue("@cusine", recipe[i].cusine);
 			
-			//	connection.Open();
+			
 			try
 			{
 				//Execute update
@@ -100,7 +103,7 @@ namespace WebApplication1
 				Response.Write(ex);
 				throw ex;
 			}
-			//	connection.Close();
+			
 		}
 		
 		/**
@@ -281,17 +284,22 @@ namespace WebApplication1
 			public List<Ingredient> Ingredient { get; set; }
 		}
 
-		//Stores prep details for recipe
+		/**
+		* Stores prep details for recipe
+		*
+		**/
 		public class Preperation
 		{
 			public  List<String> prep { get; set; }
 			public List<String> prepNums { get; set; }
 			public List<String> uniqueid { get; set;  }
 			public List<String> prepprogress { get; set; }
-			//  public int prepNums { get; set; }
 		}
 
-		//Stores ingred details for recipe
+		/** 
+		* Stores ingred details for recipe
+		*
+		**/
 		public class Ingredient
 		{
 			public List<String> Ingredients { get; set; }

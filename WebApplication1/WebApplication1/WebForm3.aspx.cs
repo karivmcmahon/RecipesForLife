@@ -49,10 +49,11 @@ namespace WebApplication1
 		
 		/**
 		* Inserts recipe into database
-		*
+		* int i - point in loop
 		**/
 		public void insertRecipe(int i)
 		{
+			//Sets up and opens connection
 			connn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			connn.Open();
 			
@@ -76,7 +77,7 @@ namespace WebApplication1
 			
 			try
 			{ 
-				recipeId = (Int32)insertRecipe.ExecuteScalar(); //inserts recipe into database
+				recipeId = (Int32)insertRecipe.ExecuteScalar(); //inserts recipe into database and retrieves inserted id
 				
 				insertPrep(i);	//makes call to insert prep related to this recipe
 				insertIngredient(i); //makes call to insert prep related to this recipe
@@ -155,6 +156,8 @@ namespace WebApplication1
 		* Selects ingredient from database where name matches name from json
 		* i - point in recipe loop
 		* a - point in ingred loop
+		*
+		* return - Int32 - ingredient id
 		**/
 		public Int32 selectIngredient(int i, int a)
 		{
