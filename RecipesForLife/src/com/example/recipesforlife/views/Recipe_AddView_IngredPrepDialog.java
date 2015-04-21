@@ -122,7 +122,7 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 		errorView.setTextColor(Color.parseColor("#FFFFFF"));
 		String stepNum = utils.getTextFromDialog(R.id.stepNumEditText, recipeAddStepDialog);
 		String step = utils.getTextFromDialog(R.id.stepEditText, recipeAddStepDialog);
-		prepnumcount = Integer.parseInt(stepNum) + 1;
+		
 		
 		//Error catching before moving to next dialog stage
 		if(stepNum.equals(""))
@@ -135,6 +135,7 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 		}
 		else
 		{
+			prepnumcount = Integer.parseInt(stepNum) + 1;
 			//Sets the details to a prep bean
 			PreperationBean prepBean = new PreperationBean();
 			prepBean.setPreperation(step);

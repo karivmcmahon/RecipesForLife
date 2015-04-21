@@ -139,8 +139,8 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 		serves = utils.getTextFromDialog(R.id.recipeServesEditText, recipeAddDialog2);
 		prep = utils.getTextFromDialog(R.id.recipePrepEditText, recipeAddDialog2);
 		cooking = utils.getTextFromDialog(R.id.recipeCookingEditText, recipeAddDialog2);
-		String methods = utils.getTextFromDialog(R.id.recipeIngredsEditText, recipeAddDialog2);
-		String ingredient = utils.getTextFromDialog(R.id.recipeStepsEditText, recipeAddDialog2);
+		String ingredient = utils.getTextFromDialog(R.id.recipeIngredsEditText, recipeAddDialog2);
+		String methods = utils.getTextFromDialog(R.id.recipeStepsEditText, recipeAddDialog2);
 
 		//Error catching before moving to next stage
 		if(ingredient.equals(""))

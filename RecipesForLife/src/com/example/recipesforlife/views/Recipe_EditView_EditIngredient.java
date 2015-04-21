@@ -304,6 +304,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		if(create == true)
 		{
 			sItems = new Spinner(activity);
+			sItems.setLayoutParams(params);
 		}
 		else
 		{
@@ -311,7 +312,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		}
 		sItems.getBackground().setColorFilter(context.getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
 		sItems.setAdapter(adapter);
-		sItems.setLayoutParams(params);
+		
 		return sItems;
 	}
 
