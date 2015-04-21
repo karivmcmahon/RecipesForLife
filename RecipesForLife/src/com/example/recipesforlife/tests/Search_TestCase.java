@@ -19,6 +19,11 @@ import com.example.recipesforlife.models.ApplicationModel_ReviewModel;
 import com.example.recipesforlife.models.ApplicationModel_SearchModel;
 import com.example.recipesforlife.models.Database_DatabaseConnection;
 
+/**
+ * Test cases for search related database querys
+ * @author Kari
+ *
+ */
 public class Search_TestCase extends AndroidTestCase {
 	ApplicationModel_SearchModel searchmodel;
 	Database_DatabaseConnection dbConnection;

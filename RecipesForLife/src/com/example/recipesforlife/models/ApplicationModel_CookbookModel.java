@@ -193,7 +193,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * Check if contributer exists where email and cookbookid matches
 	 * 
 	 * @param email		Users email address
-	 * @param id		Cookbooks ida
+	 * @param id		Cookbooks id
 	 * @return boolean  Whether contrib exists
 	 */
 	public boolean selectContributer(String email, int id)
@@ -238,7 +238,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	/**
 	 * Select contributers for a specific cookbook
 	 * 
-	 * @param uniqueid 				Coobooks unique id
+	 * @param uniqueid 				Cookbooks unique id
 	 * @return ArrayList<String>	List of contribs emails
 	 */
 	public ArrayList<String> selectCookbookContributers(String uniqueid, String progress)

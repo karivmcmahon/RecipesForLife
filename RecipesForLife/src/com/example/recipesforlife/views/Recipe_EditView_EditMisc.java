@@ -97,7 +97,6 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				servesDialog.dismiss();
 
 			}});
@@ -123,10 +122,10 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates style from a serves dialog
+	 * Creates style for  serves dialog
 	 * 
-	 * @param servesDialog
-	 * @param errorView
+	 * @param servesDialog	Dialog
+	 * @param errorView		Textview displays errors
 	 */
 	private void setUpServesDialog(Dialog servesDialog, TextView errorView)
 	{
@@ -139,10 +138,10 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a spinner for the serves dialog
+	 * Creates a spinner for the serves dialog - fills with difficulties
 	 * 
-	 * @param servesDialog
-	 * @return Spinner
+	 * @param servesDialog	Dialog
+	 * @return Spinner		Filled spinner
 	 */
 	private Spinner setUpServesSpinner(Dialog servesDialog)
 	{
@@ -173,7 +172,6 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				titleDialog.dismiss();
 
 			}});
@@ -214,7 +212,6 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				cusineDialog.dismiss();
 
 			}});		
@@ -234,8 +231,8 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Creates a dialog filled with cuisine data to be edited 
 	 * 
-	 * @param cusineDialog
-	 * @return Spinner  - with filled data and style
+	 * @param cusineDialog 	Dialog
+	 * @return Spinner   	With filled data and style
 	 */
 	private Spinner createCusineSpinner(Dialog cusineDialog)
 	{
@@ -264,8 +261,8 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Creates a dietary spinner with correct data and style
 	 * 
-	 * @param cusineDialog
-	 * @return Spinner
+	 * @param cusineDialog		Dialog
+	 * @return Spinner			filled spinner
 	 */
 	private Spinner createDietarySpinner(Dialog cusineDialog)
 	{
@@ -290,8 +287,8 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Sets up dialog style for the chef dialog
 	 * 
-	 * @param cusineDialog
-	 * @param errorView
+	 * @param cusineDialog	Dialog
+	 * @param errorView		TextView
 	 */
 	private void setUpChefDialogStyle(Dialog cusineDialog, TextView errorView)
 	{
@@ -305,8 +302,8 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	/**
 	 * Sets up title dialog style for the title dialog
 	 * 
-	 * @param titleDialog
-	 * @param errorView
+	 * @param titleDialog	Dialog
+	 * @param errorView		TextView
 	 */
 	private void setUpTitleDialogStyle(Dialog titleDialog, TextView errorView)
 	{
@@ -320,7 +317,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a dialog showing the prep and cooking values which the user can change
+	 * Creates a dialog showing the prep and cooking time values which the user can change
 	 */
 	void getTimeDialog()
 	{
@@ -331,7 +328,6 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				timeDialog.dismiss();
 
 			}});
@@ -350,7 +346,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 	/**
 	 * Sets up a time dialog style
-	 * @param timeDialog
+	 * @param timeDialog	Dialog
 	 */
 	public void setUpTimeDialogStyle(Dialog timeDialog)
 	{
@@ -364,7 +360,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a title dialog where the user can edit the title dialog
+	 * Creates a title dialog where the user can edit the tips dialog
 	 */
 	void getTipsDialog()
 	{
@@ -379,7 +375,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				tipsDialog.dismiss();
 
 			}});

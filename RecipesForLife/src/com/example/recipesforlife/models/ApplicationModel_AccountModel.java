@@ -100,6 +100,7 @@ public class ApplicationModel_AccountModel extends Database_BaseDataSource
 		accountValues.put("id", (int)id);
 		accountValues.put("email", account.getEmail());
 		accountValues.put("password", account.getPassword());
+		
 		//If request is from server set updateTime to shared pref time otherwise set to timestamp for that time
 		if(server == true)
 		{			
@@ -132,6 +133,7 @@ public class ApplicationModel_AccountModel extends Database_BaseDataSource
 	{
 		values = new ContentValues();
 		values.put("name", user.getName()); 
+		
 		//If request is from server set updateTime to shared pref time otherwise set to timestamp for that time
 		if(server == true)
 		{

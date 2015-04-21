@@ -87,9 +87,8 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						// TODO Auto-generated method stub
 						Intent i = new Intent(Search_Explore_CookbookView.this, Recipe_ShelfListView.class);
-						//intents used on getting the recipes		
+						//intents used on getting  to the recipe shelf		
 						i.putExtra("uniqueid", cb.get(position).getUniqueid());
 						i.putExtra("type", "view");
 						i.putExtra("bookname", cb.get(position).getName());

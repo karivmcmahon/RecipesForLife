@@ -109,7 +109,7 @@ public class Recipe_View extends ActionBarActivity {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
 
-		//Gets and dispalys the reviews for the recipes
+		//Gets and displays the reviews for the recipes
 		final ApplicationModel_ReviewModel reviewmodel = new ApplicationModel_ReviewModel(getApplicationContext());
 		rbs = reviewmodel.selectReviews(recipe.getId());
 		ListView listView = (ListView) findViewById(R.id.reviewlist);
@@ -332,6 +332,7 @@ public class Recipe_View extends ActionBarActivity {
 		ApplicationModel_RecipeModel model = new ApplicationModel_RecipeModel(getApplicationContext());
 		recipe = new RecipeBean();
 		
+		//Get details for intent
 		Intent intent = getIntent();
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr") );
 		prepList = model.selectPreperation(recipe.getId());
@@ -339,6 +340,7 @@ public class Recipe_View extends ActionBarActivity {
 		imgBean = model.selectImages(recipe.getId());
 
 
+		//Load recipe image
 		img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);
 		task.execute();
@@ -442,7 +444,6 @@ public class Recipe_View extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				cloneDialog.dismiss();
 				
 			}});
@@ -461,6 +462,7 @@ public class Recipe_View extends ActionBarActivity {
 				try
 				{
 					ApplicationModel_RecipeModel rmodel = new ApplicationModel_RecipeModel(getApplicationContext());
+					
 					//check for errors
 					if(rmodel.selectRecipe( recipe.getName(), cbList.get(namepos).getUniqueid()))
 					{
@@ -472,6 +474,7 @@ public class Recipe_View extends ActionBarActivity {
 					}
 					else
 					{
+						//insert recipe and notify list change
 						String uid = rmodel.insertRecipe(recipe, false, ingredList, prepList, imgBean);
 						Recipe_ShelfListView.adapter.notifyDataSetChanged(); 
 						cloneDialog.dismiss();

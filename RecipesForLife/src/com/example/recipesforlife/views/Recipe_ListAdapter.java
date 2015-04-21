@@ -72,6 +72,7 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 	{
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
+		
 		//Shows empty row for layout reasons or a recipe based on the string
 		if(recipenames.get(position).toString().equals(""))
 		{

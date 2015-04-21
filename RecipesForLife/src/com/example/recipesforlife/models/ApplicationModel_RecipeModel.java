@@ -706,6 +706,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * Retrieve ingredient from database the helps us know whether to insert ingredient. If id 0 then insert
 	 * 
 	 * @param name		Ingredient name
+	 * @return int 		row id
 	 */
 	public int selectIngredient(String name)
 	{	

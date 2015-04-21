@@ -167,6 +167,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		ListView userlistView = (ListView) findViewById(R.id.userlist);
 		if(ub.size() == 0)
 		{
+			//Set list for empty if empty
 			UserBean userbean = new UserBean();
 			userbean.setName("empty");
 			ub.add(userbean);
@@ -188,7 +189,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		cookbooktv.setText("Cookbooks that feature '" + query + "' :");
 		ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
 
-		//If empty show no results
+		//If empty set for no results
 		if(cb.size() == 0)
 		{
 			CookbookBean cookbookbean = new CookbookBean();
@@ -235,7 +236,7 @@ public class Search_ResultsView extends ActionBarActivity {
 
 		ListView listView = (ListView) findViewById(R.id.list);
 		
-		//If list is 0 shows no results
+		//If list is 0 set for no results
 		if(rb.size() == 0)
 		{
 			RecipeBean recipebean = new RecipeBean();

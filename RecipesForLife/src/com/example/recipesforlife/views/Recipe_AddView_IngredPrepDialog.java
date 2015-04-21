@@ -105,7 +105,6 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				recipeAddStepDialog.dismiss();
 
 			}});

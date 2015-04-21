@@ -47,6 +47,7 @@ class Recipe_Review_Adapter extends ArrayAdapter<ReviewBean> {
 		LayoutInflater inflater = activity.getLayoutInflater();
 		View rowView = null;
 		rowView= inflater.inflate(R.layout.recipe_individreview, null, true);
+		
 		//sets style for each row in list
 		rowView = setListStyle(rowView, position);
 

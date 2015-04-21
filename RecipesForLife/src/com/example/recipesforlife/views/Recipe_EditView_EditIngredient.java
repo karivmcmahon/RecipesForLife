@@ -73,7 +73,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Check the ingredient list and check for any errors before making any changes
-	 * @param errorView
+	 * @param errorView		Textview displays error
 	 */
 	private void listCheck(TextView errorView)
 	{
@@ -224,7 +224,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create button style for the dialog
-	 * @return
+	 * @return Button
 	 */
 	private Button createButton()
 	{
@@ -242,7 +242,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create error view style for dialog
-	 * @return
+	 * @return TextView
 	 */
 	private TextView createErrorView()
 	{
@@ -272,7 +272,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create spinner
-	 * @param create
+	 * @param create 	Whether the spinner is being created or not
 	 * @return Spinner with values and style
 	 */
 	private Spinner createSpinner(boolean create)
@@ -334,12 +334,12 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Set visibility of views to invisible if delete is selected
-	 * @param point
-	 * @param amountEdit
-	 * @param ingredEdit
-	 * @param sItems
-	 * @param view
-	 * @param noteEdit
+	 * @param point			point in loop
+	 * @param amountEdit	EditText
+	 * @param ingredEdit	EditText
+	 * @param sItems		Spinner
+	 * @param view			TextView
+	 * @param noteEdit		EditText
 	 */
 	private void setVisibility(int point, EditText amountEdit, EditText ingredEdit, Spinner sItems, TextView view, EditText noteEdit)
 	{
@@ -354,6 +354,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	@Override
 	/**
 	 * Finds an id which is not currently in use
+	 * @return int - available id
 	 */
 	public int findId(){  
 		View v = activity.findViewById(id);  
@@ -366,8 +367,8 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Checks the size of list against a counter to know when to display
-	 * @param size
-	 * @return a boolean - which tells us when to dismiss dialog
+	 * @param size		    Size of list
+	 * @return a boolean 	Which tells us when to dismiss dialog
 	 */
 	private boolean sizeCheck(int size)
 	{
@@ -402,13 +403,13 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Add the different views to a linear layout
-	 * @param linearLayoutInDialog
-	 * @param amountEdit
-	 * @param sItems
-	 * @param ingredEdit
-	 * @param view
-	 * @param noteEdit
-	 * @param img
+	 * @param linearLayoutInDialog		Linear layout
+	 * @param amountEdit				EditText
+	 * @param sItems					Spinner
+	 * @param ingredEdit				EditText
+	 * @param view						TextView
+	 * @param noteEdit					EditText
+	 * @param img						ImageButton
 	 */
 	private void addViews(LinearLayout linearLayoutInDialog,
 			EditText amountEdit, Spinner sItems, EditText ingredEdit, TextView view, EditText noteEdit, ImageButton img)

@@ -79,11 +79,15 @@ import com.example.recipesforlife.util.Util;
 		misc = new Recipe_EditView_EditMisc(getApplicationContext(), this);
 		utils = new Util(getApplicationContext(), this);
 		recipe = new RecipeBean();
+		
+		//set style and text
 		setStyle();
 		setTextForLayout();
+		
+		//get recipe name
 		String recipename = utils.getTextView(R.id.recipeTitle);
 
-
+		//set up nav bar
 		nav = new Navigation_DrawerCreation(this, "Edit Recipe Name");
 		nav.createDrawer();
 		SpannableString s = new SpannableString("Edit " + recipename);
@@ -252,16 +256,21 @@ import com.example.recipesforlife.util.Util;
 		addIngredList = new ArrayList<IngredientBean>();
 		addPrepList = new ArrayList<PreperationBean>();
 		
+		//get intent
 		Intent intent = getIntent();
+		
+		//get recipe details
 		recipe = model.selectRecipe2(intent.getStringExtra("uniqueidr"));
 		prepList = model.selectPreperation(recipe.getId());
 		ingredList = model.selectIngredients(recipe.getId());
 		imgBean = model.selectImages(recipe.getId());
 		
+		//Load image
 		ImageView img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);	
 		task.execute();
 		
+		//update prep and ingred lists
 		updatePrepList();
 		updateIngredList();
 
@@ -535,7 +544,6 @@ import com.example.recipesforlife.util.Util;
 					imgBean.setImage(byteArray);
 					
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -561,7 +569,6 @@ import com.example.recipesforlife.util.Util;
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				imageDialog.dismiss();
 
 			}});

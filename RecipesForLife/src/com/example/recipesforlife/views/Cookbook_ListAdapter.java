@@ -69,12 +69,10 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	}
 
 
-	@Override
-	/**
-	 * Adapts list data 
-	 * 
-	 * @return View with adapted data
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
+	@Override
 	public View getView(final int position, View view, ViewGroup parent) 
 	{
 

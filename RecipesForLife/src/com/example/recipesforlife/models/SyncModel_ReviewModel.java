@@ -96,19 +96,22 @@ public class SyncModel_ReviewModel  extends Database_BaseDataSource {
 
 		for(int i = 0; i < jArray.length(); i++)
 		{
-
-
 			json = jArray.getJSONObject(i);
+			
+			//retrieve from json and set to bean
 			ReviewBean review = new ReviewBean();
 			review.setComment(json.getString("comment"));
 			review.setUser(json.getString("user"));
+			
 			ApplicationModel_RecipeModel rm = new ApplicationModel_RecipeModel(context);
+			
+			//get recipe id
 			RecipeBean recipebean = rm.selectRecipe2(json.getString("recipeuniqueid"));
 			review.setRecipeid(recipebean.getId());
 			ApplicationModel_ReviewModel model = new ApplicationModel_ReviewModel(context);
 			try
 			{
-				model.insertReview(review, true);
+				model.insertReview(review, true); //insert review once all data retrieve
 
 			}
 			catch(SQLException e)

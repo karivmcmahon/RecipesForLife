@@ -194,12 +194,12 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	/**
 	 * Set up views for the list
 	 * 
-	 * @param linearLayoutInDialog
-	 * @param prepView
-	 * @param prepNumView
-	 * @param prepNumEdit
-	 * @param prepEdit
-	 * @param img
+	 * @param linearLayoutInDialog	Linear Layout
+	 * @param prepView				TextView
+	 * @param prepNumView			TextView
+	 * @param prepNumEdit			EditText
+	 * @param prepEdit				EditText
+	 * @param img					Image - Byte array
 	 */
 	private void addViews(LinearLayout linearLayoutInDialog, TextView prepView, TextView prepNumView, EditText prepNumEdit, EditText prepEdit, ImageButton img)
 	{

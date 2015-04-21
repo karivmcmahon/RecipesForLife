@@ -84,7 +84,6 @@ class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 				minutes %= 60;
 
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

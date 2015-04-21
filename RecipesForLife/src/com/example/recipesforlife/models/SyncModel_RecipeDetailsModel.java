@@ -333,9 +333,13 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
+				
 				int prepid = cursor.getInt(getIndex("Preperationid", cursor));
+				
 				int id = cursor.getInt(getIndex("recipeId", cursor));
+				
 				recipeprepid = rm.selectRecipeByID(id);
+			
 				Cursor cursor2 = database.rawQuery("SELECT * FROM Preperation WHERE  id = ?", new String[] {  Integer.toString(prepid) });
 				if (cursor2 != null && cursor2.getCount() > 0) {
 					for (int x = 0; x < cursor2.getCount(); x++) {

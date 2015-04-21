@@ -158,6 +158,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		Intent intent = getIntent();
 		
+		//depending on access show different views
 		boolean access = rmodel.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), intent.getStringExtra("uniqueid"));
 		if(access == true)
 		{
@@ -285,7 +286,6 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				cloneDialog.dismiss();
 				
 			}});

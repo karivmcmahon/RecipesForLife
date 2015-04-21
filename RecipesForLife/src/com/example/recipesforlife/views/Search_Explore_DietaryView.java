@@ -106,7 +106,7 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 						@Override
 						public void onItemClick(AdapterView<?> parent, View view,
 								int position, long id) {
-							// TODO Auto-generated method stub
+							//if clicked take to that recipe
 							Intent i = new Intent(Search_Explore_DietaryView.this, Recipe_View.class);
 							i.putExtra("uniqueidr", rb.get(position).getUniqueid());
 							i.putExtra("name", rb.get(position).getName());
