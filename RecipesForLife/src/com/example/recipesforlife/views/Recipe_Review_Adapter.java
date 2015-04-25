@@ -56,6 +56,7 @@ class Recipe_Review_Adapter extends ArrayAdapter<ReviewBean> {
 	
 	/**
 	 * Sets the style of row in list and adapts the data for that row
+	 * 
 	 * @param rowView		rowView
 	 * @param position		position in list
 	 * @return rowView 		updated row

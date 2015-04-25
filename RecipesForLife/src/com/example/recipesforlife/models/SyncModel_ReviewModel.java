@@ -18,7 +18,7 @@ import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 /**
- * Gets and sends review JSON to server
+ * Class gets and sends review JSON to server
  * @author Kari
  *
  */

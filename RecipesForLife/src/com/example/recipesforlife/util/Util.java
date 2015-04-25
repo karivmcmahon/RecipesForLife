@@ -80,7 +80,8 @@ public class Util  {
 	}
 	/**
 	 * Checks if there is internet connection
-	 * @param context
+	 * 
+	 * @param context	Activity context
 	 * @return boolean	if there is return true else return false
 	 */
 	private boolean checkInternetConnection(Context context) {
@@ -95,7 +96,8 @@ public class Util  {
 
 	/**
 	 * Convert date to string
-	 * @param date
+	 * 
+	 * @param date		Date
 	 * @return String 	Date as string
 	 */
 	@SuppressLint("SimpleDateFormat")
@@ -114,8 +116,8 @@ public class Util  {
 
 	/**
 	 * Get current date
-	 * @param appstring  Request coming from app
 	 * 
+	 * @param appstring  Request coming from app
 	 * @return String	current date time
 	 */
 	private String getLastUpdated(boolean appstring)
@@ -129,6 +131,7 @@ public class Util  {
 
 	/**
 	 * Set custom text for the dialog
+	 * 
 	 * @param resource		Resource that the custom text will be set for
 	 * @param dialog		Dialog the resource is contained in
 	 * @param fontSize		Fontsize for text
@@ -144,6 +147,7 @@ public class Util  {
 
 	/**
 	 * Set text for a row in a listview
+	 * 
 	 * @param resource		Resource that the custom text will be set for
 	 * @param rowview		Row view in a list
 	 * @param fontSize		Fontsize for text
@@ -159,6 +163,7 @@ public class Util  {
 
 	/**
 	 * Set custom text for the dialog
+	 * 
 	 * @param resource		Resource that the custom text will be set for
 	 * @param dialog		Dialog the resource is contained 
 	 * @param fontSize		Fontsize for text
@@ -172,6 +177,7 @@ public class Util  {
 
 	/**
 	 * Set custom text
+	 * 
 	 * @param resource	Resource that the custom text will be set for
 	 * @param fontSize	Fontsize for text
 	 */
@@ -185,6 +191,7 @@ public class Util  {
 
 	/**
 	 * Set text to black and italic
+	 * 
 	 * @param resource		Resource that the custom text will be set for
 	 * @param fontSize		Fontsize for text
 	 */
@@ -198,6 +205,7 @@ public class Util  {
 
 	/**
 	 * Set custom text
+	 * 
 	 * @param resource	Resource that the  text will be set for
 	 * @param text 		Text to be set to textview
 	 */
@@ -209,6 +217,7 @@ public class Util  {
 
 	/**
 	 * Get text from edit text
+	 * 
 	 * @param resource  Resource that the text will be retrieved from
 	 * @return String 	Retrieved text from edit text
 	 */
@@ -221,6 +230,7 @@ public class Util  {
 
 	/**
 	 * Gets text from textview
+	 * 
 	 * @param resource	Resource that the text will be retrieved from
 	 * @return String		Text retrieved from textview
 	 */
@@ -246,6 +256,7 @@ public class Util  {
 
 	/**
 	 * Set custom text with pink color
+	 * 
 	 * @param resource	Resource that the text will be set for
 	 * @param fontSize	Font size for text
 	 */
@@ -259,6 +270,7 @@ public class Util  {
 
 	/**
 	 * Set custom text with black color
+	 * 
 	 * @param resource	Resource that the text will be set for
 	 * @param fontSize	Font size for text
 	 */
@@ -273,6 +285,7 @@ public class Util  {
 
 	/**
 	 * Set custom text for button
+	 * 
 	 * @param resource	Resource that the text will be set for
 	 * @param fontSize	Font size for text
 	 */
@@ -286,6 +299,7 @@ public class Util  {
 
 	/**
 	 * Set button text for a dialog
+	 * 
 	 * @param resource	Resource that the button text will be set for
 	 * @param fontSize	Font size for text
 	 * @param dialog	Dialog which contains the button
@@ -302,6 +316,7 @@ public class Util  {
 
 	/**
 	 * Set up the time picker
+	 * 
 	 * @param dialog		Dialog which should contain the time picker
 	 * @param res			Resource for the time picker
 	 * @param handler
@@ -400,6 +415,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of account information to be inserted to the databases
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -428,6 +444,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of cookbook information to be inserted to the databases
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -456,6 +473,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of recipe information to be inserted to the databases
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -484,6 +502,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of recipe details information to be inserted to the databases
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -513,6 +532,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of contributors information to be inserted to the databases
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -541,6 +561,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of review information to be inserted to the databases
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -569,6 +590,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of recipe information to be updated in the database
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -597,6 +619,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of cookbook information to be updated in the database
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -625,6 +648,7 @@ public class Util  {
 
 	/**
 	 * Handles the retrieving and sending of contrib information to be updated in the database
+	 * 
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws SQLiteException
@@ -653,6 +677,7 @@ public class Util  {
 
 	/**
 	 * Creates a dialog
+	 * 
 	 * @param activity	
 	 * @param resource	Resource for dialog view to be set to
 	 * @return Dialog
@@ -670,9 +695,10 @@ public class Util  {
 
 	/**
 	 * Gets spinner index  - found online http://stackoverflow.com/questions/2390102/how-to-set-selected-item-of-spinner-by-value-not-by-position
+	 *
 	 * @param spinner		Spinner
 	 * @param myString		String item to get index for
-	 * @return int - the index
+	 * @return int 			the index
 	 */
 	public int getIndex(Spinner spinner, String myString)
 	{
@@ -690,6 +716,7 @@ public class Util  {
 
 	/**
 	 * Gets image path based on URI - used to show path when user selects image in browse
+	 * 
 	 * @param uri		Uri
 	 * @return String	Image path
 	 */
@@ -705,8 +732,10 @@ public class Util  {
 
 	/**
 	 * Decodes image and finds the correct scale value for sample size
+	 * 
 	 * @param selectedImage		Image URI
 	 * @return Bitmap			Bitmap image
+	 * 
 	 * @throws FileNotFoundException
 	 */
 	public Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
@@ -741,6 +770,7 @@ public class Util  {
 
 	/**
 	 * Rotates image based on ExifInterface - particularly useful for camera photos
+	 * 
 	 * @param bitmap		Image bitmap
 	 * @param filePath		Image file path
 	 * @return Bitmap		Correctly rotated image
@@ -777,6 +807,7 @@ public class Util  {
 
 	/** 
 	 * Get image intent for selecting photos from gallery or camera
+	 * 
 	 * @return Intent	For selecting image
 	 */
 	public Intent getImageIntent()
@@ -797,6 +828,7 @@ public class Util  {
 
 	/**
 	 * Sets up the search details
+	 * 
 	 * @param menu	Menu
 	 */
 	public void setUpSearch(Menu menu)

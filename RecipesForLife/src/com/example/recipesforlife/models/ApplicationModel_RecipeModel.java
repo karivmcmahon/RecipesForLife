@@ -122,6 +122,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 
 	/**
 	 * A method to check if the user has access to recipe
+	 * *
 	 * @param user		users email
 	 * @param uid		cookbook id
 	 * @return boolean 	whether they have access
@@ -144,11 +145,11 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Method called to get a generated uuid
+	 * Method called to get a generated uuid 
 	 * 
 	 * @param addedby	the user who is adding the data
 	 * @param table 	the related database table for the uuid
-	 * @return uuid		unique id
+	 * @return uuid		generated unique id
 	 */
 	public String generateuuid(String addedby, String table)
 	{
@@ -212,12 +213,12 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 		String uniqueid = "";
 		if(server == true)
 		{
-			uniqueid = img.getUniqueid();
+			uniqueid = img.getUniqueid(); //get image uniqueid if from server
 			imagevalues.put("uniqueid", uniqueid);
 		}
 		else
 		{
-			uniqueid = utils.generateUUID(addedBy, "Images", database);
+			uniqueid = utils.generateUUID(addedBy, "Images", database); //generate unique id if from application
 			imagevalues.put("uniqueid", uniqueid);
 		}
 		long imageID = database.insertOrThrow("Images", null, imagevalues);
@@ -241,7 +242,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Inserts extra ingredient details which come after the recipe has been inserted
+	 * Inserts extra ingredient details which come after the recipe has been inserted e.g. when edited
 	 * 
 	 * @param server		if request from server
 	 * @param ingredList 	ingredient details
@@ -304,7 +305,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * Insert ingredient information into database
 	 * 
 	 * @param ingredList  ingredient information
-	 * @param addedBy     user who inserted recipe email
+	 * @param addedBy     user who inserted recipe's email
 	 * @param server      if request from server or application
 	 * @param edit		  if the insert is coming from the edit method or not
 	 */
@@ -384,7 +385,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Insert connected ingred details id and ingred id into database
+	 * Insert connected ingred details id and ingred id into database in a linking table
 	 */
 	private void insertIngredToDetails()
 	{
@@ -437,7 +438,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 
 
 	/**
-	 * Inserts extra prep details after recipe has been inserted
+	 * Inserts extra prep details after recipe has been inserted e.g. from an edit
 	 * 
 	 * @param server		if request has come from server
 	 * @param prepList		preperation details
@@ -530,7 +531,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	 * @param ingredList  	ingred info for recipe
 	 * @param prepList 		prep info for recipe
 	 * @param img  			image for recipe
-	 * @return uniqueid 	of inserted recipe
+	 * @return uniqueid 	Unique id for inserted recipe
 	 */
 	public String insertRecipe(RecipeBean recipe, boolean server, ArrayList<IngredientBean> ingredList, ArrayList<PreperationBean> prepList, ImageBean img)
 	{
@@ -553,7 +554,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 		if(server == true)
 		{
 			uniqueid = recipe.getUniqueid();
-			//if from server get unique id and set to shared pref from db for update tim
+			//if from server get unique id and set to shared pref from db for update time
 			values.put("uniqueid", uniqueid);
 			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); 
 		}
@@ -564,7 +565,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 			values.put("uniqueid", uniqueid);
 			values.put("updateTime", utils.getLastUpdated(false)); 
 		}
-		//Starts transaction before insserting to datbase
+		//Starts transaction before inserting to database
 		database.beginTransaction();
 		try
 		{
@@ -589,7 +590,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 
 
 	/**
-	 * Insert connected ingred details id and recipe id into database
+	 * Insert connected ingred details id and recipe id into database in a linking table
 	 * 
 	 * @param server 	 whether the call came from server or not
 	 * 
@@ -751,7 +752,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Selects preperation info based on recipe
+	 * Selects preperation info based on recipe id
 	 * 
 	 * @param id							Recipe id
 	 * @return ArrayList<preperationBean>	List of prep details

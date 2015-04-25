@@ -38,7 +38,7 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 	 * Gets list data
 	 * @param activity 
 	 * @param users			List of users
-	 * @param context
+	 * @param context		Activity context
 	 * @param cookbookuid	Cookbook that contains the contributers
 	 */
 	Contributer_ListAdapter(Activity activity , ArrayList<String> users, Context context, String cookbookuid, boolean isCreator)

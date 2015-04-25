@@ -224,6 +224,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create button style for the dialog
+	 * 
 	 * @return Button
 	 */
 	private Button createButton()
@@ -242,6 +243,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create error view style for dialog
+	 * 
 	 * @return TextView
 	 */
 	private TextView createErrorView()
@@ -258,8 +260,9 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Creates edit text box
-	 * @param width
-	 * @return EditText box with formatting and style
+	 * 
+	 * @param width		Width of edit text box
+	 * @return EditText Box with formatting and style
 	 */
 	private EditText createEditText(int width)
 	{
@@ -272,8 +275,9 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create spinner
+	 * 
 	 * @param create 	Whether the spinner is being created or not
-	 * @return Spinner with values and style
+	 * @return Spinner  Filled spinner
 	 */
 	private Spinner createSpinner(boolean create)
 	{
@@ -318,6 +322,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Create delete image button for the each item in the list of ingredient
+	 * 
 	 * @return ImageButton
 	 */
 	@SuppressWarnings({ "deprecation" })
@@ -335,6 +340,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Set visibility of views to invisible if delete is selected
+	 * 
 	 * @param point			point in loop
 	 * @param amountEdit	EditText
 	 * @param ingredEdit	EditText
@@ -355,7 +361,8 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 	@Override
 	/**
 	 * Finds an id which is not currently in use
-	 * @return int - available id
+	 * 
+	 * @return int 	available id
 	 */
 	public int findId(){  
 		View v = activity.findViewById(id);  
@@ -368,6 +375,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Checks the size of list against a counter to know when to display
+	 * 
 	 * @param size		    Size of list
 	 * @return a boolean 	Which tells us when to dismiss dialog
 	 */
@@ -404,6 +412,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 
 	/**
 	 * Add the different views to a linear layout
+	 * 
 	 * @param linearLayoutInDialog		Linear layout
 	 * @param amountEdit				EditText
 	 * @param sItems					Spinner

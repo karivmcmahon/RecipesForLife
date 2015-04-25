@@ -39,8 +39,8 @@ public class Utility  {
 	}
 
 	/**
-	/**
 	 * Convert date to string
+	 * 
 	 * @param date
 	 * @return String	string with date
 	 */
@@ -59,6 +59,7 @@ public class Utility  {
 
 	/**
 	 * Get current date and time
+	 * 
 	 * @param appstring		whether request is coming from app
 	 */
 	public String getLastUpdated(boolean appstring)
@@ -74,6 +75,7 @@ public class Utility  {
 
 	/**
 	 * Generates UUID then adds the name and type of table - to create a more detailed unique id
+	 * 
 	 * @param addedBy		Who is inserting into the db
 	 * @param table			Table for which the uuid request is coming from
 	 * @return String		Unique ID
@@ -91,9 +93,10 @@ public class Utility  {
 
 	/**
 	 * Checks if unique id exists - if so create another one
+	 * 
 	 * @param table		Table for which the uuid request is coming from
 	 * @param uuid		Generated unique id
-	 * @return true or false depending on if UUID exists
+	 * @return boolean	true or false depending on if UUID exists
 	 */
 	@SuppressWarnings("unused")
 	private boolean selectUUID(String table, String uuid, SQLiteDatabase database )
@@ -111,9 +114,11 @@ public class Utility  {
 
 	/**
 	 * Send json to the server
+	 * 
 	 * @param jsonArray		JSON to send to server
 	 * @param update		Whether the request is update or not
 	 * @param url			URL it's being sent to
+	 *
 	 * @throws IOException
 	 */
 	public void sendJSONToServer(JSONArray jsonArray, boolean update, String url ) throws IOException
@@ -129,7 +134,7 @@ public class Utility  {
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 7200);
 			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
+					jsonArray.toString().getBytes("UTF8"))); //set json to entity
 
 
 			try 
@@ -139,7 +144,7 @@ public class Utility  {
 				Log.v("RESPONSE", "RESPONSE " + str);
 				if(str.startsWith("Error"))
 				{
-					throw new ClientProtocolException("Exception contributers error");
+					throw new ClientProtocolException("Exception error");
 				}
 
 			} 
@@ -159,11 +164,13 @@ public class Utility  {
 
 	
 	/**
-	 * Retrieves JSON from server
+	 * Http post request to retrieves JSON from server
+	 * 
 	 * @param url 		url to retrieve JSON
 	 * @param pref 		datetime from a shared preference
 	 * @param update 	whether its for an update or insert
-	 * @return A JSON string recieved from server
+	 * @return String	 A JSON string recieved from server
+	 * 
 	 * @throws IOException
 	 * @throws JSONException
 	 */
@@ -195,7 +202,7 @@ public class Utility  {
 			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 7200);
 			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
 			myConnection.setEntity(new ByteArrayEntity(
-					jsonArray.toString().getBytes("UTF8")));
+					jsonArray.toString().getBytes("UTF8"))); //set to json entity 
 			try 
 			{
 				response = myClient.execute(myConnection);

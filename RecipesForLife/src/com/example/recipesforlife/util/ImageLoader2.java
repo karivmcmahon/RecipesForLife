@@ -38,6 +38,7 @@ public class ImageLoader2 {
 
 	/**
 	 * Sets the image to be displayed if in cache otherwise it will queue photo
+	 * 
 	 * @param imageView		Where the image will displayed
 	 * @param arr			Image byte array
 	 * @param recipeid		Recipe unique id
@@ -57,6 +58,7 @@ public class ImageLoader2 {
 
 	/**
 	 * Submits photo to executor service
+	 * 
 	 * @param bytearr		Image byte array
 	 * @param imageView		Where image is displayed
 	 */
@@ -68,6 +70,7 @@ public class ImageLoader2 {
 
 	/**
 	 * Gets bitmap by using method decode sampled bitmap
+	 * 
 	 * @param bytearr		Image byte array
 	 * @return Bitmap		Image bitmap
 	 */
@@ -90,8 +93,9 @@ public class ImageLoader2 {
 
 	/**
 	 * Gets bitmap with correct sample size for width and height
-	 * @param context
-	 * @param imageStream
+	 * 
+	 * @param context			Activity context
+	 * @param imageStream		Byte array input stream
 	 * @param reqWidth			Required width for image
 	 * @param reqHeight			Required height for image
 	 * @return Bitmap			Image bitmap

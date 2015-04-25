@@ -95,7 +95,6 @@ class Recipe_AddView_Dialog2  extends Recipe_AddView {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				recipeAddDialog2.dismiss();
 
 			}});

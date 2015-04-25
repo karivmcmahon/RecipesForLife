@@ -57,10 +57,10 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 
 
 	/**
-	 * Creating a cookbookBean based on cursor from the database
+	 * Creating a cookbookBean based on the cursor from the database
 	 * 
 	 * @param cursor		  Stores query results
-	 * @return cookbookBean   Stores info from the query
+	 * @return CookbookBean   Stores info from the query
 	 */
 	private CookbookBean cursorToCookbook(Cursor cursor) {
 		CookbookBean cb = new CookbookBean();
@@ -78,7 +78,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 
 
 	/** 
-	 * Creating a recipebean based on cursor from the database
+	 * Creating a RecipeBean based on cursor from the database
 	 * 
 	 * @param cursor		Stores query results
 	 * @return recipeBean 	Stores info from query
@@ -113,16 +113,17 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 		String uid = "";
 		if(server == true)
 		{
-			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); //if server use shared pref time
+			values.put("updateTime", sharedpreferences.getString("Date", "DEFAULT")); //if from server use shared pref time
 			values.put("uniqueid", book.getUniqueid()); //gets unique id if from server
 			uid = book.getUniqueid();
 		}
 		else
 		{
-			values.put("updateTime", utils.getLastUpdated(false));  //if application get time from timestamp
+			values.put("updateTime", utils.getLastUpdated(false));  //if from application get time from timestamp
 			uid = utils.generateUUID(book.getCreator(), "Cookbook", database); //generate uuid for when being inserted
 			values.put("uniqueid", uid);
 		}
+		
 		database.beginTransaction();
 		try
 		{
@@ -148,7 +149,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * Inserts contributers information into the database
 	 * 
 	 * @param email 		 email address of contributer
-	 * @param cookbookid 	 id of cookbook
+	 * @param cookbookid 	 id of cookbook in database
 	 * @param server 		 if request from server or the application
 	 */
 	public void insertContributers(String email, int cookbookid, boolean server)
@@ -193,7 +194,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * Check if contributer exists where email and cookbookid matches
 	 * 
 	 * @param email		Users email address
-	 * @param id		Cookbooks id
+	 * @param id		Cookbooks id in database
 	 * @return boolean  Whether contrib exists
 	 */
 	public boolean selectContributer(String email, int id)
@@ -239,6 +240,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * Select contributers for a specific cookbook
 	 * 
 	 * @param uniqueid 				Cookbooks unique id
+	 * @param progress				The cookbooks progress - whether its added or deleted
 	 * @return ArrayList<String>	List of contribs emails
 	 */
 	public ArrayList<String> selectCookbookContributers(String uniqueid, String progress)
@@ -377,7 +379,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	/**
 	 * Select cookbooks unique id based on a recipe id
 	 * 
-	 * @param recipeid		recipe row id
+	 * @param recipeid		recipe row id in database
 	 * @return uniqueid		cookbook unique id
 	 */
 	public String selectCookbooksUniqueID(int recipeid)
@@ -491,7 +493,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	 * Update contributers in the database
 	 * 
 	 * @param email 		email of the contributer
-	 * @param cookbookid 	id of the cookbook
+	 * @param cookbookid 	id of the cookbook in database
 	 * @param progress 		progress of contributer account whether added or deleted
 	 * @param server		if the request from the server or from the application
 	 */

@@ -41,7 +41,7 @@ public class PasswordHashing
 	 * Returns a salted PBKDF2 hash of the password.
 	 *
 	 * @param   password    the password to hash
-	 * @return              a salted PBKDF2 hash of the password
+	 * @return  String      a salted PBKDF2 hash of the password
 	 */
 	private static String createHash(char[] password) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
@@ -61,7 +61,7 @@ public class PasswordHashing
 	 *
 	 * @param   password        the password to check
 	 * @param   correctHash     the hash of the valid password
-	 * @return                  true if the password is correct, false if not
+	 * @return  boolean         true if the password is correct, false if not
 	 */
 	public static boolean validatePassword(String password, String correctHash) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
@@ -73,7 +73,7 @@ public class PasswordHashing
 	 *
 	 * @param   password        the password to check
 	 * @param   correctHash     the hash of the valid password
-	 * @return                  true if the password is correct, false if not
+	 * @return  boolean         true if the password is correct, false if not
 	 */
 	private static boolean validatePassword(char[] password, String correctHash)	throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
@@ -114,7 +114,7 @@ public class PasswordHashing
 	 * @param   salt        the salt
 	 * @param   iterations  the iteration count (slowness factor)
 	 * @param   bytes       the length of the hash to compute in bytes
-	 * @return              the PBDKF2 hash of the password
+	 * @return  byte[]      the PBDKF2 hash of the password
 	 */
 	private static byte[] pbkdf2(char[] password, byte[] salt, int iterations, int bytes) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
@@ -127,7 +127,7 @@ public class PasswordHashing
 	 * Converts a string of hexadecimal characters into a byte array.
 	 *
 	 * @param   hex         the hex string
-	 * @return              the hex string decoded into a byte array
+	 * @return  byte[]      the hex string decoded into a byte array
 	 */
 	private static byte[] fromHex(String hex)
 	{
@@ -143,7 +143,7 @@ public class PasswordHashing
 	 * Converts a byte array into a hexadecimal string.
 	 *
 	 * @param   array       the byte array to convert
-	 * @return              a length*2 character string encoding the byte array
+	 * @return  String      a length*2 character string encoding the byte array
 	 */
 	private static String toHex(byte[] array)
 	{

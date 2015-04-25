@@ -18,6 +18,12 @@ import com.example.recipesforlife.controllers.PreperationBean;
 import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.Account_SignUpSignInView;
 
+/**
+ * Class syncs additional recipe details between server and application.
+ * This is additional ingreds or prep details that were inserted after the recipe was inserted
+ * @author Kari
+ *
+ */
 public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 	private Context context;
 	private ApplicationModel_RecipeModel rm;
@@ -73,7 +79,7 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Builds a json with all the recipe data to send to the server
+	 * Builds a json with all the addtional recipe details to send to the server
 	 * 
 	 * @param update 			Whether its for update or insert
 	 * @throws JSONException
@@ -191,9 +197,13 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
+			
 				int detsId = cursor.getInt(getIndex("ingredientDetailsId", cursor));
+				
 				int id = cursor.getInt(getIndex("Recipeid", cursor));
+			
 				recipeingredid =  rm.selectRecipeByID(id);
+				
 				Cursor cursor2 = database.rawQuery("SELECT * FROM IngredientDetails WHERE  id = ?", new String[] {  Integer.toString(detsId) });
 				if (cursor2 != null && cursor2.getCount() > 0) {
 					for (int x = 0; x < cursor2.getCount(); x++) {

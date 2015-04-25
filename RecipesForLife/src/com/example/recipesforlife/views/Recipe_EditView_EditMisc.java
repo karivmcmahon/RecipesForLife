@@ -346,6 +346,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 
 	/**
 	 * Sets up a time dialog style
+	 * 
 	 * @param timeDialog	Dialog
 	 */
 	public void setUpTimeDialogStyle(Dialog timeDialog)
@@ -360,7 +361,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 	}
 
 	/**
-	 * Creates a title dialog where the user can edit the tips dialog
+	 * Creates a tips dialog where the user can edit the tips dialog
 	 */
 	void getTipsDialog()
 	{

@@ -140,7 +140,7 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 			ImageView delRecipeImage = (ImageView) rowView.findViewById(R.id.delView);
 			if(access == false)
 			{
-				//if not creator then set edit button to invisible
+				//if not creator then sets the edit button to invisible
 				delRecipeImage.setVisibility(View.INVISIBLE);
 			}
 			else

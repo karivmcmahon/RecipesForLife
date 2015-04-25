@@ -116,7 +116,7 @@ public class SyncModel_AccountModel extends Database_BaseDataSource
 	}
 
 	/**
-	 * Gets the json with it's sync info from the server
+	 * Gets the json with it's sync info from the server and inserts into database
 	 * 
 	 * @throws JSONException
 	 * @throws IOException 

@@ -41,7 +41,7 @@ public class ApplicationModel_AccountModel extends Database_BaseDataSource
 	 * Checks if email is already in use
 	 * 
 	 * @param email
-	 * @return true if in use and false if not
+	 * @return boolean 	true if in use and false if not
 	 */
 	public boolean checkEmail(String email )
 	{
@@ -62,7 +62,7 @@ public class ApplicationModel_AccountModel extends Database_BaseDataSource
 
 
 	/**
-	 * Inserts account information into the sqlite database
+	 * Transaction to insert account information into the sqlite database
 	 * 
 	 * @param account  a controller containing account info
 	 * @param user     a controller containing user info

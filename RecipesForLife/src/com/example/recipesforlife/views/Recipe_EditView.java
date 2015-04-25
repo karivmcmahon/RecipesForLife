@@ -604,7 +604,8 @@ import com.example.recipesforlife.util.Util;
 	
 	/**
 	 * Finds current available id's - found online
-	 * @return
+	 * 
+	 * @return int 	available id
 	 */
 	public int findId(){  
 		View v = findViewById(id);  

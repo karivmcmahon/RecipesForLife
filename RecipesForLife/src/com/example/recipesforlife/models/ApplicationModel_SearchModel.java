@@ -130,10 +130,9 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Select cookbooks based on search query where cookbooks contain the word searched
+	 * Select 10 random cookbooks
 	 * 
-	 * @param word						User search query
-	 * @return ArrayList<CookbookBean>	List of cookbooks containing the query
+	 * @return ArrayList<CookbookBean>	List of cookbooks
 	 */
 	public ArrayList<CookbookBean> selectRandomCookbooks()
 	{	
@@ -144,7 +143,6 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				cb.add(cursorToCookbook(cursor));
-
 			}
 		}
 		cursor.close();
@@ -168,7 +166,6 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				rb.add(cursorToRecipe(cursor));
-
 			}
 		}
 		cursor.close();
@@ -191,7 +188,6 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				rb.add(cursorToRecipe(cursor));
-
 			}
 		}
 		cursor.close();
@@ -215,7 +211,6 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				rb.add(cursorToRecipe(cursor));
-
 			}
 		}
 		cursor.close();
@@ -238,7 +233,6 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				rb.add(cursorToRecipe(cursor));
-
 			}
 		}
 		cursor.close();
@@ -261,7 +255,6 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
 				ub.add(cursorToUsers(cursor));
-
 			}
 		}
 		cursor.close();

@@ -59,7 +59,6 @@ class Recipe_AddView_Dialog3  extends Recipe_AddView {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				addRecipeDialog3.dismiss();
 
 			}});
@@ -144,7 +143,7 @@ class Recipe_AddView_Dialog3  extends Recipe_AddView {
 	 */
 	private void getThirdDialogData()
 	{	
-
+		//get data from dialog
 		Spinner dietaryspinner = (Spinner) addRecipeDialog3.findViewById(R.id.recipeDietarySpinner);
 		dietary = dietaryspinner.getSelectedItem().toString();
 		tips = utils.getTextFromDialog(R.id.recipeTipsEditText, addRecipeDialog3);

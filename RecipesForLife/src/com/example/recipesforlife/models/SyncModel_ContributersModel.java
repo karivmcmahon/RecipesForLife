@@ -17,7 +17,7 @@ import com.example.recipesforlife.util.Utility;
 import com.example.recipesforlife.views.Account_SignUpSignInView;
 
 /**
- * Gets and creates JSON contributers too send to and from server
+ * Gets and creates JSON contributers to send to and from server
  * @author Kari
  *
  */
@@ -66,7 +66,7 @@ public class SyncModel_ContributersModel extends Database_BaseDataSource {
 	} 
 
 	/**
-	 * Gets contributers after a specific date
+	 * Gets contributers info from database after a specific date
 	 * 
 	 * @param update 							whether checking for updates or inserts
 	 * @return ArrayList<ContributerBean>		List of contributers

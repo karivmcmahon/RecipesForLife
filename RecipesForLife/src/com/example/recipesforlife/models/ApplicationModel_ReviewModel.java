@@ -32,7 +32,7 @@ public class ApplicationModel_ReviewModel extends Database_BaseDataSource  {
 	}
 
 	/**
-	 * Gets information from database and set to review bean
+	 * Gets information from database and sets to review bean
 	 * 
 	 * @param cursor		Results from database query
 	 * @return reviewBean 	review info from database
@@ -112,7 +112,7 @@ public class ApplicationModel_ReviewModel extends Database_BaseDataSource  {
 	/**
 	 * Select reviews for a recipe based on the recipe ids
 	 * 
-	 * @param recipeid
+	 * @param recipeid					Recipes id in database
 	 * @return ArrayList<ReviewBean> 	List of reviews
 	 */
 	public ArrayList<ReviewBean> selectReviews(int recipeid)

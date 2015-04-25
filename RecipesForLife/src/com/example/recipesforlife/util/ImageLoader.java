@@ -63,11 +63,11 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 	/**
 	 * Sets bitmap options 
-	 * @param context
-	 * @param imageStream
-	 * @param reqWidth
-	 * @param reqHeight
-	 * @return Changed bitmap
+	 * @param context			Activity context
+	 * @param imageStream		byte array input stream
+	 * @param reqWidth			Required width for image
+	 * @param reqHeight			Required height for image
+	 * @return Changed bitmap	Altered image
 	 * @throws FileNotFoundException
 	 */
 	@SuppressWarnings("deprecation")
@@ -89,10 +89,10 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 	/**
 	 * Calculates the best sample size for the required width height and width
-	 * @param options
-	 * @param reqWidth
-	 * @param reqHeight
-	 * @return int - sample size
+	 * @param options		Bitmap options for image
+	 * @param reqWidth		Required width for image
+	 * @param reqHeight		Required height for image
+	 * @return int 			Sample size
 	 */
 	private static int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) 

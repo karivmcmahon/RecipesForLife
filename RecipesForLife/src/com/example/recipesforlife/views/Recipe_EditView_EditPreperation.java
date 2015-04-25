@@ -115,6 +115,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 				//Create styles
 				utils.setDialogText(prepviewid, prepDialog, 22);
 				utils.setDialogText(prepNumViewId, prepDialog, 22);
+				
 				//SetText
 				prepEdit.setText(prepList.get(i).getPreperation());
 				prepEdit.setWidth(400);
@@ -268,7 +269,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	/**
 	 * Checks the list for errors before making changes
 	 * 
-	 * @param errorView
+	 * @param errorView		TextView which displays errors
 	 */
 	private void listCheck(TextView errorView)
 	{
@@ -367,6 +368,8 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	@Override
 	/**
 	 * Checks for ids which can be used
+	 * 
+	 * @return int 		id which can be used
 	 */
 	public int findId(){  
 		View v = activity.findViewById(id);  
@@ -387,6 +390,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		utils.setDialogText(R.id.stepView, recipeAddStepDialog, 22);
 		utils.setDialogText(R.id.addStepView, recipeAddStepDialog, 22);
 		
+		//Dismiss dialog
 		Button closeButton = utils.setButtonTextDialog(R.id.closeButton, 22, recipeAddStepDialog);
 		closeButton.setOnClickListener(new OnClickListener(){
 
@@ -398,12 +402,12 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		
 		final TextView errorView = (TextView) recipeAddStepDialog.findViewById(R.id.errorView);
 		
+		//Add pressed then get the data
 		Button addButton = utils.setButtonTextDialog(R.id.addStepButton, 22, recipeAddStepDialog);
 		addButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				getRecipeStep(recipeAddStepDialog, errorView);
 			}});
 		recipeAddStepDialog.show();

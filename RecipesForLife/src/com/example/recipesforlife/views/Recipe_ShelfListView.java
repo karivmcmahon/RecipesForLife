@@ -179,11 +179,14 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		
-		//Updates list on resume
+		//clears list
 		recipenames.clear();
 		recipeids.clear();
 		recipeimages.clear();
+		
 		recipeList = model.selectRecipesByCookbook(uniqueid);
+		
+		//updates list
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			ImageBean image = model.selectImage(recipeList.get(a).getId());

@@ -124,7 +124,7 @@ public class Search_ResultsView extends ActionBarActivity {
 	/**
 	 * Handles the search intent
 	 * 
-	 * @param intent
+	 * @param intent	Search intent
 	 */
 	private void handleIntent(Intent intent) {
 

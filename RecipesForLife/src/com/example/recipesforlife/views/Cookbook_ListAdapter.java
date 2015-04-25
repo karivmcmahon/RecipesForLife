@@ -48,9 +48,9 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 
 	/** 
 	 * Gets list data
-	 * @param activity
+	 * @param activity			Activity
 	 * @param booknames			List of book names to be displayed in listview
-	 * @param context
+	 * @param context			Activity context
 	 * @param bookids			List of book ids to be displayed in listview
 	 * @param bookimages		List of book images to be displayed in listview
 	 */
