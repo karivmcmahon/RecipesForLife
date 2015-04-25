@@ -1,0 +1,10 @@
+								Recipes For Life
+								Appendix 5.3
+								Accessing the database
+
+Access the central server database:
+
+server:	  zeno.computing.dundee.ac.uk
+username: kari
+password: ABcdefg1234567
+database: karidb

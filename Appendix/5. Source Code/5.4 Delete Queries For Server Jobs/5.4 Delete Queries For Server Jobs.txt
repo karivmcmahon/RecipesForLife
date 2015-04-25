@@ -1,0 +1,89 @@
+							Appendix 5.4
+							Recipes For Life
+							Delete Queries To Be Used For Server Jobs
+							To be placed on the central database when sql server agent made available
+
+
+
+begin transaction;
+
+   declare @deletedIds table ( id int );
+
+   delete 
+   from Cookbook 
+   output deleted.id into @deletedIds
+   WHERE Cookbook.progress='deleted'
+   
+
+   delete 
+   from CookbookRecipe  
+   WHERE CookbookRecipe.Cookbookid IN (SELECT id FROM @deletedIds)
+ 
+   delete
+   from Contributers
+   WHERE Contributers.Cookbookid IN (SELECT id FROM @deletedIds)
+
+commit transaction;
+
+begin transaction;
+
+   delete
+   from Contributers
+   WHERE Contributers.progress = 'deleted'
+ 
+commit transaction;
+
+begin transaction;
+
+   declare @deletedrecipeid table ( id int );
+   declare @deletedprepid table ( id int );
+   declare @deletedingredid table ( id int );
+   declare @deletedimageid table ( id int );
+   declare @deletedreviewid table ( id int );
+
+   delete 
+   from Recipe
+   output deleted.id into @deletedrecipeid
+   WHERE Recipe.progress='deleted'
+   
+   delete 
+   from PrepRecipe 
+   output deleted.Preperationid into @deletedprepid
+   WHERE PrepRecipe.recipeId IN (SELECT id FROM @deletedrecipeid)
+ 
+   delete
+   from Preperation
+   WHERE Preperation.id IN (SELECT id FROM @deletedprepid)
+
+    delete 
+   from RecipeIngredient 
+   output deleted.ingredientDetailsId into @deletedingredid
+   WHERE RecipeIngredient.Recipeid IN (SELECT id FROM @deletedrecipeid)
+ 
+   delete
+   from IngredientDetails
+   WHERE IngredientDetails.id IN (SELECT id FROM @deletedingredid)
+
+    delete 
+   from RecipeImages 
+   output deleted.imageid into @deletedimageid
+   WHERE RecipeImages.Recipeid IN (SELECT id FROM @deletedrecipeid)
+ 
+   delete
+   from Images
+   WHERE Images.imageid IN (SELECT id FROM @deletedimageid)
+
+   delete 
+   from ReviewRecipe 
+   output deleted.ReviewId into @deletedreviewid
+   WHERE ReviewRecipe.Recipeid IN (SELECT id FROM @deletedrecipeid)
+ 
+   delete
+   from Review
+   WHERE Review.reviewId IN (SELECT id FROM @deletedreviewid)
+
+   delete 
+   from CookbookRecipe 
+   WHERE CookbookRecipe.Recipeid IN (SELECT id FROM @deletedrecipeid)
+
+commit transaction;
