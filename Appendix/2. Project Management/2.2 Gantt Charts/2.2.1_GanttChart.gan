@@ -8,7 +8,7 @@
     </view>
     <view id="resource-table">
         <field id="0" name="Name" width="50" order="0"/>
-        <field id="1" name="Default role" width="49" order="1"/>
+        <field id="1" name="Default role" width="50" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -75,7 +75,7 @@
                     <depend id="69" type="2" difference="0" hardness="Strong"/>
                 </task>
             </task>
-            <task id="69" name="Development" color="#8cb6ce" meeting="true" start="2014-11-24" duration="0" complete="0" expand="true"/>
+            <task id="69" name="Development" color="#8cb6ce" meeting="false" start="2014-11-24" duration="98" complete="0" expand="true"/>
             <task id="68" name="Report" meeting="false" start="2014-11-04" duration="167" complete="0" expand="true">
                 <task id="97" name="Abstract" meeting="false" start="2014-11-04" duration="6" complete="0" expand="true"/>
                 <task id="98" name="Intro" color="#8cb6ce" meeting="false" start="2014-11-04" duration="6" complete="0" expand="true"/>
