@@ -253,7 +253,7 @@ namespace WebApplication1
 		/**
 		* Selects recipe id from database based on recipe unique id
 		* uniqueid - recipe uniqueid
-		* I
+		* 
 		* return - Int32 - recipe id
 		**/
 		public Int32 selectRecipe(String uniqueid)
@@ -278,7 +278,7 @@ namespace WebApplication1
 		
 		/**
 		* Checks if the ingredient unique id already exists
-		* uniqueid - ingred unique 
+		* uniqueid - ingreds unique id
 		* return - bool - states whether the ingred already exists or not
 		**/
 		public bool selectIngredUID(String uniqueid)

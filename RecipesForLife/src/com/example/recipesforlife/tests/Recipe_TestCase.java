@@ -133,51 +133,47 @@ public void testInsertRecipe()
 		
 	} 
 
-public void testEditRecipe()
-{
-
-	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
-	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
-
+	public void testEditRecipe()
+	{
 	
+		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+		
+		ImageBean imgbean = new ImageBean();
+		
+		RecipeBean recipe = new RecipeBean();
+		recipe.setName("pizza");
+		recipe.setDesc("good food");
+		recipe.setUniqueid("uniqueidrecip1");
+		recipe.setAddedBy("doe"); 
+		recipe.setProgress("added");
+		recipemodel.updateRecipe(recipe, prepList, ingredList, imgbean, false);	
+		RecipeBean recipeSelect = new RecipeBean();
+		recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
+		Assert.assertEquals(recipeSelect.getDesc(), "good food");
+		
+		
+	} 
 	
-	
-	ImageBean imgbean = new ImageBean();
-	
-	RecipeBean recipe = new RecipeBean();
-	recipe.setName("pizza");
-	recipe.setDesc("good food");
-	recipe.setUniqueid("uniqueidrecip1");
-	recipe.setAddedBy("doe"); 
-	recipe.setProgress("added");
-	recipemodel.updateRecipe(recipe, prepList, ingredList, imgbean, false);	
-	RecipeBean recipeSelect = new RecipeBean();
-	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
-	Assert.assertEquals(recipeSelect.getDesc(), "good food");
-	
-	
-} 
-
-public void testDeleteRecipe()
-{
-	ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
-	ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
-	ImageBean imgbean = new ImageBean();
-
-	
-	RecipeBean recipe = new RecipeBean();
-	recipe.setName("pizza");
-	recipe.setDesc("good food");
-	recipe.setUniqueid("uniqueidrecip1");
-	recipe.setAddedBy("doe"); 
-	recipe.setProgress("deleted"); 
-	
-	recipemodel.updateRecipe(recipe, prepList, ingredList, imgbean, false);	
-	RecipeBean recipeSelect = new RecipeBean();
-	recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
-	Assert.assertEquals(recipeSelect.getName(), null);
-}
-	
+	public void testDeleteRecipe()
+	{
+		ArrayList<IngredientBean> ingredList = new ArrayList<IngredientBean>();
+		ArrayList<PreperationBean> prepList = new ArrayList<PreperationBean>();
+		ImageBean imgbean = new ImageBean();
+		
+		RecipeBean recipe = new RecipeBean();
+		recipe.setName("pizza");
+		recipe.setDesc("good food");
+		recipe.setUniqueid("uniqueidrecip1");
+		recipe.setAddedBy("doe"); 
+		recipe.setProgress("deleted"); 
+		
+		recipemodel.updateRecipe(recipe, prepList, ingredList, imgbean, false);	
+		RecipeBean recipeSelect = new RecipeBean();
+		recipeSelect = recipemodel.selectRecipe2(recipe.getUniqueid());
+		Assert.assertEquals(recipeSelect.getName(), null);
+	}
+		
 
 	
 	public void testSelectRecipe()

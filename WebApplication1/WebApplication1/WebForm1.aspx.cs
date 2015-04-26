@@ -92,7 +92,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts account data into account table
-		*
+		* int i - point in loop
 		**/
 		public void insertIndAccount(int i)
 		{

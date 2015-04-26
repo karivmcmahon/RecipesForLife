@@ -138,7 +138,7 @@ class Navigation_DrawerCreation   {
 		@Override
 		public void onItemClick(AdapterView parent, View view, int position, long id) 
 		{
-			
+			//Depending on position takes to different activitys
 			if(position == 0)
 			{
 				//Goes to homepage

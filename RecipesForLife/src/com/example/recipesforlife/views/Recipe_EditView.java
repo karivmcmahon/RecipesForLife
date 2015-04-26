@@ -297,6 +297,7 @@ import com.example.recipesforlife.util.Util;
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					//Displays dialog to add ingred
 					ingred.setUpIngredAddDialog();
 				}
 				return false;
@@ -308,6 +309,7 @@ import com.example.recipesforlife.util.Util;
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					//Displays dialog to add prep
 					prep.setUpStepAddDialog();
 				}
 				return false;
@@ -320,6 +322,7 @@ import com.example.recipesforlife.util.Util;
 					@Override
 					public boolean onTouch(View v, MotionEvent event) {
 						if (event.getAction() == MotionEvent.ACTION_DOWN) {
+							//Displays dialog to edit prep
 							prep.getPreperation();
 						}
 						return false;
@@ -332,6 +335,7 @@ import com.example.recipesforlife.util.Util;
 					@Override
 					public boolean onTouch(View v, MotionEvent event) {
 						if (event.getAction() == MotionEvent.ACTION_DOWN) {
+							//Displays dialog to edit ingred
 							ingred.getIngredient();
 						}
 						return false;
@@ -432,6 +436,7 @@ import com.example.recipesforlife.util.Util;
 				return false;
 			}}); 
 
+		//Edit tips dialog
 		ImageView tipsButton = (ImageView) findViewById(R.id.tipsEditImage);
 		tipsButton.setOnTouchListener(new OnTouchListener(){
 
@@ -443,6 +448,7 @@ import com.example.recipesforlife.util.Util;
 				return false;
 			}});
 
+		//Edit chef dialog
 		ImageView chefEditButton = (ImageView) findViewById(R.id.chefEditImage);
 		chefEditButton.setOnTouchListener(new OnTouchListener(){
 

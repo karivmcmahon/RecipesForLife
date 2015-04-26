@@ -75,7 +75,7 @@ public class Search_ExploreView  extends ActionBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
+				//Depending on position click will take to different activity
 				if(position == 0)
 				{
 					//Searches recipe by difficulty

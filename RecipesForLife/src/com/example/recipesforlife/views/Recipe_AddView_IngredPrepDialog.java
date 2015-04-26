@@ -136,6 +136,7 @@ class Recipe_AddView_IngredPrepDialog extends Recipe_AddView {
 		else
 		{
 			prepnumcount = Integer.parseInt(stepNum) + 1;
+			
 			//Sets the details to a prep bean
 			PreperationBean prepBean = new PreperationBean();
 			prepBean.setPreperation(step);

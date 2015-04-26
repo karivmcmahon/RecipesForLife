@@ -103,7 +103,7 @@ class Search_RecipeAdapter extends ArrayAdapter<RecipeBean> {
 	}
 	
 	/**
-	 * Set the layout with correct styles and data thats being adapated
+	 * Set the layout with correct styles and data thats being adapted
 	 * 
 	 * @param rowView	 View of row to be modified
 	 * @param position   Position of list

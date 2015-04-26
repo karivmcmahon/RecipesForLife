@@ -97,6 +97,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		recipeids = new ArrayList<String>();
 		recipeimages = new ArrayList<byte[]>();
 
+		//updates list
 		for(int a = 0; a < recipeList.size(); a++)
 		{
 			ImageBean image = model.selectImage(recipeList.get(a).getId());
@@ -135,6 +136,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		SharedPreferences sharedpreferences = getApplicationContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		Intent intent = getIntent();
 		
+		//Depending on access shows menu options
 		boolean access = rmodel.doesUserHaveAccess(sharedpreferences.getString(emailk, ""), intent.getStringExtra("uniqueid"));
 		if(access == true)
 		{
@@ -144,6 +146,8 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		{
 			getMenuInflater().inflate(R.menu.menu_plain, menu);
 		}
+		
+		//set up search
 		utils.setUpSearch(menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -208,6 +212,7 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 				recipeimages.add(arr);
 			}
 		}
+		
 		//Updates the list view
 		adapter.notifyDataSetChanged();
 

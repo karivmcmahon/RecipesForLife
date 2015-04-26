@@ -243,6 +243,7 @@ public class Util  {
 
 	/**
 	 * Get text from Dialog
+	 * 
 	 * @param resource	Resource that the text will be retrieved from
 	 * @param dialog 	Dialog the text is being retrieved from
 	 * @return String 	Text retrieved from dialog

@@ -88,6 +88,8 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 				final ArrayList<RecipeBean> rb = sm.selectRecipeByCuisine(sItems.getSelectedItem().toString());
 				ListView listView = (ListView) findViewById(R.id.list);
+				
+				//if no results then set to empty
 				if(rb.size() == 0)
 				{
 					RecipeBean recipebean = new RecipeBean();

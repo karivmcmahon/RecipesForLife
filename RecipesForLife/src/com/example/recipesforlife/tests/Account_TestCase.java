@@ -172,7 +172,4 @@ public class Account_TestCase extends AndroidTestCase  {
 		Assert.assertEquals(account.size(), 0);
 	}
 
-	//Needs to test sync - not sure how to approach it without adding test data to server
-	//possibly add and delete from server
-
 }

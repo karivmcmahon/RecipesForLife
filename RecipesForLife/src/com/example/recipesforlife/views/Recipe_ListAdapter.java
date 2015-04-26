@@ -126,6 +126,7 @@ class Recipe_ListAdapter extends ArrayAdapter<String> {
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) 
 					{
+						//Start edit activity
 						Intent i = new Intent(activity, Recipe_EditView.class);
 						i.putExtra("uniqueidr", recipeids.get(position));
 						i.putExtra("name", recipenames.get(position));

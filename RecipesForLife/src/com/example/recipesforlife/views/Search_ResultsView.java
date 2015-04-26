@@ -146,7 +146,7 @@ public class Search_ResultsView extends ActionBarActivity {
 			final ArrayList<CookbookBean> cb = sm.selectCookbooks(query);
 			final ArrayList<UserBean> ub = sm.selectUsers(query);
 
-			//Creates listviews for the different searches 
+			//Creates listviews for the different searches with the data from different searches
 			getRecipesBasedOnQuery(query, rb);
 			getCookbooksBasedOnQuery(query, cb);
 			getUsersBasedOnQuery(query, ub);
@@ -200,6 +200,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		Search_CookbookAdapter cookbookadapter = new Search_CookbookAdapter( getApplicationContext(), this,  cb);
 		cookbooklistView.setAdapter(cookbookadapter); 
 
+		//if list isnt empty enable clicks
 		if(empty == false)
 		{
 			//Enables clicks to take you to the recipe list view

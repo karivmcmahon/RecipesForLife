@@ -407,6 +407,7 @@ public class Account_SignUpSignInView extends Activity {
 		{
 			// Add info to list
 			accountBean.setEmail(email);
+			
 			//Hash password
 			PasswordHashing ph = new PasswordHashing();
 			try 
@@ -425,6 +426,7 @@ public class Account_SignUpSignInView extends Activity {
 			userBean.setBio(bio);
 			userBean.setCountry(country);
 			userBean.setCookingInterest(interest);
+			
 			// Insert to db
 			try {
 				ApplicationModel_AccountModel accountmodel = new ApplicationModel_AccountModel(getApplicationContext());

@@ -64,8 +64,9 @@ class Search_UserAdapter extends ArrayAdapter<UserBean> {
 	
 	/**
 	 * Sets the style of row and adapts the data for the row
-	 * @param rowView
+	 * @param rowView		View of row
 	 * @param position		Position in list
+	 * 
 	 * @return rowView 		Updated  rowView
 	 */
 	private View setListStyle(View rowView, int position)

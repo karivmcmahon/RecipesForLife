@@ -133,7 +133,7 @@ namespace WebApplication1
 		**/
 		public void insertPrepLink(Int32 prepId, int i)
 		{
-			//Creates commnd to insert preperation id into a linking table
+			//Creates command to insert preperation id into a linking table
 			SqlCommand insertPrepLink = new SqlCommand(" INSERT INTO PrepRecipe(recipeId, Preperationid, updateTime, changeTime)  VALUES (@recipeId, @Preperationid, @updateTime, @changeTime)", connn);
 			insertPrepLink.Parameters.AddWithValue("@recipeId", recipeId);
 			insertPrepLink.Parameters.AddWithValue("@Preperationid", prepId);
@@ -205,6 +205,7 @@ namespace WebApplication1
 		{
 			//Command  to insert ingredient into database if it doesnt exist
 			SqlCommand insertIngred = new SqlCommand(" INSERT INTO Ingredient(name, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime, @changeTime)", connn);
+			
 			//Set up command
 			insertIngred.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
 			insertIngred.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
@@ -228,13 +229,14 @@ namespace WebApplication1
 		/**
 		* Inserts ingred details into db
 		* i - point in recipe loop
-		* a -point in ingred loop
+		* a - point in ingred loop
 		* ingredId - ingred id which is inserted into ingred dets table
 		**/
 		public void insertIngredDets(Int32 ingredId, int i, int a)
 		{
 			//Command to insert the ingredient details
 			SqlCommand insertIngredDet = new SqlCommand(" INSERT INTO IngredientDetails(ingredientId, amount, note, value, updateTime, changeTime, uniqueid, progress)  OUTPUT INSERTED.id  VALUES (@id, @amount, @note, @value, @updateTime, @changeTime, @uniqueid, @progress)", connn);
+		
 			//Set up command
 			insertIngredDet.Parameters.AddWithValue("@id", ingredId);
 			insertIngredDet.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
@@ -289,7 +291,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Inserts the link between ingred dets and ingred id
+		* Inserts the link between ingred dets and ingred id in the linking table
 		* ingredId - ingredient  id in db
 		* ingredDetsId - ingredient dets id in db
 		* i - point in recipe loop
@@ -345,6 +347,7 @@ namespace WebApplication1
 			SqlCommand selectCookbookId = new SqlCommand(" SELECT id FROM Cookbook WHERE uniqueid=@uniqueid", connn);
 			selectCookbookId.Parameters.AddWithValue("@uniqueid", recipe[i].cookbookid);
 			var reader = selectCookbookId.ExecuteReader();
+			
 			while(reader.Read())
 			{
 				Int32 id = (Int32)reader["id"];

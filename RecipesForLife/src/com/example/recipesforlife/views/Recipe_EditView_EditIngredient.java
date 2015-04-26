@@ -103,7 +103,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 				}
 				else
 				{
-					size += 1;
+					size += 1; //helps track size to know when to dismiss dialog
 					ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
 					ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
 					ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));

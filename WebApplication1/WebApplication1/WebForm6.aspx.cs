@@ -162,7 +162,7 @@ namespace WebApplication1
 		
 		/** 
 		* selects related ingredients to recipe
-		* recipe - stores recipe info liked id which is used for query
+		* recipe - stores recipe info like id which is used for query
 		* ingredrecipe - List of ingredient details for recipe. Adds selected info onto it for use in JSON
 		*
 		* return - List<Ingredient> - Updated list of ingred details

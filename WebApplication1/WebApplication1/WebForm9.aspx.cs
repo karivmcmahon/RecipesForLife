@@ -43,7 +43,7 @@ namespace WebApplication1
 					byte[] image  = null;
 					if(cookbook[i].image != "")
 					{
-						image = Convert.FromBase64String(cookbook[i].image);
+						image = Convert.FromBase64String(cookbook[i].image); //convert to byte array
 					}
 					updateCookbook.Parameters.AddWithValue("@image", image);
 					connection.Open();

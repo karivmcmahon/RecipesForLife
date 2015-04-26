@@ -391,8 +391,8 @@ public class Recipe_View extends ActionBarActivity {
 	 * Gets the local bitmap URI - this is ued for sharing image
 	 * Code from here https://guides.codepath.com/android/Sharing-Content-with-Intents
 	 * 
-	 * @param imageView
-	 * @return Uri 
+	 * @param imageView	Image
+	 * @return Uri 		Image URI
 	 */
 	private Uri getLocalBitmapUri(ImageView imageView) {
 		
@@ -453,6 +453,7 @@ public class Recipe_View extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
+				
 				//gets a position of select item
 				int namepos = spinner.getSelectedItemPosition();
 				recipe.setName(utils.getTextFromDialog(R.id.recipenameEditText, cloneDialog));

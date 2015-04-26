@@ -417,7 +417,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 	 * Get the details from the recipe add step dialog
 	 * 
 	 * @param recipeAddStepDialog	Dialog to retrieve data from
-	 * @param errorView
+	 * @param errorView				Displays errors in textview
 	 */
 	private void getRecipeStep(Dialog recipeAddStepDialog, TextView errorView)
 	{

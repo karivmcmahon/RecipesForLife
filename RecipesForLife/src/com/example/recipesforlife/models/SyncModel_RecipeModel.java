@@ -122,12 +122,15 @@ public class SyncModel_RecipeModel extends Database_BaseDataSource {
 			recipe.put("updateTime", recipeList.get(i).getUpdateTime());
 			recipe.put("changeTime", recipeList.get(i).getChangeTime());
 			recipe.put("uniqueid", recipeList.get(i).getUniqueid());
+			
 			ApplicationModel_CookbookModel model = new ApplicationModel_CookbookModel(context);
 			String id = model.selectCookbooksUniqueID(recipeList.get(i).getId());
 			recipe.put("cookbookid", id);
+			
 			ImageBean image = rm.selectImages(recipeList.get(i).getId());
 			String stringToStore = new String(Base64.encode(image.getImage(), Base64.DEFAULT));
 			recipe.put("image", stringToStore);
+			
 			recipe.put("imageid", image.getUniqueid());
 			recipe.put("progress", recipeList.get(i).getProgress());
 			recipe.put("difficulty", recipeList.get(i).getDifficulty());
