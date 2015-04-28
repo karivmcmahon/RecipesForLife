@@ -248,6 +248,7 @@ class Recipe_EditView_EditMisc extends Recipe_EditView{
 		cusineSpinnerArray.add("African");
 		cusineSpinnerArray.add("Middle Eastern");
 		cusineSpinnerArray.add("Other");
+		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				activity, R.layout.general_spinner_item, cusineSpinnerArray);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

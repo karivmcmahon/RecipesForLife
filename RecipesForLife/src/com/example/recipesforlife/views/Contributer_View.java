@@ -221,7 +221,7 @@ class Contributer_View {
 		//Show list of contributers
 		ListView listView2 = (ListView) contribDialog.findViewById(R.id.lists);
 
-		//select the contributers and dispaly in a listview
+		//select the contributers and display in a listview
 		contribs = model.selectCookbookContributers(ccadapter.bookids.get(position), "added");
 		ccadapter.adapter2 = new
 				Contributer_ListAdapter(activity, contribs, context, ccadapter.bookids.get(position), isCreator);

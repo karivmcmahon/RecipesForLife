@@ -201,6 +201,7 @@ public class Cookbook_ListAdapter  extends ArrayAdapter<String> {
 	
 	/**
 	 * Displays the dialog and handles user interaction for deleting cookbook
+	 * 
 	 * @param position		Position in list
 	 */
 	void deleteCookbookDialog(final int position)

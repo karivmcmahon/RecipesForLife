@@ -364,7 +364,7 @@ import com.example.recipesforlife.util.Util;
 	 */
 	private void updatePrepList()
 	{
-		//Orders instructions in order
+		//Orders instructions in order by step num
 		TextView instructions = (TextView) findViewById(R.id.methodList);
 		Collections.sort(prepList, new Comparator<PreperationBean>() {
 			@Override 

@@ -119,6 +119,7 @@ public class ImageLoader2 {
 
 	/**
 	 * Calculates sample size based on width and height
+	 * 
 	 * @param options		Bitmap options
 	 * @param reqWidth		Required image width
 	 * @param reqHeight		Required image height
@@ -192,6 +193,7 @@ public class ImageLoader2 {
 
 	/**
 	 * Checks if imageview has been used
+	 * 
 	 * @param photoToLoad		Instance of photoToLoad
 	 * @return boolean 			 if image is reusued
 	 */

@@ -113,7 +113,7 @@ public class Utility  {
 	}
 
 	/**
-	 * Send json to the server
+	 * Http post request sends json to the server
 	 * 
 	 * @param jsonArray		JSON to send to server
 	 * @param update		Whether the request is update or not

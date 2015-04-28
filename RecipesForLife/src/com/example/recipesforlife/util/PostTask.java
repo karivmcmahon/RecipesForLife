@@ -89,6 +89,7 @@ public class PostTask extends AsyncTask<Void, Void, String>
 		}
 		else if(response.equals("fail"))
 		{
+			//Display message telling the user the sync failed
 			Toast.makeText(context, 
 					"App sync failed", Toast.LENGTH_LONG).show();
 		}

@@ -106,6 +106,7 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 
 	/**
 	 * Checks for any errors with user input
+	 * 
 	 * @return boolean 	true if errors, false if no errors
 	 */
 	private boolean errorCheck()
@@ -266,7 +267,7 @@ class Cookbook_AddView extends Cookbook_ShelfListView {
 	}
 
 	/**
-	 * Sets up the dialog style for the adding cookbook dialog
+	 * Sets up the dialog style for adding cookbook dialog
 	 */
 	private void setStyle()
 	{

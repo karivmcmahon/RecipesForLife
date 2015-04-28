@@ -449,7 +449,7 @@ public class ApplicationModel_CookbookModel extends Database_BaseDataSource {
 	/**
 	 * Updates the cookbook in the database
 	 * 
-	 * @param cookbook		CookbookBean information needs to be updated in db
+	 * @param cookbook		CookbookBean information that needs to be updated in db
 	 * @param server 		If request comes from the server or the application
 	 */
 	public void updateBook(CookbookBean cookbook, boolean server)

@@ -197,7 +197,7 @@ public class ApplicationModel_AccountModel extends Database_BaseDataSource
 
 
 	/**
-	 * Selects a list of accounts from database based on email and password
+	 * Selects a list of accounts from database based on email 
 	 * 
 	 * @param email						A specific email address
 	 * @return ArrayList<AccountBean> 	List of accounts relating to this email

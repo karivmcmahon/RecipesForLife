@@ -125,6 +125,7 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 
 	/**
 	 * Updates the cookbook list - called when data has changed in database
+	 * 
 	 * @param update	Whether its an update
 	 */
 	private static void updateCookbookList(boolean update)

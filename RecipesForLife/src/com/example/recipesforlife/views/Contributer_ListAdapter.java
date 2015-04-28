@@ -134,7 +134,7 @@ class Contributer_ListAdapter extends ArrayAdapter<String>{
 				}
 				catch(SQLiteException e)
 				{
-					Toast.makeText(context, "Contributer could not be added", Toast.LENGTH_LONG).show();
+					Toast.makeText(context, "Contributer could not be deleted", Toast.LENGTH_LONG).show();
 				}
 				dialog.dismiss(); 
 			}

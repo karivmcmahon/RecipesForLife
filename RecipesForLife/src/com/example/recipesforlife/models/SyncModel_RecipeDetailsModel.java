@@ -79,7 +79,7 @@ public class SyncModel_RecipeDetailsModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Builds a json with all the addtional recipe details to send to the server
+	 * Builds a json with all the additional recipe details to send to the server
 	 * 
 	 * @param update 			Whether its for update or insert
 	 * @throws JSONException

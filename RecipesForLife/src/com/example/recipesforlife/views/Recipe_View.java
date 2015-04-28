@@ -251,7 +251,7 @@ public class Recipe_View extends ActionBarActivity {
 		}
 		if(item.getItemId() == R.id.action_copy)
 		{
-			createCloneDialog();
+			createCloneDialog(); //Displays clone dialog
 		}
 		setStyle(); 
 		return super.onOptionsItemSelected(item);

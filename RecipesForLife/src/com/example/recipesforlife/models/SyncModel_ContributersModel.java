@@ -115,7 +115,7 @@ public class SyncModel_ContributersModel extends Database_BaseDataSource {
 
 
 	/**
-	 * Get contributer json from server and either insert or update the contributer in the db
+	 * Get contributer json from server and either insert or update the contributers in the db
 	 * 
 	 * @param update 			whether the json is for update or insert
 	 * @throws JSONException

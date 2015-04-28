@@ -336,10 +336,12 @@ public class Account_SignUpSignInView extends Activity {
 		Context t = getApplicationContext();
 		ApplicationModel_AccountModel accountmodel = new ApplicationModel_AccountModel(t);
 
+		//set up error view
 		TextView errorView = (TextView) dialog.findViewById(R.id.errorView);
 		utils.setDialogText(R.id.errorView, dialog, 16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
 
+		//retrieve values
 		email = utils.getTextFromDialog(R.id.emailEdit, dialog);
 		password = utils.getTextFromDialog(R.id.passwordEdit, dialog);
 		name = utils.getTextFromDialog(R.id.nameEdit, dialog);

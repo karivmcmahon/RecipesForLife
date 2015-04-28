@@ -104,6 +104,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 				else
 				{
 					size += 1; //helps track size to know when to dismiss dialog
+					//set details to ungred bean
 					ingred.setName(utils.getTextFromDialog(ingredEditIds.get(i), ingredDialog));
 					ingred.setAmount(Integer.parseInt(utils.getTextFromDialog(amountEditIds.get(i), ingredDialog)));
 					ingred.setNote(utils.getTextFromDialog(noteEditIds.get(i), ingredDialog));
@@ -112,6 +113,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 					String value = spinner.getSelectedItem().toString();
 					ingred.setValue(value);			
 					ingred.setUniqueid(ingredList.get(i).getUniqueid());
+					//then add to ingred list
 					modifiedIngredList.add(ingred);
 					dismissed = sizeCheck(size);
 				}
@@ -122,7 +124,7 @@ class Recipe_EditView_EditIngredient extends Recipe_EditView{
 		}
 		if(dismissed == true)
 		{
-			updateList();
+			updateList(); //then update list once changes are complete
 		}
 	}
 

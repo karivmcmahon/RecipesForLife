@@ -30,6 +30,7 @@ public class MemoryCache {
 
 	/**
 	 * Sets limit
+	 * 
 	 * @param new_limit
 	 */
 	public void setLimit(long new_limit){
@@ -39,6 +40,7 @@ public class MemoryCache {
 
 	/**
 	 * Get bitmap based on id
+	 * 
 	 * @param id			Image id
 	 * @return Bitmap		Image
 	 */
@@ -55,6 +57,7 @@ public class MemoryCache {
 
 	/**
 	 * Puts bitmap in cache
+	 * 
 	 * @param id		Image id
 	 * @param bitmap	Image
 	 */
@@ -104,6 +107,7 @@ public class MemoryCache {
 	
 	/**
 	 * Gets the bitmap size in bytes
+	 * 
 	 * @param bitmap	Image
 	 * @return long		Bitmap size
 	 */

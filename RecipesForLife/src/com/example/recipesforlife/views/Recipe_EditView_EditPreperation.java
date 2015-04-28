@@ -302,7 +302,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 					prep.setPrepNum(Integer.parseInt(utils.getTextFromDialog(prepNumEditIds.get(i), prepDialog)));
 					prep.setUniqueid(prepList.get(i).getUniqueid());
 					prep.setProgress(prepList.get(i).getProgress());
-					modifiedPrepList.add(prep); 
+					modifiedPrepList.add(prep); //set details and add to modified prep list once done
 
 					size += 1;
 					dismissed = sizeCheck(size);
@@ -316,7 +316,7 @@ class Recipe_EditView_EditPreperation extends Recipe_EditView{
 		//Set prep list to new modified list
 		if(dismissed == true)
 		{
-			updateList(modifiedPrepList);
+			updateList(modifiedPrepList); //update list in edit text once done
 		}
 	}
 

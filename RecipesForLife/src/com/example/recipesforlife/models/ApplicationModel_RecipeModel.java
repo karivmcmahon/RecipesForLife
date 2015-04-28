@@ -666,7 +666,6 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	private int selectCookbooksIDByUnique(String uniqueid)
 	{
 		int id = 0;
-		//open();
 		Cursor cursor = database.rawQuery("SELECT id FROM Cookbook WHERE uniqueid=?", new String[] { uniqueid});
 		if (cursor != null && cursor.getCount() > 0) {
 			for (int i = 0; i < cursor.getCount(); i++) {
@@ -674,8 +673,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 				id = cursor.getInt(getIndex("id",cursor));
 			}
 		}
-		cursor.close(); 
-		//close();
+		cursor.close();
 		return id;	
 	}
 
@@ -704,7 +702,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Retrieve ingredient from database the helps us know whether to insert ingredient. If id 0 then insert
+	 * Retrieve ingredient from database this helps us know whether to insert ingredient. If id 0 then insert
 	 * 
 	 * @param name		Ingredient name
 	 * @return int 		row id
@@ -822,7 +820,7 @@ public class ApplicationModel_RecipeModel extends Database_BaseDataSource {
 
 
 	/**
-	 * Select recipe by row id
+	 * Select recipe unique id by row id
 	 * 
 	 * @param id			 row id in database
 	 * @return uniqueid 	 recipes unique id

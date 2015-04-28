@@ -63,6 +63,7 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 	/**
 	 * Sets bitmap options 
+	 * 
 	 * @param context			Activity context
 	 * @param imageStream		byte array input stream
 	 * @param reqWidth			Required width for image
@@ -89,6 +90,7 @@ public class ImageLoader extends AsyncTask <Void, Void, Bitmap>{
 
 	/**
 	 * Calculates the best sample size for the required width height and width
+	 * 
 	 * @param options		Bitmap options for image
 	 * @param reqWidth		Required width for image
 	 * @param reqHeight		Required height for image

@@ -24,6 +24,7 @@ import com.example.recipesforlife.util.Util;
 
 /**
  * The first dialog displayed for adding a recipe. Handles the style and retrieval of data from dialog
+ * 
  * @author Kari
  *
  */

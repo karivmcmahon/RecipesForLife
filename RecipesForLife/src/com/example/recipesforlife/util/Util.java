@@ -117,7 +117,7 @@ public class Util  {
 	/**
 	 * Get current date
 	 * 
-	 * @param appstring  Request coming from app
+	 * @param appstring  If request coming from app
 	 * @return String	current date time
 	 */
 	private String getLastUpdated(boolean appstring)
@@ -232,7 +232,7 @@ public class Util  {
 	 * Gets text from textview
 	 * 
 	 * @param resource	Resource that the text will be retrieved from
-	 * @return String		Text retrieved from textview
+	 * @return String	Text retrieved from textview
 	 */
 	public String getTextView(int resource )
 	{
@@ -427,12 +427,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("1"))
 				sync.getJSONFromServer();
-			editor.putString("Stage", "2");
-			editor.commit();
+				editor.putString("Stage", "2");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("2"))
 				sync.getAndCreateAccountJSON();
-			editor.putString("Stage", "3");
-			editor.commit();
+				editor.putString("Stage", "3");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -456,12 +456,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("3"))
 				syncCookbook.getJSONFromServer(false);
-			editor.putString("Stage", "4");
-			editor.commit();
+				editor.putString("Stage", "4");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("4"))
 				syncCookbook.getAndCreateJSON(false);
-			editor.putString("Stage", "5");
-			editor.commit();
+				editor.putString("Stage", "5");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -485,12 +485,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("5"))   
 				syncRecipe.getJSONFromServer(false);
-			editor.putString("Stage", "6");
-			editor.commit();
+				editor.putString("Stage", "6");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("6"))   
 				syncRecipe.getAndCreateJSON(false); 
-			editor.putString("Stage", "7");
-			editor.commit();
+				editor.putString("Stage", "7");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -514,12 +514,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("7"))
 				syncRecipeDetails.getJSONFromServer();
-			editor.putString("Stage", "8");
-			editor.commit();
+				editor.putString("Stage", "8");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("8"))   
 				syncRecipeDetails.getAndCreateJSON(false);
-			editor.putString("Stage", "10");
-			editor.commit();
+				editor.putString("Stage", "10");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -544,12 +544,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("10"))
 				syncContributer.getJSONFromServer(false);
-			editor.putString("Stage", "11");
-			editor.commit();
+				editor.putString("Stage", "11");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("11"))
 				syncContributer.getAndCreateJSON(false);
-			editor.putString("Stage", "12");
-			editor.commit();
+				editor.putString("Stage", "12");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -573,12 +573,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("12"))
 				syncReview.getJSONFromServer();
-			editor.putString("Stage", "13");
-			editor.commit();
+				editor.putString("Stage", "13");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("13"))
 				syncReview.getAndCreateJSON();
-			editor.putString("Stage", "14");
-			editor.commit();
+				editor.putString("Stage", "14");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -602,12 +602,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("14"))
 				syncRecipe.getJSONFromServer(true);
-			editor.putString("Stage", "15");
-			editor.commit();
+				editor.putString("Stage", "15");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("15"))
 				syncRecipe.getAndCreateJSON(true);
-			editor.putString("Stage", "16");
-			editor.commit();
+				editor.putString("Stage", "16");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -631,12 +631,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("16"))
 				syncCookbook.getJSONFromServer(true);
-			editor.putString("Stage", "17");
-			editor.commit();
+				editor.putString("Stage", "17");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("17"))
 				syncCookbook.getAndCreateJSON(true);
-			editor.putString("Stage", "18");
-			editor.commit();
+				editor.putString("Stage", "18");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {
@@ -660,12 +660,12 @@ public class Util  {
 		{
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("18"))
 				syncContributer.getJSONFromServer(true);
-			editor.putString("Stage", "19");
-			editor.commit();
+				editor.putString("Stage", "19");
+				editor.commit();
 			if(sharedpreferences.getString("Stage", "DEFAULT").equals("19"))
 				syncContributer.getAndCreateJSON(true);
-			editor.putString("Stage", "20");
-			editor.commit();
+				editor.putString("Stage", "20");
+				editor.commit();
 		} catch (JSONException e) {
 			throw e;
 		} catch (IOException e) {

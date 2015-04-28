@@ -42,7 +42,7 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 	}
 	
 	/**
-	 * Sets info from db to the controller
+	 * Sets info from db to the recipe bean controller
 	 * 
 	 * @param cursor		Results from database query
 	 * @return RecipeBean 	Stores recipe info from query
@@ -130,7 +130,7 @@ public class ApplicationModel_SearchModel extends Database_BaseDataSource {
 	}
 
 	/**
-	 * Select 10 random cookbooks
+	 * Select 10 random cookbooks that are public
 	 * 
 	 * @return ArrayList<CookbookBean>	List of cookbooks
 	 */
