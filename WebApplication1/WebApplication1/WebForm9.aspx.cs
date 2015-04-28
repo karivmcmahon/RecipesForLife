@@ -11,7 +11,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	Class that updates cookbooks based on  JSON sent from app
+	* Script updates cookbooks based on  JSON sent from app
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm9 : System.Web.UI.Page
 	{

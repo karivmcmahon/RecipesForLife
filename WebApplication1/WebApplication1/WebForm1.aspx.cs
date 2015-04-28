@@ -12,8 +12,9 @@ using System.Web.Script.Serialization;
 namespace WebApplication1
 {
 	/**
-	* Class handles account information received from JSON and inserts into db
+	* Script handles account information received from JSON and inserts into db
 	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm1 : System.Web.UI.Page
 	{

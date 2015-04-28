@@ -11,7 +11,9 @@ using System.IO;
 namespace WebApplication1
 {
 	/**
-	Class gets JSON to update recipes from app in the database
+	* Script gets JSON to update recipes from app in the database
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm5 : System.Web.UI.Page
 	{
@@ -107,7 +109,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Updates recipe prep info
+		* Updates recipe prep info in the database
 		* int i - point in loop
 		**/
 		public void updatePrep(int i)
@@ -127,7 +129,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Updates recipe ingred details
+		* Updates recipe ingred details in the database
 		* int i -point in loop
 		**/
 		public void updateIngred(int i)
@@ -146,7 +148,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Updates ingredient details
+		* Updates ingredient details in the database
 		* int i - point in recipe loop
 		* int a -  point in ingredient loop
 		**/
@@ -239,7 +241,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Updates recipe image information
+		* Updates recipe image information in database
 		* int i - point in recipe loop
 		*
 		**/
@@ -262,7 +264,10 @@ namespace WebApplication1
 			
 		}
 		
-		//Stores JSON as recipe
+		/**
+		* Class stores JSON as recipe
+		*
+		**/
 		public class Recipe
 		{
 			public string name { get; set; }

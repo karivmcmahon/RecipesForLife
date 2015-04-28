@@ -11,7 +11,9 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	* Sends additional recipe details JSON to app based on date
+	* Script sends additional recipe details JSON to app based on date
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm17 : System.Web.UI.Page
 	{

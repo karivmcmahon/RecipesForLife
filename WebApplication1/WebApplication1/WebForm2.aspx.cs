@@ -11,8 +11,9 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	* Sends a JSON of account information from database after a specific date
+	* Script sends a JSON of account information from database after a specific date
 	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm2 : System.Web.UI.Page
 	{

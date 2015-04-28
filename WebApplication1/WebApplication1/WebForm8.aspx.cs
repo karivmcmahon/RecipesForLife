@@ -10,7 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	Class creates JSON of cookbooks to be sent to app based on certain date
+	* Script creates JSON of cookbooks to be sent to app based on certain date
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm8 : System.Web.UI.Page
 	{
@@ -65,14 +67,14 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Stores date sent from app in json form
+		* Class stores date sent from app in json form
 		**/
 		public class Date2
 		{
 			public string updateTime { get; set; }
 		}
 		/**
-		* Stores list of cookbooks
+		* Class stores list of cookbooks - for json array
 		**/
 		public class Cookbooks
 		{
@@ -80,7 +82,7 @@ namespace WebApplication1
 
 		}
 		/**
-		* Stores a cookbook
+		* Class stores a cookbook
 		**/
 		public class Cookbook
 		{

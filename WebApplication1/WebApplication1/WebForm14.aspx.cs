@@ -10,8 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	* 	Class deserializes reviews JSON and handles inserts for reviews into the database
+	* Script deserializes reviews JSON and handles inserts for reviews into the database
 	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm14 : System.Web.UI.Page
 	{

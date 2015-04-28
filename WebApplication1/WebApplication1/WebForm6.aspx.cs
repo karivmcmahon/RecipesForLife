@@ -10,7 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	Class creates JSON to send to app with recipes needing updated based on date
+	* Script creates JSON to send to app with recipes needing updated based on date
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm6 : System.Web.UI.Page
 	{

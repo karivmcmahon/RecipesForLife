@@ -12,8 +12,9 @@ namespace WebApplication1
 {
 
 	/**
-	* Class handles the sending of review json from database to app
+	* Script handles the sending of review json from database to app
 	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm15 : System.Web.UI.Page
 	{

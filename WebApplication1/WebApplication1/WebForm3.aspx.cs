@@ -11,7 +11,9 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	Class handles recipe JSON from app to insert into database
+	* Script handles recipe JSON from app to insert into database
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm3 : System.Web.UI.Page
 	{
@@ -130,6 +132,7 @@ namespace WebApplication1
 		/**
 		* Inserts the link between recipe and prep
 		* prepId - value for where prep is in database
+		* int i - point in loop
 		**/
 		public void insertPrepLink(Int32 prepId, int i)
 		{

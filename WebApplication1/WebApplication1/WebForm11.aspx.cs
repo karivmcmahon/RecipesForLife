@@ -10,7 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	* Gets json from server to insert contributers into database
+	* Script gets json from server to insert contributers into database
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm11 : System.Web.UI.Page
 	{

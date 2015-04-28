@@ -10,7 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	* Class retrieves JSON of cookbooks to be inserted into database
+	* Script retrieves JSON of cookbooks to be inserted into database
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm7 : System.Web.UI.Page
 	{
@@ -72,7 +74,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Stores  cookbook json
+		* Class stores  cookbook json
 		**/
 		public class Cookbook
 		{

@@ -12,7 +12,9 @@ using System.Data;
 namespace WebApplication1
 {
 	/**
-	* Sends recipe JSON to app to insert into database based on date
+	* Script sends recipe JSON to app to insert into database based on date
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm4 : System.Web.UI.Page
 	{
@@ -168,7 +170,7 @@ namespace WebApplication1
 		/**
 		* Select ingredient info from database
 		* recipeingred - List of ingred info for recipe
-		* recipe - recipe ingred info
+		* recipe - recipe info
 		*
 		* return - List<Ingredient> - List of ingred info for recipe
 		**/
@@ -276,7 +278,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* List of recipes - creates a json array
+		* Class stores list of recipes - creates a json array
 		*
 		**/
 		public class Recipes
@@ -286,7 +288,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Stores recipe prep details
+		* Class stores recipe prep details
 		*
 		**/
 		public class Preperation
@@ -299,7 +301,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Stores recipe ingred details
+		* Class stores recipe ingred details
 		*
 		**/
 		public class Ingredient

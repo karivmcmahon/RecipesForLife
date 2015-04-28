@@ -11,7 +11,9 @@ namespace WebApplication1
 {
 
 	/**
-	Class creates a JSON of contributers based on certain date to send to app
+	* Script creates a JSON of contributers based on certain date to send to app
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm12 : System.Web.UI.Page
 	{

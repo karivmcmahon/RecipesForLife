@@ -11,7 +11,9 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	Class handles recipe details JSON from app
+	* Script handles recipe details JSON from app to insert into database
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm16 : System.Web.UI.Page
 	{

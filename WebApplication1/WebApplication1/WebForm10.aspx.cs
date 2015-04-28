@@ -10,7 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	Creates JSON of cookbooks to be updated after a certain date to send to app
+	* Script creates JSON of cookbooks to be updated after a certain date to send to app
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm10 : System.Web.UI.Page
 	{
@@ -24,6 +26,7 @@ namespace WebApplication1
 				JavaScriptSerializer js = new JavaScriptSerializer();
 				js.MaxJsonLength = Int32.MaxValue;
 		
+				//deserializes json for date
 				var time = js.Deserialize<List<Date2>>(jsonInput);
 				string lastUpdated = time[0].changeTime; //gets last updated time from json
 				
@@ -73,7 +76,7 @@ namespace WebApplication1
 		}
 	
 		/**
-		* Used to create list of cookbooks 
+		* Used to create list of cookbooks  for json array
 		**/
 		public class Cookbooks
 		{

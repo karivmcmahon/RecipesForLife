@@ -10,7 +10,9 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	Class updates contributer information based on JSON from app
+	* Script updates contributer information based on JSON from app in the database
+	*
+	* By Kari McMahon
 	**/
 	public partial class WebForm13 : System.Web.UI.Page
 	{
