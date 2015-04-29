@@ -27,6 +27,7 @@ namespace WebApplication1
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			js.MaxJsonLength = Int32.MaxValue;
+			//Reads JSON
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -87,7 +88,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Creates a list of reviews for json
+		* Class creates a list of reviews for json
 		**/
 		public class Reviews
 		{
@@ -96,7 +97,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Review class which stores json
+		* Review class which stores json to send to app
 		*
 		**/
 		public class Review

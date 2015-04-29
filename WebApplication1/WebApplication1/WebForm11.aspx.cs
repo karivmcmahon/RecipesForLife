@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	* Script gets json from server to insert contributers into database
+	* Script gets json from app to insert contributers into database
 	*
 	* By Kari McMahon
 	**/
@@ -18,6 +18,7 @@ namespace WebApplication1
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads json
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{

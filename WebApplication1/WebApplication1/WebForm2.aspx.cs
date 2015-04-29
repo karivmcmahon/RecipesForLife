@@ -11,7 +11,7 @@ using System.Configuration;
 namespace WebApplication1
 {
 	/**
-	* Script sends a JSON of account information from database after a specific date
+	* Script sends a JSON of account information from database to app after a specific date
 	*
 	* By Kari McMahon
 	**/
@@ -22,12 +22,14 @@ namespace WebApplication1
 		List<Date> dates = new List<Date>();
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads json
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
+			
 			if (jsonInput != null)
 			{
 				try
 				{
-					//deserializing a json
+					//deserializing  json into list of dates
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
 					dates = js.Deserialize<List<Date>>(jsonInput);
@@ -138,7 +140,7 @@ namespace WebApplication1
 	}
 
 	/**
-	* Stores account details
+	* Class stores account details for json
 	**/
 	public class Acc
 	{
@@ -149,7 +151,7 @@ namespace WebApplication1
 	}
 
 	/**
-	* Stores user details
+	* Class stores user details for json
 	**/
 	public class User
 	{

@@ -72,7 +72,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Stores cookbook info
+		* Class stores cookbook info recieved from JSON
 		**/
 		public class Cookbook
 		{

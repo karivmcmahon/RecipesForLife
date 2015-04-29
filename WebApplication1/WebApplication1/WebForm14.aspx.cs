@@ -74,6 +74,7 @@ namespace WebApplication1
 			
 			/**
 			* Inserts review into database
+			*
 			* i - point in loop
 			* review - list of review info from json
 			**/
@@ -110,6 +111,7 @@ namespace WebApplication1
 			
 			/**
 			* Select id from recipe based on uniqueid - the recipe which links to review
+			*
 			* i - point in loop
 			* review - list of reviews from json
 			**/
@@ -143,6 +145,7 @@ namespace WebApplication1
 			
 			/**
 			* Inserts link between recipe and review
+			*
 			* i - point in loop
 			* review - list of review info from json
 			**/

@@ -28,6 +28,8 @@ namespace WebApplication1
 			//Set up connection
 			connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["SQLDbConnection"].ConnectionString);
 			js.MaxJsonLength = Int32.MaxValue;
+			
+			//Reads json
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			
 			if (jsonInput != null)
@@ -66,7 +68,7 @@ namespace WebApplication1
 		
 		/**
 		* Update recipe in database based on json
-		* int i - point in loop
+		*  i - point in loop
 		**/
 		public void updateRecipe(int i)
 		{
@@ -110,12 +112,14 @@ namespace WebApplication1
 		
 		/**
 		* Updates recipe prep info in the database
-		* int i - point in loop
+		*
+		*  i - point in loop
 		**/
 		public void updatePrep(int i)
 		{
 			for (int y = 0; y < recipe[i].Preperation[0].prep.Count(); y++)
 			{
+				//Prepare command and update prep
 				SqlCommand updatePreperation = new SqlCommand("UPDATE Preperation SET instruction=@prep, instructionNum=@prepNums, changeTime=@changeTime, progress=@progress WHERE uniqueid=@uniqueid", connection, transaction);
 				updatePreperation.Parameters.AddWithValue("@prep", recipe[i].Preperation[0].prep[y]);
 				updatePreperation.Parameters.AddWithValue("@prepNums", recipe[i].Preperation[1].prepNums[y]);
@@ -130,7 +134,8 @@ namespace WebApplication1
 		
 		/**
 		* Updates recipe ingred details in the database
-		* int i -point in loop
+		*
+		* i -point in loop
 		**/
 		public void updateIngred(int i)
 		{
@@ -149,11 +154,13 @@ namespace WebApplication1
 		
 		/**
 		* Updates ingredient details in the database
-		* int i - point in recipe loop
-		* int a -  point in ingredient loop
+		*
+		*  i - point in recipe loop
+		*  a -  point in ingredient loop
 		**/
 		public void updateIngredDetails(int i,int  a)
 		{
+			//Prepare command and then update ingred details
 			SqlCommand updateDets = new SqlCommand("UPDATE IngredientDetails SET amount=@amount, note=@note, value=@value, changeTime=@changeTime, progress=@progress, ingredientId = @id WHERE uniqueid=@uniqueid", connection, transaction);
 			updateDets.Parameters.AddWithValue("@id", ingredId);
 			updateDets.Parameters.AddWithValue("@amount", recipe[i].Ingredient[2].Amount[a]);
@@ -178,17 +185,20 @@ namespace WebApplication1
 		
 		/**
 		* Inserts ingredient if updated ingredient does not exist
-		* int i - point in recipe loop
-		* int a - point in ingredient loop
+		*
+		*  i - point in recipe loop
+		*  a - point in ingredient loop
 		**/
 		public void insertIngred(int i , int a)
 		{
+			//Prepare command to insert ingredient
 			SqlCommand insertIngredient = new SqlCommand(" INSERT INTO Ingredient(name, updateTime, changeTime)  OUTPUT INSERTED.id  VALUES (@name,  @updateTime, @changeTime)", connection, transaction);
 			insertIngredient.Parameters.AddWithValue("@name", recipe[i].Ingredient[0].Ingredients[a]);
 			insertIngredient.Parameters.AddWithValue("@updateTime", recipe[i].updateTime);
 			insertIngredient.Parameters.AddWithValue("@changeTime", recipe[i].changeTime);
 			try
 			{
+				//if there is no ingred id then insert
 				if (ingredId == 0)
 				{
 					ingredId = (Int32)insertIngredient.ExecuteScalar();
@@ -206,8 +216,9 @@ namespace WebApplication1
 		
 		/**
 		* Checks if ingredient exists by fetching id from database
-		* int i - point in recipe loop
-		* int a - point in ingredient loop
+		*
+		*  i - point in recipe loop
+		*  a - point in ingredient loop
 		**/
 		public void selectIngredId(int i, int a)
 		{
@@ -220,13 +231,13 @@ namespace WebApplication1
 				{
 					while (selectIngIdReader.Read())
 					{
-						ingredId= selectIngIdReader.GetInt32(0);
+						ingredId= selectIngIdReader.GetInt32(0); //Gets ingred id
 					}
 					
 				}
 				else
 				{
-					ingredId = 0;
+					ingredId = 0; //If no ingred id set to 0
 				}
 				selectIngIdReader.Close();
 
@@ -242,12 +253,13 @@ namespace WebApplication1
 		
 		/**
 		* Updates recipe image information in database
-		* int i - point in recipe loop
+		*
+		*  i - point in recipe loop
 		*
 		**/
 		public void updateImage(int i)
 		{
-			
+			//Prepares command and updates image
 			SqlCommand updateImage = new SqlCommand("UPDATE Images SET image=@image, changeTime=@changeTime WHERE uniqueid=@uniqueid", connection, transaction);
 			byte[] image  = null;
 			if(recipe[i].image != "")
@@ -290,7 +302,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Stores prep details for recipe
+		* Class stores prep details from recipe JSON
 		*
 		**/
 		public class Preperation
@@ -302,7 +314,7 @@ namespace WebApplication1
 		}
 
 		/** 
-		* Stores ingred details for recipe
+		* Class stores ingred details from recipe JSON
 		*
 		**/
 		public class Ingredient

@@ -18,6 +18,7 @@ namespace WebApplication1
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads json
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -68,7 +69,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		*	Stores date from JSON
+		*	Class stores date from JSON
 		**/
 		public class Date2
 		{
@@ -76,7 +77,7 @@ namespace WebApplication1
 		}
 	
 		/**
-		* Used to create list of cookbooks  for json array
+		* Class used to create list of cookbooks  for json array
 		**/
 		public class Cookbooks
 		{
@@ -85,7 +86,7 @@ namespace WebApplication1
 		}
 
 		/**
-		*	Stores cookbook info for json
+		*	Class stores cookbook info for json
 		**/
 		public class Cookbook
 		{

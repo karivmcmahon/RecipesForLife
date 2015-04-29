@@ -29,6 +29,7 @@ namespace WebApplication1
 		{
 			//Reads Json on page load
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
+			
 			if (jsonInput != null)
 			{
 				try
@@ -50,7 +51,7 @@ namespace WebApplication1
 		**/
 		public void insertAccount()
 		{
-			//Serializing a json
+			//Serializing the json into account list
 			JavaScriptSerializer js = new JavaScriptSerializer();
 			js.MaxJsonLength = Int32.MaxValue;
 			account = js.Deserialize<List<Account>>(jsonInput);

@@ -27,7 +27,7 @@ namespace WebApplication1
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			js.MaxJsonLength = Int32.MaxValue;
-
+			//Reads JSON
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -69,7 +69,9 @@ namespace WebApplication1
 		
 		/**
 		* Select recipes unique id based on id in database
-		* int id - row in database
+		*
+		*  id - row in database
+		*
 		* return - String - recipe uniqueid
 		**/
 		public String selectRecipe(int id)
@@ -101,6 +103,7 @@ namespace WebApplication1
 				preps.prepNums = new List<Int32>();
 				preps.prepprogress = new List<string>();
 				preps.preprecipe = new List<string>();
+				//builds prep json
 				preps.prep.Add((string)selectPreperationReader["instruction"]);
 				preps.uniqueid.Add((string)selectPreperationReader["uniqueid"]);
 				preps.prepNums.Add((Int32)selectPreperationReader["instructionNum"]);
@@ -129,6 +132,7 @@ namespace WebApplication1
 				ingreds.uniqueid = new List<string>();
 				ingreds.ingredprogress = new List<string>();
 				ingreds.ingredrecipe = new List<string>();
+				//builds ingred json
 				ingreds.Ingredients.Add((string)selectIngredReader["name"]);
 				ingreds.Amount.Add((Int32)selectIngredReader["amount"]);
 				ingreds.Value.Add((string)selectIngredReader["value"]);
@@ -170,7 +174,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Stores recipe prep details
+		* Class stores  prep details for json
 		**/
 		public class Preperation
 		{
@@ -183,7 +187,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Stores recipe ingred details
+		* Class stores ingred details for json
 		**/
 		public class Ingredient
 		{

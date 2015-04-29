@@ -25,6 +25,7 @@ namespace WebApplication1
 		
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads json
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -97,7 +98,7 @@ namespace WebApplication1
 		/**
 		* Inserts prep details into database
 		*
-		* Int i -  point in for loop
+		*  i -  point in for loop
 		*
 		**/
 		public void insertPrep(int i)
@@ -118,7 +119,7 @@ namespace WebApplication1
 				try
 				{
 					Int32 prepId = (Int32)insertPrep.ExecuteScalar(); //Inserts prep details into preperation
-					insertPrepLink(prepId, i );
+					insertPrepLink(prepId, i ); //calls method to insert into linking table
 					
 				}
 				catch (Exception ex)
@@ -131,8 +132,9 @@ namespace WebApplication1
 		
 		/**
 		* Inserts the link between recipe and prep
+		*
 		* prepId - value for where prep is in database
-		* int i - point in loop
+		*  i - point in loop
 		**/
 		public void insertPrepLink(Int32 prepId, int i)
 		{
@@ -157,6 +159,7 @@ namespace WebApplication1
 		
 		/**
 		* Selects ingredient from database where name matches name from json
+		*
 		* i - point in recipe loop
 		* a - point in ingred loop
 		*
@@ -198,6 +201,7 @@ namespace WebApplication1
 		
 		/**
 		* Insert ingredient into database if it doesn't exist
+		*
 		* ingredId - ingred id, if 0 tells us doesnt exist
 		* i - point in recipe loop
 		* a  - point in ingred loop
@@ -231,6 +235,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts ingred details into db
+		*
 		* i - point in recipe loop
 		* a - point in ingred loop
 		* ingredId - ingred id which is inserted into ingred dets table
@@ -253,8 +258,8 @@ namespace WebApplication1
 			{
 
 				Int32 ingredDetsId = (Int32)insertIngredDet.ExecuteScalar(); //Inserts details
-				insertIngredRecipeLink(ingredDetsId, i , a);
-				insertIngredDetsLink(ingredId, ingredDetsId, i , a);
+				insertIngredRecipeLink(ingredDetsId, i , a); //calls method to insert recipe to ingred details link
+				insertIngredDetsLink(ingredId, ingredDetsId, i , a); //calls method to insert ingred to ingred details link
 				
 			}
 			catch (Exception ex)
@@ -267,6 +272,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts the link between ingred  dets and recipe  in db
+		*
 		* i  - point in recipe loop
 		* a - point in ingred loop
 		* ingredDetsId - ingred id in db
@@ -295,6 +301,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts the link between ingred dets and ingred id in the linking table
+		*
 		* ingredId - ingredient  id in db
 		* ingredDetsId - ingredient dets id in db
 		* i - point in recipe loop
@@ -325,7 +332,8 @@ namespace WebApplication1
 		
 		/**
 		* Inserts ingredient details into database
-		* int i - point in loop
+		*
+		*  i - point in loop
 		**/
 		public void insertIngredient(int i)
 		{
@@ -342,7 +350,8 @@ namespace WebApplication1
 		
 		/**
 		* Inserts cookbook link for recipe into database
-		* int i - point in loop
+		*
+		*  i - point in loop
 		**/
 		public void insertCookbook(int i)
 		{
@@ -379,7 +388,8 @@ namespace WebApplication1
 		
 		/**
 		* Insert image into image table for recipe
-		* int i - point in loop
+		*
+		* i - point in loop
 		**/
 		public void insertImage(int i)
 		{
@@ -428,7 +438,7 @@ namespace WebApplication1
 		
 		
 		/**
-		Class stores recipe details to from json
+		Class stores recipe details  from json
 		**/
 		public class Recipe
 		{
@@ -454,7 +464,7 @@ namespace WebApplication1
 		}
 
 		/**
-		Class stores prep details to from json
+		Class stores prep details  from json
 		**/
 		public class Preperation
 		{
@@ -465,7 +475,7 @@ namespace WebApplication1
 		}
 
 		/**
-		Class stores ingredient details to from json
+		Class stores ingredient details  from json
 		**/
 		public class Ingredient
 		{

@@ -27,6 +27,7 @@ namespace WebApplication1
 		
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads JSON
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -54,7 +55,8 @@ namespace WebApplication1
 		
 		/**
 		* Inserts additional prep and recipe details which are added after the recipe was inserted 
-		* int i - point in loop
+		*
+		*  i - point in loop
 		**/
 		public void insertAdditionalDets(int i)
 		{
@@ -82,6 +84,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts prep details into database
+		*
 		* i - point in loop
 		**/
 		public void insertPrep(int i)
@@ -131,6 +134,7 @@ namespace WebApplication1
 		
 		/**
 		* Inserts ingredient details into database if they dont already exist
+		*
 		* i - point in loop
 		**/
 		public void insertIngredient(int i)
@@ -254,6 +258,7 @@ namespace WebApplication1
 		
 		/**
 		* Selects recipe id from database based on recipe unique id
+		*
 		* uniqueid - recipe uniqueid
 		* 
 		* return - Int32 - recipe id
@@ -280,7 +285,9 @@ namespace WebApplication1
 		
 		/**
 		* Checks if the ingredient unique id already exists
+		*
 		* uniqueid - ingreds unique id
+		*
 		* return - bool - states whether the ingred already exists or not
 		**/
 		public bool selectIngredUID(String uniqueid)
@@ -305,7 +312,9 @@ namespace WebApplication1
 		
 		/**
 		* Check if prep unique id already exists in db
+		*
 		* uniqueid - prep unique id
+		*
 		* return - bool - states whether the ingred already exists or not
 		**/
 		public bool selectPrepUID(String uniqueid)

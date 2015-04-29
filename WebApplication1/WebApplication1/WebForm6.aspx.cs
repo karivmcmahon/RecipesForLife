@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 namespace WebApplication1
 {
 	/**
-	* Script creates JSON to send to app with recipes needing updated based on date
+	* Script creates JSON to send to app with recipes needing updated
 	*
 	* By Kari McMahon
 	**/
@@ -23,6 +23,8 @@ namespace WebApplication1
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			js.MaxJsonLength = Int32.MaxValue;
+			
+			//Reads json
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 		
 		if (jsonInput != null)
@@ -46,7 +48,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Selects recipe needing updated in the app
+		* Selects recipe to place in JSON to send to app
 		*
 		**/
 		public void selectRecipe()
@@ -64,6 +66,8 @@ namespace WebApplication1
 				Recipe recipe = new Recipe();
 				recipe.Preperation = new List<Preperation>();
 				recipe.Ingredient = new List<Ingredient>();
+				
+				//Build JSON
 				recipe.id = (Int32)reader["id"];
 				recipe.name = (string)reader["name"];
 				recipe.description = (string)reader["description"];
@@ -85,12 +89,13 @@ namespace WebApplication1
 				recipes.Recipe.Add(recipe); 
 			}
 			connection.Close();
-			string json = js.Serialize(recipes); // Serialize list to JSON
+			string json = js.Serialize(recipes); // Serialize list to JSON and write so app can read it
 			Response.Write(json);
 		}
 		
 		/**
 		* Checks for nulls in db values and sets them to empty quotes
+		*
 		* recipe - stores recipe data
 		* recipereader - stores info from query
 		*
@@ -135,6 +140,7 @@ namespace WebApplication1
 		
 		/**
 		* Selects related preperation to recipe
+		*
 		* recipe - stores recipe info like id which is used for query
 		* preprecipe - A list of preperation details for recipe. Adds selected info onto it for use info json
 		*
@@ -147,7 +153,7 @@ namespace WebApplication1
 			var selectprepReader = selectprep.ExecuteReader();
 			while (selectprepReader.Read())
 			{
-				
+				//Builds preperation JSON
 				Preperation preps = new Preperation();
 				preps.prep = new List<string>();
 				preps.uniqueid = new List<string>();
@@ -164,6 +170,7 @@ namespace WebApplication1
 		
 		/** 
 		* selects related ingredients to recipe
+		*
 		* recipe - stores recipe info like id which is used for query
 		* ingredrecipe - List of ingredient details for recipe. Adds selected info onto it for use in JSON
 		*
@@ -183,6 +190,7 @@ namespace WebApplication1
 				ingreds.Notes = new List<string>();
 				ingreds.uniqueid = new List<string>();
 				ingreds.ingredprogress = new List<string>();
+				//Builds ingred JSON
 				ingreds.Ingredients.Add((string)selectingredReader["name"]);
 				ingreds.Amount.Add((Int32)selectingredReader["amount"]);
 				ingreds.Value.Add((string)selectingredReader["value"]);
@@ -196,6 +204,7 @@ namespace WebApplication1
 		
 		/**
 		* Select images to be updated for recipe.
+		*
 		* recipe - recipe info used for update
 		*
 		* return - recipe - now containing image info
@@ -215,7 +224,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Stores date sent to webpage from json
+		* Class stores date sent to webpage from app in form of json
 		*
 		**/
 		public class Date
@@ -249,7 +258,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Creates list of recipes - json array
+		* Creates list of recipes for json array
 		**/
 		public class Recipes
 		{
@@ -258,7 +267,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Class to store preperation dets
+		* Class to store preperation dets for recipe JSON
 		**/
 		public class Preperation
 		{
@@ -270,7 +279,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Class to store ingredient dets
+		* Class to store ingredient dets for recipe JSON
 		**/
 		public class Ingredient
 		{

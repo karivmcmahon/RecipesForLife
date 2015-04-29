@@ -11,7 +11,7 @@ namespace WebApplication1
 {
 
 	/**
-	* Script creates a JSON of contributers based on certain date to send to app
+	* Script creates a JSON of contributers to send to app
 	*
 	* By Kari McMahon
 	**/
@@ -26,11 +26,13 @@ namespace WebApplication1
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			js.MaxJsonLength = Int32.MaxValue;
+			//Reads json
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
 				try
 				{
+					//Deserializes json
 					var time = js.Deserialize<List<Date2>>(jsonInput);
 					lastUpdated = time[0].updateTime; //gets last updated time - insert time
 					change = time[0].change; //gets last change time - update time
@@ -81,7 +83,7 @@ namespace WebApplication1
 			}
 			con.Close();
 			
-			//Creates json of contributers
+			//Creates json of contributers, serializes and writes
 			string json = js.Serialize(contributers);
 			Response.Write(json);
 		}
@@ -103,7 +105,7 @@ namespace WebApplication1
 		}
 		
 		/**
-		* Stores json from app containing dates
+		* Class stores json from app containing dates as well as whether its a change or not
 		*
 		**/
 		public class Date2
@@ -113,7 +115,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Creates a list of contributers used for json
+		* Class creates a list of contributers used for json
 		**/
 		public class Contributers
 		{
@@ -122,7 +124,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Stores contrib info to send to JSON
+		* Class stores contrib info to send in JSON
 		*
 		**/
 		public class Contributer

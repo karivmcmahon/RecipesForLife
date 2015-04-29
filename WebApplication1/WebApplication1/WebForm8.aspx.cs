@@ -18,6 +18,7 @@ namespace WebApplication1
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads JSON
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
@@ -25,6 +26,7 @@ namespace WebApplication1
 				{
 					JavaScriptSerializer js = new JavaScriptSerializer();
 					js.MaxJsonLength = Int32.MaxValue;
+					//Deserialize json
 					var time = js.Deserialize<List<Date2>>(jsonInput);
 					string lastUpdated = time[0].updateTime; //gets last updated time from json
 					
@@ -74,7 +76,7 @@ namespace WebApplication1
 			public string updateTime { get; set; }
 		}
 		/**
-		* Class stores list of cookbooks - for json array
+		* Class stores list of cookbooks for json array
 		**/
 		public class Cookbooks
 		{
@@ -82,7 +84,7 @@ namespace WebApplication1
 
 		}
 		/**
-		* Class stores a cookbook
+		* Class stores a cookbook for json
 		**/
 		public class Cookbook
 		{

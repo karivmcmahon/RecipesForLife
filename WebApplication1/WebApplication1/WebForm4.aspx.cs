@@ -12,7 +12,7 @@ using System.Data;
 namespace WebApplication1
 {
 	/**
-	* Script sends recipe JSON to app to insert into database based on date
+	* Script sends recipe JSON to app to insert into app database 
 	*
 	* By Kari McMahon
 	**/
@@ -29,12 +29,13 @@ namespace WebApplication1
 		{
 			js.MaxJsonLength = Int32.MaxValue;
 
+			//Reads JSON
 			jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
 				try
 				{
-					//Gets last update
+					//Deserialize json and get last updated time
 					var time = js.Deserialize<List<RecipeDate>>(jsonInput);
 					lastUpdated = time[0].updateTime;
 					
@@ -96,6 +97,7 @@ namespace WebApplication1
 		
 		/**
 		* Checks for nulls in db values and sets them to empty quotes
+		*
 		* recipe - stores recipe data
 		* recipereader - stores info from query
 		*
@@ -140,6 +142,7 @@ namespace WebApplication1
 		
 		/**
 		* Select prep info from database
+		*
 		* recipeprep - List of prep info for recipe
 		* recipe - info about recipe
 		*
@@ -169,6 +172,7 @@ namespace WebApplication1
 		
 		/**
 		* Select ingredient info from database
+		*
 		* recipeingred - List of ingred info for recipe
 		* recipe - recipe info
 		*
@@ -222,6 +226,7 @@ namespace WebApplication1
 		
 		/**
 		* Selects image related to recipe
+		*
 		* recipe - stores recipe info
 		* return - recipe - updated recipe info
 		**/
@@ -252,7 +257,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Class used to create JSON
+		* Class used to create recipe JSON
 		**/
 		public class Recipe
 		{
@@ -288,7 +293,7 @@ namespace WebApplication1
 		}
 
 		/**
-		* Class stores recipe prep details
+		* Class stores recipe prep details for json
 		*
 		**/
 		public class Preperation

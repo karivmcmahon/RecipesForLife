@@ -18,6 +18,7 @@ namespace WebApplication1
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
+			//Reads JSON
 			string jsonInput = new System.IO.StreamReader(Context.Request.InputStream, System.Text.Encoding.UTF8).ReadToEnd();
 			if (jsonInput != null)
 			{
