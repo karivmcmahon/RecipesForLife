@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativelayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/image_default_shelf"
+    android:gravity="center_horizontal"
+    android:paddingBottom="30dp"
+    android:paddingTop="40dp" >
+
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="An image which relates to the cookbook"
+        android:scaleType="fitXY"
+        android:src="@drawable/image_default_cookbook" />
+
+    <ImageView
+        android:id="@+id/editView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_toRightOf="@+id/myImageView"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_pen_white" />
+
+    <ImageView
+        android:id="@+id/userView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/editView"
+        android:layout_marginBottom="15dp"
+        android:layout_toRightOf="@+id/myImageView"
+        android:contentDescription="An image representing a user"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_user2" />
+
+    <ImageView
+        android:id="@+id/delView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/userView"
+        android:layout_marginBottom="15dp"
+        android:layout_toRightOf="@+id/myImageView"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_delete" />
+
+    <TextView
+        android:id="@+id/myImageViewText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/myImageView"
+        android:layout_alignRight="@+id/myImageView"
+        android:layout_alignTop="@+id/myImageView"
+        android:layout_margin="4dp"
+        android:background="@drawable/background_dialog2"
+        android:gravity="center_horizontal"
+        android:text="My First Cookbook"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>

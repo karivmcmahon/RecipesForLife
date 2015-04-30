@@ -1,0 +1,42 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+  xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+    
+     <item android:id="@+id/action_copy"
+          android:icon="@drawable/icon_copy"
+          android:title="@string/action_copy"
+          yourapp:showAsAction="always"  />
+     
+     <item android:id="@+id/action_fontup"
+          android:icon="@drawable/icon_fontup"
+          android:title="@string/action_fontup"
+          yourapp:showAsAction="always"  />
+     
+      <item android:id="@+id/action_fontdown"
+          android:icon="@drawable/icon_fontdown"
+          android:title="@string/action_fontdown"
+          yourapp:showAsAction="always"  />
+     
+     
+     <item android:id="@+id/action_share"
+          android:icon="@drawable/icon_share"
+          android:title="@string/action_share"
+           yourapp:actionProviderClass=
+            "android.support.v7.widget.ShareActionProvider"
+          yourapp:showAsAction="always"  />
+     
+     <item android:id="@+id/action_fullScreen"
+          android:icon="@drawable/icon_fullscreen"
+          android:title="@string/action_fullScreen"
+          yourapp:showAsAction="always"  />
+     
+     <item android:id="@+id/action_screenOn"
+          android:icon="@drawable/icon_screen"
+          android:title="@string/action_screenOn"
+          yourapp:showAsAction="always"  />
+     
+	 <item android:id="@+id/action_search"
+          android:icon="@drawable/icon_search"
+          android:title="@string/action_search"
+          yourapp:showAsAction="always"
+ 		  yourapp:actionViewClass="android.support.v7.widget.SearchView"  />
+</menu>

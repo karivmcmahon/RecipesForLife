@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog2"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/recipeAddView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="Add Recipe" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/recipeNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipeAddView"
+            android:layout_marginTop="22dp"
+            android:gravity="left"
+            android:text="Recipe name:" />
+
+        <EditText
+            android:id="@+id/recipenameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/recipeAddView"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/recipeNameView"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:textCursorDrawable="@drawable/drawable_cursor"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/recipeBookView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipeNameView"
+            android:layout_marginTop="22dp"
+            android:gravity="left"
+            android:text="Cookbook:" />
+
+        <Spinner
+            android:id="@+id/recipeBookSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipenameEditText"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/recipeBookView"
+            android:ems="10"
+            android:textSize="14dp"
+            android:theme="@android:style/Theme.Holo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/recipeDescView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipeBookView"
+            android:layout_marginTop="22dp"
+            android:gravity="left"
+            android:text="Description:" />
+
+        <EditText
+            android:id="@+id/recipeDescEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_below="@+id/recipeBookSpinner"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/recipeDescView"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:textCursorDrawable="@drawable/drawable_cursor"
+            android:textSize="14dp" >
+        </EditText>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/errorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:gravity="center"
+        android:text="" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/errorView"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_below="@+id/recipeDescView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/drawable_button"
+            android:text="Next" />
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_below="@+id/errorView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/drawable_button"
+            android:text="Close" />
+    </LinearLayout>
+
+</LinearLayout>

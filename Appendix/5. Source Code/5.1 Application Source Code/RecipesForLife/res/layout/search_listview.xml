@@ -1,0 +1,91 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Search_ResultsView" >
+
+    <!-- The main content view -->
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/background_actionbar"
+        android:choiceMode="singleChoice"
+        android:divider="#FFFFFF"
+        android:dividerHeight="0.5dp" />
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_search"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/recipeheader"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_actionbar"
+            android:gravity="center"
+            android:padding="5dp" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="5dp"
+            android:divider="#F3216C"
+            android:dividerHeight="1px" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/cookbookheader"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_actionbar"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Cookbooks that feature &apos; &apos; " />
+
+        <ListView
+            android:id="@+id/cookbooklist"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="5dp"
+            android:divider="#F3216C"
+            android:dividerHeight="1px" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/userheader"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_actionbar"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Users that feature &apos; &apos;" />
+
+        <ListView
+            android:id="@+id/userlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:divider="#F3216C"
+            android:dividerHeight="1px" >
+        </ListView>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

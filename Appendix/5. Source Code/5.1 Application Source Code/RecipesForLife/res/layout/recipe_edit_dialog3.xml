@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog2"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/recipeEditView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="Edit Recipe" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/recipePrepView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipeServesView"
+            android:layout_marginTop="22dp"
+            android:gravity="left"
+            android:text="Prep time: " />
+
+        <EditText
+            android:id="@+id/recipePrepEditText"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/recipeServesView"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/recipePrepView"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:textCursorDrawable="@drawable/drawable_cursor"
+            android:textSize="14dp" >
+        </EditText>
+
+        <TextView
+            android:id="@+id/recipeCookingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipeServesView"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/recipePrepEditText"
+            android:gravity="left"
+            android:text="Cooking time: " />
+
+        <EditText
+            android:id="@+id/recipeCookingEditText"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/recipeServesView"
+            android:layout_marginTop="22dp"
+            android:layout_toRightOf="@+id/recipeCookingView"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:inputType="time"
+            android:textCursorDrawable="@drawable/drawable_cursor"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/errorView"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/drawable_button"
+        android:text="Ok" />
+    
+      <Button
+        android:id="@+id/closeButton"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/errorView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/drawable_button"
+        android:text="Close" />
+    
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/background_dialog2" >
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/contributerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="Manage Contributers" />
+
+        <ImageButton
+            android:id="@+id/contributerAddButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/icon_plus2"
+            android:contentDescription="Image of a plus sign" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lists"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll"
+        android:layout_centerHorizontal="true" >
+    </ListView>
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/lists"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/drawable_button"
+        android:text="Close" />
+
+</RelativeLayout>
