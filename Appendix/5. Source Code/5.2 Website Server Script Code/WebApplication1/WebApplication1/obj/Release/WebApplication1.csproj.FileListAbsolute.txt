@@ -1,0 +1,15 @@
+X:\website\WebApplication1\WebApplication1\bin\WebApplication1.dll.config
+X:\website\WebApplication1\WebApplication1\bin\WebApplication1.dll
+X:\website\WebApplication1\WebApplication1\bin\WebApplication1.pdb
+X:\website\WebApplication1\WebApplication1\obj\Release\WebApplication1.dll
+X:\website\WebApplication1\WebApplication1\obj\Release\WebApplication1.pdb
+X:\website\WebApplication1\WebApplication1\bin\Newtonsoft.Json.dll
+X:\website\WebApplication1\WebApplication1\bin\Newtonsoft.Json.xml
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\obj\Release\WebApplication1.dll
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\obj\Release\WebApplication1.pdb
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\WebApplication1.dll.config
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\WebApplication1.dll
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\WebApplication1.pdb
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\Newtonsoft.Json.dll
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\bin\Newtonsoft.Json.xml
+C:\Users\Kari\Pictures\website\WebApplication1\WebApplication1\obj\Release\WebApplication1.csprojResolveAssemblyReference.cache
