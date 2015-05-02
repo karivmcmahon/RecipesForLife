@@ -217,6 +217,13 @@ public class Recipe_ShelfListView extends ActionBarActivity {
 		adapter.notifyDataSetChanged();
 
 	}
+	
+	@Override
+    public void onDestroy()
+    {
+        listView.setAdapter(null);
+        super.onDestroy();
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPostCreate(android.os.Bundle)

@@ -33,6 +33,7 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 	
 	private Navigation_DrawerCreation nav;
 	private Util utils;
+	ListView listView;
 
 	/* (non-Javadoc)
 	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
@@ -86,7 +87,7 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 		    	//Get results for selected item
 		        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 				final ArrayList<RecipeBean> rb = sm.selectRecipeByDietary(sItems.getSelectedItem().toString());
-				ListView listView = (ListView) findViewById(R.id.list);
+				listView = (ListView) findViewById(R.id.list);
 			
 				//If no results - set empty to true and add to list
 				if(rb.size() == 0)
@@ -124,6 +125,13 @@ public class Search_Explore_DietaryView extends ActionBarActivity {
 	
 
 	}
+	
+	@Override
+    public void onDestroy()
+    {
+        listView.setAdapter(null);
+        super.onDestroy();
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)

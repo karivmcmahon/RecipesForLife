@@ -32,6 +32,7 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 	
 	private Navigation_DrawerCreation nav;
 	private Util utils;
+	ListView listView;
 
 	/* (non-Javadoc)
 	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
@@ -67,7 +68,7 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 	
 	        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 			final ArrayList<CookbookBean> cb = sm.selectRandomCookbooks();
-			ListView listView = (ListView) findViewById(R.id.list);
+		    listView = (ListView) findViewById(R.id.list);
 			
 			//if empty then add following to the list
 			if(cb.size() == 0)
@@ -99,6 +100,13 @@ public class Search_Explore_CookbookView extends ActionBarActivity {
 			}
 
 	}
+	
+	@Override
+    public void onDestroy()
+    {
+        listView.setAdapter(null);
+        super.onDestroy();
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)

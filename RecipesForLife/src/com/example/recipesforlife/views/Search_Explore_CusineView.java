@@ -33,6 +33,7 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 	
 	private Navigation_DrawerCreation nav;
 	private Util utils;
+	ListView listView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		    	boolean empty = false;
 		        ApplicationModel_SearchModel sm = new ApplicationModel_SearchModel(getApplicationContext());
 				final ArrayList<RecipeBean> rb = sm.selectRecipeByCuisine(sItems.getSelectedItem().toString());
-				ListView listView = (ListView) findViewById(R.id.list);
+			    listView = (ListView) findViewById(R.id.list);
 				
 				//if no results then set to empty
 				if(rb.size() == 0)
@@ -123,6 +124,13 @@ public class Search_Explore_CusineView extends ActionBarActivity {
 		}); 
 
 	}
+	
+	@Override
+    public void onDestroy()
+    {
+        listView.setAdapter(null);
+        super.onDestroy();
+    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)

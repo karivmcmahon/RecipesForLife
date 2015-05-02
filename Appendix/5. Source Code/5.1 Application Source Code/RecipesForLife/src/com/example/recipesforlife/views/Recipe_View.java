@@ -528,5 +528,12 @@ public class Recipe_View extends ActionBarActivity {
 		utils.setDialogText(R.id.errorView,cloneDialog,16);
 		errorView.setTextColor(Color.parseColor("#F70521"));
 	}
+	
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+
+	    img.setImageDrawable(null);
+	}
 
 }

@@ -37,6 +37,7 @@ public class Search_ResultsView extends ActionBarActivity {
 
 	private Navigation_DrawerCreation nav;
 	private Util utils;
+	ListView userlistView, cookbooklistView, listView;
 
 	/* (non-Javadoc)
 	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
@@ -153,6 +154,15 @@ public class Search_ResultsView extends ActionBarActivity {
 
 		}
 	}
+	
+	@Override
+    public void onDestroy()
+    {
+        listView.setAdapter(null);
+        userlistView.setAdapter(null);
+        cookbooklistView.setAdapter(null);
+        super.onDestroy();
+    }
 
 	/**
 	 * Gets users based on the search query and place them in a listview
@@ -164,7 +174,7 @@ public class Search_ResultsView extends ActionBarActivity {
 	{
 		TextView usertv = (TextView) findViewById(R.id.userheader);
 		usertv.setText("Accounts that feature '" + query + "' :");
-		ListView userlistView = (ListView) findViewById(R.id.userlist);
+		userlistView = (ListView) findViewById(R.id.userlist);
 		if(ub.size() == 0)
 		{
 			//Set list for empty if empty
@@ -187,7 +197,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		boolean empty = false;
 		TextView cookbooktv = (TextView) findViewById(R.id.cookbookheader);
 		cookbooktv.setText("Cookbooks that feature '" + query + "' :");
-		ListView cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
+		cookbooklistView = (ListView) findViewById(R.id.cookbooklist);
 
 		//If empty set for no results
 		if(cb.size() == 0)
@@ -235,7 +245,7 @@ public class Search_ResultsView extends ActionBarActivity {
 		utils.setText(R.id.cookbookheader, 30);
 		utils.setText(R.id.userheader, 30);
 
-		ListView listView = (ListView) findViewById(R.id.list);
+		 listView = (ListView) findViewById(R.id.list);
 		
 		//If list is 0 set for no results
 		if(rb.size() == 0)

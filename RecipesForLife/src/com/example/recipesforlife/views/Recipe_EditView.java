@@ -61,6 +61,7 @@ import com.example.recipesforlife.util.Util;
 	private Recipe_EditView_EditPreperation prep;
 	private Recipe_EditView_EditIngredient ingred;
 	Recipe_EditView_EditMisc misc;
+	ImageView img;
 	
 
 
@@ -266,7 +267,7 @@ import com.example.recipesforlife.util.Util;
 		imgBean = model.selectImages(recipe.getId());
 		
 		//Load image
-		ImageView img = (ImageView) findViewById(R.id.foodImage);
+		 img = (ImageView) findViewById(R.id.foodImage);
 		ImageLoader task = new ImageLoader(getApplicationContext(),imgBean, img);	
 		task.execute();
 		
@@ -620,6 +621,13 @@ import com.example.recipesforlife.util.Util;
 			v = findViewById(++id);  
 		}  
 		return id++;  
+	}
+	
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+
+	    img.setImageDrawable(null);
 	}
 
 

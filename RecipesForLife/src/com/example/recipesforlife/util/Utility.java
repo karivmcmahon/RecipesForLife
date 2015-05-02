@@ -1,6 +1,7 @@
 package com.example.recipesforlife.util;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -131,8 +132,8 @@ public class Utility  {
 
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 7200);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 10000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 10000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8"))); //set json to entity
 
@@ -199,8 +200,8 @@ public class Utility  {
 
 		try 
 		{
-			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 7200);
-			HttpConnectionParams.setSoTimeout(myClient.getParams(), 7200);
+			HttpConnectionParams.setConnectionTimeout(myClient.getParams(), 10000);
+			HttpConnectionParams.setSoTimeout(myClient.getParams(), 10000);
 			myConnection.setEntity(new ByteArrayEntity(
 					jsonArray.toString().getBytes("UTF8"))); //set to json entity 
 			try 

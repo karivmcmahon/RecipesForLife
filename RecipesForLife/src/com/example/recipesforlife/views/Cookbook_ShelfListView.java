@@ -79,6 +79,13 @@ public class Cookbook_ShelfListView extends ActionBarActivity {
 		adapter = new Cookbook_ListAdapter(this, values, getApplicationContext(), ids, images);
 		listView.setAdapter(adapter); 
 	}
+	
+		@Override
+	    public void onDestroy()
+	    {
+	        listView.setAdapter(null);
+	        super.onDestroy();
+	    }
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
